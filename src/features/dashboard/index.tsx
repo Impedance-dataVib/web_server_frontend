@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { NavLink, Outlet } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
@@ -108,7 +108,8 @@ const DashboardPage = () => {
 
   return (
     <Box>
-      <DashboardContext.Provider
+      <Typography variant="h5">Dashboard</Typography>
+      {/* <DashboardContext.Provider
         value={{ message: "Hi", digitalIOData, systemData, cpuUsage, engineLatestReport, bearingLatestReport, motorLatestReport, turbineLatestReport, gearboxLatestReport }}
       >
         <Box>Dashboard</Box>
@@ -137,7 +138,7 @@ const DashboardPage = () => {
         <Box sx={{ p: 2, background: "lightgrey" }}>
           <Outlet />
         </Box>
-      </DashboardContext.Provider>
+      </DashboardContext.Provider> */}
     </Box>
   );
 };

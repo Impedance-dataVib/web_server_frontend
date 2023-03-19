@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.12",
+    "@mui/utils": "^5.11.13",
     "chart.js": "^4.2.1",
     "date-fns": "^2.29.3",
     "humanize-plus": "^1.8.2",
