@@ -23,7 +23,7 @@ const Layout = ({ children }: any) => {
           }}
         >
           <DrawerAppBar />
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{ display: "flex", backgroundColor: (theme) => theme.palette.color37.main, }}>
             <Sidebar
               // @ts-ignore
               variant={sidebarView}

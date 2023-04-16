@@ -13,7 +13,7 @@ import CoreSystem from "../core/system";
 const EngineMonitoringPage = () => {
   return (
     <Box>
-      <Box sx={{ mt: 2 }}>
+      {/* <Box sx={{ mt: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={4} lg={4} spacing={2}>
             <Box sx={{ mt: 2 }}>
@@ -51,7 +51,7 @@ const EngineMonitoringPage = () => {
             </Box>
           </Grid>
         </Grid>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

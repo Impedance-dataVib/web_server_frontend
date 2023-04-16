@@ -12,7 +12,7 @@ import LogoutPage from "./features/login/logout";
 import Layout from "./app/components/layout";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { lightTheme } from "./app/theme";
-import HomePage from "./features/home";
+import TrendsPage from "./features/trends";
 import ConfigurationPage from "./features/configuration";
 import NotepadPage from './features/notepad';
 import FileBrowserPage from "./features/fileBrowser";
@@ -23,7 +23,7 @@ const AppRoutes = (
   <Routes>
     <Route path="login" element={<LoginPage />} />
     <Route path="logout" element={<LogoutPage />} />
-    <Route path="/home/*" element={<HomePage />}>
+    <Route path="/trends/*" element={<TrendsPage />}>
     </Route>
     <Route path="/dashboard/*" element={<DashboardPage />}>
       <Route path="" index element={<EngineMonitoringPage />} />
