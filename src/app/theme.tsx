@@ -42,7 +42,7 @@ declare module '@mui/material/styles' {
     color35: Palette['primary'],
     color36: Palette['primary'],
     color37: Palette['primary'],
-    
+    color38: Palette['primary'],
   }
   interface PaletteOptions {
     color1: PaletteOptions['primary'];
@@ -82,7 +82,9 @@ declare module '@mui/material/styles' {
     color35: PaletteOptions['primary'];
     color36: PaletteOptions['primary'];
     color37: PaletteOptions['primary'],
+    color38: PaletteOptions['primary'],
   }
+  
 }
 
 let baseTheme = createTheme({
@@ -204,14 +206,24 @@ let baseTheme = createTheme({
     },
     color37: {
       main: '#1d4580'
+    },
+    color38: {
+      main: '#4d4e4e'
     }
   },
   typography: {
     fontFamily: 'Poppins, Helvetica, "sans-serif"',
-    fontSize: 12
+    fontSize: 12,
+    
   },
   components: {
-    
+    // MuiTypography: {
+    //   styleOverrides: {
+    //     root: {
+    //       color:  '#4d4e4e'
+    //     }
+    //   }
+    // }
   }
 });
 

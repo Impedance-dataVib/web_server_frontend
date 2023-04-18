@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Grid,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -12,6 +13,8 @@ import { makeStyles } from "tss-react/mui";
 
 import DashboardContext from "./context";
 import { useTranslation } from "react-i18next";
+import CardWidget from "../../app/components/card";
+import { CellTowerOutlined, DescriptionOutlined, SignpostOutlined, TrendingUp, VisibilityOutlined, Warning, WarningAmber, WarningOutlined } from "@mui/icons-material";
 
 const useStyles = makeStyles()((theme) => {
   return {
@@ -237,8 +240,40 @@ const DashboardPage = () => {
           gearboxLatestReport,
         }}
       >
-        <Box sx={{ p: 2, background: "lightgrey" }}>
-          <Outlet />
+        <Box sx={{ p: 2, }}>
+          {/* <Outlet /> */}
+          <Grid container spacing={2}>
+            <Grid item xs={5}>
+              <CardWidget headerLabel="Alerts and Instructions" 
+                headerIcon={<WarningAmber />}
+              />
+            </Grid>
+            <Grid item xs={7}>
+              <CardWidget headerLabel="Global Indicators" 
+                headerIcon={<SignpostOutlined />}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <CardWidget headerLabel="Trends" 
+                headerIcon={<TrendingUp />}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <CardWidget headerLabel="Live Status" 
+                headerIcon={<VisibilityOutlined />}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <CardWidget headerLabel="Signals" 
+                headerIcon={<CellTowerOutlined />}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <CardWidget headerLabel="Latest Reports" 
+                headerIcon={<DescriptionOutlined />}
+              />
+            </Grid>
+          </Grid>
         </Box>
       </DashboardContext.Provider>
       {/* <DashboardContext.Provider
