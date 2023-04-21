@@ -247,12 +247,12 @@ const DrawerAppBar = () => {
                 },
               }}
             >
-              <Badge badgeContent={4} color="secondary">
+              <Badge badgeContent={4} color="error">
                 <NotificationsOutlined />
               </Badge>
             </IconButton>
           </Box>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          {/* <Box sx={{ display: "flex", alignItems: "center" }}>
             <Avatar sx={{ width: "30px", height: "30px", mr: 1 }}></Avatar>
             <Typography
               sx={{ color: "black", fontSize: "14px", fontWeight: 400 }}
@@ -262,7 +262,7 @@ const DrawerAppBar = () => {
             <IconButton onClick={handleClick}>
               <KeyboardArrowDown />
             </IconButton>
-          </Box>
+          </Box> */}
         </Toolbar>
       </AppBar>
       <Box component="nav">

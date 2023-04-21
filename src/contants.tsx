@@ -5,6 +5,7 @@ import Description from "@mui/icons-material/Description";
 import WebAsset from "@mui/icons-material/WebAsset";
 import Help from "@mui/icons-material/Help";
 import Settings from "@mui/icons-material/Settings";
+import { Download, Logout, TrendingUpSharp } from "@mui/icons-material";
 
 export interface INavMenuItem {
   label: string;
@@ -13,39 +14,43 @@ export interface INavMenuItem {
 }
 
 export const APP_NAV_MENU_ITEMS: INavMenuItem[] = [
-  {
-    label: "Home",
-    icon: <Home />,
-    path: "/home",
-  },
+  
   {
     label: "Dashboard",
     icon: <Dashboard />,
     path: "/dashboard",
   },
   {
-    label: "Configuration",
-    icon: <Construction />,
-    path: "/configuration",
+    label: "Trends",
+    icon: <TrendingUpSharp />,
+    path: "/trends",
   },
   {
-    label: "Notepad",
-    icon: <Description />,
+    label: "Configuration",
+    icon: <Settings />,
+    path: "/configuration",
+  },
+
+  {
+    label: "Download",
+    icon: <Download />,
     path: "/notepad",
   },
   {
-    label: "File Browser",
+    label: "Settings",
+    
+    icon: <Construction />,
+    path: "/settings",
+  },
+  {
+    label: "Auxilay Data",
     icon: <WebAsset />,
     path: "/file-browser",
   },
   {
-    label: "Help",
-    icon: <Help />,
+    label: "Logout",
+    icon: <Logout />,
     path: "/help",
   },
-  {
-    label: "Settings",
-    icon: <Settings />,
-    path: "/settings",
-  },
+  
 ];

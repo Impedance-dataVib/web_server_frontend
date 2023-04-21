@@ -1,11 +1,11 @@
 import React from "react";
 import { Typography, Box } from "@mui/material";
 
-const HomePage = () => {
+const TrendsPage = () => {
   return (
     <Box>
-      <Typography variant="h5">Home</Typography>
+      <Typography variant="h5">Trends</Typography>
     </Box>
   );
 };
-export default HomePage;
+export default TrendsPage;

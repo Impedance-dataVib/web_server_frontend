@@ -35,12 +35,12 @@ const SidebarItem = ({ variant, item }: SidebarItemProps & SidebarProps) => {
         textDecoration: "none",
         color: isMatch
           ? (theme) => theme.palette.color7.main
-          : (theme) => theme.palette.color32.main,
+          : (theme) => theme.palette.color3.main,
         "&:hover": {
           color: (theme) => theme.palette.color7.main,
         },
 
-        backgroundColor: (theme) => theme.palette.color3.main,
+        backgroundColor: (theme) => theme.palette.color37.main,
         "& :hover": {
           backgroundColor: (theme) => theme.palette.color1.main,
         },
@@ -51,19 +51,19 @@ const SidebarItem = ({ variant, item }: SidebarItemProps & SidebarProps) => {
         sx={{
           backgroundColor: isMatch
             ? (theme) => theme.palette.color1.main
-            : (theme) => theme.palette.color3.main,
+            : (theme) => theme.palette.color37.main,
           "& :hover": {
             backgroundColor: (theme) => theme.palette.color1.main,
           },
           borderLeft: isMatch
-            ? (theme) => `4px solid ${theme.palette.color7.main}`
+            ? (theme) => `8px solid ${theme.palette.color37.main}`
             : "none",
         }}
         disablePadding
       >
         <ListItemButton
           sx={{
-            pl: isMatch ? "17px" : "20px",
+            pl: isMatch ? "12px" : "20px",
             height: "52px",
             display: "flex",
             alignItems: "center",
@@ -126,6 +126,7 @@ const Sidebar = ({ variant = "collapsed", setVariant }: SidebarProps) => {
         transition: "all .2s ease-in",
         height: "52px",
         mt: 1,
+        backgroundColor: (theme) => theme.palette.color37.main,
       }}
     >
       <Box
@@ -135,6 +136,7 @@ const Sidebar = ({ variant = "collapsed", setVariant }: SidebarProps) => {
           justifyContent: "end",
           alignItems: "center",
           height: "100%",
+          backgroundColor: (theme) => theme.palette.color37.main,
         }}
       >
         <IconButton
@@ -152,7 +154,7 @@ const Sidebar = ({ variant = "collapsed", setVariant }: SidebarProps) => {
             <ArrowForward
               sx={{
                 fontSize: "24px",
-                color: (theme) => theme.palette.color7.main,
+                color: (theme) => theme.palette.color3.main,
                 transition: "all .2s ease-in",
               }}
             />
@@ -160,7 +162,7 @@ const Sidebar = ({ variant = "collapsed", setVariant }: SidebarProps) => {
             <ArrowBack
               sx={{
                 fontSize: "24px",
-                color: (theme) => theme.palette.color7.main,
+                color: (theme) => theme.palette.color3.main,
                 transition: "all .2s ease-in",
               }}
             />
@@ -172,7 +174,7 @@ const Sidebar = ({ variant = "collapsed", setVariant }: SidebarProps) => {
         component="div"
         sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
       >
-        <Box component="div" sx={{ flex: 1, flexGrow: 1 }}>
+        <Box component="div" sx={{ flex: 1, flexGrow: 1, backgroundColor: (theme) => theme.palette.color37.main, }}>
           <List sx={{ textAlign: "left" }}>
             {APP_NAV_MENU_ITEMS.map((item) => (
               <SidebarItem

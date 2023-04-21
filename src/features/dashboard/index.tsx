@@ -1,10 +1,48 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from "@mui/material";
 import { NavLink, Outlet } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+import { makeStyles } from "tss-react/mui";
 
 import DashboardContext from "./context";
 import { useTranslation } from "react-i18next";
+
+const useStyles = makeStyles()((theme) => {
+  return {
+    grouped: {
+      marginLeft: "8px !important",
+      border: "none",
+      borderRadius: "4px",
+    },
+    toggleBtnRoot: {
+      background: theme?.palette?.color3?.main,
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+      borderRadius: "4px !important",
+      '&hover': {
+        background: theme?.palette?.color3?.main,
+      },
+      textTransform: 'none'
+    },
+    toggleBtnSelected: {
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+      background: `${theme?.palette?.color37?.main} !important`,
+      color: `${theme?.palette?.color3?.main} !important`,
+    }
+  };
+});
+
+export interface IActiveModule {
+  name: string;
+  index: number;
+}
 
 const DashboardPage = () => {
   const [digitalIOData, setDigitalIOData] = useState({});
@@ -16,7 +54,12 @@ const DashboardPage = () => {
   const [turbineLatestReport, setTurbineLatestReport] = useState<any>();
   const [gearboxLatestReport, setGearboxLatestReport] = useState<any>();
 
-  const { t, i18n} = useTranslation();
+  const [moduleTabs, setModuleTabs] = useState<string[]>([]);
+  const [activeModules, setActiveModules] = useState<string[]>([]);
+
+  const { classes } = useStyles();
+
+  const { t, i18n } = useTranslation();
 
   const getSocketUrl = useCallback(() => {
     return new Promise((resolve) => {
@@ -27,7 +70,7 @@ const DashboardPage = () => {
   }, []);
 
   const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket(
-    process.env.REACT_APP_WEBSOCKET_URL || ''
+    process.env.REACT_APP_WEBSOCKET_URL || ""
     // getSocketUrl,
     // STATIC_OPTIONS
   );
@@ -43,13 +86,24 @@ const DashboardPage = () => {
   useEffect(() => {
     if (lastMessage !== undefined) {
       const data = lastMessage?.data;
+      console.log("lastMessage = ", lastMessage);
       if (data) {
         const parsedData = JSON.parse(data);
         console.log("message = ", JSON.parse(data));
-        const digitalData = parsedData?.modules?.core?.["digital-io"];        
+
+        if (
+          parsedData &&
+          parsedData?.engines &&
+          Array.isArray(parsedData?.engines)
+        ) {
+          const moduleArr = parsedData?.engines?.map((i: any) => i?.name) || [];
+          setModuleTabs(moduleArr);
+        }
+
+        const digitalData = parsedData?.modules?.core?.["digital-io"];
         setDigitalIOData(digitalData);
 
-        const systemModuleData = parsedData?.modules?.core?.["system-info"];        
+        const systemModuleData = parsedData?.modules?.core?.["system-info"];
         setSystemData(systemModuleData);
 
         setCPUUsage((arr) => {
@@ -62,53 +116,131 @@ const DashboardPage = () => {
           return newArr;
         });
 
-        const engineData = parsedData?.engines?.find((i: any) => i.name === 'Engine');
+        const engineData = parsedData?.engines?.find(
+          (i: any) => i.name === "Engine"
+        );
 
-
-        const latestReportForEngine = engineData?.modules?.engine?.[`latest-reports`];
-        console.log('latestReportForEngine = ', latestReportForEngine);
+        const latestReportForEngine =
+          engineData?.modules?.engine?.[`latest-reports`];
+        console.log("latestReportForEngine = ", latestReportForEngine);
         setEngineLatestReport(latestReportForEngine || {});
 
-
         // "Bearing"
-        const bearingData = parsedData?.engines?.find((i: any) => i.name === 'Bearing');
-        const latestReportForBearing = bearingData?.modules?.bearing?.[`latest-reports`];
-        console.log('latestReportForBearing = ', latestReportForBearing);
+        const bearingData = parsedData?.engines?.find(
+          (i: any) => i.name === "Bearing"
+        );
+        const latestReportForBearing =
+          bearingData?.modules?.bearing?.[`latest-reports`];
+        console.log("latestReportForBearing = ", latestReportForBearing);
         setBearingLatestReport(latestReportForBearing || {});
 
+        const motorData = parsedData?.engines?.find(
+          (i: any) => i.name === "Motor"
+        );
 
-        const motorData = parsedData?.engines?.find((i: any) => i.name === 'Motor');
-
-        const latestReportForMotor = motorData?.modules?.motor?.[`latest-reports`];
-        console.log('latestReportForMotor = ', latestReportForMotor);
+        const latestReportForMotor =
+          motorData?.modules?.motor?.[`latest-reports`];
+        console.log("latestReportForMotor = ", latestReportForMotor);
         setMotorLatestReport(latestReportForMotor || {});
 
-        const turbineData = parsedData?.engines?.find((i: any) => i.name === 'Turbine');
+        const turbineData = parsedData?.engines?.find(
+          (i: any) => i.name === "Turbine"
+        );
 
-        const latestReportForTurbine = turbineData?.modules?.turbine?.[`latest-reports`];
-        console.log('latestReportForTurbine = ', latestReportForTurbine);
+        const latestReportForTurbine =
+          turbineData?.modules?.turbine?.[`latest-reports`];
+        console.log("latestReportForTurbine = ", latestReportForTurbine);
         setTurbineLatestReport(latestReportForTurbine || {});
 
-        const gearboxData = parsedData?.engines?.find((i: any) => i.name === "Gearbox");
+        const gearboxData = parsedData?.engines?.find(
+          (i: any) => i.name === "Gearbox"
+        );
 
-        const latestReportForGearbox = gearboxData?.modules?.gearbox?.[`latest-reports`];
-        console.log('latestReportForGearbox = ', latestReportForGearbox);
+        const latestReportForGearbox =
+          gearboxData?.modules?.gearbox?.[`latest-reports`];
+        console.log("latestReportForGearbox = ", latestReportForGearbox);
         setGearboxLatestReport(latestReportForGearbox || {});
       }
     }
   }, [lastMessage]);
 
   const changeLanguageToEnglish = () => {
-    i18n.changeLanguage('en');
-  }
+    i18n.changeLanguage("en");
+  };
 
   const changeLanguageToFrench = () => {
-    i18n.changeLanguage('fr');
-  }
+    i18n.changeLanguage("fr");
+  };
+
+  const onActiveModuleChange = (event: any, params: any) => {
+    setActiveModules(
+      params
+    );
+  };
 
   return (
     <Box>
-      <Typography variant="h5">Dashboard</Typography>
+      <Box sx={{ display: "flex", mb: 2 }}>
+        <Typography variant="h5">Dashboard</Typography>
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Typography>Select Module:</Typography>
+          <Box>
+            <ToggleButtonGroup
+              exclusive={false}
+              fullWidth
+              classes={{
+                grouped: classes?.grouped,
+              }}
+              value={activeModules|| []}
+              onChange={onActiveModuleChange}
+            >
+              {moduleTabs &&
+                moduleTabs?.map((t: string) => (
+                  <ToggleButton
+                    disableRipple
+                    disableFocusRipple
+                    disableTouchRipple
+                    size="small"
+                    sx={{ ml: 1 }}
+                    value={t}
+                    classes={{
+                      root: classes.toggleBtnRoot,
+                      selected: classes.toggleBtnSelected
+                    }}
+                    // onChange={onActiveModuleChange}
+                  >
+                    {t}
+                  </ToggleButton>
+                ))}
+            </ToggleButtonGroup>
+          </Box>
+        </Box>
+      </Box>
+
+      <DashboardContext.Provider
+        value={{
+          message: "",
+          digitalIOData,
+          systemData,
+          cpuUsage,
+          engineLatestReport,
+          bearingLatestReport,
+          motorLatestReport,
+          turbineLatestReport,
+          gearboxLatestReport,
+        }}
+      >
+        <Box sx={{ p: 2, background: "lightgrey" }}>
+          <Outlet />
+        </Box>
+      </DashboardContext.Provider>
       {/* <DashboardContext.Provider
         value={{ message: "Hi", digitalIOData, systemData, cpuUsage, engineLatestReport, bearingLatestReport, motorLatestReport, turbineLatestReport, gearboxLatestReport }}
       >
