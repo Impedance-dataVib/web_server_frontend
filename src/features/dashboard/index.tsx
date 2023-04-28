@@ -14,7 +14,19 @@ import { makeStyles } from "tss-react/mui";
 import DashboardContext from "./context";
 import { useTranslation } from "react-i18next";
 import CardWidget from "../../app/components/card";
-import { CellTowerOutlined, DescriptionOutlined, SignpostOutlined, TrendingUp, VisibilityOutlined, Warning, WarningAmber, WarningOutlined } from "@mui/icons-material";
+import {
+  CellTowerOutlined,
+  DescriptionOutlined,
+  SignpostOutlined,
+  TrendingUp,
+  VisibilityOutlined,
+  Warning,
+  WarningAmber,
+  WarningOutlined,
+} from "@mui/icons-material";
+import AlertsAndInstructions from "../common/alertsAndInstructions";
+import ReportsCard from "../common/reports";
+import GlobalIndicatorChart from "./globalIndicator";
 
 const useStyles = makeStyles()((theme) => {
   return {
@@ -28,17 +40,17 @@ const useStyles = makeStyles()((theme) => {
       paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(1),
       borderRadius: "4px !important",
-      '&hover': {
+      "&hover": {
         background: theme?.palette?.color3?.main,
       },
-      textTransform: 'none'
+      textTransform: "none",
     },
     toggleBtnSelected: {
       paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(1),
       background: `${theme?.palette?.color37?.main} !important`,
       color: `${theme?.palette?.color3?.main} !important`,
-    }
+    },
   };
 });
 
@@ -73,7 +85,8 @@ const DashboardPage = () => {
   }, []);
 
   const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket(
-    process.env.REACT_APP_WEBSOCKET_URL || ""
+    // process.env.REACT_APP_WEBSOCKET_URL || ""
+    ""
     // getSocketUrl,
     // STATIC_OPTIONS
   );
@@ -176,9 +189,7 @@ const DashboardPage = () => {
   };
 
   const onActiveModuleChange = (event: any, params: any) => {
-    setActiveModules(
-      params
-    );
+    setActiveModules(params);
   };
 
   return (
@@ -196,12 +207,12 @@ const DashboardPage = () => {
           <Typography>Select Module:</Typography>
           <Box>
             <ToggleButtonGroup
-              exclusive={false}
+              exclusive={true}
               fullWidth
               classes={{
                 grouped: classes?.grouped,
               }}
-              value={activeModules|| []}
+              value={activeModules || []}
               onChange={onActiveModuleChange}
             >
               {moduleTabs &&
@@ -215,7 +226,7 @@ const DashboardPage = () => {
                     value={t}
                     classes={{
                       root: classes.toggleBtnRoot,
-                      selected: classes.toggleBtnSelected
+                      selected: classes.toggleBtnSelected,
                     }}
                     // onChange={onActiveModuleChange}
                   >
@@ -240,38 +251,48 @@ const DashboardPage = () => {
           gearboxLatestReport,
         }}
       >
-        <Box sx={{ p: 2, }}>
+        <Box sx={{ p: 2 }}>
           {/* <Outlet /> */}
           <Grid container spacing={2}>
-            <Grid item xs={5}>
-              <CardWidget headerLabel="Alerts and Instructions" 
-                headerIcon={<WarningAmber />}
-              />
+            <Grid item lg={5} md={6} sm={12}>
+              <AlertsAndInstructions></AlertsAndInstructions>
+              
             </Grid>
-            <Grid item xs={7}>
-              <CardWidget headerLabel="Global Indicators" 
+            <Grid item xs={12} md={6} lg={7}>
+              <CardWidget
+                headerLabel="Global Indicators"
                 headerIcon={<SignpostOutlined />}
+                content={<GlobalIndicatorChart />}
+                initiallyCollapsed={false}
               />
             </Grid>
             <Grid item xs={12}>
-              <CardWidget headerLabel="Trends" 
+              <CardWidget
+                headerLabel="Trends"
                 headerIcon={<TrendingUp />}
+                content={<div>PlaceHolder Content</div>}
+                initiallyCollapsed={false}
               />
             </Grid>
             <Grid item xs={4}>
-              <CardWidget headerLabel="Live Status" 
+              <CardWidget
+                headerLabel="Live Status"
                 headerIcon={<VisibilityOutlined />}
+                content={<div>PlaceHolder Content</div>}
+                initiallyCollapsed={true}
               />
             </Grid>
             <Grid item xs={4}>
-              <CardWidget headerLabel="Signals" 
+              <CardWidget
+                headerLabel="Signals"
                 headerIcon={<CellTowerOutlined />}
+                content={<div>PlaceHolder Content</div>}
+                initiallyCollapsed={true}
               />
             </Grid>
             <Grid item xs={4}>
-              <CardWidget headerLabel="Latest Reports" 
-                headerIcon={<DescriptionOutlined />}
-              />
+              
+              <ReportsCard />
             </Grid>
           </Grid>
         </Box>

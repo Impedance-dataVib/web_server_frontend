@@ -208,7 +208,7 @@ let baseTheme = createTheme({
       main: '#1d4580'
     },
     color38: {
-      main: '#4d4e4e'
+      main: '#636464'
     }
   },
   typography: {
