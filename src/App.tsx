@@ -18,10 +18,12 @@ import NotepadPage from "./features/notepad";
 import FileBrowserPage from "./features/fileBrowser";
 import HelpPage from "./features/help";
 import SettingsPage from "./features/settings";
-import { AUTH_STATUS, useAuthenticator } from "./app/hooks";
+import { AUTH_STATUS, useAuth } from "./app/auth";
+import FullScreenLoader from "./app/components/fullscreen-loader";
 
 const AppRoutes = (
   <Routes>
+    <Route path="/" element={<DashboardPage />} />
     <Route path="login" element={<LoginPage />} />
     <Route path="logout" element={<LogoutPage />} />
     <Route path="/trends/*" element={<TrendsPage />}></Route>
@@ -44,23 +46,31 @@ const AppRoutes = (
 function App() {
   const [activeTheme, setActiveTheme] = useState<any>(lightTheme);
 
-  const { authStatus } = useAuthenticator();
+  const authenticator = useAuth();
+
+  console.log("authStatus 2= ", authenticator);
 
   return (
-    <Suspense fallback={<div>Loading</div>}>
-      <div className="App">
+    <div className="App">
+      <Suspense fallback={<FullScreenLoader />}>
         <ThemeProvider theme={activeTheme}>
           <CssBaseline />
-          {authStatus !== AUTH_STATUS.AUTHENITCATED ? (
-            <LoginPage />
+          {/* {authenticator.authStatus  && <FullScreenLoader />} */}
+          {!authenticator.readyState ? (
+            <FullScreenLoader />
           ) : (
-            <BrowserRouter>
-              <Layout>{AppRoutes}</Layout>
-            </BrowserRouter>
+            <>
+              {authenticator.readyState &&
+              authenticator.authStatus !== AUTH_STATUS.AUTHENITCATED ? (
+                <LoginPage />
+              ) : (
+                <Layout>{AppRoutes}</Layout>
+              )}
+            </>
           )}
         </ThemeProvider>
-      </div>
-    </Suspense>
+      </Suspense>
+    </div>
   );
 }
 

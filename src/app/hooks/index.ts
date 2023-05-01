@@ -1,1 +1,2 @@
-export * from './useAuthenticator';
+// This is a place for custom hooks
+export {}
