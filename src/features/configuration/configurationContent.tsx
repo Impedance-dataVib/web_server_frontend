@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import TabPanel from "../../app/components/tab-panel";
+import TabPanel from "@app/components/tab-panel";
 import TabContent from "./engineTabContent";
 import formSchema from "./formSchema";
 function tabProps(index: number) {
