@@ -3,6 +3,7 @@ import Dashboard from "@mui/icons-material/Dashboard";
 import Construction from "@mui/icons-material/Construction";
 import Description from "@mui/icons-material/Description";
 import WebAsset from "@mui/icons-material/WebAsset";
+import DvrIcon from '@mui/icons-material/Dvr';
 import Help from "@mui/icons-material/Help";
 import Settings from "@mui/icons-material/Settings";
 import { Download, Logout, TrendingUpSharp } from "@mui/icons-material";
@@ -34,11 +35,10 @@ export const APP_NAV_MENU_ITEMS: INavMenuItem[] = [
   {
     label: "Download",
     icon: <Download />,
-    path: "/notepad",
+    path: "/download",
   },
   {
     label: "Settings",
-    
     icon: <Construction />,
     path: "/settings",
   },
@@ -48,9 +48,16 @@ export const APP_NAV_MENU_ITEMS: INavMenuItem[] = [
     path: "/file-browser",
   },
   {
+    label: "System Configuration",
+    icon: <DvrIcon />,
+    path: "/systemconfiguration",
+  },
+  {
     label: "Logout",
     icon: <Logout />,
     path: "/help",
   },
+  
+  
   
 ];

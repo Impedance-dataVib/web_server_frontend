@@ -18,6 +18,8 @@ import NotepadPage from './features/notepad';
 import FileBrowserPage from "./features/fileBrowser";
 import HelpPage from "./features/help";
 import SettingsPage from "./features/settings";
+import SystemConfiguration from "./features/systemConfiguration";
+import DownloadPage from "./features/downloads";
 
 const AppRoutes = (
   <Routes>
@@ -35,6 +37,8 @@ const AppRoutes = (
     </Route>
     <Route path="/configuration/*" element={<ConfigurationPage />}>
     </Route>
+    <Route path="/download/*" element={<DownloadPage/>}>
+    </Route>
     <Route path="/notepad/*" element={<NotepadPage />}>
     </Route>
     <Route path="/file-browser/*" element={<FileBrowserPage />}>
@@ -42,6 +46,8 @@ const AppRoutes = (
     <Route path="/help/*" element={<HelpPage />}>
     </Route>
     <Route path="/settings/*" element={<SettingsPage />}>
+    </Route>
+    <Route path="/systemconfiguration/*" element={<SystemConfiguration/>}>
     </Route>
   </Routes>
 );
