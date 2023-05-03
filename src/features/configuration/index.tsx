@@ -1,11 +1,17 @@
 import React from "react";
-import { Typography, Box } from "@mui/material";
-
+import Box from "@mui/material/Box";
+import ContentBox from "../../app/components/content-box";
+import ConfigurationContent from "./configurationContent";
+import ManageConfigurationPage from "./configuration";
 const ConfigurationPage = () => {
   return (
     <Box>
-      <Typography variant="h5">Configuration</Typography>
+      <ContentBox title="Configuration">
+        <ConfigurationContent></ConfigurationContent>
+      </ContentBox>
     </Box>
   );
 };
 export default ConfigurationPage;
+
+export { ManageConfigurationPage };
