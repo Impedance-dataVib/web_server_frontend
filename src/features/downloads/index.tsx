@@ -22,6 +22,7 @@ import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
 const DownloadPage = () => {
+    
   const initial = "";
   const [dataSelection, setDataSelection] = useState(initial);
   const [asset, setAsset] = useState(initial);
@@ -128,6 +129,20 @@ const DownloadPage = () => {
                 <FormControl sx={{ py: 0, width: '110px'}}>
                   <Select
                     value={asset}
+                    sx={{
+                        height: '2.5rem',
+                        color: '#1D4580',
+                        '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#1D4580'
+                        },
+                        '& .MuiSvgIcon-root': {
+                            color: '#1D4580'
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#1D4580',
+                            borderWidth: '0.15rem',
+                          },
+                    }}
                     name="asset"
                     onChange={assetHandler}
                     autoWidth
@@ -135,7 +150,7 @@ const DownloadPage = () => {
                   >
                     {assetData.map((val) => (
                       <MenuItem value={val.value}>
-                        <Typography variant="body2">{val.label}</Typography>
+                        <Typography variant="body2" color="#1D4580">{val.label}</Typography>
                       </MenuItem>
                     ))}
                   </Select>

@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import FileUpload from "../../app/components/fileUpload";
+import FileUpload from "../../app/components/file-upload";
 export default function UploadFile() {
   return (
     <Box

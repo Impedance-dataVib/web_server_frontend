@@ -1,10 +1,30 @@
 import { Typography, Box, Link, Divider, Button } from "@mui/material";
 import SystemInfoTable from "./systemInfoTable";
 import UploadFile from "./uploadFile";
-import CachedIcon from '@mui/icons-material/Cached';
-import { apiData } from "./schema";
+import CachedIcon from "@mui/icons-material/Cached";
+// import { apiData } from "./schema";
+import { useEffect, useState } from "react";
+import SystemInfoApi from "./api";
+
 const SystemConfiguration = () => {
-  
+  const [apiData, setApiData] = useState({
+    serianNo: "",
+    macId: "",
+    firmwareVersion: "",
+    softwareVersion: "",
+    library: "",
+    systemInfo: [],
+  });
+
+  const getSystemInfo = async () =>   {
+    const response = await SystemInfoApi.getSystemInfo();
+    setApiData(response?.data?.data?.master_policy_details[0]);
+  };
+
+  useEffect(() => {
+    getSystemInfo();
+  }, []);
+
   return (
     <Box>
       <Typography variant="h5">System Configuration</Typography>
@@ -138,10 +158,11 @@ const SystemConfiguration = () => {
           <Box>
             <SystemInfoTable systemInfo={apiData.systemInfo} />
           </Box>
+          <Divider sx={{ my: 5 }} />
           <Box
             sx={{
               display: "flex",
-              py: 2,
+              // p: 2,
             }}
           >
             <UploadFile />
@@ -149,13 +170,11 @@ const SystemConfiguration = () => {
           <Box
             sx={{
               display: "flex",
-              justifyContent: 'flex-end'
+              justifyContent: "flex-end",
+              pt: 2
             }}
           >
-            <Button 
-              variant="contained" 
-              startIcon={<CachedIcon />}
-            >
+            <Button variant="contained" startIcon={<CachedIcon />}>
               Update
             </Button>
           </Box>

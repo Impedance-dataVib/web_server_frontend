@@ -20,7 +20,6 @@ interface SystemInfoObject {
     isLocked: boolean;
 }
 
-
 export default function SystemInfoTable({ systemInfo }: SystemIndoProps) {
   return (
     <TableContainer component={Paper}>
@@ -47,6 +46,11 @@ export default function SystemInfoTable({ systemInfo }: SystemIndoProps) {
               <TableCell align="left" sx={{border: 'none', opacity: row.isLocked ? 0.5: 1}}>{row.expiryDate}</TableCell>
             </TableRow>
           ))}
+          {systemInfo.length ===0 && (
+            <TableRow  sx={{ "&:td, &:th": { border: "none" } }}> 
+               <TableCell colSpan={4} align="center">No records found</TableCell> 
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

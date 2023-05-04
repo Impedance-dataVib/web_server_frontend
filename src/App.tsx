@@ -1,6 +1,6 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import DashboardPage from "./features/dashboard";
 import MotorMonitoringPage from "./features/dashboard/pages/motor";
 import EngineMonitoringPage from "./features/dashboard/pages/engine";
@@ -22,10 +22,15 @@ import HelpPage from "./features/help";
 import SettingsPage from "./features/settings";
 import SystemConfiguration from "./features/systemConfiguration";
 import DownloadPage from "./features/downloads";
+// import { AUTH_STATUS, useAuth } from "./app/auth";
+import FullScreenLoader from "./app/components/fullscreen-loader";
+import CommonApi from "./commonApi";
+import appContext from "./app/context";
 
 const AppRoutes = (
   <Routes>
-    <Route path="login" element={<LoginPage />} />
+    <Route path="/" element={<DashboardPage />} />
+    {/* <Route path="login" element={<LoginPage />} /> */}
     <Route path="logout" element={<LogoutPage />} />
     <Route path="/trends/*" element={<TrendsPage />}></Route>
     <Route path="/dashboard/*" element={<DashboardPage />}>
@@ -53,20 +58,98 @@ const AppRoutes = (
   </Routes>
 );
 
+const LoginRoutes = (
+  <Routes>
+    <Route path="login" element={<LoginPage />} />
+  </Routes>
+);
+
+export const LICENSE_STATUS = {
+  INACTIVE: "inactive",
+  ACTIVE: "active",
+};
+
 function App() {
   const [activeTheme, setActiveTheme] = useState<any>(lightTheme);
 
+  const [licenseInfo, setLicenseInfo] = useState<any>();
+  const [licenseStatus, setLicenseStatus] = useState<string>();
+
+  // const authenticator = useAuth();
+  const navigate = useNavigate();
+  const path = useLocation();
+
+  const onLoadCheckLicense = () => {
+    CommonApi.getLicenseInfo()
+      .then((res) => {
+        const lic = res.data;
+        setLicenseInfo(lic);
+        if (lic !== undefined && String(lic.isActive) === "true") {
+          // set license active
+          setLicenseStatus(LICENSE_STATUS.ACTIVE);
+          if (lic.expiryDate === undefined) {
+            // set license as inactive
+            setLicenseStatus(LICENSE_STATUS.INACTIVE);
+            return;
+          }
+          if (lic.configCount >= 1) {
+            // redirect to dashboard
+            navigate("/dashboard");
+            return;
+          } else {
+            // redirect to configuration screen
+            navigate("/configuration");
+            return;
+          }
+        } else {
+          // redirect to activate license screen
+          setLicenseStatus(LICENSE_STATUS.INACTIVE);
+          return;
+        }
+      })
+      .catch((e) => {
+        setLicenseInfo(undefined);
+        setLicenseStatus(LICENSE_STATUS.INACTIVE);
+        // Show login screen, then show license import screen
+      });
+  };
+
+  useEffect(() => {
+    onLoadCheckLicense();
+  }, []);
+
+  if (licenseStatus === LICENSE_STATUS.INACTIVE) {
+    navigate("/login?inactive=true");
+  }
+
+  //   Active licensne and min one config.
+  // -> dashboard
+  // -> all other pages are disabled
+
+  // active licensne and no configuration.
+  // -> login
+  // -> config screen
+  // ->dashboard inactive
+
+  // inactive license
+  // -> login with message invalid.
+  // -> redirect to system screen where user can import license.
+
   return (
-    <Suspense fallback={<div>Loading</div>}>
-      <div className="App">
-        <ThemeProvider theme={activeTheme}>
-          <CssBaseline />
-          <BrowserRouter>
-            <Layout>{AppRoutes}</Layout>
-          </BrowserRouter>
-        </ThemeProvider>
-      </div>
-    </Suspense>
+    <div className="App">
+      <Suspense fallback={<FullScreenLoader />}>
+        <appContext.Provider value={{ licenseInfo, licenseStatus }}>
+          <ThemeProvider theme={activeTheme}>
+            <CssBaseline />
+            {path && ["/login", "/logout"].includes(path.pathname) ? (
+              <>{LoginRoutes}</>
+            ) : (
+              <Layout>{AppRoutes}</Layout>
+            )}
+          </ThemeProvider>
+        </appContext.Provider>
+      </Suspense>
+    </div>
   );
 }
 
