@@ -1,6 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-// import { AUTH_STATUS } from "../hooks";
-// import { useAuthenticator } from "../hooks";
 
 export interface IAuth {
   authToken: string | undefined;
@@ -27,8 +25,8 @@ export const AUTH_STATUS = {
   UNAUTHENTICATED: "un_authenticated",
 };
 
-const AUTH_TOKEN_KEY = "vib-360-auth-token";
-const REFRESH_TOKEN_KEY = "vib-360-refresh-token";
+export const AUTH_TOKEN_KEY = "vib-360-auth-token";
+export const REFRESH_TOKEN_KEY = "vib-360-refresh-token";
 
 const authContext = React.createContext<IAuth>(initialState);
 
@@ -40,11 +38,8 @@ const AuthProvider = ({ children }: any) => {
   const [readyState, setReadyState] = useState<boolean>(false);
 
   useEffect(() => {
-    // console.log("theAuthToken called");
     const theAuthToken = sessionStorage.getItem(AUTH_TOKEN_KEY);
     const refToken = sessionStorage.getItem(REFRESH_TOKEN_KEY);
-
-    // console.log("theAuthToken = ", theAuthToken);
 
     setAuthToken(theAuthToken || "");
     setRefreshToken(refToken || "");

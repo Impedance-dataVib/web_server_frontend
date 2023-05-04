@@ -12,10 +12,6 @@ const login = (payload: ILoginRequest) => {
   });
 };
 
-const getLicense = () => {
-    return api.get('license/get-license.php');
-}
-
 const LoginApi = {
   login,
 };

@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Checkbox,
   FormLabel,
   Grid,
+  IconButton,
   Link,
   TextField,
   Typography,
 } from "@mui/material";
-import { WarningOutlined } from "@mui/icons-material";
+import { Cancel, Key, WarningOutlined } from "@mui/icons-material";
 import LoginApi from "./loginApi";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { AUTH_STATUS, useAuth } from "../../app/auth";
 import FileUploadComponent from "../../app/components/fileupload";
+import appContext from "../../app/context";
+import { LICENSE_STATUS } from "../../App";
+import * as dateFns from "date-fns";
+import CommonApi from "../../commonApi";
 
 const LoginForm = () => {
   const [username, setUsername] = useState<string>("");
@@ -167,11 +173,49 @@ const LoginForm = () => {
 };
 
 const LicenseInActiveForm = () => {
-  const [isError, setIsError] = useState<boolean>(true);
+  const [isExpired, setIsExpired] = useState<boolean>(false);
+  const [isInactive, setInactive] = useState<boolean>(false);
 
-  const [licenseKey, setLicenseKey] = useState<string>("");
+  const [expiryDate, setExpiryDate] = useState<any>();
+  const [selectedFile, setSelectedFile] = useState<any>();
+  const [tNcAccepted, setTnCAccepted] = useState<boolean>(false);
 
-  const renderLicenseError = () => {
+  const { licenseStatus, licenseInfo } = useContext(appContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setInactive(false);
+    setIsExpired(false);
+
+    if (licenseStatus === LICENSE_STATUS.INACTIVE) {
+      if (
+        licenseInfo !== undefined &&
+        licenseInfo.expiryDate &&
+        String(licenseInfo.expiryDate)?.trim()?.length > 0
+      ) {
+        const parsedExpiryDate = dateFns.parse(
+          licenseInfo.expiryDate,
+          "yyyy-MM-dd HH:mm:ss",
+          new Date()
+        );
+
+        const currentDate = new Date();
+        if (dateFns.isBefore(parsedExpiryDate, currentDate)) {
+          setIsExpired(true);
+          setExpiryDate(parsedExpiryDate);
+          return;
+        } else {
+          setInactive(true);
+        }
+      }
+      setInactive(true);
+    } else if (licenseStatus === LICENSE_STATUS.ACTIVE) {
+      setInactive(false);
+      setIsExpired(false);
+    }
+  }, [licenseStatus, licenseInfo]);
+
+  const renderLicenseExpiredError = () => {
     return (
       <Box
         sx={{
@@ -187,20 +231,61 @@ const LicenseInActiveForm = () => {
         </Box>
         <Box>
           <Typography sx={{ fontSize: "24px", color: "#5A607F" }}>
-            Authentication error
+            Expired Licence
           </Typography>
           <Typography sx={{ fontSize: "16px", color: "#5A607F" }}>
-            Incorrect Username or Password, Please try again.
+            Your Licence key has Expired, To continue to use this application,
+            please renew your licence
           </Typography>
         </Box>
       </Box>
     );
   };
 
-  const onClickActivateButton = () => {};
+  const renderLicenseInactiveError = () => {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          border: "1px solid #FF0A002B",
+          borderRadius: "8px",
+          backgroundColor: "#FEF3F3",
+          p: 1,
+        }}
+      >
+        <Box sx={{ p: 2 }}>
+          <WarningOutlined sx={{ fontSize: "30px" }} />
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: "24px", color: "#5A607F" }}>
+            Activate Licence
+          </Typography>
+          <Typography sx={{ fontSize: "16px", color: "#5A607F" }}>
+            You have not yet Activated your Licence, to continue to use this
+            application, please activate your licence
+          </Typography>
+        </Box>
+      </Box>
+    );
+  };
 
-  const onClickLicense = () => {
-    console.log("on click");
+  const onClickActivateButton = () => {
+    CommonApi.importLicense({ selectedFile })
+      .then((res) => {
+        alert(res?.data?.Message);
+        navigate("/dashboard");
+      })
+      .catch((e) => {
+        alert(e?.response?.data?.Message);
+      });
+  };
+
+  const onChangeLicenseFile = (licFile: any) => {
+    setSelectedFile(licFile);
+  };
+
+  const onChangeTnc = (e: any, checked: boolean) => {
+    setTnCAccepted(checked);
   };
 
   return (
@@ -208,22 +293,102 @@ const LicenseInActiveForm = () => {
       <Box sx={{ maxWidth: "416px", mt: { md: 10, sm: 1, xs: 1 } }}>
         <img alt="logo" src="logo_vib_360.png" />
       </Box>
-      <Box sx={{ maxWidth: isError ? "auto" : "416px", mt: 1 }}>
-        <>{isError && renderLicenseError()}</>
 
-        <Typography sx={{ color: "#5A607F", fontSize: "18px", opacity: "0.5" }}>
-          Please enter your license key below
-        </Typography>
-      </Box>
-      <Box>       
+      {isExpired && (
+        <Box sx={{ maxWidth: isExpired ? "auto" : "416px", mt: 1 }}>
+          <>{renderLicenseExpiredError()}</>
+          <>
+            <Box sx={{ mt: 1 }}>
+              <Typography>
+                Your Licence Expired on{" "}
+                <b> {`${dateFns.format(expiryDate, "dd MMM yyyy, H:mm a")}`}</b>
+                , If you have a Licence key please enter below or{" "}
+                <a
+                  href={`${process.env.REACT_APP_LIC_PORTAL_URL}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Click here
+                </a>{" "}
+                to Renew Licence
+              </Typography>
+            </Box>
+          </>
+        </Box>
+      )}
+      {isInactive && (
+        <Box sx={{ maxWidth: isInactive ? "auto" : "416px", mt: 1 }}>
+          <>{renderLicenseInactiveError()}</>
+        </Box>
+      )}
+      <Box sx={{ mt: 1 }}>
         <Box>
           <FormLabel>Upload License file</FormLabel>
-          <FileUploadComponent
-            onChangeHandler={onClickLicense}
-          ></FileUploadComponent>
+          {selectedFile ? (
+            <Box
+              sx={{
+                border: "1px solid #1D4580",
+                borderRadius: "8px",
+                height: "100px",
+                display: "flex",
+                mt: 1,
+                alignItems: "center",
+                position: "relative",
+              }}
+            >
+              <Box display="flex" sx={{ flex: 1 }}>
+                <Box sx={{ mr: 2, p: 1 }}>
+                  <Key sx={{ fontSize: "36px" }} />
+                </Box>
+                <Box sx={{ pr: 2 }}>
+                  <Typography variant="body1" sx={{ fontSize: "16px" }}>
+                    {selectedFile.name}
+                  </Typography>
+                  <Typography variant="caption">
+                    {selectedFile.size} bytes
+                  </Typography>
+                </Box>
+
+                <Box sx={{ position: "absolute", top: "10px", right: "10px" }}>
+                  <IconButton onClick={() => setSelectedFile(undefined)}>
+                    <Cancel />
+                  </IconButton>
+                </Box>
+              </Box>
+            </Box>
+          ) : (
+            <FileUploadComponent
+              onChangeHandler={onChangeLicenseFile}
+              accept=".dat"
+            ></FileUploadComponent>
+          )}
+        </Box>
+        <Box>
+          <Checkbox
+            id="termsAndConditionsAccept"
+            value={tNcAccepted}
+            onChange={onChangeTnc}
+          ></Checkbox>{" "}
+          I agree to the{" "}
+          <a
+            href={
+              process.env.PUBLIC_URL +
+              `/Annex VIII_VIB 360 End user license contract_Distrib agreement [FR].pdf`
+            }
+            target="_blank"
+            rel="noreferrer"
+          >
+            End user license agreement
+          </a>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-          <Button id="activate-btn" color="primary" variant="contained">
+          <Button
+            id="activate-btn"
+            color="primary"
+            variant="contained"
+            disabled={!(tNcAccepted && selectedFile !== undefined)}
+            onClick={onClickActivateButton}
+          >
             Activate
           </Button>
         </Box>
@@ -258,34 +423,19 @@ const LoginPage = () => {
     licenseInActiveFlag = true;
   }
 
-  const licenseExpiredParam = searchParams.get("expired");
-  let licenseExpiredFlag = false;
-  if (
-    licenseExpiredParam !== null &&
-    String(licenseExpiredParam).trim().toLowerCase() === "true"
-  ) {
-    licenseExpiredFlag = true;
-  }
-
   const authenticator = useAuth();
 
   useEffect(() => {
     if (authenticator.authStatus === AUTH_STATUS.AUTHENITCATED) {
       if (licenseInActiveFlag) {
         setFormToRender(LOGIN_PAGE_FORMS.LICENSE_IMPORT);
-      } else if (licenseExpiredFlag) {
-        setFormToRender(LOGIN_PAGE_FORMS.LICENSE_EXPIRED);
       } else {
         setFormToRender(LOGIN_PAGE_FORMS.LOGIN_FORM);
       }
     } else {
       setFormToRender(LOGIN_PAGE_FORMS.LOGIN_FORM);
     }
-  }, [authenticator, licenseInActiveFlag, licenseExpiredFlag]);
-
-  console.log("params in active = ", licenseInActiveFlag);
-  console.log("params expired ", licenseExpiredFlag);
-  console.log("params auth ", authenticator);
+  }, [authenticator, licenseInActiveFlag]);
 
   return (
     <Box
@@ -307,12 +457,8 @@ const LoginPage = () => {
             sx={{
               height: {
                 sm: "600px",
-                // sm: "100%",
                 xs: "100%",
               },
-              // width: { sm: "1164px",
-              //  sm: "auto",
-              //  xs: "auto" },
               background: "#fff",
               display: "flex",
             }}
@@ -327,7 +473,6 @@ const LoginPage = () => {
                   height: "100%",
                   display: {
                     sm: "flex",
-                    //  sm: "none",
                     xs: "none",
                   },
                   p: 2,
@@ -335,11 +480,7 @@ const LoginPage = () => {
               >
                 <Box
                   sx={{
-                    // height: "448px",
-                    // width: "448px",
-                    // border: "2px solid #fff",
                     mixBlendMode: "overlay",
-                    // borderRadius: "50%",
                     overflow: "hidden",
                     display: { sm: "block", xs: "none" },
                   }}

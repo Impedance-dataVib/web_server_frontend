@@ -13,11 +13,10 @@ const FileUploadComponent = ({
   const id = useId();
   const [dragOverFlag, setDragOverFlag] = useState<boolean>(false);
 
-  const ref = useRef(undefined);
+  // const ref = useRef(undefined);
 
   const onDropHandler = (e: any) => {
     e.preventDefault();
-    console.log("dropped ", e);
   };
 
   const onDropCapture = () => {
@@ -27,16 +26,21 @@ const FileUploadComponent = ({
   };
 
   const onDragOver = () => {
-    console.log("onDragOver = ");
     if (!dragOverFlag) {
       setDragOverFlag(true);
     }
   };
 
   const onDragEnd = () => {
-    console.log("drag end = ");
     if (dragOverFlag) {
       setDragOverFlag(false);
+    }
+  };
+
+  const onFileChangeHandler = (e: any) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      onChangeHandler(files[0]);
     }
   };
 
@@ -57,7 +61,9 @@ const FileUploadComponent = ({
     >
       <Box sx={{ height: "100%" }}>
         <Box style={{ position: "absolute", top: "40%", left: "20%" }}>
-          <Typography>Drag and Drop your file here</Typography>
+          <Typography>
+            Drag and drop, or click here to browse your files
+          </Typography>
         </Box>
 
         <input
@@ -70,9 +76,8 @@ const FileUploadComponent = ({
             opacity: 0,
             width: "100%",
             height: "100%",
-            background: "yellow",
           }}
-          onChange={onChangeHandler}
+          onChange={onFileChangeHandler}
         />
       </Box>
     </Box>

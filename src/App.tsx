@@ -1,12 +1,6 @@
 import React, { Suspense, useEffect, useState } from "react";
 import "./App.css";
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import DashboardPage from "./features/dashboard";
 import MotorMonitoringPage from "./features/dashboard/pages/motor";
 import EngineMonitoringPage from "./features/dashboard/pages/engine";
@@ -26,11 +20,10 @@ import NotepadPage from "./features/notepad";
 import FileBrowserPage from "./features/fileBrowser";
 import HelpPage from "./features/help";
 import SettingsPage from "./features/settings";
-import { AUTH_STATUS, useAuth } from "./app/auth";
+// import { AUTH_STATUS, useAuth } from "./app/auth";
 import FullScreenLoader from "./app/components/fullscreen-loader";
 import CommonApi from "./commonApi";
 import appContext from "./app/context";
-import * as dateFns from "date-fns";
 
 const AppRoutes = (
   <Routes>
@@ -75,25 +68,16 @@ function App() {
   const [licenseInfo, setLicenseInfo] = useState<any>();
   const [licenseStatus, setLicenseStatus] = useState<string>();
 
-  const authenticator = useAuth();
+  // const authenticator = useAuth();
   const navigate = useNavigate();
   const path = useLocation();
-
-  console.log("path = ", path);
-  console.log("authStatus 2= ", authenticator);
 
   const onLoadCheckLicense = () => {
     CommonApi.getLicenseInfo()
       .then((res) => {
-        console.log("res data = ", res.data);
-        const lic = {
-          configCount: 0,
-          expiryDate: "2023-07-28 09:21:12",
-          isActive: "false",
-        };
+        const lic = res.data;
         setLicenseInfo(lic);
-        if (lic !== undefined && lic.isActive === "true") {
-          console.log("active");
+        if (lic !== undefined && String(lic.isActive) === "true") {
           // set license active
           setLicenseStatus(LICENSE_STATUS.ACTIVE);
           if (lic.expiryDate === undefined) {
@@ -101,19 +85,6 @@ function App() {
             setLicenseStatus(LICENSE_STATUS.INACTIVE);
             return;
           }
-          // else {
-          //   const parsedDate = dateFns.parse(
-          //     lic.expiryDate,
-          //     "yyyy-MM-dd HH:mm:ss",
-          //     new Date()
-          //   );
-
-          //   const currentDate = new Date();
-          //   if (dateFns.isBefore(parsedDate, currentDate)) {
-          //     setLicenseStatus(LICENSE_STATUS.EXPIRED);
-          //     return;
-          //   }
-          // }
           if (lic.configCount >= 1) {
             // redirect to dashboard
             navigate("/dashboard");
@@ -126,12 +97,10 @@ function App() {
         } else {
           // redirect to activate license screen
           setLicenseStatus(LICENSE_STATUS.INACTIVE);
-          console.log("in active");
           return;
         }
       })
       .catch((e) => {
-        // console.log("eror", e);
         setLicenseInfo(undefined);
         setLicenseStatus(LICENSE_STATUS.INACTIVE);
         // Show login screen, then show license import screen
@@ -145,15 +114,10 @@ function App() {
   if (licenseStatus === LICENSE_STATUS.INACTIVE) {
     navigate("/login?inactive=true");
   }
-  // else if (licenseStatus === LICENSE_STATUS.EXPIRED) {
-  //   navigate("/login?expired=true");
-  // }
 
   //   Active licensne and min one config.
   // -> dashboard
   // -> all other pages are disabled
-
-  //
 
   // active licensne and no configuration.
   // -> login
