@@ -14,6 +14,6 @@ const login = (payload: ILoginRequest) => {
 
 const LoginApi = {
   login,
-};
+};   
 
 export default LoginApi;

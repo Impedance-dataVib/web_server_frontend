@@ -74,7 +74,7 @@ const AuthProvider = ({ children }: any) => {
         setAuthToken,
         setRefreshToken,
         signOut,
-        readyState
+        readyState,
       }}
     >
       {children}
