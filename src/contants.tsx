@@ -50,7 +50,7 @@ export const APP_NAV_MENU_ITEMS: INavMenuItem[] = [
   {
     label: "Logout",
     icon: <Logout />,
-    path: "/help",
+    path: "/logout",
   },
   
 ];

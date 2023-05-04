@@ -88,7 +88,7 @@ declare module '@mui/material/styles' {
 let baseTheme = createTheme({
   palette: {
     primary: {
-      main: '#333070',
+      main: '#1D4580',
       dark: '#171717'
     },
     secondary: {
