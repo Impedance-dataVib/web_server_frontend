@@ -72,7 +72,7 @@ const DrawerAppBar = () => {
         }}
       >
         <img
-          src="logo.png"
+          src="logo_vib_360.png"
           style={{
             width: "107px",
             height: "36px",
@@ -220,7 +220,7 @@ const DrawerAppBar = () => {
               }}
             >
               <img
-                src="logo.png"
+                src="logo_vib_360.png"
                 style={{
                   width: "107px",
                   height: "36px",
