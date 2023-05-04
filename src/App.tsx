@@ -76,6 +76,11 @@ function App() {
     CommonApi.getLicenseInfo()
       .then((res) => {
         const lic = res.data;
+        // {
+        //   configCount: 1,
+        //   expiryDate: "2023-01-03 06:42:35",
+        //   isActive: false,
+        // };
         setLicenseInfo(lic);
         if (lic !== undefined && String(lic.isActive) === "true") {
           // set license active
