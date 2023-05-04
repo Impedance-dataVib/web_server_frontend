@@ -19,7 +19,9 @@ import Layout from "./app/components/layout";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { lightTheme } from "./app/theme";
 import TrendsPage from "./features/trends";
-import ConfigurationPage from "./features/configuration";
+import ConfigurationPage, {
+  ManageConfigurationPage,
+} from "./features/configuration";
 import NotepadPage from "./features/notepad";
 import FileBrowserPage from "./features/fileBrowser";
 import HelpPage from "./features/help";
@@ -44,7 +46,11 @@ const AppRoutes = (
       <Route path="bearing" element={<BearingMonitoringPage />} />
       <Route path="motor" element={<MotorMonitoringPage />} />
     </Route>
-    <Route path="/configuration/*" element={<ConfigurationPage />}></Route>
+    <Route path="/configuration" element={<ManageConfigurationPage />}></Route>
+    <Route
+      path="/configuration/:configName"
+      element={<ConfigurationPage></ConfigurationPage>}
+    />
     <Route path="/notepad/*" element={<NotepadPage />}></Route>
     <Route path="/file-browser/*" element={<FileBrowserPage />}></Route>
     <Route path="/help/*" element={<HelpPage />}></Route>
