@@ -1,5 +1,5 @@
-import { Box, TextField, Typography } from "@mui/material";
-import { ChangeEventHandler, useId, useRef, useState } from "react";
+import { Box, Typography } from "@mui/material";
+import { ChangeEventHandler, useId, useState } from "react";
 
 interface FileUploadObject {
   onChangeHandler: ChangeEventHandler;
@@ -12,8 +12,6 @@ const FileUploadComponent = ({
 }: FileUploadObject) => {
   const id = useId();
   const [dragOverFlag, setDragOverFlag] = useState<boolean>(false);
-
-  // const ref = useRef(undefined);
 
   const onDropHandler = (e: any) => {
     e.preventDefault();

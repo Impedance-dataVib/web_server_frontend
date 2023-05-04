@@ -1,3 +1,23 @@
 {
-    "latestReportHeading": "Latest Report"
+  "latestReportHeading": "Latest Report",
+  "login.auth.error.heading": "Authentication error",
+  "login.auth.error.subheading": "Incorrect Username or Password, Please try again.",
+  "login.screen.welcome.message": "Welcome back! Please login to your account.",
+  "login.screen.label.username": "Username",
+  "login.screen.label.password": "Password",
+  "login.screen.button.login": "Login",
+  "login.screen.button.signup": "Sign up",
+  "login.screen.copyright.text": "Copyright @dataVib-Impedance",
+  "login.lic.inactive.error.heading": "Activate Licence",
+  "login.lic.inactive.error.subheading": "You have not yet Activated your Licence, to continue to use this application, please activate your licence",
+  "login.lic.expired.error.heading": "Expired Licence",
+  "login.lic.expired.error.subheading": "Your Licence key has Expired, To continue to use this application, please renew your licence",
+  "login.lic.expired.msg.part1": "Your Licence Expired on",
+  "login.lic.expired.msg.part2": "If you have a Licence key please enter below or",
+  "login.lic.expired.msg.part3": "Click here",
+  "login.lic.expired.msg.part4": "to Renew Licence",
+  "login.lic.upload.file": "Upload License file",
+  "login.lic.agree.part1": "I agree to the",
+  "login.lic.agree.part2": "End user license agreement",
+  "login.lic.btn.activate": "Activate"
 }
