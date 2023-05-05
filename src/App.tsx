@@ -20,6 +20,8 @@ import NotepadPage from "./features/notepad";
 import FileBrowserPage from "./features/fileBrowser";
 import HelpPage from "./features/help";
 import SettingsPage from "./features/settings";
+import SystemConfiguration from "./features/systemConfiguration";
+import DownloadPage from "./features/downloads";
 // import { AUTH_STATUS, useAuth } from "./app/auth";
 import FullScreenLoader from "./app/components/fullscreen-loader";
 import CommonApi from "./commonApi";
@@ -95,6 +97,23 @@ const AppRoutes = (
         </ProtectedRoute>
       }
     ></Route>
+
+    <Route
+      path="/systemconfiguration/*"
+      element={
+        <ProtectedRoute>
+          <SystemConfiguration /> 
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/download/*"
+      element={
+        <ProtectedRoute>
+          <DownloadPage />
+        </ProtectedRoute>
+      }
+    />
   </Routes>
 );
 
