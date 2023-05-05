@@ -132,8 +132,8 @@ const SettingsPage = () => {
                     <ToggleSwitch
                       value={apiData.display_date_utc}
                       onChange={(e: any) => {
-                        console.log(e);
-                        changeEventHandler("display_date_utc", e.target.value === "on");
+                        console.log(e.target.checked);
+                        changeEventHandler("display_date_utc", e.target.checked);
                       }}
                     />
                   </Box>
