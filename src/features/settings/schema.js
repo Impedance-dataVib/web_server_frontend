@@ -7,22 +7,6 @@ export const Language = [
         label: 'English',
         value: 'english'
     },
-    {
-        label: 'Hindi',
-        value: 'hindi'
-    },
-    {
-        label: 'French',
-        value: 'french'
-    },
-    {
-        label: 'German',
-        value: 'german'
-    },
-    {
-        label: 'Other',
-        value: 'other'
-    },
 ]
 
 export const radioData = [

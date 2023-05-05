@@ -31,7 +31,7 @@ const defaultApiData = {
   websocket_port: "",
   dns_server: "",
   ip_address: "",
-  netwrok: "",
+  netmask: "",
   gateway: "",
   description: "",
   network_type: "",
@@ -64,6 +64,10 @@ const SettingsPage = () => {
 
   const changeEventHandler = (key: string, val: any) => {
     setApiData((value) => {
+      console.log({
+        ...value,
+        [key]: val,
+      });
       return {
         ...value,
         [key]: val,
@@ -73,7 +77,7 @@ const SettingsPage = () => {
 
   const getSettingsInfo = () => {
     SettingsApi.getSettingsInfo().then((val) => {
-      setApiData(val?.data?.data[0]);
+      setApiData(val?.data?.data);
     });
   };
 
@@ -128,6 +132,7 @@ const SettingsPage = () => {
                     <ToggleSwitch
                       value={apiData.display_date_utc}
                       onChange={(e: any) => {
+                        console.log(e);
                         changeEventHandler("display_date_utc", e.target.value === "on");
                       }}
                     />
@@ -164,7 +169,6 @@ const SettingsPage = () => {
                         changeEventHandler("date_in_utc", e.target.value);
                       }}
                       variant="outlined"
-                      type="date"
                       sx={{
                         fontSize: "16px",
                         mb: "20px",
@@ -199,7 +203,6 @@ const SettingsPage = () => {
                         changeEventHandler("time_in_utc", e.target.value);
                       }}
                       variant="outlined"
-                      type="time"
                       sx={{
                         fontSize: "16px",
                         mb: "20px",
@@ -347,7 +350,7 @@ const SettingsPage = () => {
                   </Typography>
                   <Box sx={{ mx: 1 }}>
                     <TextField
-                      placeholder="0000"
+                      placeholder="00:00"
                       value={apiData.webdev_port}
                       variant="outlined"
                       onChange={(e: any) => {
@@ -397,7 +400,7 @@ const SettingsPage = () => {
                   </Typography>
                   <Box sx={{ mx: 1 }}>
                     <TextField
-                      placeholder="0000"
+                      placeholder="00:00"
                       value={apiData.websocket_port}
                       onChange={(e: any) => {
                         if(e.target.value.length < 5)
@@ -544,8 +547,8 @@ const SettingsPage = () => {
                   <Box>
                     <TextField
                       placeholder="_._._._ "
-                      value={apiData.netwrok}
-                      onChange={e => handleIpAddress('netwrok', e.target.value, (apiData.netwrok).length)}
+                      value={apiData.netmask}
+                      onChange={e => handleIpAddress('netmask', e.target.value, (apiData.netmask).length)}
                       variant="outlined"
                       sx={{
                         fontSize: "16px",
