@@ -41,7 +41,7 @@ const AppRoutes = (
     </Route>
     <Route path="/configuration" element={<ManageConfigurationPage />}></Route>
     <Route
-      path="/configuration/:configName"
+      path="/configuration/:configId"
       element={<ConfigurationPage></ConfigurationPage>}
     />
     <Route path="/notepad/*" element={<NotepadPage />}></Route>

@@ -12,11 +12,13 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+
 import { useNavigate } from "react-router-dom";
+import { deleteConfig, activeConfig } from "../../app/services";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: '#e8e8ed',
+    backgroundColor: "#e8e8ed",
     color: theme.palette.common.black,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -25,7 +27,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  
   // hide last border
   "&:last-child td, &:last-child th": {
     border: 0,
@@ -44,9 +45,34 @@ const rows = [
   createData("Configuartion 5", false),
 ];
 
-const ConfigurationTable = () => {
+const ConfigurationTable = ({ data, refetchOnDelete, setAlert }: any) => {
   const navigate = useNavigate();
-
+  const onDeleteConfiguration = async (id: string) => {
+    try {
+      await deleteConfig(id);
+      await refetchOnDelete();
+      setAlert.setOpenAlert(true);
+      setAlert.setAlertMessage("Success");
+    } catch (e) {
+      setAlert.setOpenAlert(true);
+      setAlert.setAlertMessage("Error");
+    }
+  };
+  const onExportConfiguartion = async (id: string) => {};
+  const onActiveConfig = async (id: string) => {
+    try {
+      const data = {
+        records_id: id,
+      };
+      await activeConfig(data);
+      await refetchOnDelete();
+      setAlert.setOpenAlert(true);
+      setAlert.setAlertMessage("Success");
+    } catch (error) {
+      setAlert.setOpenAlert(true);
+      setAlert.setAlertMessage("Error");
+    }
+  };
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -57,28 +83,39 @@ const ConfigurationTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {data.map((row: any) => (
             <StyledTableRow key={row.name}>
               <StyledTableCell component="th" scope="row">
                 {row.name}
               </StyledTableCell>
               <StyledTableCell align="left">
-                <IconButton aria-label="Export" color="primary">
+                <IconButton
+                  onClick={() => onExportConfiguartion(row.id)}
+                  aria-label="Export"
+                  color="primary"
+                >
                   <FileDownloadIcon></FileDownloadIcon>
                 </IconButton>
-                <IconButton aria-label="delete" color="primary">
+                <IconButton
+                  onClick={() => onDeleteConfiguration(row.id)}
+                  aria-label="delete"
+                  color="primary"
+                >
                   <DeleteOutlineIcon></DeleteOutlineIcon>
                 </IconButton>
                 <IconButton
-                  onClick={() => navigate(`${row.name}`)}
+                  onClick={() => navigate(`${row.id}`)}
                   aria-label="edit"
                   color="primary"
                 >
                   <EditIcon></EditIcon>
                 </IconButton>
 
-                <Button variant="contained">
-                  {row.isActive ? "Active" : "In Active"}
+                <Button
+                  variant="contained"
+                  onClick={() => onActiveConfig(row.id)}
+                >
+                  {row.status === "Active" ? "Active" : "In Active"}
                 </Button>
               </StyledTableCell>
             </StyledTableRow>
