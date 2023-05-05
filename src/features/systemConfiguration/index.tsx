@@ -18,7 +18,7 @@ const SystemConfiguration = () => {
 
   const getSystemInfo = async () =>   {
     const response = await SystemInfoApi.getSystemInfo();
-    setApiData(response?.data?.data?.master_policy_details[0]);
+    setApiData(response?.data?.data);
   };
 
   useEffect(() => {
@@ -156,7 +156,7 @@ const SystemConfiguration = () => {
           </Box>
           <Divider sx={{ my: 5 }} />
           <Box>
-            <SystemInfoTable systemInfo={apiData.systemInfo} />
+            <SystemInfoTable systemInfo={[]} />
           </Box>
           <Divider sx={{ my: 5 }} />
           <Box

@@ -96,13 +96,16 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default function ToggleSwitch() {
+interface ToggleSwitchObject {
+  value: boolean,
+  onChange: React.ChangeEventHandler,
+}
+
+export default function ToggleSwitch ({value, onChange}: ToggleSwitchObject) {
   return (
     <FormGroup>
       <Stack direction="row" spacing={1} alignItems="center">
-        {/* <Typography>Off</Typography> */}
-        <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-        {/* <Typography>On</Typography> */}
+        <AntSwitch checked={value} onChange={onChange} inputProps={{ 'aria-label': 'ant design' }} />
       </Stack>
     </FormGroup>
   );

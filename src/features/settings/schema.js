@@ -1,5 +1,9 @@
 export const Language = [
     {
+        label: 'Please Select',
+        value: ''
+    },
+    {
         label: 'English',
         value: 'english'
     },
@@ -24,14 +28,14 @@ export const Language = [
 export const radioData = [
     {
         label: 'Static',
-        value: 'static'
+        value: '1'
     },
     {
-        label: 'Dynamic',
-        value: 'dynamic'
+        label: 'Value 2',
+        value: '2'
     },
     {
-        label: 'Other',
-        value: 'other'
+        label: 'Value 3',
+        value: '3'
     },
 ]
