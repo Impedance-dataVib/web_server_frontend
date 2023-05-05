@@ -86,10 +86,10 @@ const DashboardPage = () => {
   useEffect(() => {
     if (lastMessage !== undefined) {
       const data = lastMessage?.data;
-      console.log("lastMessage = ", lastMessage);
+      // console.log("lastMessage = ", lastMessage);
       if (data) {
         const parsedData = JSON.parse(data);
-        console.log("message = ", JSON.parse(data));
+        // console.log("message = ", JSON.parse(data));
 
         if (
           parsedData &&
@@ -122,7 +122,7 @@ const DashboardPage = () => {
 
         const latestReportForEngine =
           engineData?.modules?.engine?.[`latest-reports`];
-        console.log("latestReportForEngine = ", latestReportForEngine);
+        // console.log("latestReportForEngine = ", latestReportForEngine);
         setEngineLatestReport(latestReportForEngine || {});
 
         // "Bearing"
@@ -131,7 +131,7 @@ const DashboardPage = () => {
         );
         const latestReportForBearing =
           bearingData?.modules?.bearing?.[`latest-reports`];
-        console.log("latestReportForBearing = ", latestReportForBearing);
+        // console.log("latestReportForBearing = ", latestReportForBearing);
         setBearingLatestReport(latestReportForBearing || {});
 
         const motorData = parsedData?.engines?.find(
@@ -140,7 +140,7 @@ const DashboardPage = () => {
 
         const latestReportForMotor =
           motorData?.modules?.motor?.[`latest-reports`];
-        console.log("latestReportForMotor = ", latestReportForMotor);
+        // console.log("latestReportForMotor = ", latestReportForMotor);
         setMotorLatestReport(latestReportForMotor || {});
 
         const turbineData = parsedData?.engines?.find(
@@ -149,7 +149,7 @@ const DashboardPage = () => {
 
         const latestReportForTurbine =
           turbineData?.modules?.turbine?.[`latest-reports`];
-        console.log("latestReportForTurbine = ", latestReportForTurbine);
+        // console.log("latestReportForTurbine = ", latestReportForTurbine);
         setTurbineLatestReport(latestReportForTurbine || {});
 
         const gearboxData = parsedData?.engines?.find(
@@ -158,7 +158,7 @@ const DashboardPage = () => {
 
         const latestReportForGearbox =
           gearboxData?.modules?.gearbox?.[`latest-reports`];
-        console.log("latestReportForGearbox = ", latestReportForGearbox);
+        // console.log("latestReportForGearbox = ", latestReportForGearbox);
         setGearboxLatestReport(latestReportForGearbox || {});
       }
     }
