@@ -156,7 +156,7 @@ const SystemConfiguration = () => {
           </Box>
           <Divider sx={{ my: 5 }} />
           <Box>
-            <SystemInfoTable systemInfo={[]} />
+            <SystemInfoTable systemInfo={apiData.systemInfo} />
           </Box>
           <Divider sx={{ my: 5 }} />
           <Box
