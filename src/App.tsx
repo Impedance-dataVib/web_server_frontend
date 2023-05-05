@@ -65,17 +65,6 @@ const AppRoutes = (
         </ProtectedRoute>
       }
     />
-<<<<<<< HEAD
-    <Route path="/notepad/*" element={<NotepadPage />}></Route>
-    <Route path="/file-browser/*" element={<FileBrowserPage />}></Route>
-    <Route path="/help/*" element={<HelpPage />}></Route>
-    <Route path="/settings/*" element={<SettingsPage />}></Route>
-
-    <Route path="/download/*" element={<DownloadPage/>}>
-    </Route>
-
-    <Route path="/systemconfiguration/*" element={<SystemConfiguration/>}></Route>
-=======
     <Route
       path="/notepad/*"
       element={
@@ -108,7 +97,23 @@ const AppRoutes = (
         </ProtectedRoute>
       }
     ></Route>
->>>>>>> 759d730b9a83a8883ee13c7c61314ac8787d2aa0
+
+    <Route
+      path="/systemconfiguration/*"
+      element={
+        <ProtectedRoute>
+          <SystemConfiguration /> 
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/download/*"
+      element={
+        <ProtectedRoute>
+          <DownloadPage />
+        </ProtectedRoute>
+      }
+    />
   </Routes>
 );
 

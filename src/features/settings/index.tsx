@@ -73,7 +73,7 @@ const SettingsPage = () => {
 
   const getSettingsInfo = () => {
     SettingsApi.getSettingsInfo().then((val) => {
-      setApiData(val?.data?.data[(val?.data?.data).length >1 ? 1: 0 ]);
+      setApiData(val?.data?.data[0]);
     });
   };
 

@@ -18,7 +18,7 @@ const SystemConfiguration = () => {
 
   const getSystemInfo = async () =>   {
     const response = await SystemInfoApi.getSystemInfo();
-    setApiData(response?.data?.data);
+    setApiData(response?.data);
   };
 
   useEffect(() => {
