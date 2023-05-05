@@ -1,11 +1,12 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import ContentBox from "../../app/components/content-box";
+import ContentBox from "@app/components/content-box";
 import ConfigurationTable from "./configurationTable";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
+import axiosInstance from "@app/api";
 const ConfigurationPageContent = () => {
   return (
     <Box sx={{ marginLeft: "41px", paddingTop: "41px", width: "50%" }}>
