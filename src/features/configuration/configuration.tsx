@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import ContentBox from "../../app/components/content-box";
+import ContentBox from "@app/components/content-box";
 import ConfigurationTable from "./configurationTable";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
+
 import { addConfiguration, AddConfiguration } from "../../app/services";
 import { useGetConfiguration } from "./hooks";
 import Dialog from "@mui/material/Dialog";
@@ -15,7 +16,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-
 const ConfigurationPageContent = () => {
   const [openAddConfigDialog, setOpenAddConfigDialog] = useState(false);
   const [formData, setFormData] = useState<AddConfiguration>({ name: "" });

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+
 import TabPanel from "../../app/components/tab-panel";
 import EngineTabContent from "./engineTabContent";
 import BearingTabContent from "./bearingTabContent";

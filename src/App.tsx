@@ -20,17 +20,27 @@ import NotepadPage from "./features/notepad";
 import FileBrowserPage from "./features/fileBrowser";
 import HelpPage from "./features/help";
 import SettingsPage from "./features/settings";
+import SystemConfiguration from "./features/systemConfiguration";
+import DownloadPage from "./features/downloads";
 // import { AUTH_STATUS, useAuth } from "./app/auth";
 import FullScreenLoader from "./app/components/fullscreen-loader";
 import CommonApi from "./commonApi";
 import appContext from "./app/context";
+import ProtectedRoute from "./app/components/protectedRoute";
 
 const AppRoutes = (
   <Routes>
     <Route path="/" element={<DashboardPage />} />
     {/* <Route path="login" element={<LoginPage />} /> */}
     <Route path="logout" element={<LogoutPage />} />
-    <Route path="/trends/*" element={<TrendsPage />}></Route>
+    <Route
+      path="/trends/*"
+      element={
+        <ProtectedRoute>
+          <TrendsPage />
+        </ProtectedRoute>
+      }
+    ></Route>
     <Route path="/dashboard/*" element={<DashboardPage />}>
       <Route path="" index element={<EngineMonitoringPage />} />
       <Route path="engine" element={<EngineMonitoringPage />} />
@@ -39,15 +49,72 @@ const AppRoutes = (
       <Route path="bearing" element={<BearingMonitoringPage />} />
       <Route path="motor" element={<MotorMonitoringPage />} />
     </Route>
-    <Route path="/configuration" element={<ManageConfigurationPage />}></Route>
     <Route
+      path="/configuration"
+      element={
+        <ProtectedRoute>
+          <ManageConfigurationPage />
+        </ProtectedRoute>
+      }
+    ></Route>
+    <Route
+
       path="/configuration/:configId"
-      element={<ConfigurationPage></ConfigurationPage>}
+      element={
+        <ProtectedRoute>
+          <ConfigurationPage></ConfigurationPage>
+        </ProtectedRoute>
+      }
     />
-    <Route path="/notepad/*" element={<NotepadPage />}></Route>
-    <Route path="/file-browser/*" element={<FileBrowserPage />}></Route>
-    <Route path="/help/*" element={<HelpPage />}></Route>
-    <Route path="/settings/*" element={<SettingsPage />}></Route>
+    <Route
+      path="/notepad/*"
+      element={
+        <ProtectedRoute>
+          <NotepadPage />
+        </ProtectedRoute>
+      }
+    ></Route>
+    <Route
+      path="/file-browser/*"
+      element={
+        <ProtectedRoute>
+          <FileBrowserPage />
+        </ProtectedRoute>
+      }
+    ></Route>
+    <Route
+      path="/help/*"
+      element={
+        <ProtectedRoute>
+          <HelpPage />
+        </ProtectedRoute>
+      }
+    ></Route>
+    <Route
+      path="/settings/*"
+      element={
+        <ProtectedRoute>
+          <SettingsPage />
+        </ProtectedRoute>
+      }
+    ></Route>
+
+    <Route
+      path="/systemconfiguration/*"
+      element={
+        <ProtectedRoute>
+          <SystemConfiguration /> 
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/download/*"
+      element={
+        <ProtectedRoute>
+          <DownloadPage />
+        </ProtectedRoute>
+      }
+    />
   </Routes>
 );
 
@@ -76,6 +143,11 @@ function App() {
     CommonApi.getLicenseInfo()
       .then((res) => {
         const lic = res.data;
+        // {
+        //   configCount: 1,
+        //   expiryDate: "2023-01-03 06:42:35",
+        //   isActive: false,
+        // };
         setLicenseInfo(lic);
         if (lic !== undefined && String(lic.isActive) === "true") {
           // set license active
@@ -134,7 +206,7 @@ function App() {
         <appContext.Provider value={{ licenseInfo, licenseStatus }}>
           <ThemeProvider theme={activeTheme}>
             <CssBaseline />
-            {path && ["/login", "/logout"].includes(path.pathname) ? (
+            {path && ["/login"].includes(path.pathname) ? (
               <>{LoginRoutes}</>
             ) : (
               <Layout>{AppRoutes}</Layout>
