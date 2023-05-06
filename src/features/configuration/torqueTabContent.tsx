@@ -10,12 +10,13 @@ import formSchema from "./formSchema";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import {
-  ChannelInformationForm,
-  AdvancedParameters,
-  DiagnosticDetailsForm,
-  EngineDetailsForm,
+  TorqueChannelInformationForm,
+  TorqueMachineDetailsForm,
+  TorqueDiagnosticDetails,
 } from "./configuration-forms";
-
+import { useFormik } from "formik";
+import { saveModuleData } from "../../app/services";
+import { useParams } from "react-router-dom";
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -23,41 +24,44 @@ const extractTabConfigs = (schema: any, module: string) => {
   return schema[module];
 };
 
-const StepToComponentEngineModule = ({ step, handleFormData }: any) => {
+const StepToComponentEngineModule = ({
+  step,
+  handleFormData,
+  formContext,
+}: any) => {
   switch (step) {
     case "Channel Information":
       return (
-        <ChannelInformationForm
+        <TorqueChannelInformationForm
           handleFormData={handleFormData}
-        ></ChannelInformationForm>
+          formContext={formContext}
+        ></TorqueChannelInformationForm>
       );
 
-    case "Engine Details":
+    case "Machine Details":
       return (
-        <EngineDetailsForm handleFormData={handleFormData}></EngineDetailsForm>
+        <TorqueMachineDetailsForm
+          handleFormData={handleFormData}
+          formContext={formContext}
+        ></TorqueMachineDetailsForm>
       );
       break;
     case "Diagnostic Details":
       return (
-        <DiagnosticDetailsForm
+        <TorqueDiagnosticDetails
           handleFormData={handleFormData}
-        ></DiagnosticDetailsForm>
-      );
-
-    case "Advanced Parameters":
-      return (
-        <AdvancedParameters
-          handleFormData={handleFormData}
-        ></AdvancedParameters>
+          formContext={formContext}
+        ></TorqueDiagnosticDetails>
       );
     default:
       return <div>Invalid Step</div>;
   }
 };
-const EngineTabContent = ({ module }: any) => {
+const TorqueTabContent = ({ module, moduleId }: any) => {
   const [expanded, setExpanded] = useState<string | false>("Global");
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
+  const { configId } = useParams();
   useEffect(() => {
     setTabConfigs(extractTabConfigs(formSchema, module));
     setStepperSteps(extractSteps(formSchema, module));
@@ -66,6 +70,41 @@ const EngineTabContent = ({ module }: any) => {
     (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? value : false);
     };
+  const moduleFormContext = useFormik({
+    initialValues: {
+      de_channel_sensorx: "",
+      de_channel_channel_type: "",
+      de_channel__teeth: "",
+      de_channel_wheel_type: "",
+      nde_channel_sensorx: "",
+      nde_channel_channel_type: "",
+      nde_channel_teeth: "",
+      nde_channel_wheel_type: "",
+      min_speed: "",
+      min_volt: "",
+      recording_period: "",
+      recording_length: "",
+      name: "",
+      rated_rpm: "",
+    },
+    onSubmit: (values) => {},
+  });
+  const handleSubmit = async () => {
+    try {
+      const payload = {
+        configuration_id: configId,
+        module_type: module,
+        module_id: moduleId,
+        from_data: {
+          ...moduleFormContext.values,
+        },
+        advance_option: "",
+      };
+      await saveModuleData(payload);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper
@@ -94,6 +133,7 @@ const EngineTabContent = ({ module }: any) => {
                 handleFormData={(e: any) =>
                   console.log(e.target.name, e.target.value)
                 }
+                formContext={moduleFormContext}
               ></StepToComponentEngineModule>
             </AccordionBase>
           </Grid>
@@ -105,7 +145,7 @@ const EngineTabContent = ({ module }: any) => {
           direction="row"
           sx={{ display: "flex", justifyContent: "flex-end" }}
         >
-          <Button variant="contained">Save</Button>
+          <Button variant="contained" onClick={handleSubmit}>Save</Button>
           <Button variant="contained">Cancel</Button>
         </Stack>
       </Box>
@@ -113,4 +153,4 @@ const EngineTabContent = ({ module }: any) => {
   );
 };
 
-export default EngineTabContent;
+export default TorqueTabContent;

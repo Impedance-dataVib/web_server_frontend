@@ -68,6 +68,10 @@ export const activeConfig = (data: any) => {
   return axiosInstance.post("/configuration/activate.php", data);
 };
 
-export const getModulesByConfigId = (id: string|undefined) => {
+export const getModulesByConfigId = (id: string | undefined) => {
   return axiosInstance.get(`/module/get-modules-by-config-Id.php/${id}`);
+};
+
+export const saveModuleData = (data: any) => {
+  return axiosInstance.post("/module/update.php", data);
 };

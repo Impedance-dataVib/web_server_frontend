@@ -390,57 +390,65 @@ const formSchema = {
     "Diagnostic Details": [
       {
         name: "Min Speed",
+        label: "min_speed",
         type: "text",
       },
       {
         name: "MinVolt",
+        label: "min_volt",
         type: "text",
       },
       {
         name: "Recording Period",
+        label: "recording_period",
         type: "text",
       },
       {
         name: "Recording Length",
+        label: "recording_length",
         type: "text",
       },
       {
         name: "ZeroDegree",
+        label: "zero_degree",
         type: "text",
       },
       {
         name: "Rigidity(R)",
+        label: "rigidity",
         type: "text",
       },
       {
         name: "Power",
+        label: "power",
         type: "text",
       },
     ],
-    "Default Parameters": [
+    "Machine Details": [
       {
-        name: "Data Disk Naming ",
+        name: "Name",
+        label: "name",
         type: "text",
       },
       {
-        name: "Reboot Hours",
+        name: "Rated RPM",
+        label: "rated_rpm",
         type: "text",
       },
       {
-        name: "Level Min",
-        type: "text",
-      },
-      {
-        name: "Json Report  ",
-        type: "text",
-      },
-      {
-        name: "Component Type",
-        type: "text",
-      },
-      {
-        name: "Wav Saving Periodicity",
-        type: "text",
+        name: "VesselType",
+        label: "vessel_type",
+        type: "dropdown",
+        options: [
+          "AHTS",
+          "PSV",
+          "OSV",
+          "Harbor Tugs",
+          "Container Ship",
+          "Large Bulk carriers",
+          "Mini Bulk Carriers",
+          "Gas Tankers",
+        ],
       },
     ],
   },
@@ -680,6 +688,32 @@ const formSchema = {
       },
     ],
   },
+  "Default Parameters": [
+    {
+      name: "Data Disk Naming ",
+      type: "text",
+    },
+    {
+      name: "Reboot Hours",
+      type: "text",
+    },
+    {
+      name: "Level Min",
+      type: "text",
+    },
+    {
+      name: "Json Report  ",
+      type: "text",
+    },
+    {
+      name: "Component Type",
+      type: "text",
+    },
+    {
+      name: "Wav Saving Periodicity",
+      type: "text",
+    },
+  ],
 };
 
 export default formSchema;

@@ -15,32 +15,43 @@ import {
   DiagnosticDetailsForm,
   EngineDetailsForm,
 } from "./configuration-forms";
-
+import { useFormik } from "formik";
+import { saveModuleData } from "../../app/services";
+import { useParams } from "react-router-dom";
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
-const extractTabConfigs = (schema: any, module: string) => {
+const extractTabConfigs = (schema: any, module: string): any => {
   return schema[module];
 };
 
-const StepToComponentEngineModule = ({ step, handleFormData }: any) => {
+const StepToComponentEngineModule = ({
+  step,
+  handleFormData,
+  formContext,
+}: any) => {
   switch (step) {
     case "Channel Information":
       return (
         <ChannelInformationForm
           handleFormData={handleFormData}
+          formContext={formContext}
         ></ChannelInformationForm>
       );
 
     case "Engine Details":
       return (
-        <EngineDetailsForm handleFormData={handleFormData}></EngineDetailsForm>
+        <EngineDetailsForm
+          handleFormData={handleFormData}
+          formContext={formContext}
+        ></EngineDetailsForm>
       );
       break;
     case "Diagnostic Details":
       return (
         <DiagnosticDetailsForm
           handleFormData={handleFormData}
+          formContext={formContext}
         ></DiagnosticDetailsForm>
       );
 
@@ -48,16 +59,34 @@ const StepToComponentEngineModule = ({ step, handleFormData }: any) => {
       return (
         <AdvancedParameters
           handleFormData={handleFormData}
+          formContext={formContext}
         ></AdvancedParameters>
       );
     default:
       return <div>Invalid Step</div>;
   }
 };
-const EngineTabContent = ({ module }: any) => {
+const EngineTabContent = ({ module, moduleId }: any) => {
   const [expanded, setExpanded] = useState<string | false>("Global");
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
+  const { configId } = useParams();
+  const handleSubmit = async () => {
+    try {
+      const payload = {
+        configuration_id: configId,
+        module_type: module,
+        module_id: moduleId,
+        from_data: {
+          ...moduleFormContext.values,
+        },
+        advance_option: "",
+      };
+      await saveModuleData(payload);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     setTabConfigs(extractTabConfigs(formSchema, module));
     setStepperSteps(extractSteps(formSchema, module));
@@ -66,6 +95,63 @@ const EngineTabContent = ({ module }: any) => {
     (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? value : false);
     };
+  const moduleFormContext = useFormik({
+    initialValues: {
+      Crankshaft_SENSORx: "",
+      Crankshaft_ChannelType: "",
+      Crankshaft_Teeth: "",
+      Crankshaft_WheelType: "",
+      CamShaft_SENSORx: "",
+      CamShaft_ChannelType: "",
+      CamShaft_Teeth: "",
+      CamShaft_WheelType: "",
+      TDC_SENSORx: "",
+      TDC_ChannelType: "",
+      TDC_Teeth: "",
+      TDC_WheelType: "",
+      Peak_Pressure_SENSORx: "",
+      Peak_Pressure_ChannelType: "",
+      Peak_Pressure_Teeth: "",
+      Peak_Pressure_WheelType: "",
+      peak_pressure_transducer_sensitivity: "",
+      name: "",
+      serial_number: "",
+      make_model: "",
+      rated_rpm: "",
+      application: "",
+      fuel: "",
+      type: "",
+      no_of_strokes: "",
+
+      no_of_cylinders: "",
+      firing_order: "",
+      phase_shift_mode: "",
+      shift_angle: "",
+      power: "",
+      min_speed: "",
+      min_volt: "",
+      recording_period: "",
+      recording_length: "",
+      over_write: "",
+      over_writeType: "",
+      over_writeMin: "",
+      over_writeMiddle: "",
+      over_writeMedian: "",
+      over_writeMax: "",
+      Filter_lowDecim: "",
+      Filter_low: "",
+      engine_useSmallEngineLogic: "",
+      engine_useInjectionSkewLogicRemoval: "",
+      engine_useIncreaseSensitivity: "",
+      engine_useNoDetailedIndicAlarmLimits: "",
+
+      engine_useInjectionAlarmOverwrite: "",
+      engine_useInjectionAcyWeighting: "",
+      engine_useInjectionDissymetryDeviation: "",
+      highPass: "",
+    },
+    onSubmit: (values) => {},
+  });
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper
@@ -94,6 +180,7 @@ const EngineTabContent = ({ module }: any) => {
                 handleFormData={(e: any) =>
                   console.log(e.target.name, e.target.value)
                 }
+                formContext={moduleFormContext}
               ></StepToComponentEngineModule>
             </AccordionBase>
           </Grid>
@@ -105,7 +192,9 @@ const EngineTabContent = ({ module }: any) => {
           direction="row"
           sx={{ display: "flex", justifyContent: "flex-end" }}
         >
-          <Button variant="contained">Save</Button>
+          <Button variant="contained" onClick={handleSubmit}>
+            Save
+          </Button>
           <Button variant="contained">Cancel</Button>
         </Stack>
       </Box>

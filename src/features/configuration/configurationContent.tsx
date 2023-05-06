@@ -4,6 +4,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import TabPanel from "../../app/components/tab-panel";
 import EngineTabContent from "./engineTabContent";
+import BearingTabContent from "./bearingTabContent";
+import TurbineTabContent from "./turbineTabConTent";
+import TorqueTabContent from "./torqueTabContent";
+import MotorTabContent from "./motorTabContent";
 import formSchema from "./formSchema";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -17,6 +21,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { AddModule } from "../../app/services";
 import { useParams } from "react-router-dom";
 import { useGetConfigurationModuleByConfigId } from "./hooks";
+
 function tabProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -28,16 +33,40 @@ const getKeysFromSchema = (schema: any) => {
   return Object.keys(schema);
 };
 
-const TabModuleRender =({type}:any) =>{
+const TabModuleRender = ({ type, moduleId }: any) => {
+  console.log("hi", type);
   switch (type) {
     case "Engine":
-      
-      break;
-  
+      return (
+        <EngineTabContent moduleId={moduleId} module={type}></EngineTabContent>
+      );
+
+    case "Torque":
+      return (
+        <TorqueTabContent moduleId={moduleId} module={type}></TorqueTabContent>
+      );
+    case "Turbine":
+      return (
+        <TurbineTabContent
+          moduleId={moduleId}
+          module={type}
+        ></TurbineTabContent>
+      );
+    case "Bearing":
+      return (
+        <BearingTabContent
+          moduleId={moduleId}
+          module={type}
+        ></BearingTabContent>
+      );
+    case "Motor":
+      return (
+        <MotorTabContent moduleId={moduleId} module={type}></MotorTabContent>
+      );
     default:
-      break;
+      return <div> Invalid type module </div>;
   }
-}
+};
 
 const Modules = ["Engine", "Motor", "Turbine", "Torque", "Bearing"];
 const ConfigurationContent = (props: any) => {
@@ -50,7 +79,6 @@ const ConfigurationContent = (props: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const filteredTabs = tabs?.filter((tab: string) => addModules.includes(tab));
 
   const { data, isPending, isError, getAllModulesByConfigId } =
     useGetConfigurationModuleByConfigId(configId);
@@ -121,14 +149,17 @@ const ConfigurationContent = (props: any) => {
             aria-label="basic tabs example"
             sx={{ marginLeft: "45px" }}
           >
-            {data?.map((tab: any, index: number) => (
-              <Tab key={tab.id} label={tab.name} {...tabProps(index)} />
+            {data?.map((tabElement: any, index: number) => (
+              <Tab key={index} label={tabElement.name} {...tabProps(index)} />
             ))}
           </Tabs>
         </Box>
-        {data?.map((item: any) => (
-          <TabPanel key={item.id} value={tab} index={item.id}>
-            <EngineTabContent module={item.module_type}></EngineTabContent>
+        {data?.map((item: any, index: any) => (
+          <TabPanel key={item.id} value={tab} index={index}>
+            <TabModuleRender
+              moduleId={item.id}
+              type={item.module_type}
+            ></TabModuleRender>
           </TabPanel>
         ))}
       </div>

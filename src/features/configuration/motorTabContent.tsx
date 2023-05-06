@@ -10,12 +10,12 @@ import formSchema from "./formSchema";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import {
-  BearingChannelInformationForm,
-  BearingMachineDetailsForm,
-  BearingDiagnosticDetails,
+  MotorDiagnosticDetails,
+  MotorMachineDetailsForm,
+  MotorChannelInformationForm,
 } from "./configuration-forms";
-import { saveModuleData } from "../../app/services";
 import { useFormik } from "formik";
+import { saveModuleData } from "../../app/services";
 import { useParams } from "react-router-dom";
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
@@ -32,42 +32,49 @@ const StepToComponentEngineModule = ({
   switch (step) {
     case "Channel Information":
       return (
-        <BearingChannelInformationForm
+        <MotorChannelInformationForm
           handleFormData={handleFormData}
           formContext={formContext}
-        ></BearingChannelInformationForm>
+        ></MotorChannelInformationForm>
       );
 
     case "Machine Details":
       return (
-        <BearingMachineDetailsForm
+        <MotorMachineDetailsForm
           handleFormData={handleFormData}
           formContext={formContext}
-        ></BearingMachineDetailsForm>
+        ></MotorMachineDetailsForm>
       );
     case "Diagnostic Details":
       return (
-        <BearingDiagnosticDetails
+        <MotorDiagnosticDetails
           handleFormData={handleFormData}
           formContext={formContext}
-        ></BearingDiagnosticDetails>
+        ></MotorDiagnosticDetails>
       );
     default:
       return <div>Invalid Step</div>;
   }
 };
-const BearingTabContent = ({ module, moduleId }: any) => {
+const MotorTabContent = ({ module, moduleId }: any) => {
   const [expanded, setExpanded] = useState<string | false>("Global");
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
   const { configId } = useParams();
-
+  useEffect(() => {
+    setTabConfigs(extractTabConfigs(formSchema, module));
+    setStepperSteps(extractSteps(formSchema, module));
+  }, []);
+  const handleAccordionChange =
+    (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? value : false);
+    };
   const moduleFormContext = useFormik({
     initialValues: {
-      bearing_crankshaft_sensorx: "",
-      bearing_crankshaft_channel_type: "",
-      bearing_crankshaft_teeth: "",
-      bearing_crankshaft_wheel_type: "",
+      motor_crankshaft_sensorx: "",
+      motor_crankshaft_channel_type: "",
+      motor_crankshaft_teeth: "",
+      motor_crankshaft_wheel_type: "",
       min_speed: "",
       min_volt: "",
       recording_period: "",
@@ -93,14 +100,6 @@ const BearingTabContent = ({ module, moduleId }: any) => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    setTabConfigs(extractTabConfigs(formSchema, module));
-    setStepperSteps(extractSteps(formSchema, module));
-  }, []);
-  const handleAccordionChange =
-    (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-      setExpanded(newExpanded ? value : false);
-    };
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper
@@ -126,10 +125,10 @@ const BearingTabContent = ({ module, moduleId }: any) => {
             >
               <StepToComponentEngineModule
                 step={item}
-                formContext={moduleFormContext}
                 handleFormData={(e: any) =>
                   console.log(e.target.name, e.target.value)
                 }
+                formContext={moduleFormContext}
               ></StepToComponentEngineModule>
             </AccordionBase>
           </Grid>
@@ -141,9 +140,7 @@ const BearingTabContent = ({ module, moduleId }: any) => {
           direction="row"
           sx={{ display: "flex", justifyContent: "flex-end" }}
         >
-          <Button variant="contained" onClick={handleSubmit}>
-            Save
-          </Button>
+          <Button variant="contained" onClick={handleSubmit}>Save</Button>
           <Button variant="contained">Cancel</Button>
         </Stack>
       </Box>
@@ -151,4 +148,4 @@ const BearingTabContent = ({ module, moduleId }: any) => {
   );
 };
 
-export default BearingTabContent;
+export default MotorTabContent;
