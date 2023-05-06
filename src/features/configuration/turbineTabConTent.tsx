@@ -4,17 +4,15 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { Grid } from "@mui/material";
-
 import CustomConnector from "../../app/components/custom-stepper";
 import AccordionBase from "../../app/components/accordion-base";
 import formSchema from "./formSchema";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import {
-  ChannelInformationForm,
-  AdvancedParameters,
-  DiagnosticDetailsForm,
-  EngineDetailsForm,
+  TurbineMachineDetailsForm,
+  TurbineDiagnosticDetails,
+  TurbineChannelInformationForm,
 } from "./configuration-forms";
 import { useFormik } from "formik";
 import { saveModuleData } from "../../app/services";
@@ -22,7 +20,7 @@ import { useParams } from "react-router-dom";
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
-const extractTabConfigs = (schema: any, module: string): any => {
+const extractTabConfigs = (schema: any, module: string) => {
   return schema[module];
 };
 
@@ -34,44 +32,62 @@ const StepToComponentEngineModule = ({
   switch (step) {
     case "Channel Information":
       return (
-        <ChannelInformationForm
+        <TurbineChannelInformationForm
           handleFormData={handleFormData}
           formContext={formContext}
-        ></ChannelInformationForm>
+        ></TurbineChannelInformationForm>
       );
 
-    case "Engine Details":
+    case "Machine Details":
       return (
-        <EngineDetailsForm
+        <TurbineMachineDetailsForm
           handleFormData={handleFormData}
           formContext={formContext}
-        ></EngineDetailsForm>
+        ></TurbineMachineDetailsForm>
       );
-      break;
     case "Diagnostic Details":
       return (
-        <DiagnosticDetailsForm
+        <TurbineDiagnosticDetails
           handleFormData={handleFormData}
           formContext={formContext}
-        ></DiagnosticDetailsForm>
-      );
-
-    case "Advanced Parameters":
-      return (
-        <AdvancedParameters
-          handleFormData={handleFormData}
-          formContext={formContext}
-        ></AdvancedParameters>
+        ></TurbineDiagnosticDetails>
       );
     default:
       return <div>Invalid Step</div>;
   }
 };
-const EngineTabContent = ({ module, moduleId }: any) => {
+const TurbineTabContent = ({ module, moduleId }: any) => {
   const [expanded, setExpanded] = useState<string | false>("Global");
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
   const { configId } = useParams();
+  useEffect(() => {
+    setTabConfigs(extractTabConfigs(formSchema, module));
+    setStepperSteps(extractSteps(formSchema, module));
+  }, []);
+  const handleAccordionChange =
+    (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? value : false);
+    };
+  const moduleFormContext = useFormik({
+    initialValues: {
+      turbine_crankshaft_sensorx: "",
+      turbine_crankshaft_channel_type: "",
+      turbine_crankshaft_teeth: "",
+      turbine_crankshaft_wheel_type: "",
+      min_speed: "",
+      min_volt: "",
+      recording_period: "",
+      recording_length: "",
+      zero_degree: "",
+      rigidity: "",
+      power: "",
+      name: "",
+      rated_rpm: "",
+      vessel_type: "",
+    },
+    onSubmit: (values) => {},
+  });
   const handleSubmit = async () => {
     try {
       const payload = {
@@ -88,71 +104,6 @@ const EngineTabContent = ({ module, moduleId }: any) => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    setTabConfigs(extractTabConfigs(formSchema, module));
-    setStepperSteps(extractSteps(formSchema, module));
-  }, []);
-  const handleAccordionChange =
-    (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-      setExpanded(newExpanded ? value : false);
-    };
-  const moduleFormContext = useFormik({
-    initialValues: {
-      Crankshaft_SENSORx: "",
-      Crankshaft_ChannelType: "",
-      Crankshaft_Teeth: "",
-      Crankshaft_WheelType: "",
-      CamShaft_SENSORx: "",
-      CamShaft_ChannelType: "",
-      CamShaft_Teeth: "",
-      CamShaft_WheelType: "",
-      TDC_SENSORx: "",
-      TDC_ChannelType: "",
-      TDC_Teeth: "",
-      TDC_WheelType: "",
-      Peak_Pressure_SENSORx: "",
-      Peak_Pressure_ChannelType: "",
-      Peak_Pressure_Teeth: "",
-      Peak_Pressure_WheelType: "",
-      peak_pressure_transducer_sensitivity: "",
-      name: "",
-      serial_number: "",
-      make_model: "",
-      rated_rpm: "",
-      application: "",
-      fuel: "",
-      type: "",
-      no_of_strokes: "",
-
-      no_of_cylinders: "",
-      firing_order: "",
-      phase_shift_mode: "",
-      shift_angle: "",
-      power: "",
-      min_speed: "",
-      min_volt: "",
-      recording_period: "",
-      recording_length: "",
-      over_write: "",
-      over_writeType: "",
-      over_writeMin: "",
-      over_writeMiddle: "",
-      over_writeMedian: "",
-      over_writeMax: "",
-      Filter_lowDecim: "",
-      Filter_low: "",
-      engine_useSmallEngineLogic: "",
-      engine_useInjectionSkewLogicRemoval: "",
-      engine_useIncreaseSensitivity: "",
-      engine_useNoDetailedIndicAlarmLimits: "",
-
-      engine_useInjectionAlarmOverwrite: "",
-      engine_useInjectionAcyWeighting: "",
-      engine_useInjectionDissymetryDeviation: "",
-      highPass: "",
-    },
-    onSubmit: (values) => {},
-  });
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper
@@ -193,9 +144,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
           direction="row"
           sx={{ display: "flex", justifyContent: "flex-end" }}
         >
-          <Button variant="contained" onClick={handleSubmit}>
-            Save
-          </Button>
+          <Button variant="contained" onClick={handleSubmit}>Save</Button>
           <Button variant="contained">Cancel</Button>
         </Stack>
       </Box>
@@ -203,4 +152,4 @@ const EngineTabContent = ({ module, moduleId }: any) => {
   );
 };
 
-export default EngineTabContent;
+export default TurbineTabContent;

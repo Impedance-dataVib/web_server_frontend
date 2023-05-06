@@ -58,7 +58,8 @@ const AppRoutes = (
       }
     ></Route>
     <Route
-      path="/configuration/:configName"
+
+      path="/configuration/:configId"
       element={
         <ProtectedRoute>
           <ConfigurationPage></ConfigurationPage>
