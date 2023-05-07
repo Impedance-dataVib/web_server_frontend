@@ -70,6 +70,7 @@ const TabModuleRender = ({ type, moduleId }: any) => {
 };
 
 const Modules = ["Engine", "Motor", "Turbine", "Torque", "Bearing"];
+
 const ConfigurationContent = (props: any) => {
   const [tab, setTab] = useState(0);
   const [tabs, setTabs] = useState<string[] | undefined>();
