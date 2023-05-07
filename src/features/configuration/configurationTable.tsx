@@ -16,6 +16,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { useNavigate } from "react-router-dom";
 import { deleteConfig, activeConfig } from "../../app/services";
 import ConfirmDeleteConfigurationModal from "./modals/confirmDeleteConfig";
+import { useSnackbar } from "notistack";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,21 +37,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export interface IConfigurationTableProps {
   data: any;
-  refetchOnDelete: any;
-  setAlert: any;
+  refetchOnDelete: any;  
   setIsLoading: any;
 }
 
 const ConfigurationTable = ({
   data,
-  refetchOnDelete,
-  setAlert,
+  refetchOnDelete,  
   setIsLoading,
 }: IConfigurationTableProps) => {
   const navigate = useNavigate();
   const [selectedRow, setSelectedRow] = React.useState<any>(undefined);
   const [showDeleteDialog, setShowDeleteDialog] =
     React.useState<boolean>(false);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const onDeleteConfiguration = (row: any) => {
     setSelectedRow(row);
@@ -68,16 +69,14 @@ const ConfigurationTable = ({
       await deleteConfig(selectedRow?.id);
       await refetchOnDelete();
       setIsLoading(false);
-      setAlert.setOpenAlert(true);
-      setAlert.setAlertMessage({
+      enqueueSnackbar({
         message: `Configuration with name ${selectedRow?.name}-${selectedRow?.id} successfully deleted`,
-        severity: "success",
+        variant: "success",
       });
     } catch (e) {
-      setAlert.setOpenAlert(true);
-      setAlert.setAlertMessage({
+      enqueueSnackbar({
         message: "Error occurred while deleting configuration",
-        severity: "error",
+        variant: "error",
       });
       setIsLoading(false);
     }
@@ -95,17 +94,15 @@ const ConfigurationTable = ({
       setIsLoading(true);
       await activeConfig(data);
       await refetchOnDelete();
-      setAlert.setOpenAlert(true);
-      setAlert.setAlertMessage({
+      enqueueSnackbar({
         message: `Configuration '${row?.name}' activated successfully`,
-        severity: "success",
+        variant: "error",
       });
       setIsLoading(false);
     } catch (error) {
-      setAlert.setOpenAlert(true);
-      setAlert.setAlertMessage({
-        message: `Error occurred while activating configuration`,
-        severity: "Error",
+      enqueueSnackbar({
+        message: "Error occurred while activating configuration",
+        variant: "error",
       });
       setIsLoading(false);
     }

@@ -1,36 +1,25 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import ContentBox from "../../app/components/content-box";
-import ConfigurationTable from "./configurationTable";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-
-import { addConfiguration } from "../../app/services";
-import { useGetConfiguration } from "./hooks";
-import Snackbar from "@mui/material/Snackbar";
-import Alert, { AlertColor } from "@mui/material/Alert";
 import { Grid, LinearProgress } from "@mui/material";
+import { useSnackbar } from "notistack";
+
+import ConfigurationTable from "./configurationTable";
+import { useGetConfiguration } from "./hooks";
 import ConfigurationEmptyState from "./emptyState";
 import AddConfigurationModal from "./modals/addConfiguration";
+import ContentBox from "../../app/components/content-box";
+import { addConfiguration } from "../../app/services";
 
 const ConfigurationPageContent = () => {
   const [openAddConfigDialog, setOpenAddConfigDialog] = useState(false);
-  const [openAlert, setOpenAlert] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] = useState<{
-    message: string;
-    severity: AlertColor;
-  }>({
-    message: "",
-    severity: "info",
-  });
-  const { isLoading, data, getConfigData } = useGetConfiguration();
 
-  const handleCloseAlert = () => {
-    setOpenAlert(false);
-  };
+  const { isLoading, data, getConfigData } = useGetConfiguration();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleAddConfigDialog = () => {
     setOpenAddConfigDialog((prev) => !prev);
@@ -43,19 +32,17 @@ const ConfigurationPageContent = () => {
     setLoading(true);
     try {
       await addConfiguration({ name });
-      setOpenAlert(true);
-      setAlertMessage({
+      enqueueSnackbar({
         message: "Configuration added successfully",
-        severity: "success",
+        variant: "success",
       });
       getConfigData();
       handleAddConfigDialog();
       setLoading(false);
     } catch (error) {
-      setOpenAlert(true);
-      setAlertMessage({
+      enqueueSnackbar({
         message: "Error occurred while adding configuration",
-        severity: "error",
+        variant: "error",
       });
       handleAddConfigDialog();
       setLoading(false);
@@ -85,7 +72,6 @@ const ConfigurationPageContent = () => {
               <ConfigurationTable
                 data={data}
                 refetchOnDelete={getConfigData}
-                setAlert={{ setAlertMessage, setOpenAlert }}
                 setIsLoading={setLoading}
               />
             )}
@@ -116,21 +102,6 @@ const ConfigurationPageContent = () => {
               onSubmit={handleAddConfig}
             />
           )}
-
-          <Snackbar
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            open={openAlert}
-            autoHideDuration={2000}
-            onClose={handleCloseAlert}
-          >
-            <Alert
-              onClose={handleCloseAlert}
-              severity={alertMessage?.severity || "info"}
-              sx={{ width: "100%" }}
-            >
-              {alertMessage?.message}
-            </Alert>
-          </Snackbar>
         </Grid>
       </Grid>
     </Box>

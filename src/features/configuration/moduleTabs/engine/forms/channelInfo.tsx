@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import { BootstrapInput } from "../../../app/components/bootstarp-input";
-import { FormControlLabel, Switch, Typography } from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
-import formSchema from "../formSchema";
+import { BootstrapInput } from "../../../../../app/components/bootstarp-input";
+import {
+  FormControl,
+  Grid,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
 
-export const ChannelInformationForm = ({
-  handleFormData,
-  formContext,
-}: any) => {
+const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
   const [optionsChannelInformation, setOptionsChannelInformation] = useState({
     SENSORx: [
       "Ch1",
@@ -432,155 +429,4 @@ export const ChannelInformationForm = ({
     </>
   );
 };
-
-const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
-  switch (type) {
-    case "dropdown":
-      return (
-        <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
-          <InputLabel id={fieldProps.label}>{fieldProps.name}</InputLabel>
-          <Select
-            name={fieldProps.label}
-            onChange={formContext?.handleChange}
-            value={formContext?.values?.[fieldProps.label]}
-            label={fieldProps.name}
-          >
-            {fieldProps.options.map((option: string) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      );
-
-    case "text":
-      return (
-        <TextField
-          name={fieldProps.label}
-          label={fieldProps.name}
-          onChange={formContext?.handleChange}
-          value={formContext?.values?.[fieldProps.label]}
-          variant="outlined"
-          sx={{
-            fontSize: "16px",
-            marginBottom: "20px",
-            width: "182px",
-            padding: "1px 1px",
-          }}
-          inputProps={{
-            style: {
-              padding: "11px 26px 13px 12px",
-            },
-          }}
-        ></TextField>
-      );
-    case "toggle":
-      return (
-        <FormControlLabel
-          control={
-            <Switch
-              name={fieldProps.label}
-              onChange={formContext?.handleChange}
-              value={formContext?.values?.[fieldProps.label]}
-              color="primary"
-            />
-          }
-          label={fieldProps.name}
-          labelPlacement="start"
-        />
-      );
-    default:
-      return <div>No Valid Field Type</div>;
-      break;
-  }
-};
-export const EngineDetailsForm = ({ handleFormData, formContext }: any) => {
-  return (
-    <>
-      <Grid
-        container
-        spacing={1}
-        sx={{ marginLeft: "64px", marginTop: "28px" }}
-      >
-        {formSchema["Engine"]["Engine Details"].map((item: any) => (
-          <Grid key={item.label} container item>
-            <Grid item>
-              <Typography
-                component={"label"}
-                sx={{
-                  width: "143px",
-                  display: "inline-block",
-                  fontSize: "16px",
-                  marginRight: "41px",
-                  marginBottom: "5px",
-                  alignItems: "right",
-                }}
-              >
-                {item.name}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <FormFieldConditionalRender
-                type={item.type}
-                fieldProps={{ ...item, handleChange: handleFormData }}
-                formContext={formContext}
-              ></FormFieldConditionalRender>
-            </Grid>
-          </Grid>
-        ))}
-      </Grid>
-    </>
-  );
-};
-
-export const DiagnosticDetailsForm = ({ handleFormData, formContext }: any) => {
-  return (
-    <Grid container spacing={1} sx={{ marginLeft: "64px", marginTop: "28px" }}>
-      {formSchema["Engine"]["Diagnostic Details"].map((item: any) => (
-        <Grid key={item.label} container item>
-          <Grid item>
-            <Typography
-              component={"label"}
-              sx={{
-                width: "143px",
-                display: "inline-block",
-                fontSize: "16px",
-                marginRight: "41px",
-                marginBottom: "5px",
-                alignItems: "right",
-              }}
-            >
-              {item.name}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <FormFieldConditionalRender
-              type={item.type}
-              fieldProps={{ ...item, handleChange: handleFormData }}
-              formContext={formContext}
-            ></FormFieldConditionalRender>
-          </Grid>
-        </Grid>
-      ))}
-    </Grid>
-  );
-};
-
-export const AdvancedParameters = ({ handleFormData, formContext }: any) => {
-  return (
-    <Grid container spacing={1} sx={{ marginLeft: "64px", marginTop: "28px" }}>
-      {formSchema["Engine"]["Advanced Parameters"].map((item: any) => (
-        <Grid key={item.label} container item>
-          <Grid item>
-            <FormFieldConditionalRender
-              type={item.type}
-              fieldProps={{ ...item, handleChange: handleFormData }}
-              formContext={formContext}
-            ></FormFieldConditionalRender>
-          </Grid>
-        </Grid>
-      ))}
-    </Grid>
-  );
-};
+export default ChannelInformationForm;

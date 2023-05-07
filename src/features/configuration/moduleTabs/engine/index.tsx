@@ -5,20 +5,28 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { Grid } from "@mui/material";
 
-import CustomConnector from "../../app/components/custom-stepper";
-import AccordionBase from "../../app/components/accordion-base";
-import formSchema from "./formSchema";
+// import CustomConnector from "../../../../../app/components/custom-stepper";
+// import AccordionBase from "../../../app/components/accordion-base";
+// import formSchema from "../formSchema";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import {
-  ChannelInformationForm,
-  AdvancedParameters,
-  DiagnosticDetailsForm,
-  EngineDetailsForm,
-} from "./configuration-forms";
+// import {
+//   ChannelInformationForm,
+//   AdvancedParameters,
+//   DiagnosticDetailsForm,
+//   EngineDetailsForm,
+// } from "../configuration-forms";
 import { useFormik } from "formik";
-import { saveModuleData } from "../../app/services";
+// import { saveModuleData } from "../../../app/services";
 import { useParams } from "react-router-dom";
+import ChannelInformationForm from "./forms/channelInfo";
+import EngineDetailsForm from "./forms/engineDetails";
+import DiagnosticDetailsForm from "./forms/diagnosticDetails";
+import AdvancedParameters from "./forms/advancedParams";
+import CustomConnector from "../../../../app/components/custom-stepper";
+import AccordionBase from "../../../../app/components/accordion-base";
+import formSchema from "../../formSchema";
+import { saveModuleData } from "../../../../app/services";
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -159,7 +167,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
         activeStep={2}
         alternativeLabel
         connector={<CustomConnector></CustomConnector>}
-        sx={{ width: "70%", marginBottom: "66px", marginTop: "40px" }}
+        sx={{ width: "auto", marginBottom: "66px", marginTop: "40px" }}
       >
         {stepperSteps?.map((label: string) => (
           <Step key={label}>
@@ -167,7 +175,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
           </Step>
         ))}
       </Stepper>
-      <Grid container sx={{ width: "70%" }}>
+      <Grid container sx={{ width: "auto" }}>
         {stepperSteps?.map((item: string) => (
           <Grid key={item} item>
             <AccordionBase
