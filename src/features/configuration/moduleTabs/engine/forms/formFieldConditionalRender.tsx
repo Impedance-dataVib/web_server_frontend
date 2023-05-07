@@ -12,7 +12,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
       return (
-        <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+        <FormControl sx={{ minWidth: "182px" }}>
           <InputLabel id={fieldProps.label}>{fieldProps.name}</InputLabel>
           <Select
             name={fieldProps.label}
@@ -39,7 +39,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           variant="outlined"
           sx={{
             fontSize: "16px",
-            marginBottom: "20px",
+
             width: "182px",
             padding: "1px 1px",
           }}

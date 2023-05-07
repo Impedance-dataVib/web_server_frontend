@@ -1,10 +1,10 @@
-import formSchema from "../../../../../features/configuration/formSchema";
 import { Grid, Typography } from "@mui/material";
+import formSchema from "../../../../../features/configuration/formSchema";
 import FormFieldConditionalRender from "./formFieldConditionalRender";
 
 const EngineDetailsForm = ({ handleFormData, formContext }: any) => {
   return (
-    <Grid container spacing={1} sx={{ marginLeft: "64px", marginTop: "28px" }}>
+    <Grid container spacing={1} >
       {formSchema["Engine"]["Engine Details"].map((item: any) => (
         <Grid key={item.label} container item>
           <Grid item>

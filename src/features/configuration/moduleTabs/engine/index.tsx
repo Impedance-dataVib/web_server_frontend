@@ -171,6 +171,8 @@ const EngineTabContent = ({ module, moduleId }: any) => {
     onSubmit: (values) => {},
   });
 
+  console.log('moduleFormContext = ', moduleFormContext.values);
+
   return (
     <Box sx={{ width: "auto" }}>
       <Stepper
