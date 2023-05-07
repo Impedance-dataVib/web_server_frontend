@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import ContentBox from "@app/components/content-box";
+import ContentBox from "../../app/components/content-box";
 import ConfigurationTable from "./configurationTable";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";

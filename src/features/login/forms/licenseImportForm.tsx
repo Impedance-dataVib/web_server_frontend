@@ -11,7 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import CommonApi from "../../../commonApi";
 import * as dateFns from "date-fns";
-import FileUploadComponent from "../../../app/components/fileupload";
+import FileUploadComponent from "../../../app/components/fileUpload";
 import { LICENSE_STATUS } from "../../../App";
 import appContext from "../../../app/context";
 import LicenseInActiveError from "../errors/licInactiveError";

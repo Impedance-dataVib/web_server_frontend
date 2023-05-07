@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import ContentBox from "@app/components/content-box";
+import ContentBox from "../../app/components/content-box";
 import ConfigurationContent from "./configurationContent";
 import ManageConfigurationPage from "./configuration";
 
