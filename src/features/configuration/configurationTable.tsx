@@ -167,12 +167,14 @@ const ConfigurationTable = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <ConfirmDeleteConfigurationModal
-        open={showDeleteDialog}
-        onClose={onCloseConfirmDeleteDialog}
-        onConfirm={onConfirmDelete}
-        selectedRow={selectedRow}
-      />
+      {showDeleteDialog && (
+        <ConfirmDeleteConfigurationModal
+          open={showDeleteDialog}
+          onClose={onCloseConfirmDeleteDialog}
+          onConfirm={onConfirmDelete}
+          selectedRow={selectedRow}
+        />
+      )}
     </>
   );
 };

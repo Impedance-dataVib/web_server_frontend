@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ContentBox from "../../app/components/content-box";
@@ -7,22 +7,18 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 
-import { addConfiguration, AddConfiguration } from "../../app/services";
+import { addConfiguration } from "../../app/services";
 import { useGetConfiguration } from "./hooks";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
 import Snackbar from "@mui/material/Snackbar";
 import Alert, { AlertColor } from "@mui/material/Alert";
 import { Grid, LinearProgress } from "@mui/material";
 import ConfigurationEmptyState from "./emptyState";
+import AddConfigurationModal from "./modals/addConfiguration";
 
 const ConfigurationPageContent = () => {
   const [openAddConfigDialog, setOpenAddConfigDialog] = useState(false);
-  const [formData, setFormData] = useState<AddConfiguration>({ name: "" });
   const [openAlert, setOpenAlert] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<{
     message: string;
     severity: AlertColor;
@@ -30,41 +26,44 @@ const ConfigurationPageContent = () => {
     message: "",
     severity: "info",
   });
-  const { isLoading, data, isError, getConfigData } = useGetConfiguration();
-  const [loading, setIsLoading] = useState<boolean>(false);
+  const { isLoading, data, getConfigData } = useGetConfiguration();
 
   const handleCloseAlert = () => {
     setOpenAlert(false);
   };
+
   const handleAddConfigDialog = () => {
     setOpenAddConfigDialog((prev) => !prev);
   };
-  const handleAddConfig = async () => {
+
+  const handleAddConfig = async (name: string) => {
+    if (!name) {
+      return;
+    }
+    setLoading(true);
     try {
-      await addConfiguration(formData);
+      await addConfiguration({ name });
       setOpenAlert(true);
-      setAlertMessage({ message: "Success!", severity: "success" });
+      setAlertMessage({
+        message: "Configuration added successfully",
+        severity: "success",
+      });
       getConfigData();
-      setFormData({ name: "" });
       handleAddConfigDialog();
+      setLoading(false);
     } catch (error) {
       setOpenAlert(true);
-      setAlertMessage({ message: "Error!", severity: "error" });
+      setAlertMessage({
+        message: "Error occurred while adding configuration",
+        severity: "error",
+      });
       handleAddConfigDialog();
+      setLoading(false);
     }
-  };
-  const handleFormData = (event: any) => {
-    setFormData({ name: event.target.value });
   };
 
   return (
-    <Box
-      sx={{
-        p: 2,
-        // marginLeft: "41px",
-        //  paddingTop: "41px"
-      }}
-    >
+    <Box sx={{ p: 2 }}>
       {isLoading ||
         (loading && (
           <Box sx={{ my: 1 }}>
@@ -77,7 +76,7 @@ const ConfigurationPageContent = () => {
             Manage Configuration
           </Typography>
           <Box sx={{ marginTop: "21px", paddingBottom: "41px" }}>
-            {(data === undefined || data?.length === 0) && (
+            {!isLoading && (data === undefined || data?.length === 0) && (
               <ConfigurationEmptyState
                 handleAddConfigDialog={handleAddConfigDialog}
               />
@@ -87,7 +86,7 @@ const ConfigurationPageContent = () => {
                 data={data}
                 refetchOnDelete={getConfigData}
                 setAlert={{ setAlertMessage, setOpenAlert }}
-                setIsLoading={setIsLoading}
+                setIsLoading={setLoading}
               />
             )}
           </Box>
@@ -110,36 +109,14 @@ const ConfigurationPageContent = () => {
               </Button>
             </Stack>
           )}
+          {openAddConfigDialog && (
+            <AddConfigurationModal
+              open={openAddConfigDialog}
+              onClose={handleAddConfigDialog}
+              onSubmit={handleAddConfig}
+            />
+          )}
 
-          <Dialog open={openAddConfigDialog} onClose={handleAddConfigDialog}>
-            <DialogTitle>Add Configuration</DialogTitle>
-            <DialogContent>
-              <TextField
-                autoFocus
-                id="name"
-                name="name"
-                label="Configuration Name"
-                type="text"
-                variant="standard"
-                fullWidth
-                value={formData.name}
-                onChange={handleFormData}
-              />
-            </DialogContent>
-
-            <DialogActions>
-              <Button color="secondary" onClick={handleAddConfigDialog}>
-                Cancel
-              </Button>
-              <Button
-                color="primary"
-                onClick={handleAddConfig}
-                disabled={formData.name.length > 0 ? false : true}
-              >
-                Add
-              </Button>
-            </DialogActions>
-          </Dialog>
           <Snackbar
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
             open={openAlert}
@@ -159,6 +136,7 @@ const ConfigurationPageContent = () => {
     </Box>
   );
 };
+
 const ManageConfigurationPage = () => {
   return (
     <ContentBox title={"Configuration"}>
