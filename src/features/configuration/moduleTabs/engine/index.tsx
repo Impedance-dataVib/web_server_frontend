@@ -75,11 +75,14 @@ const StepToComponentEngineModule = ({
       return <div>Invalid Step</div>;
   }
 };
+
 const EngineTabContent = ({ module, moduleId }: any) => {
   const [expanded, setExpanded] = useState<string | false>("Global");
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
+  const [activeStep, setActiveStep] = useState<number>(0);
   const { configId } = useParams();
+
   const handleSubmit = async () => {
     try {
       const payload = {
@@ -96,14 +99,20 @@ const EngineTabContent = ({ module, moduleId }: any) => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     setTabConfigs(extractTabConfigs(formSchema, module));
     setStepperSteps(extractSteps(formSchema, module));
   }, []);
-  const handleAccordionChange =
-    (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-      setExpanded(newExpanded ? value : false);
-    };
+
+  const handleAccordionChange = (value: string) => {
+    console.log("handleAccordionChange = ", value, stepperSteps);
+    setExpanded(value || false);
+    const index = stepperSteps.indexOf(value);
+    setActiveStep(index > 0 ? index : 0);
+    // setExpanded(newExpanded ? value : false);
+  };
+
   const moduleFormContext = useFormik({
     initialValues: {
       Crankshaft_SENSORx: "",
@@ -161,16 +170,19 @@ const EngineTabContent = ({ module, moduleId }: any) => {
     },
     onSubmit: (values) => {},
   });
+
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "auto" }}>
       <Stepper
-        activeStep={2}
+        activeStep={activeStep}
         alternativeLabel
         connector={<CustomConnector></CustomConnector>}
         sx={{ width: "auto", marginBottom: "66px", marginTop: "40px" }}
+        // @ts-expect-error
+        onChange={(e) => setActiveStep(e?.target?.value)}
       >
-        {stepperSteps?.map((label: string) => (
-          <Step key={label}>
+        {stepperSteps?.map((label: string, index: number) => (
+          <Step key={label} index={index}>
             <StepLabel>{label}</StepLabel>
           </Step>
         ))}
@@ -179,7 +191,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
         {stepperSteps?.map((item: string) => (
           <Grid key={item} item>
             <AccordionBase
-              expanded={expanded}
+              //   expanded={expanded}
               handleChange={handleAccordionChange}
               value={item}
               title={item}

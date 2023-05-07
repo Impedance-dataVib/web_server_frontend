@@ -9,33 +9,38 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
+const SENSORx = [
+  "Ch1",
+  "Ch2",
+  "Ch3",
+  "Ch4",
+  "Ch5",
+  "CH6",
+  "CH7",
+  "CH8",
+  "No Channel",
+];
+
+const ChannelType = ["Speed", "Transducer"];
+const WheelType = [
+  "Standard",
+  "1 Missing Tooth",
+  "1 Missing + 1 Junction",
+  "1 Missing + 2 Junction",
+  "1 Missing + 3 Junctions",
+  "1 Junction",
+  "2 Junctions",
+  "3 Junctions",
+  "Noisy",
+  "Optical",
+  "Odd",
+];
+
 const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
   const [optionsChannelInformation, setOptionsChannelInformation] = useState({
-    SENSORx: [
-      "Ch1",
-      "Ch2",
-      "Ch3",
-      "Ch4",
-      "Ch5",
-      "CH6",
-      "CH7",
-      "CH8",
-      "No Channel",
-    ],
-    ChannelType: ["Speed", "Transducer"],
-    WheelType: [
-      "Standard",
-      "1 Missing Tooth",
-      "1 Missing + 1 Junction",
-      "1 Missing + 2 Junction",
-      "1 Missing + 3 Junctions",
-      "1 Junction",
-      "2 Junctions",
-      "3 Junctions",
-      "Noisy",
-      "Optical",
-      "Odd",
-    ],
+    SENSORx,
+    ChannelType,
+    WheelType,
   });
 
   return (
