@@ -1,53 +1,51 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import { BootstrapInput } from "../../../app/components/bootstarp-input";
-import { FormControlLabel, Switch, Typography } from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
-import formSchema from "../formSchema";
+import { BootstrapInput } from "../../../../../app/components/bootstarp-input";
+import {
+  FormControl,
+  Grid,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 
-export const ChannelInformationForm = ({
-  handleFormData,
-  formContext,
-}: any) => {
-  const [optionsChannelInformation, setOptionsChannelInformation] = useState({
-    SENSORx: [
-      "Ch1",
-      "Ch2",
-      "Ch3",
-      "Ch4",
-      "Ch5",
-      "CH6",
-      "CH7",
-      "CH8",
-      "No Channel",
-    ],
-    ChannelType: ["Speed", "Transducer"],
-    WheelType: [
-      "Standard",
-      "1 Missing Tooth",
-      "1 Missing + 1 Junction",
-      "1 Missing + 2 Junction",
-      "1 Missing + 3 Junctions",
-      "1 Junction",
-      "2 Junctions",
-      "3 Junctions",
-      "Noisy",
-      "Optical",
-      "Odd",
-    ],
-  });
+const SENSORx = [
+  "Ch1",
+  "Ch2",
+  "Ch3",
+  "Ch4",
+  "Ch5",
+  "CH6",
+  "CH7",
+  "CH8",
+  "No Channel",
+];
+
+const ChannelType = ["Speed", "Transducer"];
+const WheelType = [
+  "Standard",
+  "1 Missing Tooth",
+  "1 Missing + 1 Junction",
+  "1 Missing + 2 Junction",
+  "1 Missing + 3 Junctions",
+  "1 Junction",
+  "2 Junctions",
+  "3 Junctions",
+  "Noisy",
+  "Optical",
+  "Odd",
+];
+
+const ChannelInformationForm = ({ handleFormData, formContext }: any) => { 
+
+  const optionsChannelInformation = {
+    SENSORx,
+    ChannelType,
+    WheelType,
+  };
 
   return (
     <>
-      <Grid
-        container
-        spacing={1}
-        sx={{ marginLeft: "64px", marginTop: "28px" }}
-      >
+      <Grid container spacing={1}>
         <Grid item>
           <Typography
             component={"label"}
@@ -55,8 +53,6 @@ export const ChannelInformationForm = ({
               width: "143px",
               display: "inline-block",
               fontSize: "16px",
-              marginRight: "41px",
-              marginBottom: "5px",
             }}
           >
             Crankshaft
@@ -64,7 +60,11 @@ export const ChannelInformationForm = ({
         </Grid>
         <Grid container item spacing={1}>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{
+                minWidth: "182px",
+              }}
+            >
               <Select
                 name="Crankshaft_SENSORx"
                 onChange={formContext?.handleChange}
@@ -80,7 +80,11 @@ export const ChannelInformationForm = ({
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{
+                minWidth: "182px",
+              }}
+            >
               <Select
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["Crankshaft_ChannelType"]}
@@ -104,7 +108,6 @@ export const ChannelInformationForm = ({
               variant="outlined"
               sx={{
                 fontSize: "16px",
-                marginBottom: "20px",
                 width: "182px",
                 padding: "1px 1px",
               }}
@@ -118,7 +121,11 @@ export const ChannelInformationForm = ({
             ></TextField>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{
+                minWidth: "182px",
+              }}
+            >
               <Select
                 name="Crankshaft_WheelType"
                 onChange={formContext?.handleChange}
@@ -137,7 +144,12 @@ export const ChannelInformationForm = ({
           </Grid>
         </Grid>
       </Grid>
-      <Grid container sx={{ marginLeft: "64px", marginTop: "28px" }}>
+      <Grid
+        container
+        sx={{
+          mt: 1,
+        }}
+      >
         <Grid item>
           <Typography
             component={"label"}
@@ -145,8 +157,6 @@ export const ChannelInformationForm = ({
               width: "143px",
               display: "inline-block",
               fontSize: "16px",
-              marginRight: "41px",
-              marginBottom: "5px",
             }}
           >
             CamShaft
@@ -154,7 +164,11 @@ export const ChannelInformationForm = ({
         </Grid>
         <Grid item container spacing={1}>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{
+                minWidth: "182px",
+              }}
+            >
               <Select
                 name="CamShaft_SENSORx"
                 onChange={formContext?.handleChange}
@@ -170,7 +184,11 @@ export const ChannelInformationForm = ({
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{
+                minWidth: "182px",
+              }}
+            >
               <Select
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["CamShaft_ChannelType"]}
@@ -194,7 +212,6 @@ export const ChannelInformationForm = ({
               variant="outlined"
               sx={{
                 fontSize: "16px",
-                marginBottom: "20px",
                 width: "182px",
                 padding: "1px 1px",
               }}
@@ -208,7 +225,11 @@ export const ChannelInformationForm = ({
             ></TextField>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{
+                minWidth: "182px",
+              }}
+            >
               <Select
                 name="CamShaft_WheelType"
                 onChange={formContext?.handleChange}
@@ -227,7 +248,7 @@ export const ChannelInformationForm = ({
           </Grid>
         </Grid>
       </Grid>
-      <Grid container sx={{ marginLeft: "64px", marginTop: "28px" }}>
+      <Grid container sx={{ mt: 1 }}>
         <Grid item>
           <Typography
             component={"label"}
@@ -235,8 +256,6 @@ export const ChannelInformationForm = ({
               width: "143px",
               display: "inline-block",
               fontSize: "16px",
-              marginRight: "41px",
-              marginBottom: "5px",
             }}
           >
             TDC
@@ -244,7 +263,11 @@ export const ChannelInformationForm = ({
         </Grid>
         <Grid item container spacing={1}>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{
+                minWidth: "182px",
+              }}
+            >
               <Select
                 name="TDC_SENSORx"
                 onChange={formContext?.handleChange}
@@ -260,7 +283,11 @@ export const ChannelInformationForm = ({
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{
+                minWidth: "182px",
+              }}
+            >
               <Select
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["TDC_ChannelType"]}
@@ -284,7 +311,6 @@ export const ChannelInformationForm = ({
               variant="outlined"
               sx={{
                 fontSize: "16px",
-                marginBottom: "20px",
                 width: "182px",
                 padding: "1px 1px",
               }}
@@ -298,7 +324,11 @@ export const ChannelInformationForm = ({
             ></TextField>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{
+                minWidth: "182px",
+              }}
+            >
               <Select
                 name="TDC_WheelType"
                 onChange={formContext?.handleChange}
@@ -317,7 +347,7 @@ export const ChannelInformationForm = ({
           </Grid>
         </Grid>
       </Grid>
-      <Grid container sx={{ marginLeft: "64px", marginTop: "28px" }}>
+      <Grid container sx={{ mt: 1 }}>
         <Grid item>
           <Typography
             component={"label"}
@@ -334,7 +364,11 @@ export const ChannelInformationForm = ({
         </Grid>
         <Grid item container spacing={1}>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{
+                minWidth: "182px",
+              }}
+            >
               <Select
                 name="Peak_Pressure_SENSORx"
                 onChange={formContext?.handleChange}
@@ -350,7 +384,11 @@ export const ChannelInformationForm = ({
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{
+                minWidth: "182px",
+              }}
+            >
               <Select
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["Peak_Pressure_ChannelType"]}
@@ -374,7 +412,6 @@ export const ChannelInformationForm = ({
               variant="outlined"
               sx={{
                 fontSize: "16px",
-                marginBottom: "20px",
                 width: "182px",
                 padding: "1px 1px",
               }}
@@ -388,7 +425,11 @@ export const ChannelInformationForm = ({
             ></TextField>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{
+                minWidth: "182px",
+              }}
+            >
               <Select
                 name="Peak_Pressure_WheelType"
                 onChange={formContext?.handleChange}
@@ -412,7 +453,6 @@ export const ChannelInformationForm = ({
               variant="outlined"
               sx={{
                 fontSize: "16px",
-                marginBottom: "20px",
                 width: "182px",
                 padding: "1px 1px",
               }}
@@ -432,155 +472,4 @@ export const ChannelInformationForm = ({
     </>
   );
 };
-
-const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
-  switch (type) {
-    case "dropdown":
-      return (
-        <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
-          <InputLabel id={fieldProps.label}>{fieldProps.name}</InputLabel>
-          <Select
-            name={fieldProps.label}
-            onChange={formContext?.handleChange}
-            value={formContext?.values?.[fieldProps.label]}
-            label={fieldProps.name}
-          >
-            {fieldProps.options.map((option: string) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      );
-
-    case "text":
-      return (
-        <TextField
-          name={fieldProps.label}
-          label={fieldProps.name}
-          onChange={formContext?.handleChange}
-          value={formContext?.values?.[fieldProps.label]}
-          variant="outlined"
-          sx={{
-            fontSize: "16px",
-            marginBottom: "20px",
-            width: "182px",
-            padding: "1px 1px",
-          }}
-          inputProps={{
-            style: {
-              padding: "11px 26px 13px 12px",
-            },
-          }}
-        ></TextField>
-      );
-    case "toggle":
-      return (
-        <FormControlLabel
-          control={
-            <Switch
-              name={fieldProps.label}
-              onChange={formContext?.handleChange}
-              value={formContext?.values?.[fieldProps.label]}
-              color="primary"
-            />
-          }
-          label={fieldProps.name}
-          labelPlacement="start"
-        />
-      );
-    default:
-      return <div>No Valid Field Type</div>;
-      break;
-  }
-};
-export const EngineDetailsForm = ({ handleFormData, formContext }: any) => {
-  return (
-    <>
-      <Grid
-        container
-        spacing={1}
-        sx={{ marginLeft: "64px", marginTop: "28px" }}
-      >
-        {formSchema["Engine"]["Engine Details"].map((item: any) => (
-          <Grid key={item.label} container item>
-            <Grid item>
-              <Typography
-                component={"label"}
-                sx={{
-                  width: "143px",
-                  display: "inline-block",
-                  fontSize: "16px",
-                  marginRight: "41px",
-                  marginBottom: "5px",
-                  alignItems: "right",
-                }}
-              >
-                {item.name}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <FormFieldConditionalRender
-                type={item.type}
-                fieldProps={{ ...item, handleChange: handleFormData }}
-                formContext={formContext}
-              ></FormFieldConditionalRender>
-            </Grid>
-          </Grid>
-        ))}
-      </Grid>
-    </>
-  );
-};
-
-export const DiagnosticDetailsForm = ({ handleFormData, formContext }: any) => {
-  return (
-    <Grid container spacing={1} sx={{ marginLeft: "64px", marginTop: "28px" }}>
-      {formSchema["Engine"]["Diagnostic Details"].map((item: any) => (
-        <Grid key={item.label} container item>
-          <Grid item>
-            <Typography
-              component={"label"}
-              sx={{
-                width: "143px",
-                display: "inline-block",
-                fontSize: "16px",
-                marginRight: "41px",
-                marginBottom: "5px",
-                alignItems: "right",
-              }}
-            >
-              {item.name}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <FormFieldConditionalRender
-              type={item.type}
-              fieldProps={{ ...item, handleChange: handleFormData }}
-              formContext={formContext}
-            ></FormFieldConditionalRender>
-          </Grid>
-        </Grid>
-      ))}
-    </Grid>
-  );
-};
-
-export const AdvancedParameters = ({ handleFormData, formContext }: any) => {
-  return (
-    <Grid container spacing={1} sx={{ marginLeft: "64px", marginTop: "28px" }}>
-      {formSchema["Engine"]["Advanced Parameters"].map((item: any) => (
-        <Grid key={item.label} container item>
-          <Grid item>
-            <FormFieldConditionalRender
-              type={item.type}
-              fieldProps={{ ...item, handleChange: handleFormData }}
-              formContext={formContext}
-            ></FormFieldConditionalRender>
-          </Grid>
-        </Grid>
-      ))}
-    </Grid>
-  );
-};
+export default ChannelInformationForm;

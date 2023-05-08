@@ -190,7 +190,7 @@ const SettingsPage = () => {
                           padding: 1,
                           marginLeft: 10,
                         },
-                        pattern:"\d{4}-\d{2}-\d{2}",
+                        pattern:"{4}-{2}-{2}",
                         // readOnly: true,
                       }}
                     />
