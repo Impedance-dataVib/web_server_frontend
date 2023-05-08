@@ -39,8 +39,8 @@ const defaultApiData = {
 };
 const SettingsPage = () => {
   const [apiData, setApiData] = useState(defaultApiData);
-  const [showGeneralSettings, setShowGeneralSetting] = useState(true);
-  const [showNetworkSettings, setNetworkSettings] = useState(true);
+  const [expanded, setExpanded] = useState<string | false>("generalSettings");
+  const [showNetworkSettings, setNetworkSettings] = useState<string | false>("networkSettings");
 
   const handleIpAddress = (key: string, val: string, valueLength: number) => {
     let length = val.length;
@@ -61,6 +61,14 @@ const SettingsPage = () => {
   const handleChange = (setVal: any) => {
     setVal((val: boolean) => !val);
   };
+  const handleAccordionChange =
+    (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? value : false);
+    };
+  const handleAccordionChangeNetwork =
+    (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setNetworkSettings(newExpanded ? value : false);
+    };
 
   const changeEventHandler = (key: string, val: any) => {
     setApiData((value) => {
@@ -109,8 +117,8 @@ const SettingsPage = () => {
         >
           <Box sx={{ width: "70%" }}>
             <AccordionBase
-              expanded={showGeneralSettings}
-              handleChange={(val: any) => handleChange(setShowGeneralSetting)}
+              expanded={expanded}
+              handleChange={handleAccordionChange}
               value={"generalSettings"}
               title={"General Settings"}
             >
@@ -478,7 +486,7 @@ const SettingsPage = () => {
             <Box sx={{ m: 5 }} />
             <AccordionBase
               expanded={showNetworkSettings}
-              handleChange={(val: any) => handleChange(setNetworkSettings)}
+              handleChange={handleAccordionChangeNetwork}
               value={"networkSettings"}
               title={"Network Settings"}
             >
