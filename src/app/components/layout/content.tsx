@@ -6,6 +6,7 @@ const Content = ({ children }: any) => {
     <Box
       sx={{
         p: 2,
+        px: 5,
         backgroundColor: (theme) => theme.palette.color1.main,
         width: "100%",
         minHeight: "calc(100vh - 60px)",

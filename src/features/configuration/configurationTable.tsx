@@ -15,6 +15,8 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 import { useNavigate } from "react-router-dom";
 import { deleteConfig, activeConfig } from "../../app/services";
+import ConfirmDeleteConfigurationModal from "./modals/confirmDeleteConfig";
+import { useSnackbar } from "notistack";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -33,96 +35,144 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name: string, isActive: boolean) {
-  return { name, isActive };
+export interface IConfigurationTableProps {
+  data: any;
+  refetchOnDelete: any;  
+  setIsLoading: any;
 }
 
-const rows = [
-  createData("Configuartion 1", true),
-  createData("Configuartion 2", false),
-  createData("Configuartion 3", false),
-  createData("Configuartion 4", false),
-  createData("Configuartion 5", false),
-];
-
-const ConfigurationTable = ({ data, refetchOnDelete, setAlert }: any) => {
+const ConfigurationTable = ({
+  data,
+  refetchOnDelete,  
+  setIsLoading,
+}: IConfigurationTableProps) => {
   const navigate = useNavigate();
-  const onDeleteConfiguration = async (id: string) => {
+  const [selectedRow, setSelectedRow] = React.useState<any>(undefined);
+  const [showDeleteDialog, setShowDeleteDialog] =
+    React.useState<boolean>(false);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const onDeleteConfiguration = (row: any) => {
+    setSelectedRow(row);
+    setShowDeleteDialog(true);
+  };
+
+  const onCloseConfirmDeleteDialog = () => {
+    setShowDeleteDialog(false);
+  };
+
+  const onConfirmDelete = async () => {
+    setShowDeleteDialog(false);
+    setIsLoading(true);
     try {
-      await deleteConfig(id);
+      await deleteConfig(selectedRow?.id);
       await refetchOnDelete();
-      setAlert.setOpenAlert(true);
-      setAlert.setAlertMessage("Success");
+      setIsLoading(false);
+      enqueueSnackbar({
+        message: `Configuration with name ${selectedRow?.name}-${selectedRow?.id} successfully deleted`,
+        variant: "success",
+      });
     } catch (e) {
-      setAlert.setOpenAlert(true);
-      setAlert.setAlertMessage("Error");
+      enqueueSnackbar({
+        message: "Error occurred while deleting configuration",
+        variant: "error",
+      });
+      setIsLoading(false);
     }
   };
-  const onExportConfiguartion = async (id: string) => {};
-  const onActiveConfig = async (id: string) => {
+
+  const onExportConfiguartion = async (id: string) => {
+    // TODO
+  };
+
+  const onActiveConfig = async (row: any) => {
     try {
       const data = {
-        records_id: id,
+        records_id: row?.id,
       };
+      setIsLoading(true);
       await activeConfig(data);
       await refetchOnDelete();
-      setAlert.setOpenAlert(true);
-      setAlert.setAlertMessage("Success");
+      enqueueSnackbar({
+        message: `Configuration '${row?.name}' activated successfully`,
+        variant: "error",
+      });
+      setIsLoading(false);
     } catch (error) {
-      setAlert.setOpenAlert(true);
-      setAlert.setAlertMessage("Error");
+      enqueueSnackbar({
+        message: "Error occurred while activating configuration",
+        variant: "error",
+      });
+      setIsLoading(false);
     }
   };
-  return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Configuration Name</StyledTableCell>
-            <StyledTableCell align="left">Actions</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row: any) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="left">
-                <IconButton
-                  onClick={() => onExportConfiguartion(row.id)}
-                  aria-label="Export"
-                  color="primary"
-                >
-                  <FileDownloadIcon></FileDownloadIcon>
-                </IconButton>
-                <IconButton
-                  onClick={() => onDeleteConfiguration(row.id)}
-                  aria-label="delete"
-                  color="primary"
-                >
-                  <DeleteOutlineIcon></DeleteOutlineIcon>
-                </IconButton>
-                <IconButton
-                  onClick={() => navigate(`${row.id}`)}
-                  aria-label="edit"
-                  color="primary"
-                >
-                  <EditIcon></EditIcon>
-                </IconButton>
 
-                <Button
-                  variant="contained"
-                  onClick={() => onActiveConfig(row.id)}
-                >
-                  {row.status === "Active" ? "Active" : "In Active"}
-                </Button>
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+  return (
+    <>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 500 }} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Configuration Name</StyledTableCell>
+              <StyledTableCell align="left">Actions</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((row: any) => (
+              <StyledTableRow key={row.name}>
+                <StyledTableCell component="th" scope="row">
+                  {row.name}
+                </StyledTableCell>
+                <StyledTableCell align="left">
+                  <IconButton
+                    onClick={() => onExportConfiguartion(row.id)}
+                    aria-label="Export"
+                    color="primary"
+                    title="Export Configuration"
+                  >
+                    <FileDownloadIcon></FileDownloadIcon>
+                  </IconButton>
+                  <IconButton
+                    onClick={() => onDeleteConfiguration(row)}
+                    aria-label="delete"
+                    color="primary"
+                    title="Delete Configuration"
+                  >
+                    <DeleteOutlineIcon></DeleteOutlineIcon>
+                  </IconButton>
+                  <IconButton
+                    onClick={() => navigate(`${row.id}`)}
+                    aria-label="edit"
+                    color="primary"
+                    title="Edit Configuration"
+                  >
+                    <EditIcon></EditIcon>
+                  </IconButton>
+
+                  <Button
+                    sx={{ ml: 1 }}
+                    variant="contained"
+                    onClick={() => onActiveConfig(row)}
+                    title="Click here to activate"
+                  >
+                    {row.status === "Active" ? "Active" : "In Active"}
+                  </Button>
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {showDeleteDialog && (
+        <ConfirmDeleteConfigurationModal
+          open={showDeleteDialog}
+          onClose={onCloseConfirmDeleteDialog}
+          onConfirm={onConfirmDelete}
+          selectedRow={selectedRow}
+        />
+      )}
+    </>
   );
 };
 

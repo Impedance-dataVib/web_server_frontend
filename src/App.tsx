@@ -27,6 +27,7 @@ import FullScreenLoader from "./app/components/fullscreen-loader";
 import CommonApi from "./commonApi";
 import appContext from "./app/context";
 import ProtectedRoute from "./app/components/protectedRoute";
+import { SnackbarProvider } from "notistack";
 
 const AppRoutes = (
   <Routes>
@@ -58,7 +59,6 @@ const AppRoutes = (
       }
     ></Route>
     <Route
-
       path="/configuration/:configId"
       element={
         <ProtectedRoute>
@@ -203,16 +203,22 @@ function App() {
   return (
     <div className="App">
       <Suspense fallback={<FullScreenLoader />}>
-        <appContext.Provider value={{ licenseInfo, licenseStatus }}>
-          <ThemeProvider theme={activeTheme}>
-            <CssBaseline />
-            {path && ["/login"].includes(path.pathname) ? (
-              <>{LoginRoutes}</>
-            ) : (
-              <Layout>{AppRoutes}</Layout>
-            )}
-          </ThemeProvider>
-        </appContext.Provider>
+        <SnackbarProvider
+          maxSnack={4}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          autoHideDuration={2500}
+        >
+          <appContext.Provider value={{ licenseInfo, licenseStatus }}>
+            <ThemeProvider theme={activeTheme}>
+              <CssBaseline />
+              {path && ["/login"].includes(path.pathname) ? (
+                <>{LoginRoutes}</>
+              ) : (
+                <Layout>{AppRoutes}</Layout>
+              )}
+            </ThemeProvider>
+          </appContext.Provider>
+        </SnackbarProvider>
       </Suspense>
     </div>
   );

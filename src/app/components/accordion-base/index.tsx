@@ -7,7 +7,7 @@ import MuiAccordionSummary, {
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from '@mui/icons-material/Remove';
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -49,18 +49,18 @@ const AccordionBase = ({
   title,
   children,
 }: any) => {
+  const onChange = () => {
+    if (handleChange) {
+      handleChange(value);
+    }
+  };
+
   return (
-    <Accordion expanded={expanded} onChange={handleChange}>
+    <Accordion expanded={expanded} onChange={onChange} defaultValue={value}>
       <AccordionSummary
         aria-controls={`${value}-content`}
         id={`${value}-header`}
-        expandIcon={
-          expanded ? (
-            <RemoveIcon></RemoveIcon>
-          ) : (
-            <AddIcon></AddIcon>
-          )
-        }
+        expandIcon={expanded ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       >
         <Typography>{title}</Typography>
       </AccordionSummary>

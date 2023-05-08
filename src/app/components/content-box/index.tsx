@@ -1,18 +1,29 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-const ContentBox = ({ children, title }: any) => {
+
+export interface IContentBoxProps {
+  title?: string;
+}
+
+const ContentBox = ({
+  children,
+  title,
+}: PropsWithChildren<IContentBoxProps>) => {
   return (
     <>
-      <Typography sx={{ fontSize: "24px", marginLeft: "55px",marginBottom:'19px' }}>
+      <Typography
+        variant="h5"
+        sx={{
+          mb: 2,
+        }}
+      >
         {title || "Title"}
       </Typography>
       <Box
         sx={{
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "#fff",
           width: "auto",
-          marginLeft: "54px",
-          marginRight: "95px",
         }}
       >
         {children}
