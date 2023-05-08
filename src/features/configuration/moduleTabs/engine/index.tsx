@@ -193,7 +193,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
         {stepperSteps?.map((item: string) => (
           <Grid key={item} item>
             <AccordionBase
-              expanded={expanded}
+              // expanded={expanded}
               handleChange={handleAccordionChange}
               value={item}
               title={item}
