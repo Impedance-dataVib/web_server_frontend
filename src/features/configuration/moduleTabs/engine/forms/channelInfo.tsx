@@ -35,8 +35,7 @@ const WheelType = [
   "Odd",
 ];
 
-const ChannelInformationForm = ({ handleFormData, formContext }: any) => { 
-
+const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
   const optionsChannelInformation = {
     SENSORx,
     ChannelType,

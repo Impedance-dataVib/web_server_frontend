@@ -1,7 +1,6 @@
 import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
-import { StepIconProps } from "@mui/material/StepIcon";
 import { styled } from "@mui/material/styles";
 
 const CustomConnector = styled(StepConnector)(({ theme }) => ({
@@ -10,6 +9,7 @@ const CustomConnector = styled(StepConnector)(({ theme }) => ({
     left: "calc(-50% + 12px)",
     right: "calc(50% + 12px)",
   },
+
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {
       borderColor: "#E9E9F0",

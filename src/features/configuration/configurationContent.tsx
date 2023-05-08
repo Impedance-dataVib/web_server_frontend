@@ -15,9 +15,9 @@ import { AddModule } from "../../app/services";
 import { useParams } from "react-router-dom";
 import { useGetConfigurationModuleByConfigId } from "./hooks";
 import AddModuleModal from "./modals/addModule";
-import { LinearProgress } from "@mui/material";
+import { LinearProgress, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { Add } from "@mui/icons-material";
+import { Add, Delete, Remove } from "@mui/icons-material";
 
 function tabProps(index: number) {
   return {
@@ -123,34 +123,54 @@ const ConfigurationContent = (props: any) => {
 
   return (
     <Box>
+      <Box sx={{ display: "flex" }}>
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="h5">Configuration</Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            p: 1,
+            justifyContent: "flex-start",
+          }}
+        >
+          <Button
+            startIcon={<Add />}
+            color="primary"
+            variant="contained"
+            onClick={handleOpenDialog}
+            sx={{ mr: 1 }}
+          >
+            Add Module
+          </Button>
+          <Button
+            startIcon={<Delete />}
+            color="primary"
+            variant="contained"
+            onClick={handleOpenDialog}
+          >
+            Delete Module
+          </Button>
+        </Box>
+      </Box>
       {isLoading && (
         <Box sx={{ my: 1 }}>
           <LinearProgress />
         </Box>
       )}
+
       <Box
         sx={{
-          display: "flex",
-          p: 1,
-          justifyContent: "flex-start",
+          background: (theme) => theme.palette.background.paper,
         }}
       >
-        <Button
-          startIcon={<Add />}
-          color="primary"
-          variant="contained"
-          onClick={handleOpenDialog}
-        >
-          Add Module
-        </Button>
-      </Box>
-      <div>
-        <Box>
+        <Box sx={{ borderBottom: "2px solid #f7f7f7" }}>
           <Tabs
             value={tab}
             onChange={handleChange}
             aria-label="basic tabs example"
-            sx={{ marginLeft: "45px" }}
+            variant="scrollable"
+            // sx={{ marginLeft: "45px" }}
           >
             {data?.map((tabElement: any, index: number) => (
               <Tab key={index} label={tabElement.name} {...tabProps(index)} />
@@ -165,7 +185,7 @@ const ConfigurationContent = (props: any) => {
             ></TabModuleRender>
           </TabPanel>
         ))}
-      </div>
+      </Box>
 
       {openAddModule && (
         <AddModuleModal

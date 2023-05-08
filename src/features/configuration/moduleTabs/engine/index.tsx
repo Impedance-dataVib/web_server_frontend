@@ -77,9 +77,10 @@ const StepToComponentEngineModule = ({
 };
 
 const EngineTabContent = ({ module, moduleId }: any) => {
-  const [expanded, setExpanded] = useState<string | false>("Global");
+  
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
+  const [expanded, setExpanded] = useState<string | false>('Channel Information');
   const [activeStep, setActiveStep] = useState<number>(0);
   const { configId } = useParams();
 
@@ -110,7 +111,6 @@ const EngineTabContent = ({ module, moduleId }: any) => {
     setExpanded(value || false);
     const index = stepperSteps.indexOf(value);
     setActiveStep(index > 0 ? index : 0);
-    // setExpanded(newExpanded ? value : false);
   };
 
   const moduleFormContext = useFormik({
@@ -171,7 +171,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
     onSubmit: (values) => {},
   });
 
-  console.log('moduleFormContext = ', moduleFormContext.values);
+  console.log("moduleFormContext = ", moduleFormContext.values);
 
   return (
     <Box sx={{ width: "auto" }}>
@@ -179,7 +179,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
         activeStep={activeStep}
         alternativeLabel
         connector={<CustomConnector></CustomConnector>}
-        sx={{ width: "auto", marginBottom: "66px", marginTop: "40px" }}
+        sx={{ width: "auto", mb: 3, mt: 2 }}
         // @ts-expect-error
         onChange={(e) => setActiveStep(e?.target?.value)}
       >
@@ -193,7 +193,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
         {stepperSteps?.map((item: string) => (
           <Grid key={item} item>
             <AccordionBase
-              //   expanded={expanded}
+              expanded={expanded}
               handleChange={handleAccordionChange}
               value={item}
               title={item}
@@ -209,7 +209,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
           </Grid>
         ))}
       </Grid>
-      <Box sx={{ marginTop: "48px", width: "70%" }}>
+      <Box sx={{ mt: 2 }}>
         <Stack
           spacing={1}
           direction="row"

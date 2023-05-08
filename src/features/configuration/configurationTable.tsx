@@ -37,13 +37,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export interface IConfigurationTableProps {
   data: any;
-  refetchOnDelete: any;  
+  refetchOnDelete: any;
   setIsLoading: any;
 }
 
 const ConfigurationTable = ({
   data,
-  refetchOnDelete,  
+  refetchOnDelete,
   setIsLoading,
 }: IConfigurationTableProps) => {
   const navigate = useNavigate();
@@ -96,7 +96,7 @@ const ConfigurationTable = ({
       await refetchOnDelete();
       enqueueSnackbar({
         message: `Configuration '${row?.name}' activated successfully`,
-        variant: "error",
+        variant: "success",
       });
       setIsLoading(false);
     } catch (error) {

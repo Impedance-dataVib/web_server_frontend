@@ -56,11 +56,11 @@ const AccordionBase = ({
   };
 
   return (
-    <Accordion expanded={expanded} onChange={onChange} defaultValue={value}>
+    <Accordion expanded={expanded === value} onChange={onChange}>
       <AccordionSummary
         aria-controls={`${value}-content`}
         id={`${value}-header`}
-        expandIcon={expanded ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+        expandIcon={expanded === value? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       >
         <Typography>{title}</Typography>
       </AccordionSummary>
