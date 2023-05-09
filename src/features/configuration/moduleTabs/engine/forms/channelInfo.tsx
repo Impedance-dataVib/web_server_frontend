@@ -209,6 +209,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               name={"CamShaft_Teeth"}
               label="Teeth"
               variant="outlined"
+              disabled
               sx={{
                 fontSize: "16px",
                 width: "182px",
@@ -234,6 +235,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["CamShaft_WheelType"]}
                 input={<BootstrapInput></BootstrapInput>}
+                disabled
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -308,6 +310,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               name={"TDC_Teeth"}
               label="Teeth"
               variant="outlined"
+              disabled
               sx={{
                 fontSize: "16px",
                 width: "182px",
@@ -327,6 +330,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               sx={{
                 minWidth: "182px",
               }}
+              disabled
             >
               <Select
                 name="TDC_WheelType"
@@ -409,6 +413,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               name={"Peak_Pressure_Teeth"}
               label="Teeth"
               variant="outlined"
+              disabled
               sx={{
                 fontSize: "16px",
                 width: "182px",
@@ -428,6 +433,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               sx={{
                 minWidth: "182px",
               }}
+              disabled
             >
               <Select
                 name="Peak_Pressure_WheelType"

@@ -107,7 +107,9 @@ const EngineTabContent = ({ module, moduleId }: any) => {
   }, []);
 
   const handleAccordionChange = (value: string) => {
+    // Validate the form first before navigating
     console.log("handleAccordionChange = ", value, stepperSteps);
+    
     setExpanded(value || false);
     const index = stepperSteps.indexOf(value);
     setActiveStep(index > 0 ? index : 0);
@@ -121,16 +123,16 @@ const EngineTabContent = ({ module, moduleId }: any) => {
       Crankshaft_WheelType: "",
       CamShaft_SENSORx: "",
       CamShaft_ChannelType: "",
-      CamShaft_Teeth: "",
-      CamShaft_WheelType: "",
+      CamShaft_Teeth: "0.5",
+      CamShaft_WheelType: "Standard",
       TDC_SENSORx: "",
       TDC_ChannelType: "",
-      TDC_Teeth: "",
-      TDC_WheelType: "",
+      TDC_Teeth: "1",
+      TDC_WheelType: "Standard",
       Peak_Pressure_SENSORx: "",
       Peak_Pressure_ChannelType: "",
-      Peak_Pressure_Teeth: "",
-      Peak_Pressure_WheelType: "",
+      Peak_Pressure_Teeth: "0.5",
+      Peak_Pressure_WheelType: "Standard",
       peak_pressure_transducer_sensitivity: "",
       name: "",
       serial_number: "",
