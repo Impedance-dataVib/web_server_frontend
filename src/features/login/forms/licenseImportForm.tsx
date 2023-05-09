@@ -17,6 +17,7 @@ import appContext from "../../../app/context";
 import LicenseInActiveError from "../errors/licInactiveError";
 import LicenseExpiredError from "../errors/licExpiredError";
 import { useTranslation } from "react-i18next";
+import { useSnackbar } from "notistack";
 
 const LicenseImportForm = () => {
   const [isExpired, setIsExpired] = useState<boolean>(false);
@@ -29,6 +30,7 @@ const LicenseImportForm = () => {
   const { licenseStatus, licenseInfo } = useContext(appContext);
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     setInactive(false);
@@ -65,11 +67,17 @@ const LicenseImportForm = () => {
   const onClickActivateButton = () => {
     CommonApi.importLicense({ selectedFile })
       .then((res) => {
-        alert(res?.data?.Message + " , Please refresh the page");
+        enqueueSnackbar({
+          message: res?.data?.Message + " , Please refresh the page",
+          variant: "success",
+        });
         navigate("/dashboard");
       })
       .catch((e) => {
-        alert(e?.response?.data?.Message);
+        enqueueSnackbar({
+          message: e?.response?.data?.Message || '',
+          variant: "error",
+        });
       });
   };
 
