@@ -42,7 +42,7 @@ const SidebarItem = ({ variant, item }: SidebarItemProps & SidebarProps) => {
 
         backgroundColor: (theme) => theme.palette.color37.main,
         "& :hover": {
-          backgroundColor: (theme) => theme.palette.color1.main,
+          backgroundColor: (theme) => theme.palette.color3.main,
         },
       }}
       component={Link}
@@ -53,7 +53,7 @@ const SidebarItem = ({ variant, item }: SidebarItemProps & SidebarProps) => {
             ? (theme) => theme.palette.color1.main
             : (theme) => theme.palette.color37.main,
           "& :hover": {
-            backgroundColor: (theme) => theme.palette.color1.main,
+            backgroundColor: (theme) => theme.palette.color3.main,
           },
           borderLeft: isMatch
             ? (theme) => `8px solid ${theme.palette.color37.main}`
@@ -174,7 +174,14 @@ const Sidebar = ({ variant = "collapsed", setVariant }: SidebarProps) => {
         component="div"
         sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
       >
-        <Box component="div" sx={{ flex: 1, flexGrow: 1, backgroundColor: (theme) => theme.palette.color37.main, }}>
+        <Box
+          component="div"
+          sx={{
+            flex: 1,
+            flexGrow: 1,
+            backgroundColor: (theme) => theme.palette.color37.main,
+          }}
+        >
           <List sx={{ textAlign: "left" }}>
             {APP_NAV_MENU_ITEMS.map((item) => (
               <SidebarItem

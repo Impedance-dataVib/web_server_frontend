@@ -15,6 +15,20 @@ const FileUploadComponent = ({
 
   const onDropHandler = (e: any) => {
     e.preventDefault();
+
+    if (e.dataTransfer.items) {
+      [...e.dataTransfer.items].forEach((item, i) => {
+        // If dropped items aren't files, reject them
+        if (item.kind === "file") {
+          const file = item.getAsFile();
+          onChangeHandler(file);
+        }
+      });
+    } else {
+      [...e.dataTransfer.files].forEach((file, i) => {
+        onChangeHandler(file);
+      });
+    }
   };
 
   const onDropCapture = () => {
@@ -51,11 +65,12 @@ const FileUploadComponent = ({
         backgroundImage: `url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='8' ry='8' stroke='%23333' stroke-width='2' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e")`,
         borderRadius: "8px",
         backgroundImageColor: (theme) => theme.palette.primary.main,
-        backgroundColor: dragOverFlag ? "red" : "white",
+        backgroundColor: dragOverFlag ? "#f7f7f7" : "white",
       }}
       onDragOver={onDragOver}
       onDragLeave={onDragEnd}
       onDropCapture={onDropCapture}
+      onDrop={onDropHandler}
     >
       <Box sx={{ height: "100%" }}>
         <Box style={{ position: "absolute", top: "40%", left: "20%" }}>

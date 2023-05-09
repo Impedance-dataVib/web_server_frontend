@@ -4,6 +4,8 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 import en from "./translations/en.json";
 import fr from "./translations/fr.json";
+import dashboardEn from "./translations/dashboard/en.json";
+import dashboardFr from "./translations/dashboard/fr.json";
 
 i18n
   //   .use(Backend)
@@ -18,16 +20,22 @@ i18n
     react: {
       useSuspense: false,
     },
-    
+
     resources: {
       en: {
         root: {
           ...en,
         },
+        dashboard: {
+          ...dashboardEn,
+        },
       },
       fr: {
         root: {
-         ...fr,
+          ...fr,
+        },
+        dashboard: {
+          ...dashboardFr,
         },
       },
     },

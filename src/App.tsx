@@ -2,11 +2,6 @@ import React, { Suspense, useEffect, useState } from "react";
 import "./App.css";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import DashboardPage from "./features/dashboard";
-import MotorMonitoringPage from "./features/dashboard/pages/motor";
-import EngineMonitoringPage from "./features/dashboard/pages/engine";
-import GearBoxMonitoringPage from "./features/dashboard/pages/gearbox";
-import TurbineMonitoringPage from "./features/dashboard/pages/turbine";
-import BearingMonitoringPage from "./features/dashboard/pages/bearing";
 import LoginPage from "./features/login/login";
 import LogoutPage from "./features/login/logout";
 import Layout from "./app/components/layout";
@@ -42,13 +37,7 @@ const AppRoutes = (
         </ProtectedRoute>
       }
     ></Route>
-    <Route path="/dashboard/*" element={<DashboardPage />}>
-      <Route path="" index element={<EngineMonitoringPage />} />
-      <Route path="engine" element={<EngineMonitoringPage />} />
-      <Route path="gearbox" element={<GearBoxMonitoringPage />} />
-      <Route path="turbine" element={<TurbineMonitoringPage />} />
-      <Route path="bearing" element={<BearingMonitoringPage />} />
-      <Route path="motor" element={<MotorMonitoringPage />} />
+    <Route path="/dashboard/*" element={<DashboardPage />}>      
     </Route>
     <Route
       path="/configuration"

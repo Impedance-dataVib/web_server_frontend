@@ -1,0 +1,8 @@
+{
+  "dashboard.heading.text": "Dashboard",
+  "dashboard.loading.module.text": "Loading Modules...",
+  "dashboard.module.text": "Module:",
+  "dashboard.type.not.supported": "This type of module is not supported",
+  "dashboard.lic.alert.title": "License is about to expire",
+  "dashboard.lic.alert.text.part1": "License will expire on"
+}
