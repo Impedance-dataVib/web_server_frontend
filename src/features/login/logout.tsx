@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import { useAuth } from "../../app/auth";
+import { useNavigate } from "react-router-dom";
 
 const LogoutPage = () => {
   const auth = useAuth();
+  const navigate = useNavigate();
   // auth.signOut();
 
   useEffect(() => {
@@ -11,6 +13,7 @@ const LogoutPage = () => {
       return;
     }
     auth.signOut();
+    navigate('/login');
   }, [auth]);
 
   return (
