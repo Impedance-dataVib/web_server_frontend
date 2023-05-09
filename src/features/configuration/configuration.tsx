@@ -110,9 +110,9 @@ const ConfigurationPageContent = () => {
 
 const ManageConfigurationPage = () => {
   return (
-    // <ContentBox title={"Configuration"}>
+    <ContentBox title={"Configuration"}>
       <ConfigurationPageContent></ConfigurationPageContent>
-    // </ContentBox>
+    </ContentBox>
   );
 };
 

@@ -5,7 +5,7 @@ import ManageConfigurationPage from "./configuration";
 const ConfigurationPage = () => {
   return (
     // <ContentBox title="Configuration">
-    <ConfigurationContent></ConfigurationContent>
+      <ConfigurationContent></ConfigurationContent>
     // </ContentBox>
   );
 };
