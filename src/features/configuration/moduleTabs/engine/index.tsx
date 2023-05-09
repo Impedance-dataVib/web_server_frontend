@@ -77,10 +77,11 @@ const StepToComponentEngineModule = ({
 };
 
 const EngineTabContent = ({ module, moduleId }: any) => {
-  
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
-  const [expanded, setExpanded] = useState<string | false>('Channel Information');
+  const [expanded, setExpanded] = useState<string | false>(
+    "Channel Information"
+  );
   const [activeStep, setActiveStep] = useState<number>(0);
   const { configId } = useParams();
 
@@ -106,14 +107,10 @@ const EngineTabContent = ({ module, moduleId }: any) => {
     setStepperSteps(extractSteps(formSchema, module));
   }, []);
 
-  const handleAccordionChange = (value: string) => {
-    // Validate the form first before navigating
-    console.log("handleAccordionChange = ", value, stepperSteps);
-    
-    setExpanded(value || false);
-    const index = stepperSteps.indexOf(value);
-    setActiveStep(index > 0 ? index : 0);
-  };
+  const handleAccordionChange =
+    (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? value : false);
+    };
 
   const moduleFormContext = useFormik({
     initialValues: {

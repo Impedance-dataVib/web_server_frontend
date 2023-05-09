@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   getAllConfigurations,
   getModulesByConfigId,
+  getModuleById,
 } from "../../../app/services";
 export const useGetConfiguration = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -46,4 +47,33 @@ export const useGetConfigurationModuleByConfigId = (id: string | undefined) => {
     getAllModulesByConfigId(id);
   }, [id]);
   return { isPending, data, isError, getAllModulesByConfigId };
+};
+
+export const useGetModuleById = (
+  id: string
+): {
+  isLoading: boolean;
+  data: any;
+  isError: boolean;
+  getModuleDataById: any;
+} => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [isError, setIsError] = useState(false);
+  const getModuleDataById = async (id: string) => {
+    try {
+      setIsLoading(true);
+      const { data } = await getModuleById(id);
+      setData(data.data);
+      setIsLoading(false);
+    } catch (e) {
+      setIsError(true);
+      setData([]);
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    getModuleDataById(id);
+  }, [id]);
+  return { isLoading, data, isError, getModuleDataById };
 };

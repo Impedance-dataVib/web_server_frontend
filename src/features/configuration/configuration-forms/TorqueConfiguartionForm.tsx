@@ -5,15 +5,20 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { BootstrapInput } from "../../../app/components/bootstarp-input";
-import { Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
+import FormHelperText from "@mui/material/FormHelperText";
 import formSchema from "../formSchema";
+import {PopupRigidity} from '../modals/calculateRigidityModal'
 
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
       return (
-        <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+        <FormControl
+          sx={{ minWidth: "182px", marginBottom: "20px" }}
+          error={Boolean(formContext?.errors?.[fieldProps.label])}
+        >
           <InputLabel id={fieldProps.label}>{fieldProps.name}</InputLabel>
           <Select
             name={fieldProps.label}
@@ -27,6 +32,12 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
               </MenuItem>
             ))}
           </Select>
+          {formContext?.touched?.[fieldProps.label] &&
+            Boolean(formContext?.errors?.[fieldProps.label]) && (
+              <FormHelperText>
+                {formContext?.errors?.[fieldProps.label]}
+              </FormHelperText>
+            )}
         </FormControl>
       );
 
@@ -36,7 +47,9 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           name={fieldProps.label}
           label={fieldProps.name}
           onChange={formContext?.handleChange}
-            value={formContext?.values?.[fieldProps.label]}
+          value={formContext?.values?.[fieldProps.label]}
+          error={Boolean(formContext?.errors?.[fieldProps.label])}
+          helperText={formContext?.errors?.[fieldProps.label]}
           variant="outlined"
           sx={{
             fontSize: "16px",
@@ -54,7 +67,12 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
     case "toggle":
       return <></>;
     case "popup":
-      return <></>;
+      return (
+        <PopupRigidity
+          formContext={formContext}
+          fieldProps={fieldProps}
+        ></PopupRigidity>
+      );
     default:
       return <div>No Valid Field Type</div>;
       break;
@@ -120,7 +138,7 @@ export const TorqueChannelInformationForm = ({
               <Select
                 name="de_channel_sensorx"
                 onChange={formContext?.handleChange}
-            value={formContext?.values?.["de_channel_sensorx"]}
+                value={formContext?.values?.["de_channel_sensorx"]}
                 input={<BootstrapInput></BootstrapInput>}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
@@ -134,8 +152,8 @@ export const TorqueChannelInformationForm = ({
           <Grid item>
             <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
               <Select
-               onChange={formContext?.handleChange}
-               value={formContext?.values?.["de_channel_channel_type"]}
+                onChange={formContext?.handleChange}
+                value={formContext?.values?.["de_channel_channel_type"]}
                 name="de_channel_channel_type"
                 input={<BootstrapInput></BootstrapInput>}
               >
@@ -228,8 +246,8 @@ export const TorqueChannelInformationForm = ({
           <Grid item>
             <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
               <Select
-                 onChange={formContext?.handleChange}
-                 value={formContext?.values?.["nde_channel_channel_type"]}
+                onChange={formContext?.handleChange}
+                value={formContext?.values?.["nde_channel_channel_type"]}
                 name="nde_channel_channel_type"
                 input={<BootstrapInput></BootstrapInput>}
               >

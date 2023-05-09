@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import FormHelperText from "@mui/material/FormHelperText";
 import { BootstrapInput } from "../../../app/components/bootstarp-input";
 import { Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
@@ -13,7 +14,10 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
       return (
-        <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+        <FormControl
+          sx={{ minWidth: "182px", marginBottom: "20px" }}
+          error={Boolean(formContext?.errors?.[fieldProps.label])}
+        >
           <InputLabel id={fieldProps.label}>{fieldProps.name}</InputLabel>
           <Select
             name={fieldProps.label}
@@ -27,6 +31,12 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
               </MenuItem>
             ))}
           </Select>
+          {formContext?.touched?.[fieldProps.label] &&
+            Boolean(formContext?.errors?.[fieldProps.label]) && (
+              <FormHelperText>
+                {formContext?.errors?.[fieldProps.label]}
+              </FormHelperText>
+            )}
         </FormControl>
       );
 
@@ -37,6 +47,8 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           label={fieldProps.name}
           onChange={formContext?.handleChange}
           value={formContext?.values?.[fieldProps.label]}
+          error={Boolean(formContext?.errors?.[fieldProps.label])}
+          helperText={formContext?.errors?.[fieldProps.label]}
           variant="outlined"
           sx={{
             fontSize: "16px",
