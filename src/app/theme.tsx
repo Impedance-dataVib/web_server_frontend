@@ -269,9 +269,6 @@ let baseTheme = createTheme({
     },
     MuiTab: {
       styleOverrides: {
-        selected: {
-          color: "red",
-        },
         labelIcon: {
           color: "green",
         },
@@ -282,9 +279,9 @@ let baseTheme = createTheme({
           borderRadius: "4px",
           fontWeight: "600",
           color: "#434343",
-          "& .Mui-selected": {
-            color: "green",
-          },
+          // "& .Mui-selected": {
+          //   color: "green",
+          // },
         },
       },
     },
