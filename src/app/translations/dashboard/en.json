@@ -1,0 +1,6 @@
+{
+  "dashboard.heading.text": "Dashboard",
+  "dashboard.loading.module.text": "Loading Modules...",
+  "dashboard.module.text": "Module:",
+  "dashboard.type.not.supported": "This type of module is not supported"
+}

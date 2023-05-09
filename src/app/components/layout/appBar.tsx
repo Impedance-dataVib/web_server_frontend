@@ -18,6 +18,7 @@ import {
   Toolbar,
   Typography,
   Link as MatLink,
+  Theme,
 } from "@mui/material";
 
 import { Link, useLocation, matchPath } from "react-router-dom";
@@ -81,27 +82,27 @@ const DrawerAppBar = () => {
       </Box>
 
       <Divider />
-      <Box sx={{ flex: 1 }}>
+      <Box sx={{ flex: 1, backgroundColor: (theme: Theme) => theme.palette.color37.main }}>
         <List>
           {navMenuItems.map((item) => (
             <MatLink
-              style={{
+              sx={{
                 textDecoration: "none",
-
-                // @ts-expect-error
                 color: matchPath(
                   {
                     path: item.path,
                   },
                   location.pathname
                 )
-                  ? // @ts-expect-error
-                    (theme) => theme.palette.color7.main
-                  : // @ts-expect-error
-                    (theme) => theme.palette.color32.main,
+                  ? (theme: Theme) => theme.palette.color7.main
+                  : (theme: Theme) => theme.palette.color3.main,
                 "&:hover": {
-                  // @ts-expect-error
-                  color: (theme) => theme.palette.color7.main,
+                  color: (theme: Theme) => theme.palette.color7.main,
+                },
+
+                backgroundColor: (theme: Theme) => theme.palette.color37.main,
+                "& :hover": {
+                  backgroundColor: (theme: Theme) => theme.palette.color3.main,
                 },
               }}
               key={item.path}
@@ -117,9 +118,9 @@ const DrawerAppBar = () => {
                     location.pathname
                   )
                     ? (theme) => theme.palette.color1.main
-                    : (theme) => theme.palette.color3.main,
+                    : (theme) => theme.palette.color37.main,
                   "& :hover": {
-                    backgroundColor: (theme) => theme.palette.color1.main,
+                    backgroundColor: (theme) => theme.palette.color3.main,
                   },
                   borderLeft: matchPath(
                     {
@@ -127,7 +128,7 @@ const DrawerAppBar = () => {
                     },
                     location.pathname
                   )
-                    ? (theme) => `4px solid ${theme.palette.color7.main}`
+                    ? (theme) => `8px solid ${theme.palette.color37.main}`
                     : "none",
                 }}
                 key={item.path}

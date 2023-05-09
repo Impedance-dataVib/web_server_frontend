@@ -1,49 +1,17 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  LinearProgress,
-  Tab,
-  Tabs,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Box, LinearProgress, Tab, Tabs, Typography } from "@mui/material";
 import { makeStyles } from "tss-react/mui";
-
-import DashboardContext from "./context";
 import { useTranslation } from "react-i18next";
 import DashboardApi from "./dashboardApi";
-import TabPanel from "src/app/components/tab-panel";
 import EngineMonitoringPage from "./pages/engine";
 import TorqueMonitoringPage from "./pages/torque";
 import TurbineMonitoringPage from "./pages/turbine";
 import BearingMonitoringPage from "./pages/bearing";
 import MotorMonitoringPage from "./pages/motor";
+import TabPanel from "src/app/components/tab-panel";
 
 const useStyles = makeStyles()((theme) => {
   return {
-    grouped: {
-      marginLeft: "8px !important",
-      border: "none",
-      borderRadius: "4px",
-    },
-    toggleBtnRoot: {
-      background: theme?.palette?.color3?.main,
-      paddingLeft: theme.spacing(1),
-      paddingRight: theme.spacing(1),
-      borderRadius: "4px !important",
-      "&hover": {
-        background: theme?.palette?.color3?.main,
-      },
-      textTransform: "none",
-    },
-    toggleBtnSelected: {
-      paddingLeft: theme.spacing(1),
-      paddingRight: theme.spacing(1),
-      background: `${theme?.palette?.color37?.main} !important`,
-      color: `${theme?.palette?.color3?.main} !important`,
-    },
     tabsRoot: {
       height: "34px",
       minHeight: "34px",
@@ -82,6 +50,8 @@ function tabProps(index: number) {
 }
 
 const TabModuleRender = ({ type, moduleId }: any) => {
+  const { t } = useTranslation();
+
   switch (type) {
     case "Engine":
       return (
@@ -115,7 +85,13 @@ const TabModuleRender = ({ type, moduleId }: any) => {
         </Box>
       );
     default:
-      return <div> Invalid type module </div>;
+      return (
+        <Box>
+          <Typography>
+            {t("dashboard.type.not.supported", { ns: "dashboard" })}
+          </Typography>{" "}
+        </Box>
+      );
   }
 };
 
@@ -125,16 +101,7 @@ const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { classes } = useStyles();
-
-  const { t, i18n } = useTranslation();
-
-  const changeLanguageToEnglish = () => {
-    i18n.changeLanguage("en");
-  };
-
-  const changeLanguageToFrench = () => {
-    i18n.changeLanguage("fr");
-  };
+  const { t } = useTranslation();
 
   useEffect(() => {
     setIsLoading(true);
@@ -154,8 +121,6 @@ const DashboardPage = () => {
     setActiveModule(params);
   };
 
-  console.log("isLoading = ", isLoading);
-
   return (
     <Box>
       {isLoading && (
@@ -164,7 +129,9 @@ const DashboardPage = () => {
         </Box>
       )}
       <Box sx={{ display: "flex", mb: 2 }}>
-        <Typography variant="h5">Dashboard</Typography>
+        <Typography variant="h5">
+          {t("dashboard.heading.text", { ns: "dashboard" })}
+        </Typography>
 
         <Box
           sx={{
@@ -175,7 +142,9 @@ const DashboardPage = () => {
           }}
         >
           <Typography>
-            {isLoading ? "Loading Modules... " : "Module:"}
+            {isLoading
+              ? t("dashboard.loading.module.text", { ns: "dashboard" })
+              : t("dashboard.module.text", { ns: "dashboard" })}
           </Typography>
 
           <Box sx={{ ml: 1 }}>
