@@ -1,5 +1,13 @@
-import { useEffect, useState } from "react";
-import { Box, LinearProgress, Tab, Tabs, Typography } from "@mui/material";
+import { useContext, useEffect, useState, useRef } from "react";
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  LinearProgress,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
 import { makeStyles } from "tss-react/mui";
 import { useTranslation } from "react-i18next";
 import DashboardApi from "./dashboardApi";
@@ -9,6 +17,8 @@ import TurbineMonitoringPage from "./pages/turbine";
 import BearingMonitoringPage from "./pages/bearing";
 import MotorMonitoringPage from "./pages/motor";
 import TabPanel from "src/app/components/tab-panel";
+import appContext from "src/app/context";
+import * as dateFns from "date-fns";
 
 const useStyles = makeStyles()((theme) => {
   return {
@@ -99,9 +109,56 @@ const DashboardPage = () => {
   const [moduleTabs, setModuleTabs] = useState<any[]>([]);
   const [activeModule, setActiveModule] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showLicenseExpiryMsg, setShowLicenseExpiryMsg] =
+    useState<boolean>(false);
+  const [licExpiryText, setLicExpiryText] = useState<string>("");
 
   const { classes } = useStyles();
   const { t } = useTranslation();
+
+  const { licenseInfo, licenseStatus } = useContext(appContext);
+  const intervalHandle = useRef();
+
+  useEffect(() => {
+    if (licenseInfo && licenseStatus && intervalHandle) {
+      // @ts-expect-error
+      intervalHandle.current = setInterval(() => {
+        const expiryDate = licenseInfo?.expiryDate;
+        if (
+          expiryDate !== undefined &&
+          String(expiryDate)?.trim()?.length >= 0
+        ) {
+          const parsedExpiryDate = dateFns.parse(
+            expiryDate,
+            "yyyy-MM-dd HH:mm:ss",
+            new Date()
+          );
+
+          const currentDate = new Date();
+          const fifteenDaysBeforeExpiry = dateFns.subDays(parsedExpiryDate, 15);
+          if (dateFns.isBefore(parsedExpiryDate, currentDate)) {
+            // already expired, do nothing - should be redirected to license import page
+            setShowLicenseExpiryMsg(false);
+            setLicExpiryText("");
+          } else if (dateFns.isBefore(fifteenDaysBeforeExpiry, currentDate)) {
+            // in 15 days range
+            setShowLicenseExpiryMsg(true);
+            setLicExpiryText(
+              dateFns.format(parsedExpiryDate, "dd MMM yyyy, H:mm a")
+            );
+          } else {
+            setShowLicenseExpiryMsg(false);
+            setLicExpiryText("");
+          }
+        }
+      }, 3000);
+    }
+    return () => {
+      if (intervalHandle.current) {
+        clearInterval(intervalHandle.current);
+      }
+    };
+  }, [licenseInfo, licenseStatus, intervalHandle]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -123,11 +180,31 @@ const DashboardPage = () => {
 
   return (
     <Box>
+      {showLicenseExpiryMsg && (
+        <Box sx={{ my: 1 }}>
+          <Alert
+            severity="warning"
+            onClose={() => {
+              clearInterval(intervalHandle.current);
+              setShowLicenseExpiryMsg(false);
+            }}
+          >
+            <AlertTitle>
+              {t("dashboard.lic.alert.title", { ns: "dashboard" })}
+            </AlertTitle>
+            <Typography variant="caption">
+              {t("dashboard.lic.alert.text.part1", { ns: "dashboard" })}{" "}
+              {licExpiryText}
+            </Typography>
+          </Alert>
+        </Box>
+      )}
       {isLoading && (
         <Box sx={{ my: 1 }}>
           <LinearProgress />
         </Box>
       )}
+
       <Box sx={{ display: "flex", mb: 2 }}>
         <Typography variant="h5">
           {t("dashboard.heading.text", { ns: "dashboard" })}
