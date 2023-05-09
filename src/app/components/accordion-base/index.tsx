@@ -60,8 +60,13 @@ const AccordionBase = ({
       <AccordionSummary
         aria-controls={`${value}-content`}
         id={`${value}-header`}
-        expandIcon={expanded === value? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
-      >
+        expandIcon={
+          expanded === value ? (
+            <RemoveIcon></RemoveIcon>
+          ) : (
+            <AddIcon></AddIcon>
+          )
+        }
         <Typography>{title}</Typography>
       </AccordionSummary>
       <AccordionDetails>{children}</AccordionDetails>

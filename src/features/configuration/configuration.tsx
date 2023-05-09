@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import ContentBox from "../../app/components/content-box";
+import ConfigurationTable from "./configurationTable";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { Grid, LinearProgress } from "@mui/material";
 import { useSnackbar } from "notistack";
 
-import ConfigurationTable from "./configurationTable";
 import { useGetConfiguration } from "./hooks";
 import ConfigurationEmptyState from "./emptyState";
 import AddConfigurationModal from "./modals/addConfiguration";
-import ContentBox from "../../app/components/content-box";
 import { addConfiguration } from "../../app/services";
 
 const ConfigurationPageContent = () => {

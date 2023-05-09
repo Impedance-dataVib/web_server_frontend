@@ -6,16 +6,14 @@ import { useNavigate } from "react-router-dom";
 const LogoutPage = () => {
   const auth = useAuth();
   const navigate = useNavigate();
-  // auth.signOut();
 
   useEffect(() => {
-    if (!auth) {
+    if (!auth || !navigate) {
       return;
     }
     auth.signOut();
     navigate('/login');
   }, [auth]);
-
   return (
     <Box
       sx={{
