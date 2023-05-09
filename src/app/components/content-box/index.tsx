@@ -22,7 +22,7 @@ const ContentBox = ({
       </Typography>
       <Box
         sx={{
-          backgroundColor: "#fff",
+          // backgroundColor: "#fff",
           width: "auto",
         }}
       >

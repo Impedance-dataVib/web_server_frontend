@@ -12,9 +12,8 @@ const LogoutPage = () => {
       return;
     }
     auth.signOut();
-    navigate("/login");
-  }, [auth, navigate]);
-
+    navigate('/login');
+  }, [auth]);
   return (
     <Box
       sx={{

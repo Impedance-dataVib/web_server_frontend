@@ -4,9 +4,9 @@ import ManageConfigurationPage from "./configuration";
 
 const ConfigurationPage = () => {
   return (
-    <ContentBox title="Configuration">
+    // <ContentBox title="Configuration">
       <ConfigurationContent></ConfigurationContent>
-    </ContentBox>
+    // </ContentBox>
   );
 };
 export default ConfigurationPage;

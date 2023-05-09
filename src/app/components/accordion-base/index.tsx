@@ -67,7 +67,6 @@ const AccordionBase = ({
             <AddIcon></AddIcon>
           )
         }
-      >
         <Typography>{title}</Typography>
       </AccordionSummary>
       <AccordionDetails>{children}</AccordionDetails>
