@@ -17,10 +17,11 @@ import {
 } from "./configuration-forms";
 import { useFormik } from "formik";
 import { deleteModule, saveModuleData } from "../../app/services";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import { useGetModuleById } from "./hooks";
+import { useGetConfigurationModuleByConfigId, useGetModuleById } from "./hooks";
 import { Delete } from "@mui/icons-material";
+import {eventBus} from '../../EventBus'
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -68,6 +69,9 @@ const MotorTabContent = ({ module, moduleId }: any) => {
   const { enqueueSnackbar } = useSnackbar();
   const { isLoading, data, isError, getModuleDataById } =
     useGetModuleById(moduleId);
+  const { getAllModulesByConfigId } =
+    useGetConfigurationModuleByConfigId(configId);
+  const navigate = useNavigate();
   useEffect(() => {
     setTabConfigs(extractTabConfigs(formSchema, module));
     setStepperSteps(extractSteps(formSchema, module));
@@ -84,6 +88,7 @@ const MotorTabContent = ({ module, moduleId }: any) => {
         variant: "info",
       });
       await deleteModule(moduleId);
+      eventBus.dispatch('ModuleDelete',{})
       enqueueSnackbar({
         message: "Delete Succeess!",
         variant: "success",
@@ -91,7 +96,7 @@ const MotorTabContent = ({ module, moduleId }: any) => {
     } catch (error: any) {
       enqueueSnackbar({
         message: "Delete Failed!",
-        variant: "success",
+        variant: "error",
       });
     }
   };
@@ -136,7 +141,7 @@ const MotorTabContent = ({ module, moduleId }: any) => {
       });
       await saveModuleData(payload);
       enqueueSnackbar({
-        message: "Configuration added successfully",
+        message: "Module Saved",
         variant: "success",
       });
     } catch (error: any) {
@@ -144,7 +149,7 @@ const MotorTabContent = ({ module, moduleId }: any) => {
         message:
           error?.message === "Form Validation Error!"
             ? "Form Validation Error!"
-            : "Error occurred while adding configuration",
+            : "Module Failed To Save",
         variant: "error",
       });
     }

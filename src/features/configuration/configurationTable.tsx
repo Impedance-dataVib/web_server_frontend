@@ -151,7 +151,7 @@ const ConfigurationTable = ({
                   </IconButton>
 
                   <Button
-                  color={row.status === "Active" ? "success" : "warning"}
+                    color={row.status === "Active" ? "success" : "warning"}
                     sx={{ ml: 1 }}
                     variant="contained"
                     onClick={() => onActiveConfig(row)}

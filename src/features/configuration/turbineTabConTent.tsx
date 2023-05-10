@@ -15,8 +15,12 @@ import {
   TurbineChannelInformationForm,
 } from "./configuration-forms";
 import { useFormik } from "formik";
-import { saveModuleData } from "../../app/services";
+import { deleteModule, saveModuleData } from "../../app/services";
 import { useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
+import { useGetModuleById } from "./hooks";
+import { eventBus } from "src/EventBus";
+import { Delete } from "@mui/icons-material";
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -61,10 +65,32 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
   const { configId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
+  const { isLoading, data, isError, getModuleDataById } =
+    useGetModuleById(moduleId);
   useEffect(() => {
     setTabConfigs(extractTabConfigs(formSchema, module));
     setStepperSteps(extractSteps(formSchema, module));
   }, []);
+  const handleDeleteModule = async () => {
+    try {
+      enqueueSnackbar({
+        message: "In Progress",
+        variant: "info",
+      });
+      await deleteModule(moduleId);
+      eventBus.dispatch('ModuleDelete',{})
+      enqueueSnackbar({
+        message: "Delete Succeess!",
+        variant: "success",
+      });
+    } catch (error: any) {
+      enqueueSnackbar({
+        message: "Delete Failed!",
+        variant: "error",
+      });
+    }
+  };
   const handleAccordionChange =
     (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? value : false);
@@ -88,20 +114,36 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
     },
     onSubmit: (values) => {},
   });
+  useEffect(() => {
+    // moduleFormContext.setValues({});
+    if (data?.from_data) {
+      const { configuration_id, ...rest } = data?.from_data;
+      moduleFormContext.setValues({ ...rest });
+    }
+  }, [data]);
   const handleSubmit = async () => {
     try {
       const payload = {
         configuration_id: configId,
         module_type: module,
         module_id: moduleId,
-        from_data: {
-          ...moduleFormContext.values,
-        },
+        ...moduleFormContext.values,
         advance_option: "",
       };
+      enqueueSnackbar({
+        message: "In Progress",
+        variant: "info",
+      });
       await saveModuleData(payload);
+      enqueueSnackbar({
+        message: "Module Saved",
+        variant: "success",
+      });
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar({
+        message: "Module Failed To Save",
+        variant: "error",
+      });
     }
   };
   return (
@@ -144,8 +186,18 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
           direction="row"
           sx={{ display: "flex", justifyContent: "flex-end" }}
         >
-          <Button variant="contained" onClick={handleSubmit}>Save</Button>
+          <Button variant="contained" onClick={handleSubmit}>
+            Save
+          </Button>
           <Button variant="contained">Cancel</Button>
+          <Button
+            startIcon={<Delete />}
+            color="primary"
+            variant="contained"
+            onClick={handleDeleteModule}
+          >
+            Delete Module
+          </Button>
         </Stack>
       </Box>
     </Box>

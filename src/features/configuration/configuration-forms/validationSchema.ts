@@ -14,6 +14,9 @@ export const torqueValidationSchema = yup.object({
   recording_length: yup.number().required("This is a required field"),
   name: yup.string().required("This is a required field"),
   rated_rpm: yup.number().required("This is a required field"),
+  zero_degree: yup.number().required("This is a required field"),
+  rigidity: yup.number().required("This is a required field"),
+  power: yup.number().required("This is a required field"),
 });
 export const motorValidationSchema = yup.object({
   motor_crankshaft_sensorx: yup.string().required("This is a required field"),
@@ -31,4 +34,3 @@ export const motorValidationSchema = yup.object({
   name: yup.string().required("This is a required field"),
   rated_rpm: yup.number().required("This is a required field"),
 });
-

@@ -46,7 +46,7 @@ export const PopupRigidity = ({ formContext, fieldProps }: any) => {
     onSubmit: () => {},
     validationSchema: validationSchema,
   });
-
+  
   return (
     <Stack direction={"row"}>
       <TextField

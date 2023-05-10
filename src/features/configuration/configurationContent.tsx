@@ -19,6 +19,7 @@ import { LinearProgress, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { Add, Delete, Remove } from "@mui/icons-material";
 import { makeStyles } from "tss-react/mui";
+import { eventBus } from "src/EventBus";
 
 function tabProps(index: number) {
   return {
@@ -133,7 +134,11 @@ const ConfigurationContent = (props: any) => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
-
+  useEffect(() => {
+    eventBus.on("ModuleDelete", async () => {
+      await getAllModulesByConfigId(configId);
+    });
+  }, []);
   useEffect(() => {
     setTabs(data);
   }, [formSchema]);
@@ -159,14 +164,6 @@ const ConfigurationContent = (props: any) => {
             sx={{ mr: 1 }}
           >
             Add Module
-          </Button>
-          <Button
-            startIcon={<Delete />}
-            color="primary"
-            variant="contained"
-            onClick={handleOpenDialog}
-          >
-            Delete Module
           </Button>
         </Box>
       </Box>

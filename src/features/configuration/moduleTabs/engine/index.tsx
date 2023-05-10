@@ -26,7 +26,11 @@ import AdvancedParameters from "./forms/advancedParams";
 import CustomConnector from "../../../../app/components/custom-stepper";
 import AccordionBase from "../../../../app/components/accordion-base";
 import formSchema from "../../formSchema";
-import { saveModuleData } from "../../../../app/services";
+import { deleteModule, saveModuleData } from "../../../../app/services";
+import { useSnackbar } from "notistack";
+import { useGetModuleById } from "../../hooks";
+import { Delete } from "@mui/icons-material";
+import { eventBus } from "src/EventBus";
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -84,20 +88,50 @@ const EngineTabContent = ({ module, moduleId }: any) => {
   );
   const [activeStep, setActiveStep] = useState<number>(0);
   const { configId } = useParams();
-
+  const { enqueueSnackbar } = useSnackbar();
+  const { isLoading, data, isError, getModuleDataById } =
+    useGetModuleById(moduleId);
+    const handleDeleteModule = async () => {
+      try {
+        enqueueSnackbar({
+          message: "In Progress",
+          variant: "info",
+        });
+        await deleteModule(moduleId);
+        eventBus.dispatch('ModuleDelete',{})
+        enqueueSnackbar({
+          message: "Delete Succeess!",
+          variant: "success",
+        });
+      } catch (error: any) {
+        enqueueSnackbar({
+          message: "Delete Failed!",
+          variant: "error",
+        });
+      }
+    };
   const handleSubmit = async () => {
     try {
       const payload = {
         configuration_id: configId,
         module_type: module,
         module_id: moduleId,
-        from_data: {
-          ...moduleFormContext.values,
-        },
-        advance_option: "",
+        ...moduleFormContext.values,
       };
+      enqueueSnackbar({
+        message: "In Progress",
+        variant: "info",
+      });
       await saveModuleData(payload);
+      enqueueSnackbar({
+        message: "Module Saved!",
+        variant: "success",
+      });
     } catch (error) {
+      enqueueSnackbar({
+        message: "Module Saved Failed!",
+        variant: "error",
+      });
       console.log(error);
     }
   };
@@ -169,9 +203,13 @@ const EngineTabContent = ({ module, moduleId }: any) => {
     },
     onSubmit: (values) => {},
   });
-
-  console.log("moduleFormContext = ", moduleFormContext.values);
-
+  useEffect(() => {
+    // moduleFormContext.setValues({});
+    if (data?.from_data) {
+      const { configuration_id, ...rest } = data?.from_data;
+      moduleFormContext.setValues({ ...rest });
+    }
+  }, [data]);
   return (
     <Box sx={{ width: "auto" }}>
       <Stepper
@@ -218,6 +256,14 @@ const EngineTabContent = ({ module, moduleId }: any) => {
             Save
           </Button>
           <Button variant="contained">Cancel</Button>
+          <Button
+            startIcon={<Delete />}
+            color="primary"
+            variant="contained"
+            onClick={handleDeleteModule}
+          >
+            Delete Module
+          </Button>
         </Stack>
       </Box>
     </Box>

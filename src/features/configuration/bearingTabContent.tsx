@@ -14,9 +14,13 @@ import {
   BearingMachineDetailsForm,
   BearingDiagnosticDetails,
 } from "./configuration-forms";
-import { saveModuleData } from "../../app/services";
+import { deleteModule, saveModuleData } from "../../app/services";
 import { useFormik } from "formik";
 import { useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
+import { useGetModuleById } from "./hooks";
+import { eventBus } from "src/EventBus";
+import { Delete } from "@mui/icons-material";
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -61,7 +65,9 @@ const BearingTabContent = ({ module, moduleId }: any) => {
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
   const { configId } = useParams();
-
+  const { enqueueSnackbar } = useSnackbar();
+  const { isLoading, data, isError, getModuleDataById } =
+    useGetModuleById(moduleId);
   const moduleFormContext = useFormik({
     initialValues: {
       bearing_crankshaft_sensorx: "",
@@ -83,16 +89,54 @@ const BearingTabContent = ({ module, moduleId }: any) => {
         configuration_id: configId,
         module_type: module,
         module_id: moduleId,
-        from_data: {
-          ...moduleFormContext.values,
-        },
-        advance_option: "",
+        ...moduleFormContext.values,
       };
+      enqueueSnackbar({
+        message: "In Progress",
+        variant: "info",
+      });
       await saveModuleData(payload);
-    } catch (error) {
+      enqueueSnackbar({
+        message: "Module Saved",
+        variant: "success",
+      });
+    } catch (error: any) {
+      enqueueSnackbar({
+        message:
+          error?.message === "Form Validation Error!"
+            ? "Form Validation Error!"
+            : "Module Failed To Save",
+        variant: "error",
+      });
       console.log(error);
     }
   };
+  const handleDeleteModule = async () => {
+    try {
+      enqueueSnackbar({
+        message: "In Progress",
+        variant: "info",
+      });
+      await deleteModule(moduleId);
+      eventBus.dispatch('ModuleDelete',{})
+      enqueueSnackbar({
+        message: "Delete Succeess!",
+        variant: "success",
+      });
+    } catch (error: any) {
+      enqueueSnackbar({
+        message: "Delete Failed!",
+        variant: "error",
+      });
+    }
+  };
+  useEffect(() => {
+    // moduleFormContext.setValues({});
+    if (data?.from_data) {
+      const { configuration_id, ...rest } = data?.from_data;
+      moduleFormContext.setValues({ ...rest });
+    }
+  }, [data]);
   useEffect(() => {
     setTabConfigs(extractTabConfigs(formSchema, module));
     setStepperSteps(extractSteps(formSchema, module));
@@ -145,6 +189,14 @@ const BearingTabContent = ({ module, moduleId }: any) => {
             Save
           </Button>
           <Button variant="contained">Cancel</Button>
+          <Button
+            startIcon={<Delete />}
+            color="primary"
+            variant="contained"
+            onClick={handleDeleteModule}
+          >
+            Delete Module
+          </Button>
         </Stack>
       </Box>
     </Box>
