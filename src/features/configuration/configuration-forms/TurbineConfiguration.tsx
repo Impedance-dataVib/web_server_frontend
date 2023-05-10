@@ -6,6 +6,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { BootstrapInput } from "../../../app/components/bootstarp-input";
 import { Typography } from "@mui/material";
+import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import formSchema from "../formSchema";
 
@@ -27,6 +28,12 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
               </MenuItem>
             ))}
           </Select>
+          {formContext?.touched?.[fieldProps.label] &&
+            Boolean(formContext?.errors?.[fieldProps.label]) && (
+              <FormHelperText>
+                {formContext?.errors?.[fieldProps.label]}
+              </FormHelperText>
+            )}
         </FormControl>
       );
 
@@ -118,7 +125,7 @@ export const TurbineChannelInformationForm = ({
               <Select
                 name="turbine_crankshaft_sensorx"
                 onChange={formContext?.handleChange}
-          value={formContext?.values?.["turbine_crankshaft_sensorx"]}
+                value={formContext?.values?.["turbine_crankshaft_sensorx"]}
                 input={<BootstrapInput></BootstrapInput>}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
@@ -159,7 +166,7 @@ export const TurbineChannelInformationForm = ({
                 padding: "1px 1px",
               }}
               onChange={formContext?.handleChange}
-          value={formContext?.values?.["turbine_crankshaft_teeth"]}
+              value={formContext?.values?.["turbine_crankshaft_teeth"]}
               inputProps={{
                 style: {
                   padding: "11px 26px 13px 12px",
@@ -172,7 +179,7 @@ export const TurbineChannelInformationForm = ({
               <Select
                 name="turbine_crankshaft_wheel_type"
                 onChange={formContext?.handleChange}
-          value={formContext?.values?.["turbine_crankshaft_wheel_type"]}
+                value={formContext?.values?.["turbine_crankshaft_wheel_type"]}
                 input={<BootstrapInput></BootstrapInput>}
               >
                 {optionsChannelInformation["WheelType"].map(

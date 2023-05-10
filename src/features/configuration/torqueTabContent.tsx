@@ -13,10 +13,15 @@ import {
   TorqueChannelInformationForm,
   TorqueMachineDetailsForm,
   TorqueDiagnosticDetails,
+  torqueValidationSchema,
 } from "./configuration-forms";
 import { useFormik } from "formik";
-import { saveModuleData } from "../../app/services";
-import { useParams } from "react-router-dom";
+import { deleteModule, saveModuleData } from "../../app/services";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetConfigurationModuleByConfigId, useGetModuleById } from "./hooks";
+import { useSnackbar } from "notistack";
+import { Delete } from "@mui/icons-material";
+import { eventBus } from "src/EventBus";
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -62,10 +67,16 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
   const { configId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
+  const { isLoading, data, isError, getModuleDataById } =
+    useGetModuleById(moduleId);
+  const { getAllModulesByConfigId } =
+    useGetConfigurationModuleByConfigId(configId);
   useEffect(() => {
     setTabConfigs(extractTabConfigs(formSchema, module));
     setStepperSteps(extractSteps(formSchema, module));
   }, []);
+  const navigate = useNavigate();
   const handleAccordionChange =
     (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? value : false);
@@ -84,25 +95,70 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
       min_volt: "",
       recording_period: "",
       recording_length: "",
+      zero_degree: "",
+      rigidity: "",
+      power: "",
       name: "",
       rated_rpm: "",
     },
     onSubmit: (values) => {},
+    validationSchema: torqueValidationSchema,
   });
+  useEffect(() => {
+    // moduleFormContext.setValues({});
+    if (data?.from_data) {
+      const { configuration_id, ...rest } = data?.from_data;
+      moduleFormContext.setValues({ ...rest });
+    }
+  }, [data]);
+  const handleDeleteModule = async () => {
+    try {
+      enqueueSnackbar({
+        message: "In Progress",
+        variant: "info",
+      });
+      await deleteModule(moduleId);
+      eventBus.dispatch('ModuleDelete',{})
+      enqueueSnackbar({
+        message: "Delete Succeess!",
+        variant: "success",
+      });
+    } catch (error: any) {
+      enqueueSnackbar({
+        message: "Delete Failed!",
+        variant: "error",
+      });
+    }
+  };
   const handleSubmit = async () => {
     try {
+      const validate = await moduleFormContext.validateForm();
+      if (Object.keys(validate).length > 0) {
+        throw new Error("Form Validation Error!");
+      }
       const payload = {
         configuration_id: configId,
         module_type: module,
         module_id: moduleId,
-        from_data: {
-          ...moduleFormContext.values,
-        },
-        advance_option: "",
+        ...moduleFormContext.values,
       };
+      enqueueSnackbar({
+        message: "In Progress",
+        variant: "info",
+      });
       await saveModuleData(payload);
-    } catch (error) {
-      console.log(error);
+      enqueueSnackbar({
+        message: "Module Saved",
+        variant: "success",
+      });
+    } catch (error: any) {
+      enqueueSnackbar({
+        message:
+          error?.message === "Form Validation Error!"
+            ? "Form Validation Error!"
+            : "Module Failed To Save",
+        variant: "error",
+      });
     }
   };
   return (
@@ -145,8 +201,18 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
           direction="row"
           sx={{ display: "flex", justifyContent: "flex-end" }}
         >
-          <Button variant="contained" onClick={handleSubmit}>Save</Button>
+          <Button variant="contained" onClick={handleSubmit}>
+            Save
+          </Button>
           <Button variant="contained">Cancel</Button>
+          <Button
+            startIcon={<Delete />}
+            color="primary"
+            variant="contained"
+            onClick={handleDeleteModule}
+          >
+            Delete Module
+          </Button>
         </Stack>
       </Box>
     </Box>

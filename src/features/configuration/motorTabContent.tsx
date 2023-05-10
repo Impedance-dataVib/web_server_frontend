@@ -13,10 +13,15 @@ import {
   MotorDiagnosticDetails,
   MotorMachineDetailsForm,
   MotorChannelInformationForm,
+  motorValidationSchema,
 } from "./configuration-forms";
 import { useFormik } from "formik";
-import { saveModuleData } from "../../app/services";
-import { useParams } from "react-router-dom";
+import { deleteModule, saveModuleData } from "../../app/services";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
+import { useGetConfigurationModuleByConfigId, useGetModuleById } from "./hooks";
+import { Delete } from "@mui/icons-material";
+import {eventBus} from '../../EventBus'
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -61,20 +66,46 @@ const MotorTabContent = ({ module, moduleId }: any) => {
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
   const { configId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
+  const { isLoading, data, isError, getModuleDataById } =
+    useGetModuleById(moduleId);
+  const { getAllModulesByConfigId } =
+    useGetConfigurationModuleByConfigId(configId);
+  const navigate = useNavigate();
   useEffect(() => {
     setTabConfigs(extractTabConfigs(formSchema, module));
     setStepperSteps(extractSteps(formSchema, module));
   }, []);
+
   const handleAccordionChange =
     (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? value : false);
     };
+  const handleDeleteModule = async () => {
+    try {
+      enqueueSnackbar({
+        message: "In Progress",
+        variant: "info",
+      });
+      await deleteModule(moduleId);
+      eventBus.dispatch('ModuleDelete',{})
+      enqueueSnackbar({
+        message: "Delete Succeess!",
+        variant: "success",
+      });
+    } catch (error: any) {
+      enqueueSnackbar({
+        message: "Delete Failed!",
+        variant: "error",
+      });
+    }
+  };
   const moduleFormContext = useFormik({
     initialValues: {
-      motor_crankshaft_sensorx: "",
-      motor_crankshaft_channel_type: "",
+      motor_crankshaft_sensorx: "No Channel",
+      motor_crankshaft_channel_type: "Speed",
       motor_crankshaft_teeth: "",
-      motor_crankshaft_wheel_type: "",
+      motor_crankshaft_wheel_type: "Standard",
       min_speed: "",
       min_volt: "",
       recording_period: "",
@@ -83,21 +114,44 @@ const MotorTabContent = ({ module, moduleId }: any) => {
       rated_rpm: "",
     },
     onSubmit: (values) => {},
+    validationSchema: motorValidationSchema,
   });
+  useEffect(() => {
+    // moduleFormContext.setValues({});
+    if (data?.from_data) {
+      const { configuration_id, ...rest } = data?.from_data;
+      moduleFormContext.setValues({ ...rest });
+    }
+  }, [data]);
   const handleSubmit = async () => {
     try {
+      const validate = await moduleFormContext.validateForm();
+      if (Object.keys(validate).length > 0) {
+        throw new Error("Form Validation Error!");
+      }
       const payload = {
         configuration_id: configId,
         module_type: module,
         module_id: moduleId,
-        from_data: {
-          ...moduleFormContext.values,
-        },
-        advance_option: "",
+        ...moduleFormContext.values,
       };
+      enqueueSnackbar({
+        message: "In Progress",
+        variant: "info",
+      });
       await saveModuleData(payload);
-    } catch (error) {
-      console.log(error);
+      enqueueSnackbar({
+        message: "Module Saved",
+        variant: "success",
+      });
+    } catch (error: any) {
+      enqueueSnackbar({
+        message:
+          error?.message === "Form Validation Error!"
+            ? "Form Validation Error!"
+            : "Module Failed To Save",
+        variant: "error",
+      });
     }
   };
   return (
@@ -140,8 +194,18 @@ const MotorTabContent = ({ module, moduleId }: any) => {
           direction="row"
           sx={{ display: "flex", justifyContent: "flex-end" }}
         >
-          <Button variant="contained" onClick={handleSubmit}>Save</Button>
+          <Button variant="contained" onClick={handleSubmit}>
+            Save
+          </Button>
           <Button variant="contained">Cancel</Button>
+          <Button
+            startIcon={<Delete />}
+            color="primary"
+            variant="contained"
+            onClick={handleDeleteModule}
+          >
+            Delete Module
+          </Button>
         </Stack>
       </Box>
     </Box>

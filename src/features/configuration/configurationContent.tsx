@@ -18,6 +18,8 @@ import AddModuleModal from "./modals/addModule";
 import { LinearProgress, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { Add, Delete, Remove } from "@mui/icons-material";
+import { makeStyles } from "tss-react/mui";
+import { eventBus } from "src/EventBus";
 
 function tabProps(index: number) {
   return {
@@ -25,6 +27,21 @@ function tabProps(index: number) {
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
+
+const useStyles = makeStyles()((theme) => {
+  return {
+    tabRoot: {
+      opacity: '0.5',
+      "&.Mui-selected": {
+        background: '#fff',
+        color: theme.palette.primary.main,
+        borderBottom: 'none',
+        borderRadius: '4px 4px 0px 0px',
+        opacity: 1
+      },
+    },
+  };
+});
 
 const getKeysFromSchema = (schema: any) => {
   return Object.keys(schema);
@@ -78,6 +95,7 @@ const ConfigurationContent = (props: any) => {
     useGetConfigurationModuleByConfigId(configId);
 
   const { enqueueSnackbar } = useSnackbar();
+  const { classes } = useStyles();
 
   const handleAddModules = async (data: any) => {
     const payload = {
@@ -116,7 +134,11 @@ const ConfigurationContent = (props: any) => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
-
+  useEffect(() => {
+    eventBus.on("ModuleDelete", async () => {
+      await getAllModulesByConfigId(configId);
+    });
+  }, []);
   useEffect(() => {
     setTabs(data);
   }, [formSchema]);
@@ -143,14 +165,6 @@ const ConfigurationContent = (props: any) => {
           >
             Add Module
           </Button>
-          <Button
-            startIcon={<Delete />}
-            color="primary"
-            variant="contained"
-            onClick={handleOpenDialog}
-          >
-            Delete Module
-          </Button>
         </Box>
       </Box>
       {isLoading && (
@@ -170,10 +184,13 @@ const ConfigurationContent = (props: any) => {
             onChange={handleChange}
             aria-label="basic tabs example"
             variant="scrollable"
-            // sx={{ marginLeft: "45px" }}
           >
             {data?.map((tabElement: any, index: number) => (
-              <Tab key={index} label={tabElement.name} {...tabProps(index)} />
+              <Tab key={index} label={tabElement.name} {...tabProps(index)}
+                classes={{
+                  root: classes.tabRoot
+                }}
+              />
             ))}
           </Tabs>
         </Box>

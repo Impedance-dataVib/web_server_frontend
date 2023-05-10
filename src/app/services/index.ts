@@ -75,3 +75,11 @@ export const getModulesByConfigId = (id: string | undefined) => {
 export const saveModuleData = (data: any) => {
   return axiosInstance.post("/module/update.php", data);
 };
+
+export const getModuleById = (id: string) => {
+  return axiosInstance.get(`/module/get-by-Id.php/${id}`);
+};
+
+export const deleteModule = (id: string) => {
+  return axiosInstance.delete(`/module/delete.php/${id}`);
+};

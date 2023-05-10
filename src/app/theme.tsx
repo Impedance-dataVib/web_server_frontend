@@ -5,7 +5,6 @@ import { deepmerge } from "@mui/utils";
 
 declare module "@mui/material/styles" {
   interface Palette {
-
     color1: Palette["primary"];
     color2: Palette["primary"];
     color3: Palette["primary"];
@@ -82,87 +81,47 @@ declare module "@mui/material/styles" {
     color35: PaletteOptions["primary"];
     color36: PaletteOptions["primary"];
     color37: PaletteOptions["primary"];
-=======
-    color1: Palette['primary'],
-    color2: Palette['primary'],
-    color3: Palette['primary'],
-    color4: Palette['primary'],
-    color5: Palette['primary'],
-    color6: Palette['primary'],
-    color7: Palette['primary'],
-    color8: Palette['primary'],
-    color9: Palette['primary'],
-    color10: Palette['primary'],
-    color11: Palette['primary'],
-    color12: Palette['primary'],
-    color13: Palette['primary'],
-    color14: Palette['primary'],
-    color15: Palette['primary'],
-    color16: Palette['primary'],
-    color17: Palette['primary'],
-    color18: Palette['primary'],
-    color19: Palette['primary'],
-    color20: Palette['primary'],
-    color21: Palette['primary'],
-    color22: Palette['primary'],
-    color23: Palette['primary'],
-    color24: Palette['primary'],
-    color25: Palette['primary'],
-    color26: Palette['primary'],
-    color27: Palette['primary'],
-    color28: Palette['primary'],
-    color29: Palette['primary'],
-    color30: Palette['primary'],
-    color31: Palette['primary'],
-    color32: Palette['primary'],
-    color33: Palette['primary'],
-    color34: Palette['primary'],
-    color35: Palette['primary'],
-    color36: Palette['primary'],
-    color37: Palette['primary'],
-    color38: Palette['primary'],
   }
+
   interface PaletteOptions {
-    color1: PaletteOptions['primary'];
-    color2: PaletteOptions['primary'];
-    color3: PaletteOptions['primary'];
-    color4: PaletteOptions['primary'];
-    color5: PaletteOptions['primary'];
-    color6: PaletteOptions['primary'];
-    color7: PaletteOptions['primary'];
-    color8: PaletteOptions['primary'];
-    color9: PaletteOptions['primary'];
-    color10: PaletteOptions['primary'];
-    color11: PaletteOptions['primary'];
-    color12: PaletteOptions['primary'];
-    color13: PaletteOptions['primary'];
-    color14: PaletteOptions['primary'];
-    color15: PaletteOptions['primary'];
-    color16: PaletteOptions['primary'];
-    color17: PaletteOptions['primary'];
-    color18: PaletteOptions['primary'];
-    color19: PaletteOptions['primary'];
-    color20: PaletteOptions['primary'];
-    color21: PaletteOptions['primary'];
-    color22: PaletteOptions['primary'];
-    color23: PaletteOptions['primary'];
-    color24: PaletteOptions['primary'];
-    color25: PaletteOptions['primary'];
-    color26: PaletteOptions['primary'];
-    color27: PaletteOptions['primary'];
-    color28: PaletteOptions['primary'];
-    color29: PaletteOptions['primary'];
-    color30: PaletteOptions['primary'];
-    color31: PaletteOptions['primary'];
-    color32: PaletteOptions['primary'];
-    color33: PaletteOptions['primary'];
-    color34: PaletteOptions['primary'];
-    color35: PaletteOptions['primary'];
-    color36: PaletteOptions['primary'];
-    color37: PaletteOptions['primary'],
-    color38: PaletteOptions['primary'],
+    color1: PaletteOptions["primary"];
+    color2: PaletteOptions["primary"];
+    color3: PaletteOptions["primary"];
+    color4: PaletteOptions["primary"];
+    color5: PaletteOptions["primary"];
+    color6: PaletteOptions["primary"];
+    color7: PaletteOptions["primary"];
+    color8: PaletteOptions["primary"];
+    color9: PaletteOptions["primary"];
+    color10: PaletteOptions["primary"];
+    color11: PaletteOptions["primary"];
+    color12: PaletteOptions["primary"];
+    color13: PaletteOptions["primary"];
+    color14: PaletteOptions["primary"];
+    color15: PaletteOptions["primary"];
+    color16: PaletteOptions["primary"];
+    color17: PaletteOptions["primary"];
+    color18: PaletteOptions["primary"];
+    color19: PaletteOptions["primary"];
+    color20: PaletteOptions["primary"];
+    color21: PaletteOptions["primary"];
+    color22: PaletteOptions["primary"];
+    color23: PaletteOptions["primary"];
+    color24: PaletteOptions["primary"];
+    color25: PaletteOptions["primary"];
+    color26: PaletteOptions["primary"];
+    color27: PaletteOptions["primary"];
+    color28: PaletteOptions["primary"];
+    color29: PaletteOptions["primary"];
+    color30: PaletteOptions["primary"];
+    color31: PaletteOptions["primary"];
+    color32: PaletteOptions["primary"];
+    color33: PaletteOptions["primary"];
+    color34: PaletteOptions["primary"];
+    color35: PaletteOptions["primary"];
+    color36: PaletteOptions["primary"];
+    color37: PaletteOptions["primary"];
   }
-  
 }
 
 let baseTheme = createTheme({
@@ -283,13 +242,8 @@ let baseTheme = createTheme({
       main: "#E9E9EF",
     },
     color37: {
-
-      main: '#1d4580'
+      main: "#1d4580",
     },
-    color38: {
-      main: '#636464'
-    }
-
   },
   typography: {
     fontFamily: 'Poppins, Helvetica, "sans-serif"',
@@ -309,17 +263,14 @@ let baseTheme = createTheme({
     MuiStepLabel: {
       styleOverrides: {
         root: {
-          width: 'auto'
-        }
-      }
+          width: "auto",
+        },
+      },
     },
     MuiTab: {
       styleOverrides: {
-        selected: {
-          color: 'red'
-        },
         labelIcon: {
-          color: 'green'
+          color: "green",
         },
 
         root: {
@@ -327,20 +278,14 @@ let baseTheme = createTheme({
           border: "1px solid #e0e0e0",
           borderRadius: "4px",
           fontWeight: "600",
-          color: "#434343",          
-          '& .Mui-selected': {
-            color: 'green'
-          }
+          color: "#434343",
+          // "& .Mui-selected": {
+          //   color: "green",
+          // },
         },
-        
-        
       },
-      
     },
   },
-
-    
-  }
 });
 
 baseTheme = responsiveFontSizes(baseTheme);

@@ -37,8 +37,7 @@ const AppRoutes = (
         </ProtectedRoute>
       }
     ></Route>
-    <Route path="/dashboard/*" element={<DashboardPage />}>      
-    </Route>
+    <Route path="/dashboard/*" element={<DashboardPage />}></Route>
     <Route
       path="/configuration"
       element={
@@ -123,20 +122,23 @@ function App() {
 
   const [licenseInfo, setLicenseInfo] = useState<any>();
   const [licenseStatus, setLicenseStatus] = useState<string>();
+  const [licenseLoading, setLicenseLoading] = useState<boolean>(false);
 
   // const authenticator = useAuth();
   const navigate = useNavigate();
   const path = useLocation();
 
   const onLoadCheckLicense = () => {
+    setLicenseLoading(true);
     CommonApi.getLicenseInfo()
       .then((res) => {
+        setLicenseLoading(false);
         const lic = res.data;
-        // {
-        //   configCount: 1,
-        //   expiryDate: "2023-01-03 06:42:35",
-        //   isActive: false,
-        // };
+          // {
+          //   configCount: 1,
+          //   expiryDate: "2023-01-03 06:42:35",
+          //   isActive: false,
+          // };
         setLicenseInfo(lic);
         if (lic !== undefined && String(lic.isActive) === "true") {
           // set license active
@@ -164,6 +166,7 @@ function App() {
       .catch((e) => {
         setLicenseInfo(undefined);
         setLicenseStatus(LICENSE_STATUS.INACTIVE);
+        setLicenseLoading(false);
         // Show login screen, then show license import screen
       });
   };
@@ -200,10 +203,16 @@ function App() {
           <appContext.Provider value={{ licenseInfo, licenseStatus }}>
             <ThemeProvider theme={activeTheme}>
               <CssBaseline />
-              {path && ["/login"].includes(path.pathname) ? (
-                <>{LoginRoutes}</>
+              {licenseLoading ? (
+                <FullScreenLoader />
               ) : (
-                <Layout>{AppRoutes}</Layout>
+                <>
+                  {path && ["/login"].includes(path.pathname) ? (
+                    <>{LoginRoutes}</>
+                  ) : (
+                    <Layout>{AppRoutes}</Layout>
+                  )}
+                </>
               )}
             </ThemeProvider>
           </appContext.Provider>
