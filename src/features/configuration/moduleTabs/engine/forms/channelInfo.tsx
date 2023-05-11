@@ -112,6 +112,8 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               }}
               onChange={formContext?.handleChange}
               value={formContext?.values?.["Crankshaft_Teeth"]}
+              error={Boolean(formContext?.errors?.["Crankshaft_Teeth"])}
+              helperText={formContext?.errors?.["Crankshaft_Teeth"]}
               inputProps={{
                 style: {
                   padding: "11px 26px 13px 12px",
@@ -217,6 +219,8 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               }}
               onChange={formContext?.handleChange}
               value={formContext?.values?.["CamShaft_Teeth"]}
+              error={Boolean(formContext?.errors?.["CamShaft_Teeth"])}
+              helperText={formContext?.errors?.["CamShaft_Teeth"]}
               inputProps={{
                 style: {
                   padding: "11px 26px 13px 12px",
@@ -318,6 +322,8 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               }}
               onChange={formContext?.handleChange}
               value={formContext?.values?.["TDC_Teeth"]}
+              error={Boolean(formContext?.errors?.["TDC_Teeth"])}
+              helperText={formContext?.errors?.["TDC_Teeth"]}
               inputProps={{
                 style: {
                   padding: "11px 26px 13px 12px",
@@ -421,6 +427,8 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               }}
               onChange={formContext?.handleChange}
               value={formContext?.values?.["Peak_Pressure_Teeth"]}
+              error={Boolean(formContext?.errors?.["Peak_Pressure_Teeth"])}
+              helperText={formContext?.errors?.["Peak_Pressure_Teeth"]}
               inputProps={{
                 style: {
                   padding: "11px 26px 13px 12px",
@@ -462,6 +470,12 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 padding: "1px 1px",
               }}
               onChange={formContext?.handleChange}
+              error={Boolean(
+                formContext?.errors?.["peak_pressure_transducer_sensitivity"]
+              )}
+              helperText={
+                formContext?.errors?.["peak_pressure_transducer_sensitivity"]
+              }
               value={
                 formContext?.values?.["peak_pressure_transducer_sensitivity"]
               }

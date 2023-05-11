@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import * as yup from "yup";
-import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -61,8 +60,8 @@ export const PopupRigidity = ({ formContext, fieldProps }: any) => {
         Math.PI *
         formContextPopUp?.values?.sheer_modulus *
         (Math.pow(formContextPopUp?.values?.outer_diameter, 4) -
-          Math.pow(formContextPopUp?.values?.inner_diameter, 4) /
-            (32 * formContextPopUp?.values?.length));
+          Math.pow(formContextPopUp?.values?.inner_diameter, 4))/
+          (32 * formContextPopUp?.values?.length);
       formContext.setFieldValue(fieldProps.label, rigidity);
     }
   };

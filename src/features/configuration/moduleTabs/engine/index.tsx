@@ -114,6 +114,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
   const handleSubmit = async () => {
     try {
       const validate = await moduleFormContext.validateForm();
+      console.log(validate);
       if (Object.keys(validate).length > 0) {
         throw new Error("Form Validation Error!");
       }
@@ -149,8 +150,11 @@ const EngineTabContent = ({ module, moduleId }: any) => {
   }, []);
 
   const handleAccordionChange =
-    (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+    (stepIndex: number) =>
+    (value: string) =>
+    (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? value : false);
+      setActiveStep(stepIndex + 1);
     };
 
   const moduleFormContext = useFormik({
@@ -235,11 +239,11 @@ const EngineTabContent = ({ module, moduleId }: any) => {
         ))}
       </Stepper>
       <Grid container sx={{ width: "auto" }}>
-        {stepperSteps?.map((item: string) => (
+        {stepperSteps?.map((item: string, index:number) => (
           <Grid key={item} item>
             <AccordionBase
               expanded={expanded}
-              handleChange={handleAccordionChange}
+              handleChange={handleAccordionChange(index)}
               value={item}
               title={item}
             >

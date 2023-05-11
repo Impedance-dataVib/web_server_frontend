@@ -36,6 +36,8 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           label={fieldProps.name}
           onChange={formContext?.handleChange}
           value={formContext?.values?.[fieldProps.label]}
+          error={Boolean(formContext?.errors?.[fieldProps.label])}
+          helperText={formContext?.errors?.[fieldProps.label]}
           variant="outlined"
           sx={{
             fontSize: "16px",

@@ -21,7 +21,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { useGetConfigurationModuleByConfigId, useGetModuleById } from "./hooks";
 import { Delete } from "@mui/icons-material";
-import {eventBus} from '../../EventBus'
+import { eventBus } from "../../EventBus";
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -65,6 +65,7 @@ const MotorTabContent = ({ module, moduleId }: any) => {
   const [expanded, setExpanded] = useState<string | false>("Global");
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
+  const [activeStep, setActiveStep] = useState<number>(1);
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const { isLoading, data, isError, getModuleDataById } =
@@ -78,8 +79,11 @@ const MotorTabContent = ({ module, moduleId }: any) => {
   }, []);
 
   const handleAccordionChange =
-    (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+    (stepIndex: number) =>
+    (value: string) =>
+    (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? value : false);
+      setActiveStep(stepIndex + 1);
     };
   const handleDeleteModule = async () => {
     try {
@@ -88,7 +92,7 @@ const MotorTabContent = ({ module, moduleId }: any) => {
         variant: "info",
       });
       await deleteModule(moduleId);
-      eventBus.dispatch('ModuleDelete',{})
+      eventBus.dispatch("ModuleDelete", {});
       enqueueSnackbar({
         message: "Delete Succeess!",
         variant: "success",
@@ -157,7 +161,7 @@ const MotorTabContent = ({ module, moduleId }: any) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper
-        activeStep={2}
+        activeStep={activeStep}
         alternativeLabel
         connector={<CustomConnector></CustomConnector>}
         sx={{ width: "70%", marginBottom: "66px", marginTop: "40px" }}
@@ -169,11 +173,11 @@ const MotorTabContent = ({ module, moduleId }: any) => {
         ))}
       </Stepper>
       <Grid container sx={{ width: "70%" }}>
-        {stepperSteps?.map((item: string) => (
+        {stepperSteps?.map((item: string, index: number) => (
           <Grid key={item} item>
             <AccordionBase
               expanded={expanded}
-              handleChange={handleAccordionChange}
+              handleChange={handleAccordionChange(index)}
               value={item}
               title={item}
             >

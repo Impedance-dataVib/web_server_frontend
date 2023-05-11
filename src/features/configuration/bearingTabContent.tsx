@@ -65,6 +65,7 @@ const BearingTabContent = ({ module, moduleId }: any) => {
   const [expanded, setExpanded] = useState<string | false>("Global");
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
+  const [activeStep, setActiveStep] = useState<number>(1);
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const { isLoading, data, isError, getModuleDataById } =
@@ -147,13 +148,16 @@ const BearingTabContent = ({ module, moduleId }: any) => {
     setStepperSteps(extractSteps(formSchema, module));
   }, []);
   const handleAccordionChange =
-    (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+    (stepIndex: number) =>
+    (value: string) =>
+    (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? value : false);
+      setActiveStep(stepIndex + 1);
     };
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper
-        activeStep={2}
+        activeStep={activeStep}
         alternativeLabel
         connector={<CustomConnector></CustomConnector>}
         sx={{ width: "70%", marginBottom: "66px", marginTop: "40px" }}
@@ -165,11 +169,11 @@ const BearingTabContent = ({ module, moduleId }: any) => {
         ))}
       </Stepper>
       <Grid container sx={{ width: "70%" }}>
-        {stepperSteps?.map((item: string) => (
+        {stepperSteps?.map((item: string, index: number) => (
           <Grid key={item} item>
             <AccordionBase
               expanded={expanded}
-              handleChange={handleAccordionChange}
+              handleChange={handleAccordionChange(index)}
               value={item}
               title={item}
             >

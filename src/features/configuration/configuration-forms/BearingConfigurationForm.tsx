@@ -44,6 +44,8 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
             width: "182px",
             padding: "1px 1px",
           }}
+          error={Boolean(formContext?.errors?.[fieldProps.label])}
+          helperText={formContext?.errors?.[fieldProps.label]}
           inputProps={{
             style: {
               padding: "11px 26px 13px 12px",

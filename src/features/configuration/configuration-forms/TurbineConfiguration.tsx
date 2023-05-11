@@ -14,7 +14,10 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
       return (
-        <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+        <FormControl
+          sx={{ minWidth: "182px", marginBottom: "20px" }}
+          error={Boolean(formContext?.errors?.[fieldProps.label])}
+        >
           <InputLabel id={fieldProps.label}>{fieldProps.name}</InputLabel>
           <Select
             name={fieldProps.label}
@@ -44,6 +47,8 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           label={fieldProps.name}
           onChange={formContext?.handleChange}
           value={formContext?.values?.[fieldProps.label]}
+          error={Boolean(formContext?.errors?.[fieldProps.label])}
+          helperText={formContext?.errors?.[fieldProps.label]}
           variant="outlined"
           sx={{
             fontSize: "16px",
@@ -167,6 +172,8 @@ export const TurbineChannelInformationForm = ({
               }}
               onChange={formContext?.handleChange}
               value={formContext?.values?.["turbine_crankshaft_teeth"]}
+              error={Boolean(formContext?.errors?.["turbine_crankshaft_teeth"])}
+              helperText={formContext?.errors?.["turbine_crankshaft_teeth"]}
               inputProps={{
                 style: {
                   padding: "11px 26px 13px 12px",

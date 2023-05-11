@@ -195,40 +195,8 @@ export const turbineValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     ),
-  zero_degree: yup
-    .number()
-    .required("This is a required field")
-    .test(
-      "Is positive?",
-      "ERROR: The number must be greater than 0!",
-      (value) => value > 0
-    ),
-  rigidity: yup
-    .number()
-    .required("This is a required field")
-    .test(
-      "Is positive?",
-      "ERROR: The number must be greater than 0!",
-      (value) => value > 0
-    ),
-  power: yup
-    .number()
-    .required("This is a required field")
-    .test(
-      "Is positive?",
-      "ERROR: The number must be greater than 0!",
-      (value) => value > 0
-    ),
   name: yup.string().required("This is a required field"),
   rated_rpm: yup
-    .number()
-    .required("This is a required field")
-    .test(
-      "Is positive?",
-      "ERROR: The number must be greater than 0!",
-      (value) => value > 0
-    ),
-  vessel_type: yup
     .number()
     .required("This is a required field")
     .test(
@@ -363,14 +331,7 @@ export const engineValidationSchema = yup.object({
   application: yup.string().required("This is a required field"),
   fuel: yup.string().required("This is a required field"),
   type: yup.string().required("This is a required field"),
-  no_of_strokes: yup
-    .number()
-    .required("This is a required field")
-    .test(
-      "Is positive?",
-      "ERROR: The number must be greater than 0!",
-      (value) => value > 0
-    ),
+  no_of_strokes: yup.string().required("This is a required field"),
   no_of_cylinders: yup
     .number()
     .required("This is a required field")
@@ -380,14 +341,7 @@ export const engineValidationSchema = yup.object({
       (value) => value > 0
     ),
   firing_order: yup.string().required("This is a required field"),
-  phase_shift_mode: yup
-    .number()
-    .required("This is a required field")
-    .test(
-      "Is positive?",
-      "ERROR: The number must be greater than 0!",
-      (value) => value > 0
-    ),
+  phase_shift_mode: yup.string().required("This is a required field"),
   shift_angle: yup
     .number()
     .required("This is a required field")
