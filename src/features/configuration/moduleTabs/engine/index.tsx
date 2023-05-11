@@ -31,6 +31,7 @@ import { useSnackbar } from "notistack";
 import { useGetModuleById } from "../../hooks";
 import { Delete } from "@mui/icons-material";
 import { eventBus } from "src/EventBus";
+import { engineValidationSchema } from "../../configuration-forms";
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -91,25 +92,25 @@ const EngineTabContent = ({ module, moduleId }: any) => {
   const { enqueueSnackbar } = useSnackbar();
   const { isLoading, data, isError, getModuleDataById } =
     useGetModuleById(moduleId);
-    const handleDeleteModule = async () => {
-      try {
-        enqueueSnackbar({
-          message: "In Progress",
-          variant: "info",
-        });
-        await deleteModule(moduleId);
-        eventBus.dispatch('ModuleDelete',{})
-        enqueueSnackbar({
-          message: "Delete Succeess!",
-          variant: "success",
-        });
-      } catch (error: any) {
-        enqueueSnackbar({
-          message: "Delete Failed!",
-          variant: "error",
-        });
-      }
-    };
+  const handleDeleteModule = async () => {
+    try {
+      enqueueSnackbar({
+        message: "In Progress",
+        variant: "info",
+      });
+      await deleteModule(moduleId);
+      eventBus.dispatch("ModuleDelete", {});
+      enqueueSnackbar({
+        message: "Delete Succeess!",
+        variant: "success",
+      });
+    } catch (error: any) {
+      enqueueSnackbar({
+        message: "Delete Failed!",
+        variant: "error",
+      });
+    }
+  };
   const handleSubmit = async () => {
     try {
       const payload = {
@@ -202,6 +203,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
       highPass: "",
     },
     onSubmit: (values) => {},
+    validationSchema: engineValidationSchema,
   });
   useEffect(() => {
     // moduleFormContext.setValues({});

@@ -13,6 +13,7 @@ import {
   TurbineMachineDetailsForm,
   TurbineDiagnosticDetails,
   TurbineChannelInformationForm,
+  turbineValidationSchema,
 } from "./configuration-forms";
 import { useFormik } from "formik";
 import { deleteModule, saveModuleData } from "../../app/services";
@@ -79,7 +80,7 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
         variant: "info",
       });
       await deleteModule(moduleId);
-      eventBus.dispatch('ModuleDelete',{})
+      eventBus.dispatch("ModuleDelete", {});
       enqueueSnackbar({
         message: "Delete Succeess!",
         variant: "success",
@@ -113,6 +114,7 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
       vessel_type: "",
     },
     onSubmit: (values) => {},
+    validationSchema: turbineValidationSchema,
   });
   useEffect(() => {
     // moduleFormContext.setValues({});

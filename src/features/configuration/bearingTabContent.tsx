@@ -13,6 +13,7 @@ import {
   BearingChannelInformationForm,
   BearingMachineDetailsForm,
   BearingDiagnosticDetails,
+  bearingValidationSchema
 } from "./configuration-forms";
 import { deleteModule, saveModuleData } from "../../app/services";
 import { useFormik } from "formik";
@@ -82,6 +83,7 @@ const BearingTabContent = ({ module, moduleId }: any) => {
       rated_rpm: "",
     },
     onSubmit: (values) => {},
+    validationSchema:bearingValidationSchema
   });
   const handleSubmit = async () => {
     try {
