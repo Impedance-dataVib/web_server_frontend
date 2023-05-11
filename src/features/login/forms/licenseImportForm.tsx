@@ -8,7 +8,6 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import CommonApi from "../../../commonApi";
 import * as dateFns from "date-fns";
 import FileUploadComponent from "../../../app/components/fileUpload";
@@ -28,7 +27,6 @@ const LicenseImportForm = () => {
   const [tNcAccepted, setTnCAccepted] = useState<boolean>(false);
 
   const { licenseStatus, licenseInfo } = useContext(appContext);
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
 
