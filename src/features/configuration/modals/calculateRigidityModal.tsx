@@ -73,7 +73,7 @@ export const PopupRigidity = ({ formContext, fieldProps }: any) => {
     <Stack direction={"row"}>
       <TextField
         name={fieldProps.label}
-        label={fieldProps.label}
+        placeholder={fieldProps.name}
         onChange={formContext?.handleChange}
         value={formContext?.values?.[fieldProps.label]}
         error={Boolean(formContext?.errors?.[fieldProps.label])}
@@ -91,7 +91,7 @@ export const PopupRigidity = ({ formContext, fieldProps }: any) => {
           },
         }}
       ></TextField>
-      <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
+      <Button variant="contained" size = 'small' color="primary" onClick={() => setOpen(true)}>
         Calculate
       </Button>
       <CalculateRigidityModal

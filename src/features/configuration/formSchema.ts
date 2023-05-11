@@ -674,6 +674,11 @@ const formSchema = {
         label: "recording_length",
         type: "text",
       },
+      // {
+      //   name: "Rigidity(R)",
+      //   label: "rigidity",
+      //   type: "popup",
+      // }
     ],
     "Machine Details": [
       {
