@@ -125,6 +125,10 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
   }, [data]);
   const handleSubmit = async () => {
     try {
+      const validate = await moduleFormContext.validateForm();
+      if (Object.keys(validate).length > 0) {
+        throw new Error("Form Validation Error!");
+      }
       const payload = {
         configuration_id: configId,
         module_type: module,
@@ -141,9 +145,12 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
         message: "Module Saved",
         variant: "success",
       });
-    } catch (error) {
+    } catch (error: any) {
       enqueueSnackbar({
-        message: "Module Failed To Save",
+        message:
+          error?.message === "Form Validation Error!"
+            ? "Form Validation Error!"
+            : "Module Failed To Save",
         variant: "error",
       });
     }

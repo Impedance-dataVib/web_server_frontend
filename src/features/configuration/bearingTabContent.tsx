@@ -13,7 +13,7 @@ import {
   BearingChannelInformationForm,
   BearingMachineDetailsForm,
   BearingDiagnosticDetails,
-  bearingValidationSchema
+  bearingValidationSchema,
 } from "./configuration-forms";
 import { deleteModule, saveModuleData } from "../../app/services";
 import { useFormik } from "formik";
@@ -83,10 +83,14 @@ const BearingTabContent = ({ module, moduleId }: any) => {
       rated_rpm: "",
     },
     onSubmit: (values) => {},
-    validationSchema:bearingValidationSchema
+    validationSchema: bearingValidationSchema,
   });
   const handleSubmit = async () => {
     try {
+      const validate = await moduleFormContext.validateForm();
+      if (Object.keys(validate).length > 0) {
+        throw new Error("Form Validation Error!");
+      }
       const payload = {
         configuration_id: configId,
         module_type: module,
@@ -110,7 +114,6 @@ const BearingTabContent = ({ module, moduleId }: any) => {
             : "Module Failed To Save",
         variant: "error",
       });
-      console.log(error);
     }
   };
   const handleDeleteModule = async () => {
@@ -120,7 +123,7 @@ const BearingTabContent = ({ module, moduleId }: any) => {
         variant: "info",
       });
       await deleteModule(moduleId);
-      eventBus.dispatch('ModuleDelete',{})
+      eventBus.dispatch("ModuleDelete", {});
       enqueueSnackbar({
         message: "Delete Succeess!",
         variant: "success",
