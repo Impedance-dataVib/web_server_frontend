@@ -88,6 +88,9 @@ const ConfigurationTable = ({
 
   const onActiveConfig = async (row: any) => {
     try {
+      if (row.status === "Active") {
+        return;
+      }
       const data = {
         records_id: row?.id,
       };

@@ -9,6 +9,7 @@ import { BootstrapInput } from "../../../app/components/bootstarp-input";
 import { Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import formSchema from "../formSchema";
+import { PopupRigidity } from "../modals/calculateRigidityModal";
 
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
@@ -63,8 +64,15 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           }}
         ></TextField>
       );
-    case "toggle":
-      return <></>;
+    case "popup":
+      return (
+        <>
+          <PopupRigidity
+            formContext={formContext}
+            fieldProps={fieldProps}
+          ></PopupRigidity>
+        </>
+      );
     default:
       return <div>No Valid Field Type</div>;
       break;

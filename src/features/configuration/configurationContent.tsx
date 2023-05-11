@@ -31,13 +31,13 @@ function tabProps(index: number) {
 const useStyles = makeStyles()((theme) => {
   return {
     tabRoot: {
-      opacity: '0.5',
+      opacity: "0.5",
       "&.Mui-selected": {
-        background: '#fff',
+        background: "#fff",
         color: theme.palette.primary.main,
-        borderBottom: 'none',
-        borderRadius: '4px 4px 0px 0px',
-        opacity: 1
+        borderBottom: "none",
+        borderRadius: "4px 4px 0px 0px",
+        opacity: 1,
       },
     },
   };
@@ -114,9 +114,10 @@ const ConfigurationContent = (props: any) => {
       setIsLoading(false);
       // setSelectedModule({});
       handleCloseDialog();
-    } catch (error) {
+    } catch (error: any) {
+      console.log(error);
       enqueueSnackbar({
-        message: "Error occurred while adding module",
+        message: error.response.data.Message,
         variant: "error",
       });
 
@@ -186,9 +187,12 @@ const ConfigurationContent = (props: any) => {
             variant="scrollable"
           >
             {data?.map((tabElement: any, index: number) => (
-              <Tab key={index} label={tabElement.name} {...tabProps(index)}
+              <Tab
+                key={index}
+                label={tabElement.name}
+                {...tabProps(index)}
                 classes={{
-                  root: classes.tabRoot
+                  root: classes.tabRoot,
                 }}
               />
             ))}
