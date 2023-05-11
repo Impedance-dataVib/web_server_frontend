@@ -416,7 +416,7 @@ const formSchema = {
       {
         name: "Rigidity(R)",
         label: "rigidity",
-        type: "text",
+        type: "popup",
       },
       {
         name: "Power",
