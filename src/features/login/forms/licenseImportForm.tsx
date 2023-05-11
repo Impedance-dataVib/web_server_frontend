@@ -69,7 +69,7 @@ const LicenseImportForm = () => {
           message: res?.data?.Message + " , Please refresh the page",
           variant: "success",
         });
-        window.open(`/dashboard`, '_self');
+        window.open(`/`, '_self');
       })
       .catch((e) => {
         enqueueSnackbar({
