@@ -44,7 +44,7 @@ const LoginForm = () => {
 
   const [isExpired, setIsExpired] = useState<boolean>(false);
   const [isInactive, setInactive] = useState<boolean>(false);
-  const { licenseStatus, licenseInfo } = useContext(appContext);
+  const { licenseStatus, licenseInfo, onLoadCheckLicense } = useContext(appContext);
 
   const { setAuthToken, setRefreshToken } = useAuth();
 
@@ -93,7 +93,8 @@ const LoginForm = () => {
             setAuthToken(res.data?.token);
             setRefreshToken(res.data?.refresh_token);
 
-            navigate("/dashboard");
+            // navigate("/dashboard");
+            onLoadCheckLicense?.();
           }
         } else {
           setIsError(true);

@@ -200,7 +200,7 @@ function App() {
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           autoHideDuration={2500}
         >
-          <appContext.Provider value={{ licenseInfo, licenseStatus }}>
+          <appContext.Provider value={{ licenseInfo, licenseStatus, onLoadCheckLicense }}>
             <ThemeProvider theme={activeTheme}>
               <CssBaseline />
               {licenseLoading ? (
