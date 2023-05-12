@@ -217,7 +217,7 @@ const SystemConfiguration = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="h6">Vbox Name: </Typography>
+                  <Typography variant="h6">Vibox Name: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
                     {apiData.licenseInfo?.vbox_name}
                   </Typography>
@@ -229,7 +229,7 @@ const SystemConfiguration = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="h6">Vbox Serial Number: </Typography>
+                  <Typography variant="h6">Serial Number: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
                     {apiData.licenseInfo?.vbox_serial_number}
                   </Typography>
@@ -241,7 +241,7 @@ const SystemConfiguration = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="h6">Vbox Software Version: </Typography>
+                  <Typography variant="h6">Software Version: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
                     {apiData.licenseInfo?.vbox_software_version}
                   </Typography>
@@ -253,7 +253,7 @@ const SystemConfiguration = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="h6">Vbox Firmware Version: </Typography>
+                  <Typography variant="h6">Firmware Version: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
                     {apiData.licenseInfo?.vbox_firmware_version}
                   </Typography>
