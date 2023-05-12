@@ -24,8 +24,8 @@ const SystemConfiguration = () => {
       vbox_firmware_version: "",
       client_name: "",
       client_email: "",
-      distributor_name: null,
-      distributor_email: null,
+      expiry_date: null,
+      activation_date: null,
       distributor_contact: null,
       engine_quantity: null,
       bearing_quantity: null,
@@ -37,7 +37,12 @@ const SystemConfiguration = () => {
 
   const getSystemInfo = async () => {
     const response = await SystemInfoApi.getSystemInfo();
-    setApiData(response?.data);
+    setApiData(val => {
+      return {
+        ...val,
+        ...response?.data
+      }
+    });
   };
 
   useEffect(() => {
@@ -188,21 +193,9 @@ const SystemConfiguration = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="h6">License Id: </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.license_id}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
                   <Typography variant="h6">License Number: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.license_number}
+                    {apiData.licenseInfo?.license_number}
                   </Typography>
                 </Box>
                 <Box
@@ -214,7 +207,7 @@ const SystemConfiguration = () => {
                 >
                   <Typography variant="h6">License Tenure: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.license_tenure}
+                    {apiData.licenseInfo?.license_tenure}
                   </Typography>
                 </Box>
                 <Box
@@ -226,7 +219,7 @@ const SystemConfiguration = () => {
                 >
                   <Typography variant="h6">Vbox Name: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.vbox_name}
+                    {apiData.licenseInfo?.vbox_name}
                   </Typography>
                 </Box>
                 <Box
@@ -238,7 +231,7 @@ const SystemConfiguration = () => {
                 >
                   <Typography variant="h6">Vbox Serial Number: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.vbox_serial_number}
+                    {apiData.licenseInfo?.vbox_serial_number}
                   </Typography>
                 </Box>
                 <Box
@@ -250,7 +243,7 @@ const SystemConfiguration = () => {
                 >
                   <Typography variant="h6">Vbox Software Version: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.vbox_software_version}
+                    {apiData.licenseInfo?.vbox_software_version}
                   </Typography>
                 </Box>
                 <Box
@@ -262,7 +255,20 @@ const SystemConfiguration = () => {
                 >
                   <Typography variant="h6">Vbox Firmware Version: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.vbox_firmware_version}
+                    {apiData.licenseInfo?.vbox_firmware_version}
+                  </Typography>
+                </Box>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Activation date: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo?.activation_date}
                   </Typography>
                 </Box>
                 <Box
@@ -272,57 +278,9 @@ const SystemConfiguration = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="h6">Client Name: </Typography>
+                  <Typography variant="h6">Expiry date: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.client_name}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h6">Client Email: </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.client_email}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h6">Distributor Name: </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.distributor_name}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h6">Distributor Email: </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.distributor_email}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h6">Distributor Contact: </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.distributor_contact}
+                    {apiData.licenseInfo?.expiry_date}
                   </Typography>
                 </Box>
                 <Box
@@ -334,7 +292,7 @@ const SystemConfiguration = () => {
                 >
                   <Typography variant="h6">Engine Quality: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.engine_quantity}
+                    {apiData.licenseInfo?.engine_quantity}
                   </Typography>
                 </Box>
                 <Box
@@ -346,7 +304,7 @@ const SystemConfiguration = () => {
                 >
                   <Typography variant="h6">Bearing Quantity: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.bearing_quantity}
+                    {apiData.licenseInfo?.bearing_quantity}
                   </Typography>
                 </Box>
                 <Box
@@ -358,7 +316,7 @@ const SystemConfiguration = () => {
                 >
                   <Typography variant="h6">Motor Quantity: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.motor_quantity}
+                    {apiData.licenseInfo?.motor_quantity}
                   </Typography>
                 </Box>
                 <Box
@@ -370,7 +328,7 @@ const SystemConfiguration = () => {
                 >
                   <Typography variant="h6">Turbine Quantity: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.turbine_quantity}
+                    {apiData.licenseInfo?.turbine_quantity}
                   </Typography>
                 </Box>
                 <Box
@@ -382,7 +340,7 @@ const SystemConfiguration = () => {
                 >
                   <Typography variant="h6">Torque Quantity: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo.torque_quantity}
+                    {apiData.licenseInfo?.torque_quantity}
                   </Typography>
                 </Box>
               </Box>
