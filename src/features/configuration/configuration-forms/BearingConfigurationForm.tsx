@@ -161,6 +161,8 @@ export const BearingChannelInformationForm = ({
                 padding: "1px 1px",
               }}
               value={formContext?.values["bearing_crankshaft_teeth"]}
+              error={Boolean(formContext?.errors?.["bearing_crankshaft_teeth"])}
+              helperText={formContext?.errors?.["bearing_crankshaft_teeth"]}
               onChange={formContext?.handleChange}
               inputProps={{
                 style: {

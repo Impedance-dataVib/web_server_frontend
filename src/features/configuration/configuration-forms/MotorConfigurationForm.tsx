@@ -180,6 +180,8 @@ export const MotorChannelInformationForm = ({
               }}
               onChange={formContext?.handleChange}
               value={formContext?.values?.["motor_crankshaft_teeth"]}
+              error={Boolean(formContext?.errors?.["motor_crankshaft_teeth"])}
+              helperText={formContext?.errors?.["motor_crankshaft_teeth"]}
               inputProps={{
                 style: {
                   padding: "11px 26px 13px 12px",

@@ -77,3 +77,10 @@ export const useGetModuleById = (
   }, [id]);
   return { isLoading, data, isError, getModuleDataById };
 };
+
+export const useStepperValidation = (
+  formContext: any,
+  validationSchema: any
+) => {
+  const [activeStep, setActiveStep] = useState();
+};

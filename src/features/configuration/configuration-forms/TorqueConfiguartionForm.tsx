@@ -9,7 +9,7 @@ import { Stack, Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import formSchema from "../formSchema";
-import {PopupRigidity} from '../modals/calculateRigidityModal'
+import { PopupRigidity } from "../modals/calculateRigidityModal";
 
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
@@ -180,6 +180,8 @@ export const TorqueChannelInformationForm = ({
               }}
               onChange={formContext?.handleChange}
               value={formContext?.values?.["de_channel__teeth"]}
+              error={Boolean(formContext?.errors?.["de_channel__teeth"])}
+              helperText={formContext?.errors?.["de_channel__teeth"]}
               inputProps={{
                 style: {
                   padding: "11px 26px 13px 12px",
@@ -274,6 +276,8 @@ export const TorqueChannelInformationForm = ({
               }}
               onChange={formContext?.handleChange}
               value={formContext?.values?.["nde_channel_teeth"]}
+              error={Boolean(formContext?.errors?.["nde_channel_teeth"])}
+              helperText={formContext?.errors?.["nde_channel_teeth"]}
               inputProps={{
                 style: {
                   padding: "11px 26px 13px 12px",
