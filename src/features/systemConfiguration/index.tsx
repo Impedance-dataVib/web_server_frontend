@@ -14,9 +14,28 @@ const SystemConfiguration = () => {
     softwareVersion: "",
     library: "",
     systemInfo: [],
+    licenseInfo: {
+      license_id: "",
+      license_number: "",
+      license_tenure: 1,
+      vbox_name: "",
+      vbox_serial_number: "",
+      vbox_software_version: "",
+      vbox_firmware_version: "",
+      client_name: "",
+      client_email: "",
+      distributor_name: null,
+      distributor_email: null,
+      distributor_contact: null,
+      engine_quantity: null,
+      bearing_quantity: null,
+      motor_quantity: null,
+      turbine_quantity: null,
+      torque_quantity: null,
+    },
   });
 
-  const getSystemInfo = async () =>   {
+  const getSystemInfo = async () => {
     const response = await SystemInfoApi.getSystemInfo();
     setApiData(response?.data);
   };
@@ -152,6 +171,221 @@ const SystemConfiguration = () => {
                   </Link>
                 </Box>
               </Box>
+              <Divider sx={{ mx: 4 }} />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  px: 4,
+                  py: 2,
+                }}
+              >
+                <Typography variant="h5">License Details</Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">License Id: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.license_id}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">License Number: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.license_number}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">License Tenure: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.license_tenure}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Vbox Name: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.vbox_name}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Vbox Serial Number: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.vbox_serial_number}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Vbox Software Version: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.vbox_software_version}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Vbox Firmware Version: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.vbox_firmware_version}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Client Name: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.client_name}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Client Email: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.client_email}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Distributor Name: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.distributor_name}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Distributor Email: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.distributor_email}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Distributor Contact: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.distributor_contact}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Engine Quality: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.engine_quantity}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Bearing Quantity: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.bearing_quantity}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Motor Quantity: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.motor_quantity}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Turbine Quantity: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.turbine_quantity}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6">Torque Quantity: </Typography>
+                  <Typography variant="body1" sx={{ mx: 1 }}>
+                    {apiData.licenseInfo.torque_quantity}
+                  </Typography>
+                </Box>
+              </Box>
             </Box>
           </Box>
           <Divider sx={{ my: 5 }} />
@@ -171,7 +405,7 @@ const SystemConfiguration = () => {
             sx={{
               display: "flex",
               justifyContent: "flex-end",
-              pt: 2
+              pt: 2,
             }}
           >
             <Button variant="contained" startIcon={<CachedIcon />}>
