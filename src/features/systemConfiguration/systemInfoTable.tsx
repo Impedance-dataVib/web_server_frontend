@@ -8,45 +8,62 @@ import Paper from "@mui/material/Paper";
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 
-interface SystemIndoProps {
-  systemInfo: SystemInfoObject[];
-}
 
-interface SystemInfoObject {
-    activatedModules: string;
-    numberOfLicence: string;
-    licenceNumber: string;
-    expiryDate: string;
-    isLocked: boolean;
-}
 
-export default function SystemInfoTable({ systemInfo }: SystemIndoProps) {
+export default function SystemInfoTable({ systemInfo }: any) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell align="left" sx={{border: 'none'}}>Activated Modules</TableCell>
-            <TableCell align="left" sx={{border: 'none'}}>No. Of Licence</TableCell>
-            <TableCell align="left" sx={{border: 'none'}}>Licence No.</TableCell>
-            <TableCell align="left" sx={{border: 'none'}}>Expiry date</TableCell>
+            <TableCell align="left" sx={{border: 'none'}}>Quantity</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {systemInfo.map((row, index) => (
+          
             <TableRow
-              key={index}
               sx={{ "&:td, &:th": { border: "none" } }}
             >
-              <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: row.isLocked ? 0.5: 1}}>
-                {row.isLocked ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{row.activatedModules}
+              <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Engine'}
               </TableCell>
-              <TableCell align="left" sx={{border: 'none', opacity: row.isLocked ? 0.5: 1}}>{row.numberOfLicence}</TableCell>
-              <TableCell align="left" sx={{border: 'none', opacity: row.isLocked ? 0.5: 1}}>{row.licenceNumber}</TableCell>
-              <TableCell align="left" sx={{border: 'none', opacity: row.isLocked ? 0.5: 1}}>{row.expiryDate}</TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.engine_quantity}</TableCell>
             </TableRow>
-          ))}
-          {systemInfo.length ===0 && (
+            <TableRow
+              sx={{ "&:td, &:th": { border: "none" } }}
+            >
+              <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Bearing'}
+              </TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.bearing_quantity}</TableCell>
+            </TableRow>
+            <TableRow
+              sx={{ "&:td, &:th": { border: "none" } }}
+            >
+              <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Engine'}
+              </TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.engine_quantity}</TableCell>
+            </TableRow>
+            <TableRow
+              sx={{ "&:td, &:th": { border: "none" } }}
+            >
+              <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Turbine'}
+              </TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.turbine_quantity}</TableCell>
+            </TableRow>
+            <TableRow
+              sx={{ "&:td, &:th": { border: "none" } }}
+            >
+              <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Engine'}
+              </TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.engine_quantity}</TableCell>
+            </TableRow>
+        
+          {systemInfo.length ===0 && (  
             <TableRow  sx={{ "&:td, &:th": { border: "none" } }}> 
                <TableCell colSpan={4} align="center">No records found</TableCell> 
             </TableRow>

@@ -348,7 +348,7 @@ const SystemConfiguration = () => {
           </Box>
           <Divider sx={{ my: 5 }} />
           <Box>
-            <SystemInfoTable systemInfo={apiData.systemInfo} />
+            <SystemInfoTable systemInfo={apiData.licenseInfo} />
           </Box>
           <Divider sx={{ my: 5 }} />
           <Box
