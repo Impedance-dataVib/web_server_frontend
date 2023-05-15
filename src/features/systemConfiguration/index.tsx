@@ -89,7 +89,7 @@ const SystemConfiguration = () => {
                   py: 2,
                 }}
               >
-                <Typography variant="h5">Hardware Details</Typography>
+                <Typography variant="h5">Hardware information</Typography>
                 <Box
                   sx={{
                     display: "flex",
@@ -97,11 +97,11 @@ const SystemConfiguration = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="h6">Serial No : </Typography>
+                  <Typography variant="h6">Serial Number : </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
                     {apiData.serianNo}
                   </Typography>
-                  <Typography variant="h6">Mac Id : </Typography>
+                  <Typography variant="h6">Mac ID : </Typography>
                   <Typography variant="body1" sx={{ ml: 1 }}>
                     {apiData.macId}
                   </Typography>
@@ -113,7 +113,7 @@ const SystemConfiguration = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="h6">Firmware Version : </Typography>
+                  <Typography variant="h6">Firmware Number : </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
                     {apiData.firmwareVersion}
                   </Typography>
@@ -125,7 +125,8 @@ const SystemConfiguration = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Link variant="body1" color="#002BBC" href="#">
+                  <Typography variant="h6">User Manual : </Typography>
+                  <Link variant="body1" color="#002BBC" href="#" sx={{ mx: 1 }}>
                     Download Hardware User Manual
                   </Link>
                 </Box>
@@ -139,7 +140,7 @@ const SystemConfiguration = () => {
                   py: 2,
                 }}
               >
-                <Typography variant="h5">Software Details</Typography>
+                <Typography variant="h5">Software information</Typography>
                 <Box
                   sx={{
                     display: "flex",
@@ -147,7 +148,7 @@ const SystemConfiguration = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="h6">Software Version: </Typography>
+                  <Typography variant="h6">SW Version: </Typography>
                   <Typography variant="body1" sx={{ mx: 1 }}>
                     {apiData.softwareVersion}
                   </Typography>
@@ -159,19 +160,8 @@ const SystemConfiguration = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="h6">Library: </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.library}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Link variant="body1" color="#002BBC" href="#">
+                  <Typography variant="h6">Software user manual : </Typography>
+                  <Link variant="body1" color="#002BBC" href="#" sx={{ mx: 1 }}>
                     Download Software User Manual
                   </Link>
                 </Box>
@@ -210,55 +200,6 @@ const SystemConfiguration = () => {
                     {apiData.licenseInfo?.license_tenure}
                   </Typography>
                 </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h6">Vibox Name: </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo?.vbox_name}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h6">Serial Number: </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo?.vbox_serial_number}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h6">Software Version: </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo?.vbox_software_version}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h6">Firmware Version: </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.licenseInfo?.vbox_firmware_version}
-                  </Typography>
-                </Box>
-
                 <Box
                   sx={{
                     display: "flex",

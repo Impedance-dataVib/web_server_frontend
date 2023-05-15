@@ -13,7 +13,7 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 export default function SystemInfoTable({ systemInfo }: any) {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell align="left" sx={{border: 'none'}}>Activated Modules</TableCell>
@@ -42,9 +42,9 @@ export default function SystemInfoTable({ systemInfo }: any) {
               sx={{ "&:td, &:th": { border: "none" } }}
             >
               <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
-                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Engine'}
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Motor'}
               </TableCell>
-              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.engine_quantity}</TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.motor_quantity}</TableCell>
             </TableRow>
             <TableRow
               sx={{ "&:td, &:th": { border: "none" } }}
@@ -58,16 +58,11 @@ export default function SystemInfoTable({ systemInfo }: any) {
               sx={{ "&:td, &:th": { border: "none" } }}
             >
               <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
-                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Engine'}
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Torque'}
               </TableCell>
-              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.engine_quantity}</TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.torque_quantity}</TableCell>
             </TableRow>
         
-          {systemInfo.length ===0 && (  
-            <TableRow  sx={{ "&:td, &:th": { border: "none" } }}> 
-               <TableCell colSpan={4} align="center">No records found</TableCell> 
-            </TableRow>
-          )}
         </TableBody>
       </Table>
     </TableContainer>
