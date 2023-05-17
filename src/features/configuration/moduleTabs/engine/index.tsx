@@ -18,7 +18,7 @@ import Button from "@mui/material/Button";
 // } from "../configuration-forms";
 import { useFormik } from "formik";
 // import { saveModuleData } from "../../../app/services";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ChannelInformationForm from "./forms/channelInfo";
 import EngineDetailsForm from "./forms/engineDetails";
 import DiagnosticDetailsForm from "./forms/diagnosticDetails";
@@ -92,6 +92,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
   const { enqueueSnackbar } = useSnackbar();
   const { isLoading, data, isError, getModuleDataById } =
     useGetModuleById(moduleId);
+  const navigate = useNavigate();
   const handleDeleteModule = async () => {
     try {
       enqueueSnackbar({
@@ -239,7 +240,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
         ))}
       </Stepper>
       <Grid container sx={{ width: "auto" }}>
-        {stepperSteps?.map((item: string, index:number) => (
+        {stepperSteps?.map((item: string, index: number) => (
           <Grid key={item} item>
             <AccordionBase
               expanded={expanded}
@@ -267,7 +268,12 @@ const EngineTabContent = ({ module, moduleId }: any) => {
           <Button variant="contained" onClick={handleSubmit}>
             Save
           </Button>
-          <Button variant="contained">Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={() => navigate("./configuration")}
+          >
+            Cancel
+          </Button>
           <Button
             startIcon={<Delete />}
             color="primary"

@@ -19,8 +19,11 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           sx={{ minWidth: "182px", marginBottom: "20px" }}
           error={Boolean(formContext?.errors?.[fieldProps.label])}
         >
-          <InputLabel id={fieldProps.label}>{fieldProps.name}</InputLabel>
+          <InputLabel id={`${fieldProps.label}-label`}>
+            {fieldProps.name}
+          </InputLabel>
           <Select
+            labelId={`${fieldProps.label}-label`}
             name={fieldProps.label}
             onChange={formContext?.handleChange}
             value={formContext?.values?.[fieldProps.label]}
@@ -32,12 +35,11 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
               </MenuItem>
             ))}
           </Select>
-          {formContext?.touched?.[fieldProps.label] &&
-            Boolean(formContext?.errors?.[fieldProps.label]) && (
-              <FormHelperText>
-                {formContext?.errors?.[fieldProps.label]}
-              </FormHelperText>
-            )}
+          {Boolean(formContext?.errors?.[fieldProps.label]) && (
+            <FormHelperText>
+              {formContext?.errors?.[fieldProps.label]}
+            </FormHelperText>
+          )}
         </FormControl>
       );
 
@@ -110,7 +112,7 @@ export const MotorChannelInformationForm = ({
       "Odd",
     ],
   });
-
+  console.log("formContext", formContext.errors);
   return (
     <>
       <Grid
@@ -134,12 +136,18 @@ export const MotorChannelInformationForm = ({
         </Grid>
         <Grid container item spacing={1}>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{ minWidth: "182px", marginBottom: "20px" }}
+              error={Boolean(formContext?.errors?.["motor_crankshaft_sensorx"])}
+            >
+              <InputLabel id={`motor_crankshaft_sensorx-label`}>
+                Sensorx
+              </InputLabel>
               <Select
+                labelId="motor_crankshaft_sensorx-label"
                 name="motor_crankshaft_sensorx"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["motor_crankshaft_sensorx"]}
-                input={<BootstrapInput></BootstrapInput>}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
                   <MenuItem key={option} value={option}>
@@ -147,15 +155,28 @@ export const MotorChannelInformationForm = ({
                   </MenuItem>
                 ))}
               </Select>
+              {Boolean(formContext?.errors?.["motor_crankshaft_sensorx"]) && (
+                <FormHelperText>
+                  {formContext?.errors?.["motor_crankshaft_sensorx"]}
+                </FormHelperText>
+              )}
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{ minWidth: "182px", marginBottom: "20px" }}
+              error={Boolean(
+                formContext?.errors?.["motor_crankshaft_channel_type"]
+              )}
+            >
+              <InputLabel id={`motor_crankshaft_channel_type-label`}>
+                Channel_Type
+              </InputLabel>
               <Select
+                labelId="motor_crankshaft_channel_type-label"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["motor_crankshaft_channel_type"]}
                 name="motor_crankshaft_channel_type"
-                input={<BootstrapInput></BootstrapInput>}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -165,6 +186,13 @@ export const MotorChannelInformationForm = ({
                   )
                 )}
               </Select>
+              {Boolean(
+                formContext?.errors?.["motor_crankshaft_channel_type"]
+              ) && (
+                <FormHelperText>
+                  {formContext?.errors?.["motor_crankshaft_channel_type"]}
+                </FormHelperText>
+              )}
             </FormControl>
           </Grid>
           <Grid item>
@@ -190,12 +218,20 @@ export const MotorChannelInformationForm = ({
             ></TextField>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{ minWidth: "182px", marginBottom: "20px" }}
+              error={Boolean(
+                formContext?.errors?.["motor_crankshaft_wheel_type"]
+              )}
+            >
+              <InputLabel id={`motor_crankshaft_wheel_type-label`}>
+                Wheel_Type
+              </InputLabel>
               <Select
+                labelId="motor_crankshaft_wheel_type-label"
                 name="motor_crankshaft_wheel_type"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["motor_crankshaft_wheel_type"]}
-                input={<BootstrapInput></BootstrapInput>}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -205,6 +241,13 @@ export const MotorChannelInformationForm = ({
                   )
                 )}
               </Select>
+              {Boolean(
+                formContext?.errors?.["motor_crankshaft_wheel_type"]
+              ) && (
+                <FormHelperText>
+                  {formContext?.errors?.["motor_crankshaft_wheel_type"]}
+                </FormHelperText>
+              )}
             </FormControl>
           </Grid>
         </Grid>

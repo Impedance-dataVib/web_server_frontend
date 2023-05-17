@@ -1,6 +1,7 @@
 import {
   FormControl,
   FormControlLabel,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -12,9 +13,15 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
       return (
-        <FormControl sx={{ minWidth: "182px" }}>
-          <InputLabel id={fieldProps.label}>{fieldProps.name}</InputLabel>
+        <FormControl
+          sx={{ minWidth: "182px" }}
+          error={Boolean(formContext?.errors?.[fieldProps.label])}
+        >
+          <InputLabel id={`${fieldProps.label}-label`}>
+            {fieldProps.name}
+          </InputLabel>
           <Select
+            labelId={`${fieldProps.label}-label`}
             name={fieldProps.label}
             onChange={formContext?.handleChange}
             value={formContext?.values?.[fieldProps.label]}
@@ -26,6 +33,11 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
               </MenuItem>
             ))}
           </Select>
+          {Boolean(formContext?.errors?.[fieldProps.label]) && (
+            <FormHelperText>
+              {formContext?.errors?.[fieldProps.label]}
+            </FormHelperText>
+          )}
         </FormControl>
       );
 
