@@ -217,7 +217,6 @@ const EngineTabContent = ({ module, moduleId }: any) => {
     validationSchema: engineValidationSchema,
   });
   useEffect(() => {
-    // moduleFormContext.setValues({});
     if (data?.from_data) {
       const { configuration_id, ...rest } = data?.from_data;
       moduleFormContext.setValues({ ...rest });

@@ -141,6 +141,7 @@ export const BearingChannelInformationForm = ({
                 name="bearing_crankshaft_sensorx"
                 onChange={formContext.handleChange}
                 value={formContext?.values["bearing_crankshaft_sensorx"]}
+                label={"Sensorx"}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
                   <MenuItem key={option} value={option}>
@@ -170,6 +171,7 @@ export const BearingChannelInformationForm = ({
                 onChange={formContext?.handleChange}
                 value={formContext?.values["bearing_crankshaft_channel_type"]}
                 name="bearing_crankshaft_channel_type"
+                label={"Channel_Type"}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -225,6 +227,7 @@ export const BearingChannelInformationForm = ({
                 name="bearing_crankshaft_wheel_type"
                 value={formContext?.values["bearing_crankshaft_wheel_type"]}
                 onChange={formContext?.handleChange}
+                label={"Wheel_Type"}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (

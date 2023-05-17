@@ -112,7 +112,6 @@ export const MotorChannelInformationForm = ({
       "Odd",
     ],
   });
-  console.log("formContext", formContext.errors);
   return (
     <>
       <Grid
@@ -148,6 +147,7 @@ export const MotorChannelInformationForm = ({
                 name="motor_crankshaft_sensorx"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["motor_crankshaft_sensorx"]}
+                label={"Sensorx"}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
                   <MenuItem key={option} value={option}>
@@ -177,6 +177,7 @@ export const MotorChannelInformationForm = ({
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["motor_crankshaft_channel_type"]}
                 name="motor_crankshaft_channel_type"
+                label={"Channel_Type"}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -232,6 +233,7 @@ export const MotorChannelInformationForm = ({
                 name="motor_crankshaft_wheel_type"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["motor_crankshaft_wheel_type"]}
+                label={"Wheel_Type"}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (

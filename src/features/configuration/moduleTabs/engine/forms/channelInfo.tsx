@@ -73,6 +73,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 name="Crankshaft_SENSORx"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["Crankshaft_SENSORx"]}
+                label={"Sensorx"}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
                   <MenuItem key={option} value={option}>
@@ -102,6 +103,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["Crankshaft_ChannelType"]}
                 name="Crankshaft_ChannelType"
+                label={"ChannelType"}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -154,6 +156,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 name="Crankshaft_WheelType"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["Crankshaft_WheelType"]}
+                label={"WheelType"}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -204,6 +207,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 name="CamShaft_SENSORx"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["CamShaft_SENSORx"]}
+                label={"Sensorx"}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
                   <MenuItem key={option} value={option}>
@@ -233,6 +237,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["CamShaft_ChannelType"]}
                 name="CamShaft_ChannelType"
+                label={"ChannelType"}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -284,6 +289,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 name="CamShaft_WheelType"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["CamShaft_WheelType"]}
+                label={"WheelType"}
                 disabled
               >
                 {optionsChannelInformation["WheelType"].map(
@@ -330,6 +336,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 name="TDC_SENSORx"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["TDC_SENSORx"]}
+                label={"Sensorx"}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
                   <MenuItem key={option} value={option}>
@@ -357,6 +364,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["TDC_ChannelType"]}
                 name="TDC_ChannelType"
+                label={"ChannelType"}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -409,6 +417,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 name="TDC_WheelType"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["TDC_WheelType"]}
+                label={"WheelType"}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -458,6 +467,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 name="Peak_Pressure_SENSORx"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["Peak_Pressure_SENSORx"]}
+                label={"Sensorx"}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
                   <MenuItem key={option} value={option}>
@@ -489,6 +499,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["Peak_Pressure_ChannelType"]}
                 name="Peak_Pressure_ChannelType"
+                label={"ChannelType"}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -543,6 +554,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 name="Peak_Pressure_WheelType"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["Peak_Pressure_WheelType"]}
+                label={"WheelType"}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (

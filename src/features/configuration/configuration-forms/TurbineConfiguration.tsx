@@ -142,7 +142,7 @@ export const TurbineChannelInformationForm = ({
                 name="turbine_crankshaft_sensorx"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["turbine_crankshaft_sensorx"]}
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Sensorx"}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
                   <MenuItem key={option} value={option}>
@@ -165,14 +165,14 @@ export const TurbineChannelInformationForm = ({
               )}
             >
               <InputLabel id={`turbine_crankshaft_channel_type-label`}>
-                Sensorx
+                Channel_Type
               </InputLabel>
               <Select
                 labelId="turbine_crankshaft_channel_type-label"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["turbine_crankshaft_channel_type"]}
                 name="turbine_crankshaft_channel_type"
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Channel_Type"}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -221,14 +221,14 @@ export const TurbineChannelInformationForm = ({
               )}
             >
               <InputLabel id={`turbine_crankshaft_wheel_type-label`}>
-                Sensorx
+                Wheel_Type
               </InputLabel>
               <Select
                 labelId="turbine_crankshaft_wheel_type-label"
                 name="turbine_crankshaft_wheel_type"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["turbine_crankshaft_wheel_type"]}
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Wheel_Type"}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (

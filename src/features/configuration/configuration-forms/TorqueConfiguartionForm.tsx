@@ -146,7 +146,7 @@ export const TorqueChannelInformationForm = ({
                 name="de_channel_sensorx"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["de_channel_sensorx"]}
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Sensorx"}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
                   <MenuItem key={option} value={option}>
@@ -174,7 +174,7 @@ export const TorqueChannelInformationForm = ({
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["de_channel_channel_type"]}
                 name="de_channel_channel_type"
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Channel_Type"}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -226,7 +226,7 @@ export const TorqueChannelInformationForm = ({
                 name="de_channel_wheel_type"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["de_channel_wheel_type"]}
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Wheel_Type"}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -276,7 +276,7 @@ export const TorqueChannelInformationForm = ({
                 name="nde_channel_sensorx"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["nde_channel_sensorx"]}
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Sensorx"}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
                   <MenuItem key={option} value={option}>
@@ -304,7 +304,7 @@ export const TorqueChannelInformationForm = ({
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["nde_channel_channel_type"]}
                 name="nde_channel_channel_type"
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Channel_Type"}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -356,7 +356,7 @@ export const TorqueChannelInformationForm = ({
                 name="nde_channel_wheel_type"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["nde_channel_wheel_type"]}
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Wheel_Type"}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
