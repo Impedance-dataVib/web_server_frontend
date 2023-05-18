@@ -7,6 +7,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import { Typography } from "@mui/material";
 
 
 
@@ -16,8 +17,8 @@ export default function SystemInfoTable({ systemInfo }: any) {
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="left" sx={{border: 'none'}}>Activated Modules</TableCell>
-            <TableCell align="left" sx={{border: 'none'}}>Quantity</TableCell>
+            <TableCell align="left" sx={{border: 'none'}}><Typography component="p" sx={{fontSize: 'medium'}} > Activated Modules</Typography></TableCell>
+            <TableCell align="left" sx={{border: 'none'}}><Typography component="p" sx={{fontSize: 'medium'}} > Quantity</Typography></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -26,41 +27,41 @@ export default function SystemInfoTable({ systemInfo }: any) {
               sx={{ "&:td, &:th": { border: "none" } }}
             >
               <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
-                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Engine'}
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }<Typography variant="subtitle1">{'Engine'}</Typography>
               </TableCell>
-              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.engine_quantity}</TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}><Typography variant="subtitle1">{systemInfo?.engine_quantity}</Typography></TableCell>
             </TableRow>
             <TableRow
               sx={{ "&:td, &:th": { border: "none" } }}
             >
               <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
-                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Bearing'}
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }<Typography variant="subtitle1">{'Bearing'}</Typography>
               </TableCell>
-              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.bearing_quantity}</TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}><Typography variant="subtitle1">{systemInfo?.bearing_quantity}</Typography></TableCell>
             </TableRow>
             <TableRow
               sx={{ "&:td, &:th": { border: "none" } }}
             >
               <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
-                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Motor'}
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }<Typography variant="subtitle1">{'Motor'}</Typography>
               </TableCell>
-              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.motor_quantity}</TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}><Typography variant="subtitle1">{systemInfo?.motor_quantity}</Typography></TableCell>
             </TableRow>
             <TableRow
               sx={{ "&:td, &:th": { border: "none" } }}
             >
               <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
-                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Turbine'}
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }<Typography variant="subtitle1">{'Turbine'}</Typography>
               </TableCell>
-              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.turbine_quantity}</TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}><Typography variant="subtitle1">{systemInfo?.turbine_quantity}</Typography></TableCell>
             </TableRow>
             <TableRow
               sx={{ "&:td, &:th": { border: "none" } }}
             >
               <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
-                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{'Torque'}
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }<Typography variant="subtitle1">{'Torque'}</Typography>
               </TableCell>
-              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}>{systemInfo?.torque_quantity}</TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}><Typography variant="subtitle1">{systemInfo?.torque_quantity}</Typography></TableCell>
             </TableRow>
         
         </TableBody>
