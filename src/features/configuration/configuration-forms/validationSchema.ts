@@ -454,5 +454,7 @@ export const engineValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     ),
+  vessel_type: yup.string().required("This is a required field"),
+  engine_history: yup.string().required("This is a required field"),
+  running_hours: yup.string().required("This is a required field"),
 });
-

@@ -35,7 +35,6 @@ export const useGetConfigurationModuleByConfigId = (id: string | undefined) => {
     try {
       setIsPending(true);
       const { data } = await getModulesByConfigId(id);
-      console.log(data);
       setData(data.data);
       setIsPending(false);
     } catch (e) {

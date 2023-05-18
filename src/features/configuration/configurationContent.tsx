@@ -48,7 +48,6 @@ const getKeysFromSchema = (schema: any) => {
 };
 
 const TabModuleRender = ({ type, moduleId }: any) => {
-  // console.log("hi", type);
   switch (type) {
     case "Engine":
       return (
@@ -115,7 +114,6 @@ const ConfigurationContent = (props: any) => {
       // setSelectedModule({});
       handleCloseDialog();
     } catch (error: any) {
-      console.log(error);
       enqueueSnackbar({
         message: error.response.data.Message,
         variant: "error",

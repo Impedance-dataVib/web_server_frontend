@@ -1,4 +1,4 @@
-export const bearingStepperValidationSchemaGroups = {
+export const bearingStepperValidationSchemaGroups: any = {
   "Asset Information": ["asset_name", "equipment_name", "sampling_rate"],
   "Channel Information": [
     "bearing_crankshaft_sensorx",
@@ -14,7 +14,7 @@ export const bearingStepperValidationSchemaGroups = {
   ],
   "Machine Details": ["name", "rated_rpm"],
 };
-export const engineStepperValidationSchemaGroups = {
+export const engineStepperValidationSchemaGroups: any = {
   "Asset Information": ["asset_name", "equipment_name", "sampling_rate"],
   "Channel Information": [
     "Crankshaft_SENSORx",
@@ -36,25 +36,82 @@ export const engineStepperValidationSchemaGroups = {
     "peak_pressure_transducer_sensitivity",
   ],
   "Engine Details": [
-    
+    "name",
+    "serial_number",
+    "make_model",
+    "rated_rpm",
+    "application",
+    "fuel",
+    "type",
+    "no_of_strokes",
+    "no_of_cylinders",
+    "firing_order",
+    "phase_shift_mode",
+    "shift_angle",
+    "power",
+    "running_hours",
+    "engine_history",
+    "vessel_type",
   ],
-  "Diagnostic Details": [],
+  "Diagnostic Details": [
+    "min_speed",
+    "min_volt",
+    "recording_period",
+    "recording_length",
+  ],
 };
-export const torqueStepperValidationSchemaGroups = {
+export const torqueStepperValidationSchemaGroups: any = {
   "Asset Information": ["asset_name", "equipment_name", "sampling_rate"],
-  "Channel Information": [],
-  "Diagnostic Details": [],
-  "Machine Details": [],
+  "Channel Information": [
+    "de_channel_sensorx",
+    "de_channel_channel_type",
+    "de_channel__teeth",
+    "de_channel_wheel_type",
+    "nde_channel_sensorx",
+    "nde_channel_channel_type",
+    "nde_channel_teeth",
+    "nde_channel_wheel_type",
+  ],
+  "Diagnostic Details": [
+    "min_speed",
+    "min_volt",
+    "recording_period",
+    "recording_length",
+    "zero_degree",
+    "rigidity",
+    "power",
+  ],
+  "Machine Details": ["name", "rated_rpm", "vessel_type"],
 };
-export const turbineStepperValidationSchemaGroups = {
+export const motorStepperValidationSchemaGroups: any = {
   "Asset Information": ["asset_name", "equipment_name", "sampling_rate"],
-  "Channel Information": [],
-  "Diagnostic Details": [],
-  "Machine Details": [],
+  "Channel Information": [
+    "motor_crankshaft_sensorx",
+    "motor_crankshaft_channel_type",
+    "motor_crankshaft_teeth",
+    "motor_crankshaft_wheel_type",
+  ],
+  "Diagnostic Details": [
+    "min_speed",
+    "min_volt",
+    "recording_period",
+    "recording_length",
+  ],
+  "Machine Details": ["name", "rated_rpm"],
 };
-export const motorStepperValidationSchemaGroups = {
+export const turbineStepperValidationSchemaGroups: any = {
   "Asset Information": ["asset_name", "equipment_name", "sampling_rate"],
-  "Channel Information": [],
-  "Diagnostic Details": [],
-  "Machine Details": [],
+  "Channel Information": [
+    "turbine_crankshaft_sensorx",
+    "turbine_crankshaft_channel_type",
+    "turbine_crankshaft_teeth",
+    "turbine_crankshaft_wheel_type",
+  ],
+  "Diagnostic Details": [
+    "min_speed",
+    "min_volt",
+    "recording_period",
+    "recording_length",
+  ],
+  "Machine Details": ["name", "rated_rpm", "type"],
 };

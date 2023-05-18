@@ -116,7 +116,7 @@ const CustomAccordion = ({
                         >
                           <Select
                             value={""}
-                            onChange={(e) => console.log(e)}
+                            onChange={(e) => {}}
                             displayEmpty
                             input={<BootstrapInput></BootstrapInput>}
                           >
@@ -158,7 +158,7 @@ const CustomAccordion = ({
                     >
                       <Select
                         value={""}
-                        onChange={(e) => console.log(e)}
+                        onChange={(e) => {}}
                         displayEmpty
                         input={<BootstrapInput></BootstrapInput>}
                       >

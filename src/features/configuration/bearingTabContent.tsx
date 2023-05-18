@@ -23,7 +23,7 @@ import { useSnackbar } from "notistack";
 import { useGetModuleById, useGetSystemCustomerNameInfo } from "./hooks";
 import { eventBus } from "src/EventBus";
 import { Delete } from "@mui/icons-material";
-
+import { bearingStepperValidationSchemaGroups } from "./stepperValidationSchema";
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -74,7 +74,7 @@ const BearingTabContent = ({ module, moduleId }: any) => {
   const [expanded, setExpanded] = useState<string | false>("Global");
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
-  const [activeStep, setActiveStep] = useState<number>(1);
+  const [activeStep, setActiveStep] = useState<number>(0);
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -88,7 +88,7 @@ const BearingTabContent = ({ module, moduleId }: any) => {
       return { ...rest, customer_name: customerName };
     }
     return {
-      customer_name: "",
+      customer_name: customerName,
       asset_name: "",
       equipment_name: "",
       sampling_rate: "",
@@ -171,12 +171,35 @@ const BearingTabContent = ({ module, moduleId }: any) => {
     async (event: React.SyntheticEvent, newExpanded: boolean) => {
       try {
         const formValidation = await moduleFormContext.validateForm();
-      } catch (error) {}
-      // if(){
+        const getStepsInOrder = extractSteps(formSchema, module);
 
-      // }
-      setExpanded(newExpanded ? value : false);
-      setActiveStep(stepIndex + 1);
+        if (stepIndex === 0) {
+          setExpanded(newExpanded ? value : false);
+        } else if (stepIndex > 0) {
+          const validationFields =
+            bearingStepperValidationSchemaGroups[
+              getStepsInOrder[stepIndex - 1]
+            ];
+          const stepValidation = Object.keys(formValidation).some((item) =>
+            validationFields.includes(item)
+          );
+          //Checking the validation errors of the previous step, if present true else false
+
+          if (!stepValidation) {
+            setExpanded(newExpanded ? value : false);
+            setActiveStep(stepIndex);
+          } else {
+            throw new Error(
+              `${getStepsInOrder[stepIndex - 1]} step has validation errors!`
+            );
+          }
+        }
+      } catch (error: any) {
+        enqueueSnackbar({
+          message: error?.message,
+          variant: "error",
+        });
+      }
     };
   return (
     <Box sx={{ width: "100%" }}>
@@ -204,9 +227,7 @@ const BearingTabContent = ({ module, moduleId }: any) => {
               <StepToComponentEngineModule
                 step={item}
                 formContext={moduleFormContext}
-                handleFormData={(e: any) =>
-                  console.log(e.target.name, e.target.value)
-                }
+                handleFormData={(e: any) => {}}
               ></StepToComponentEngineModule>
             </AccordionBase>
           </Grid>

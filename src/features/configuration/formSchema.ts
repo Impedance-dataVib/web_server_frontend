@@ -776,6 +776,13 @@ const formSchema = {
         type: "text",
         helperNote: "Enter the rated max RPM",
       },
+
+      {
+        name: "Type",
+        label: "type",
+        type: "dropdown",
+        options: ["Gas", "Steam"],
+      },
     ],
   },
   Motor: {

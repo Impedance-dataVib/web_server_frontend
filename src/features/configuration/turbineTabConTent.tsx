@@ -23,6 +23,7 @@ import { useSnackbar } from "notistack";
 import { useGetModuleById, useGetSystemCustomerNameInfo } from "./hooks";
 import { eventBus } from "src/EventBus";
 import { Delete } from "@mui/icons-material";
+import { turbineStepperValidationSchemaGroups } from "./stepperValidationSchema";
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -106,9 +107,38 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
   const handleAccordionChange =
     (stepIndex: number) =>
     (value: string) =>
-    (event: React.SyntheticEvent, newExpanded: boolean) => {
-      setExpanded(newExpanded ? value : false);
-      setActiveStep(stepIndex + 1);
+    async (event: React.SyntheticEvent, newExpanded: boolean) => {
+      try {
+        const formValidation = await moduleFormContext.validateForm();
+        const getStepsInOrder = extractSteps(formSchema, module);
+
+        if (stepIndex === 0) {
+          setExpanded(newExpanded ? value : false);
+        } else if (stepIndex > 0) {
+          const validationFields =
+            turbineStepperValidationSchemaGroups[
+              getStepsInOrder[stepIndex - 1]
+            ];
+          const stepValidation = Object.keys(formValidation).some((item) =>
+            validationFields.includes(item)
+          );
+          //Checking the validation errors of the previous step, if present true else false
+
+          if (!stepValidation) {
+            setExpanded(newExpanded ? value : false);
+            setActiveStep(stepIndex);
+          } else {
+            throw new Error(
+              `${getStepsInOrder[stepIndex - 1]} step has validation errors!`
+            );
+          }
+        }
+      } catch (error: any) {
+        enqueueSnackbar({
+          message: error?.message,
+          variant: "error",
+        });
+      }
     };
   const getInitialFormData = () => {
     if (data?.from_data && customerName) {
@@ -116,7 +146,7 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
       return { ...rest, customer_name: customerName };
     }
     return {
-      customer_name: "",
+      customer_name: customerName,
       asset_name: "",
       equipment_name: "",
       sampling_rate: "",
@@ -133,7 +163,7 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
       power: "",
       name: "",
       rated_rpm: "",
-      vessel_type: "",
+      type: "",
     };
   };
   const moduleFormContext = useFormik({
@@ -145,7 +175,6 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
   const handleSubmit = async () => {
     try {
       const validate = await moduleFormContext.validateForm();
-      console.log(validate);
       if (Object.keys(validate).length > 0) {
         throw new Error("Form Validation Error!");
       }
@@ -200,9 +229,7 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
             >
               <StepToComponentEngineModule
                 step={item}
-                handleFormData={(e: any) =>
-                  console.log(e.target.name, e.target.value)
-                }
+                handleFormData={(e: any) => {}}
                 formContext={moduleFormContext}
               ></StepToComponentEngineModule>
             </AccordionBase>
