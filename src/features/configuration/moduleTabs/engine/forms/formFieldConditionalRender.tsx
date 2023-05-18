@@ -62,6 +62,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
               padding: "11px 26px 13px 12px",
             },
           }}
+          disabled={fieldProps?.disabled ? true : false}
         ></TextField>
       );
     case "toggle":

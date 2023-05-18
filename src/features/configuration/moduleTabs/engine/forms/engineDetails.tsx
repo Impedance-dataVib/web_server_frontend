@@ -1,10 +1,10 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid, IconButton, Tooltip, Typography } from "@mui/material";
 import formSchema from "../../../../../features/configuration/formSchema";
 import FormFieldConditionalRender from "./formFieldConditionalRender";
-
+import HelpIcon from "@mui/icons-material/Help";
 const EngineDetailsForm = ({ handleFormData, formContext }: any) => {
   return (
-    <Grid container spacing={1} >
+    <Grid container spacing={1}>
       {formSchema["Engine"]["Engine Details"].map((item: any) => (
         <Grid key={item.label} container item>
           <Grid item>
@@ -21,6 +21,13 @@ const EngineDetailsForm = ({ handleFormData, formContext }: any) => {
             >
               {item.name}
             </Typography>
+            {item?.helperNote && (
+              <Tooltip title={item.helperNote}>
+                <IconButton>
+                  <HelpIcon></HelpIcon>
+                </IconButton>
+              </Tooltip>
+            )}
           </Grid>
           <Grid item>
             <FormFieldConditionalRender

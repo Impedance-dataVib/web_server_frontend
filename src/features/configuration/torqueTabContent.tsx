@@ -14,11 +14,12 @@ import {
   TorqueMachineDetailsForm,
   TorqueDiagnosticDetails,
   torqueValidationSchema,
+  TorqueAssetInformation
 } from "./configuration-forms";
 import { useFormik } from "formik";
 import { deleteModule, saveModuleData } from "../../app/services";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetConfigurationModuleByConfigId, useGetModuleById } from "./hooks";
+import { useGetConfigurationModuleByConfigId, useGetModuleById, useGetSystemCustomerNameInfo } from "./hooks";
 import { useSnackbar } from "notistack";
 import { Delete } from "@mui/icons-material";
 import { eventBus } from "src/EventBus";
@@ -58,6 +59,13 @@ const StepToComponentEngineModule = ({
           formContext={formContext}
         ></TorqueDiagnosticDetails>
       );
+      case "Asset Information":
+      return (
+        <TorqueAssetInformation
+          handleFormData={handleFormData}
+          formContext={formContext}
+        ></TorqueAssetInformation>
+      );
     default:
       return <div>Invalid Step</div>;
   }
@@ -78,6 +86,7 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
     setStepperSteps(extractSteps(formSchema, module));
   }, []);
   const navigate = useNavigate();
+  const { data: customerName } = useGetSystemCustomerNameInfo();
   const handleAccordionChange =
     (stepIndex: number) =>
     (value: string) =>
@@ -87,6 +96,10 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
     };
   const moduleFormContext = useFormik({
     initialValues: {
+      customer_name:"",
+      asset_name: "",
+      equipment_name: "",
+      sampling_rate: "",
       de_channel_sensorx: "",
       de_channel_channel_type: "",
       de_channel__teeth: "",
@@ -109,12 +122,13 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
     validationSchema: torqueValidationSchema,
   });
   useEffect(() => {
-    // moduleFormContext.setValues({});
+    
+    moduleFormContext.setFieldValue("customer_name", customerName);
     if (data?.from_data) {
       const { configuration_id, ...rest } = data?.from_data;
       moduleFormContext.setValues({ ...rest });
     }
-  }, [data]);
+  }, [data,customerName]);
   const handleDeleteModule = async () => {
     try {
       enqueueSnackbar({
@@ -211,7 +225,7 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
           </Button>
           <Button
             variant="contained"
-            onClick={() => navigate("./configuration")}
+            onClick={() => navigate("/configuration")}
           >
             Cancel
           </Button>

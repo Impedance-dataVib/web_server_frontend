@@ -14,12 +14,13 @@ import {
   MotorMachineDetailsForm,
   MotorChannelInformationForm,
   motorValidationSchema,
+  MotorAssetInformation
 } from "./configuration-forms";
 import { useFormik } from "formik";
 import { deleteModule, saveModuleData } from "../../app/services";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import { useGetConfigurationModuleByConfigId, useGetModuleById } from "./hooks";
+import { useGetConfigurationModuleByConfigId, useGetModuleById, useGetSystemCustomerNameInfo } from "./hooks";
 import { Delete } from "@mui/icons-material";
 import { eventBus } from "../../EventBus";
 const extractSteps = (schema: any, module: string) => {
@@ -57,6 +58,13 @@ const StepToComponentEngineModule = ({
           formContext={formContext}
         ></MotorDiagnosticDetails>
       );
+      case "Asset Information":
+      return (
+        <MotorAssetInformation
+          handleFormData={handleFormData}
+          formContext={formContext}
+        ></MotorAssetInformation>
+      );
     default:
       return <div>Invalid Step</div>;
   }
@@ -72,6 +80,7 @@ const MotorTabContent = ({ module, moduleId }: any) => {
     useGetModuleById(moduleId);
   const { getAllModulesByConfigId } =
     useGetConfigurationModuleByConfigId(configId);
+    const { data: customerName } = useGetSystemCustomerNameInfo();
   const navigate = useNavigate();
   useEffect(() => {
     setTabConfigs(extractTabConfigs(formSchema, module));
@@ -106,6 +115,10 @@ const MotorTabContent = ({ module, moduleId }: any) => {
   };
   const moduleFormContext = useFormik({
     initialValues: {
+      customer_name:"",
+      asset_name: "",
+      equipment_name: "",
+      sampling_rate: "",
       motor_crankshaft_sensorx: "",
       motor_crankshaft_channel_type: "",
       motor_crankshaft_teeth: "",
@@ -121,12 +134,13 @@ const MotorTabContent = ({ module, moduleId }: any) => {
     validationSchema: motorValidationSchema,
   });
   useEffect(() => {
-    // moduleFormContext.setValues({});
+    
+    moduleFormContext.setFieldValue("customer_name", customerName);
     if (data?.from_data) {
       const { configuration_id, ...rest } = data?.from_data;
       moduleFormContext.setValues({ ...rest });
     }
-  }, [data]);
+  }, [data,customerName]);
   const handleSubmit = async () => {
     try {
       const validate = await moduleFormContext.validateForm();
@@ -203,7 +217,7 @@ const MotorTabContent = ({ module, moduleId }: any) => {
           </Button>
           <Button
             variant="contained"
-            onClick={() => navigate("./configuration")}
+            onClick={() => navigate("/configuration")}
           >
             Cancel
           </Button>

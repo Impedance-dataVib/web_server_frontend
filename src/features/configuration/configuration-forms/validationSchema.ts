@@ -1,5 +1,8 @@
 import * as yup from "yup";
 export const torqueValidationSchema = yup.object({
+  asset_name: yup.string().required("This is a required field"),
+  equipment_name: yup.string().required("This is a required field"),
+  sampling_rate: yup.string().required("This is a required field"),
   de_channel_sensorx: yup.string().required("This is a required field"),
   de_channel_channel_type: yup.string().required("This is a required field"),
   de_channel__teeth: yup
@@ -76,7 +79,12 @@ export const torqueValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .integer("The field should be an integer !"),
+    .integer("The field should be an integer !")
+    .test(
+      "is minRPM less than ratedRPM",
+      "Error: minRPM must always be less than the rated RPM",
+      (value, context) => value > context.parent.min_speed
+    ),
   zero_degree: yup
     .number()
     .required("This is a required field")
@@ -104,6 +112,9 @@ export const torqueValidationSchema = yup.object({
   vessel_type: yup.string().required("This is a required field"),
 });
 export const motorValidationSchema = yup.object({
+  asset_name: yup.string().required("This is a required field"),
+  equipment_name: yup.string().required("This is a required field"),
+  sampling_rate: yup.string().required("This is a required field"),
   motor_crankshaft_sensorx: yup.string().required("This is a required field"),
   motor_crankshaft_channel_type: yup
     .string()
@@ -161,10 +172,18 @@ export const motorValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .integer("The field should be an integer !"),
+    .integer("The field should be an integer !")
+    .test(
+      "is minRPM less than ratedRPM",
+      "Error: minRPM must always be less than the rated RPM",
+      (value, context) => value > context.parent.min_speed
+    ),
 });
 
 export const turbineValidationSchema = yup.object({
+  asset_name: yup.string().required("This is a required field"),
+  equipment_name: yup.string().required("This is a required field"),
+  sampling_rate: yup.string().required("This is a required field"),
   turbine_crankshaft_sensorx: yup.string().required("This is a required field"),
   turbine_crankshaft_channel_type: yup
     .string()
@@ -222,10 +241,18 @@ export const turbineValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .integer("The field should be an integer !"),
+    .integer("The field should be an integer !")
+    .test(
+      "is minRPM less than ratedRPM",
+      "Error: minRPM must always be less than the rated RPM",
+      (value, context) => value > context.parent.min_speed
+    ),
 });
 
 export const bearingValidationSchema = yup.object({
+  asset_name: yup.string().required("This is a required field"),
+  equipment_name: yup.string().required("This is a required field"),
+  sampling_rate: yup.string().required("This is a required field"),
   bearing_crankshaft_sensorx: yup.string().required("This is a required field"),
   bearing_crankshaft_channel_type: yup
     .string()
@@ -283,9 +310,17 @@ export const bearingValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .integer("The field should be an integer !"),
+    .integer("The field should be an integer !")
+    .test(
+      "is minRPM less than ratedRPM",
+      "Error: minRPM must always be less than the rated RPM",
+      (value, context) => value > context.parent.min_speed
+    ),
 });
 export const engineValidationSchema = yup.object({
+  asset_name: yup.string().required("This is a required field"),
+  equipment_name: yup.string().required("This is a required field"),
+  sampling_rate: yup.string().required("This is a required field"),
   Crankshaft_SENSORx: yup.string().required("This is a required field"),
   Crankshaft_ChannelType: yup.string().required("This is a required field"),
   Crankshaft_Teeth: yup
@@ -351,7 +386,12 @@ export const engineValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .integer("The field should be an integer !"),
+    .integer("The field should be an integer !")
+    .test(
+      "is minRPM less than ratedRPM",
+      "Error: minRPM must always be less than the rated RPM",
+      (value, context) => value > context.parent.min_speed
+    ),
   application: yup.string().required("This is a required field"),
   fuel: yup.string().required("This is a required field"),
   type: yup.string().required("This is a required field"),
@@ -415,3 +455,4 @@ export const engineValidationSchema = yup.object({
       (value) => value > 0
     ),
 });
+

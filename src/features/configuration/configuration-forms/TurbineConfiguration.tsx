@@ -9,7 +9,9 @@ import { Typography } from "@mui/material";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import formSchema from "../formSchema";
-
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import HelpIcon from "@mui/icons-material/Help";
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
@@ -63,6 +65,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
               padding: "11px 26px 13px 12px",
             },
           }}
+          disabled={fieldProps?.disabled ? true : false}
         ></TextField>
       );
     case "toggle":
@@ -253,6 +256,54 @@ export const TurbineChannelInformationForm = ({
   );
 };
 
+export const TurbineAssetInformation = ({
+  handleFormData,
+  formContext,
+}: any) => {
+  return (
+    <>
+      <Grid
+        container
+        spacing={1}
+        sx={{ marginLeft: "64px", marginTop: "28px" }}
+      >
+        {formSchema["Bearing"]["Asset Information"].map((item: any) => (
+          <Grid key={item.label} container item>
+            <Grid item>
+              <Typography
+                component={"label"}
+                sx={{
+                  width: "143px",
+                  display: "inline-block",
+                  fontSize: "16px",
+                  marginRight: "41px",
+                  marginBottom: "5px",
+                  alignItems: "right",
+                }}
+              >
+                {item.name}
+              </Typography>
+              {item?.helperNote && (
+                <Tooltip title={item.helperNote}>
+                  <IconButton>
+                    <HelpIcon></HelpIcon>
+                  </IconButton>
+                </Tooltip>
+              )}
+            </Grid>
+            <Grid item>
+              <FormFieldConditionalRender
+                type={item.type}
+                fieldProps={{ ...item, handleChange: handleFormData }}
+                formContext={formContext}
+              ></FormFieldConditionalRender>
+            </Grid>
+          </Grid>
+        ))}
+      </Grid>
+    </>
+  );
+};
 export const TurbineMachineDetailsForm = ({
   handleFormData,
   formContext,
@@ -280,6 +331,13 @@ export const TurbineMachineDetailsForm = ({
               >
                 {item.name}
               </Typography>
+              {item?.helperNote && (
+                <Tooltip title={item.helperNote}>
+                  <IconButton>
+                    <HelpIcon></HelpIcon>
+                  </IconButton>
+                </Tooltip>
+              )}
             </Grid>
             <Grid item>
               <FormFieldConditionalRender
@@ -322,6 +380,13 @@ export const TurbineDiagnosticDetails = ({
               >
                 {item.name}
               </Typography>
+              {item?.helperNote && (
+                <Tooltip title={item.helperNote}>
+                  <IconButton>
+                    <HelpIcon></HelpIcon>
+                  </IconButton>
+                </Tooltip>
+              )}
             </Grid>
             <Grid item>
               <FormFieldConditionalRender

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as yup from "yup";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
@@ -14,15 +14,18 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { useFormik } from "formik";
 import Stack from "@mui/material/Stack";
-import { useEffect } from "react";
 
 const schema = [
-  { name: "Outer Diameter(D)(mm)", label: "outer_diameter", type: "text" },
-  { name: "Inner Diameter(d)(mm)", label: "inner_diameter", type: "text" },
-  { name: "Sheer Modulus(G)", label: "sheer_modulus", type: "text" },
-  { name: "Length(L)(mm)", label: "length", type: "text" },
-  { name: "MaxRPM", label: "max_rpm", type: "text" },
-  { name: "MaxPower", label: "max_power", type: "text" },
+  { name: "Outer Diameter(D)(mtrs)", label: "outer_diameter", type: "text" },
+  { name: "Inner Diameter(d)(mtrs)", label: "inner_diameter", type: "text" },
+  {
+    name: "Sheer Modulus(G)(Gigapascal)",
+    label: "sheer_modulus",
+    type: "text",
+  },
+  { name: "Length(L)(Mtrs)", label: "length", type: "text" },
+  { name: "MaxRPM(RPM)", label: "max_rpm", type: "text" },
+  { name: "MaxPower(Watts)", label: "max_power", type: "text" },
 ];
 const validationSchema: any = yup.object({
   outer_diameter: yup.number().required("This is a required field"),
@@ -57,11 +60,11 @@ export const PopupRigidity = ({ formContext, fieldProps }: any) => {
     //R = (πG (D^4 - d^4) / 32 L)
     if (formContextPopUp.isValid) {
       const rigidity =
-        Math.PI *
-        formContextPopUp?.values?.sheer_modulus *
-        (Math.pow(formContextPopUp?.values?.outer_diameter, 4) -
-          Math.pow(formContextPopUp?.values?.inner_diameter, 4))/
-          (32 * formContextPopUp?.values?.length);
+        (Math.PI *
+          formContextPopUp?.values?.sheer_modulus *
+          (Math.pow(formContextPopUp?.values?.outer_diameter, 4) -
+            Math.pow(formContextPopUp?.values?.inner_diameter, 4))) /
+        (32 * formContextPopUp?.values?.length);
       formContext.setFieldValue(fieldProps.label, rigidity);
     }
   };
@@ -90,7 +93,12 @@ export const PopupRigidity = ({ formContext, fieldProps }: any) => {
           },
         }}
       ></TextField>
-      <Button variant="contained" size = 'small' color="primary" onClick={() => setOpen(true)}>
+      <Button
+        variant="contained"
+        size="medium"
+        color="primary"
+        onClick={() => setOpen(true)}
+      >
         Calculate
       </Button>
       <CalculateRigidityModal
@@ -137,7 +145,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
       return (
         <TextField
           name={fieldProps.label}
-          label={fieldProps.label}
+          label={fieldProps.name}
           onChange={formContext?.handleChange}
           value={formContext?.values?.[fieldProps.label]}
           error={Boolean(formContext?.errors?.[fieldProps.label])}

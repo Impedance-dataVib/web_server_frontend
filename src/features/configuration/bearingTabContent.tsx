@@ -14,14 +14,16 @@ import {
   BearingMachineDetailsForm,
   BearingDiagnosticDetails,
   bearingValidationSchema,
+  BearingAssetInformation,
 } from "./configuration-forms";
 import { deleteModule, saveModuleData } from "../../app/services";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import { useGetModuleById } from "./hooks";
+import { useGetModuleById, useGetSystemCustomerNameInfo } from "./hooks";
 import { eventBus } from "src/EventBus";
 import { Delete } from "@mui/icons-material";
+
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -57,6 +59,13 @@ const StepToComponentEngineModule = ({
           formContext={formContext}
         ></BearingDiagnosticDetails>
       );
+    case "Asset Information":
+      return (
+        <BearingAssetInformation
+          handleFormData={handleFormData}
+          formContext={formContext}
+        ></BearingAssetInformation>
+      );
     default:
       return <div>Invalid Step</div>;
   }
@@ -69,10 +78,16 @@ const BearingTabContent = ({ module, moduleId }: any) => {
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+
   const { isLoading, data, isError, getModuleDataById } =
     useGetModuleById(moduleId);
+  const { data: customerName } = useGetSystemCustomerNameInfo();
   const moduleFormContext = useFormik({
     initialValues: {
+      customer_name: "",
+      asset_name: "",
+      equipment_name: "",
+      sampling_rate: "",
       bearing_crankshaft_sensorx: "",
       bearing_crankshaft_channel_type: "",
       bearing_crankshaft_teeth: "",
@@ -139,11 +154,12 @@ const BearingTabContent = ({ module, moduleId }: any) => {
   };
   useEffect(() => {
     // moduleFormContext.setValues({});
+    moduleFormContext.setFieldValue("customer_name", customerName);
     if (data?.from_data) {
       const { configuration_id, ...rest } = data?.from_data;
-      moduleFormContext.setValues({ ...rest });
+      moduleFormContext.setValues({ customer_name: customerName, ...rest });
     }
-  }, [data]);
+  }, [data, customerName]);
   useEffect(() => {
     setTabConfigs(extractTabConfigs(formSchema, module));
     setStepperSteps(extractSteps(formSchema, module));
@@ -151,7 +167,13 @@ const BearingTabContent = ({ module, moduleId }: any) => {
   const handleAccordionChange =
     (stepIndex: number) =>
     (value: string) =>
-    (event: React.SyntheticEvent, newExpanded: boolean) => {
+    async (event: React.SyntheticEvent, newExpanded: boolean) => {
+      try {
+        const formValidation = await moduleFormContext.validateForm();
+      } catch (error) {}
+      // if(){
+
+      // }
       setExpanded(newExpanded ? value : false);
       setActiveStep(stepIndex + 1);
     };
@@ -200,7 +222,7 @@ const BearingTabContent = ({ module, moduleId }: any) => {
           </Button>
           <Button
             variant="contained"
-            onClick={() => navigate("./configuration")}
+            onClick={() => navigate("/configuration")}
           >
             Cancel
           </Button>

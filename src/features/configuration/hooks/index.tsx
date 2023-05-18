@@ -3,6 +3,7 @@ import {
   getAllConfigurations,
   getModulesByConfigId,
   getModuleById,
+  getSystemInfo,
 } from "../../../app/services";
 export const useGetConfiguration = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -80,7 +81,30 @@ export const useGetModuleById = (
 
 export const useStepperValidation = (
   formContext: any,
-  validationSchema: any
-) => {
-  const [activeStep, setActiveStep] = useState();
+  validationSchema: any,
+  steps: [],
+  setActiveStep: () => {},
+  completed?: boolean
+) => {};
+
+export const useGetSystemCustomerNameInfo = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState<string>("");
+  const [isError, setIsError] = useState(false);
+  const getSystemCustomerName = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await getSystemInfo();
+      setData(data.licenseInfo.client_name);
+      setIsLoading(false);
+    } catch (e) {
+      setIsError(true);
+      setData("");
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    getSystemCustomerName();
+  }, []);
+  return { isLoading, data, isError, getSystemCustomerName };
 };

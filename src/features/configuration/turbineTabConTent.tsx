@@ -14,12 +14,13 @@ import {
   TurbineDiagnosticDetails,
   TurbineChannelInformationForm,
   turbineValidationSchema,
+  TurbineAssetInformation,
 } from "./configuration-forms";
 import { useFormik } from "formik";
 import { deleteModule, saveModuleData } from "../../app/services";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import { useGetModuleById } from "./hooks";
+import { useGetModuleById, useGetSystemCustomerNameInfo } from "./hooks";
 import { eventBus } from "src/EventBus";
 import { Delete } from "@mui/icons-material";
 const extractSteps = (schema: any, module: string) => {
@@ -57,6 +58,13 @@ const StepToComponentEngineModule = ({
           formContext={formContext}
         ></TurbineDiagnosticDetails>
       );
+    case "Asset Information":
+      return (
+        <TurbineAssetInformation
+          handleFormData={handleFormData}
+          formContext={formContext}
+        ></TurbineAssetInformation>
+      );
     default:
       return <div>Invalid Step</div>;
   }
@@ -71,6 +79,7 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
   const { isLoading, data, isError, getModuleDataById } =
     useGetModuleById(moduleId);
   const navigate = useNavigate();
+  const { data: customerName } = useGetSystemCustomerNameInfo();
   useEffect(() => {
     setTabConfigs(extractTabConfigs(formSchema, module));
     setStepperSteps(extractSteps(formSchema, module));
@@ -103,6 +112,10 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
     };
   const moduleFormContext = useFormik({
     initialValues: {
+      customer_name: "",
+      asset_name: "",
+      equipment_name: "",
+      sampling_rate: "",
       turbine_crankshaft_sensorx: "",
       turbine_crankshaft_channel_type: "",
       turbine_crankshaft_teeth: "",
@@ -122,12 +135,12 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
     validationSchema: turbineValidationSchema,
   });
   useEffect(() => {
-    // moduleFormContext.setValues({});
+    moduleFormContext.setFieldValue("customer_name", customerName);
     if (data?.from_data) {
       const { configuration_id, ...rest } = data?.from_data;
       moduleFormContext.setValues({ ...rest });
     }
-  }, [data]);
+  }, [data, customerName]);
   const handleSubmit = async () => {
     try {
       const validate = await moduleFormContext.validateForm();
@@ -206,7 +219,7 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
           </Button>
           <Button
             variant="contained"
-            onClick={() => navigate("./configuration")}
+            onClick={() => navigate("/configuration")}
           >
             Cancel
           </Button>

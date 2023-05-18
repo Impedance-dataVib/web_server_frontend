@@ -1,7 +1,9 @@
 import formSchema from "../../../../../features/configuration/formSchema";
 import { Grid, Typography } from "@mui/material";
 import FormFieldConditionalRender from "./formFieldConditionalRender";
-
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import HelpIcon from "@mui/icons-material/Help";
 const DiagnosticDetailsForm = ({ handleFormData, formContext }: any) => {
   return (
     <Grid container spacing={1}>
@@ -21,6 +23,13 @@ const DiagnosticDetailsForm = ({ handleFormData, formContext }: any) => {
             >
               {item.name}
             </Typography>
+            {item?.helperNote && (
+              <Tooltip title={item.helperNote}>
+                <IconButton>
+                  <HelpIcon></HelpIcon>
+                </IconButton>
+              </Tooltip>
+            )}
           </Grid>
           <Grid item>
             <FormFieldConditionalRender

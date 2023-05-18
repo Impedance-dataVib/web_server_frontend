@@ -26,9 +26,10 @@ import AdvancedParameters from "./forms/advancedParams";
 import CustomConnector from "../../../../app/components/custom-stepper";
 import AccordionBase from "../../../../app/components/accordion-base";
 import formSchema from "../../formSchema";
+import EngineAssetInformation from "./forms/assetInformation";
 import { deleteModule, saveModuleData } from "../../../../app/services";
 import { useSnackbar } from "notistack";
-import { useGetModuleById } from "../../hooks";
+import { useGetModuleById, useGetSystemCustomerNameInfo } from "../../hooks";
 import { Delete } from "@mui/icons-material";
 import { eventBus } from "src/EventBus";
 import { engineValidationSchema } from "../../configuration-forms";
@@ -76,6 +77,13 @@ const StepToComponentEngineModule = ({
           formContext={formContext}
         ></AdvancedParameters>
       );
+    case "Asset Information":
+      return (
+        <EngineAssetInformation
+          handleFormData={handleFormData}
+          formContext={formContext}
+        ></EngineAssetInformation>
+      );
     default:
       return <div>Invalid Step</div>;
   }
@@ -93,6 +101,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
   const { isLoading, data, isError, getModuleDataById } =
     useGetModuleById(moduleId);
   const navigate = useNavigate();
+  const { data: customerName } = useGetSystemCustomerNameInfo();
   const handleDeleteModule = async () => {
     try {
       enqueueSnackbar({
@@ -160,6 +169,10 @@ const EngineTabContent = ({ module, moduleId }: any) => {
 
   const moduleFormContext = useFormik({
     initialValues: {
+      customer_name: "",
+      asset_name: "",
+      equipment_name: "",
+      sampling_rate: "",
       Crankshaft_SENSORx: "",
       Crankshaft_ChannelType: "",
       Crankshaft_Teeth: "",
@@ -217,11 +230,12 @@ const EngineTabContent = ({ module, moduleId }: any) => {
     validationSchema: engineValidationSchema,
   });
   useEffect(() => {
+    moduleFormContext.setFieldValue("customer_name", customerName);
     if (data?.from_data) {
       const { configuration_id, ...rest } = data?.from_data;
       moduleFormContext.setValues({ ...rest });
     }
-  }, [data]);
+  }, [data,customerName]);
   return (
     <Box sx={{ width: "auto" }}>
       <Stepper
@@ -269,7 +283,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
           </Button>
           <Button
             variant="contained"
-            onClick={() => navigate("./configuration")}
+            onClick={() => navigate("/configuration")}
           >
             Cancel
           </Button>
