@@ -110,8 +110,12 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
       setExpanded(newExpanded ? value : false);
       setActiveStep(stepIndex + 1);
     };
-  const moduleFormContext = useFormik({
-    initialValues: {
+  const getInitialFormData = () => {
+    if (data?.from_data && customerName) {
+      const { configuration_id, ...rest } = data?.from_data;
+      return { ...rest, customer_name: customerName };
+    }
+    return {
       customer_name: "",
       asset_name: "",
       equipment_name: "",
@@ -130,17 +134,14 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
       name: "",
       rated_rpm: "",
       vessel_type: "",
-    },
+    };
+  };
+  const moduleFormContext = useFormik({
+    initialValues: getInitialFormData(),
+    enableReinitialize: true,
     onSubmit: (values) => {},
     validationSchema: turbineValidationSchema,
   });
-  useEffect(() => {
-    moduleFormContext.setFieldValue("customer_name", customerName);
-    if (data?.from_data) {
-      const { configuration_id, ...rest } = data?.from_data;
-      moduleFormContext.setValues({ ...rest });
-    }
-  }, [data, customerName]);
   const handleSubmit = async () => {
     try {
       const validate = await moduleFormContext.validateForm();

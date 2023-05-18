@@ -66,6 +66,9 @@ export const PopupRigidity = ({ formContext, fieldProps }: any) => {
             Math.pow(formContextPopUp?.values?.inner_diameter, 4))) /
         (32 * formContextPopUp?.values?.length);
       formContext.setFieldValue(fieldProps.label, rigidity);
+      setTimeout(() => {
+        setOpen(false);
+      }, 100);
     }
   };
   useEffect(() => {

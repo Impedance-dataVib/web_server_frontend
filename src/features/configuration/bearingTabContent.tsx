@@ -82,8 +82,12 @@ const BearingTabContent = ({ module, moduleId }: any) => {
   const { isLoading, data, isError, getModuleDataById } =
     useGetModuleById(moduleId);
   const { data: customerName } = useGetSystemCustomerNameInfo();
-  const moduleFormContext = useFormik({
-    initialValues: {
+  const getInitialFormData = () => {
+    if (data?.from_data && customerName) {
+      const { configuration_id, ...rest } = data?.from_data;
+      return { ...rest, customer_name: customerName };
+    }
+    return {
       customer_name: "",
       asset_name: "",
       equipment_name: "",
@@ -98,7 +102,11 @@ const BearingTabContent = ({ module, moduleId }: any) => {
       recording_length: "",
       name: "",
       rated_rpm: "",
-    },
+    };
+  };
+  const moduleFormContext = useFormik({
+    initialValues: getInitialFormData(),
+    enableReinitialize: true,
     onSubmit: (values) => {},
     validationSchema: bearingValidationSchema,
   });
@@ -152,14 +160,7 @@ const BearingTabContent = ({ module, moduleId }: any) => {
       });
     }
   };
-  useEffect(() => {
-    // moduleFormContext.setValues({});
-    moduleFormContext.setFieldValue("customer_name", customerName);
-    if (data?.from_data) {
-      const { configuration_id, ...rest } = data?.from_data;
-      moduleFormContext.setValues({ customer_name: customerName, ...rest });
-    }
-  }, [data, customerName]);
+
   useEffect(() => {
     setTabConfigs(extractTabConfigs(formSchema, module));
     setStepperSteps(extractSteps(formSchema, module));
