@@ -219,8 +219,7 @@ const formSchema = {
       {
         name: "Firing Order",
         label: "firing_order",
-        type: "dropdown",
-        options: [1, 9, 3, 11, 2, 10, 5, 12, 8, 16, 6, 14, 7, 15, 4, 13],
+        type: "text",
       },
       {
         name: "Phase Shift Mode",

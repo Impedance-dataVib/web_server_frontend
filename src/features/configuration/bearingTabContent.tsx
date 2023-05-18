@@ -17,7 +17,7 @@ import {
 } from "./configuration-forms";
 import { deleteModule, saveModuleData } from "../../app/services";
 import { useFormik } from "formik";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { useGetModuleById } from "./hooks";
 import { eventBus } from "src/EventBus";
@@ -68,6 +68,7 @@ const BearingTabContent = ({ module, moduleId }: any) => {
   const [activeStep, setActiveStep] = useState<number>(1);
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
   const { isLoading, data, isError, getModuleDataById } =
     useGetModuleById(moduleId);
   const moduleFormContext = useFormik({
@@ -197,7 +198,12 @@ const BearingTabContent = ({ module, moduleId }: any) => {
           <Button variant="contained" onClick={handleSubmit}>
             Save
           </Button>
-          <Button variant="contained">Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={() => navigate("./configuration")}
+          >
+            Cancel
+          </Button>
           <Button
             startIcon={<Delete />}
             color="primary"

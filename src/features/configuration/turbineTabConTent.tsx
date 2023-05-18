@@ -17,7 +17,7 @@ import {
 } from "./configuration-forms";
 import { useFormik } from "formik";
 import { deleteModule, saveModuleData } from "../../app/services";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { useGetModuleById } from "./hooks";
 import { eventBus } from "src/EventBus";
@@ -65,11 +65,12 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
   const [expanded, setExpanded] = useState<string | false>("Global");
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
-  const [activeStep,setActiveStep]= useState<number>(1);
+  const [activeStep, setActiveStep] = useState<number>(1);
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const { isLoading, data, isError, getModuleDataById } =
     useGetModuleById(moduleId);
+  const navigate = useNavigate();
   useEffect(() => {
     setTabConfigs(extractTabConfigs(formSchema, module));
     setStepperSteps(extractSteps(formSchema, module));
@@ -175,7 +176,7 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
         ))}
       </Stepper>
       <Grid container sx={{ width: "70%" }}>
-        {stepperSteps?.map((item: string,index:number) => (
+        {stepperSteps?.map((item: string, index: number) => (
           <Grid key={item} item>
             <AccordionBase
               expanded={expanded}
@@ -203,7 +204,12 @@ const TurbineTabContent = ({ module, moduleId }: any) => {
           <Button variant="contained" onClick={handleSubmit}>
             Save
           </Button>
-          <Button variant="contained">Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={() => navigate("./configuration")}
+          >
+            Cancel
+          </Button>
           <Button
             startIcon={<Delete />}
             color="primary"

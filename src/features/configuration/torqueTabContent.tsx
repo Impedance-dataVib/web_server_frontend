@@ -66,7 +66,7 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
   const [expanded, setExpanded] = useState<string | false>("Global");
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
-  const [activeStep,setActiveStep]= useState<number>(1);
+  const [activeStep, setActiveStep] = useState<number>(1);
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const { isLoading, data, isError, getModuleDataById } =
@@ -122,7 +122,7 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
         variant: "info",
       });
       await deleteModule(moduleId);
-      eventBus.dispatch('ModuleDelete',{})
+      eventBus.dispatch("ModuleDelete", {});
       enqueueSnackbar({
         message: "Delete Succeess!",
         variant: "success",
@@ -137,7 +137,7 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
   const handleSubmit = async () => {
     try {
       const validate = await moduleFormContext.validateForm();
-      
+
       if (Object.keys(validate).length > 0) {
         throw new Error("Form Validation Error!");
       }
@@ -181,7 +181,7 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
         ))}
       </Stepper>
       <Grid container sx={{ width: "70%" }}>
-        {stepperSteps?.map((item: string,index:number) => (
+        {stepperSteps?.map((item: string, index: number) => (
           <Grid key={item} item>
             <AccordionBase
               expanded={expanded}
@@ -209,7 +209,12 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
           <Button variant="contained" onClick={handleSubmit}>
             Save
           </Button>
-          <Button variant="contained">Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={() => navigate("./configuration")}
+          >
+            Cancel
+          </Button>
           <Button
             startIcon={<Delete />}
             color="primary"

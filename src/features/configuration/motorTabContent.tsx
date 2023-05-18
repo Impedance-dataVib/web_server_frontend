@@ -106,10 +106,10 @@ const MotorTabContent = ({ module, moduleId }: any) => {
   };
   const moduleFormContext = useFormik({
     initialValues: {
-      motor_crankshaft_sensorx: "No Channel",
-      motor_crankshaft_channel_type: "Speed",
+      motor_crankshaft_sensorx: "",
+      motor_crankshaft_channel_type: "",
       motor_crankshaft_teeth: "",
-      motor_crankshaft_wheel_type: "Standard",
+      motor_crankshaft_wheel_type: "",
       min_speed: "",
       min_volt: "",
       recording_period: "",
@@ -201,7 +201,12 @@ const MotorTabContent = ({ module, moduleId }: any) => {
           <Button variant="contained" onClick={handleSubmit}>
             Save
           </Button>
-          <Button variant="contained">Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={() => navigate("./configuration")}
+          >
+            Cancel
+          </Button>
           <Button
             startIcon={<Delete />}
             color="primary"

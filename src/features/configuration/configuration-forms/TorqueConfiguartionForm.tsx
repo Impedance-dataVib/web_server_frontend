@@ -19,8 +19,11 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           sx={{ minWidth: "182px", marginBottom: "20px" }}
           error={Boolean(formContext?.errors?.[fieldProps.label])}
         >
-          <InputLabel id={fieldProps.label}>{fieldProps.name}</InputLabel>
+          <InputLabel id={`${fieldProps.label}-label`}>
+            {fieldProps.name}
+          </InputLabel>
           <Select
+            labelId={`${fieldProps.label}-label`}
             name={fieldProps.label}
             onChange={formContext?.handleChange}
             value={formContext?.values?.[fieldProps.label]}
@@ -32,12 +35,11 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
               </MenuItem>
             ))}
           </Select>
-          {formContext?.touched?.[fieldProps.label] &&
-            Boolean(formContext?.errors?.[fieldProps.label]) && (
-              <FormHelperText>
-                {formContext?.errors?.[fieldProps.label]}
-              </FormHelperText>
-            )}
+          {Boolean(formContext?.errors?.[fieldProps.label]) && (
+            <FormHelperText>
+              {formContext?.errors?.[fieldProps.label]}
+            </FormHelperText>
+          )}
         </FormControl>
       );
 
@@ -134,12 +136,17 @@ export const TorqueChannelInformationForm = ({
         </Grid>
         <Grid container item spacing={1}>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{ minWidth: "182px", marginBottom: "20px" }}
+              error={Boolean(formContext?.errors?.["de_channel_sensorx"])}
+            >
+              <InputLabel id={`de_channel_sensorx-label`}>Sensorx</InputLabel>
               <Select
+                labelId="de_channel_sensorx-label"
                 name="de_channel_sensorx"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["de_channel_sensorx"]}
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Sensorx"}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
                   <MenuItem key={option} value={option}>
@@ -147,15 +154,27 @@ export const TorqueChannelInformationForm = ({
                   </MenuItem>
                 ))}
               </Select>
+              {Boolean(formContext?.errors?.["de_channel_sensorx"]) && (
+                <FormHelperText>
+                  {formContext?.errors?.["de_channel_sensorx"]}
+                </FormHelperText>
+              )}
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{ minWidth: "182px", marginBottom: "20px" }}
+              error={Boolean(formContext?.errors?.["de_channel_channel_type"])}
+            >
+              <InputLabel id={`de_channel_channel_type-label`}>
+                Channel_Type
+              </InputLabel>
               <Select
+                labelId="de_channel_channel_type-label"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["de_channel_channel_type"]}
                 name="de_channel_channel_type"
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Channel_Type"}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -165,6 +184,11 @@ export const TorqueChannelInformationForm = ({
                   )
                 )}
               </Select>
+              {Boolean(formContext?.errors?.["de_channel_channel_type"]) && (
+                <FormHelperText>
+                  {formContext?.errors?.["de_channel_channel_type"]}
+                </FormHelperText>
+              )}
             </FormControl>
           </Grid>
           <Grid item>
@@ -190,12 +214,19 @@ export const TorqueChannelInformationForm = ({
             ></TextField>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{ minWidth: "182px", marginBottom: "20px" }}
+              error={Boolean(formContext?.errors?.["de_channel_wheel_type"])}
+            >
+              <InputLabel id={`de_channel_wheel_type-label`}>
+                Wheel_Type
+              </InputLabel>
               <Select
+                labelId="de_channel_wheel_type-label"
                 name="de_channel_wheel_type"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["de_channel_wheel_type"]}
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Wheel_Type"}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -205,6 +236,11 @@ export const TorqueChannelInformationForm = ({
                   )
                 )}
               </Select>
+              {Boolean(formContext?.errors?.["de_channel_wheel_type"]) && (
+                <FormHelperText>
+                  {formContext?.errors?.["de_channel_wheel_type"]}
+                </FormHelperText>
+              )}
             </FormControl>
           </Grid>
         </Grid>
@@ -230,12 +266,17 @@ export const TorqueChannelInformationForm = ({
         </Grid>
         <Grid container item spacing={1}>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{ minWidth: "182px", marginBottom: "20px" }}
+              error={Boolean(formContext?.errors?.["nde_channel_sensorx"])}
+            >
+              <InputLabel id={`nde_channel_sensorx-label`}>Sensorx</InputLabel>
               <Select
+                labelId="nde_channel_sensorx-label"
                 name="nde_channel_sensorx"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["nde_channel_sensorx"]}
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Sensorx"}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
                   <MenuItem key={option} value={option}>
@@ -243,15 +284,27 @@ export const TorqueChannelInformationForm = ({
                   </MenuItem>
                 ))}
               </Select>
+              {Boolean(formContext?.errors?.["nde_channel_sensorx"]) && (
+                <FormHelperText>
+                  {formContext?.errors?.["nde_channel_sensorx"]}
+                </FormHelperText>
+              )}
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{ minWidth: "182px", marginBottom: "20px" }}
+              error={Boolean(formContext?.errors?.["nde_channel_channel_type"])}
+            >
+              <InputLabel id={`nde_channel_channel_type-label`}>
+                Channel_Type
+              </InputLabel>
               <Select
+                labelId="nde_channel_channel_type-label"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["nde_channel_channel_type"]}
                 name="nde_channel_channel_type"
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Channel_Type"}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -261,6 +314,11 @@ export const TorqueChannelInformationForm = ({
                   )
                 )}
               </Select>
+              {Boolean(formContext?.errors?.["nde_channel_channel_type"]) && (
+                <FormHelperText>
+                  {formContext?.errors?.["nde_channel_channel_type"]}
+                </FormHelperText>
+              )}
             </FormControl>
           </Grid>
           <Grid item>
@@ -286,12 +344,19 @@ export const TorqueChannelInformationForm = ({
             ></TextField>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{ minWidth: "182px", marginBottom: "20px" }}
+              error={Boolean(formContext?.errors?.["nde_channel_wheel_type"])}
+            >
+              <InputLabel id={`nde_channel_wheel_type-label`}>
+                Wheel_Type
+              </InputLabel>
               <Select
+                labelId="nde_channel_wheel_type-label"
                 name="nde_channel_wheel_type"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["nde_channel_wheel_type"]}
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Wheel_Type"}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -301,6 +366,11 @@ export const TorqueChannelInformationForm = ({
                   )
                 )}
               </Select>
+              {Boolean(formContext?.errors?.["nde_channel_wheel_type"]) && (
+                <FormHelperText>
+                  {formContext?.errors?.["nde_channel_wheel_type"]}
+                </FormHelperText>
+              )}
             </FormControl>
           </Grid>
         </Grid>

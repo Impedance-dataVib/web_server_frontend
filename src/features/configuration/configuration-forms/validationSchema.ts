@@ -9,7 +9,13 @@ export const torqueValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ),
+    )
+    .test(
+      "no of teeth should be same?",
+      "The no of teeth for both channels DE & NDE must be same.",
+      (value, testConetext) => testConetext.parent.nde_channel_teeth === value
+    )
+    .integer("The field should be an integer !"),
   de_channel_wheel_type: yup.string().required("This is a required field"),
   nde_channel_sensorx: yup.string().required("This is a required field"),
   nde_channel_channel_type: yup.string().required("This is a required field"),
@@ -20,7 +26,14 @@ export const torqueValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ),
+    )
+    .test(
+      "no of teeth should be same?",
+      "The no of teeth for both channels DE & NDE must be same.",
+      (value, testConetext) => testConetext.parent.de_channel__teeth === value
+    )
+    .integer("The field should be an integer !"),
+
   nde_channel_wheel_type: yup.string().required("This is a required field"),
   min_speed: yup
     .number()
@@ -62,7 +75,8 @@ export const torqueValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ),
+    )
+    .integer("The field should be an integer !"),
   zero_degree: yup
     .number()
     .required("This is a required field")
@@ -87,6 +101,7 @@ export const torqueValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     ),
+  vessel_type: yup.string().required("This is a required field"),
 });
 export const motorValidationSchema = yup.object({
   motor_crankshaft_sensorx: yup.string().required("This is a required field"),
@@ -95,6 +110,7 @@ export const motorValidationSchema = yup.object({
     .required("This is a required field"),
   motor_crankshaft_teeth: yup
     .number()
+    .integer("The field should be an integer !")
     .required("This is a required field")
     .test(
       "Is positive?",
@@ -144,7 +160,8 @@ export const motorValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ),
+    )
+    .integer("The field should be an integer !"),
 });
 
 export const turbineValidationSchema = yup.object({
@@ -159,7 +176,8 @@ export const turbineValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ),
+    )
+    .integer("The field should be an integer !"),
   turbine_crankshaft_wheel_type: yup
     .string()
     .required("This is a required field"),
@@ -203,7 +221,8 @@ export const turbineValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ),
+    )
+    .integer("The field should be an integer !"),
 });
 
 export const bearingValidationSchema = yup.object({
@@ -218,7 +237,8 @@ export const bearingValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ),
+    )
+    .integer("The field should be an integer !"),
   bearing_crankshaft_wheel_type: yup
     .string()
     .required("This is a required field"),
@@ -262,7 +282,8 @@ export const bearingValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ),
+    )
+    .integer("The field should be an integer !"),
 });
 export const engineValidationSchema = yup.object({
   Crankshaft_SENSORx: yup.string().required("This is a required field"),
@@ -274,7 +295,8 @@ export const engineValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ),
+    )
+    .integer("The field should be an integer !"),
   Crankshaft_WheelType: yup.string().required("This is a required field"),
   CamShaft_SENSORx: yup.string().required("This is a required field"),
   CamShaft_ChannelType: yup.string().required("This is a required field"),
@@ -296,7 +318,8 @@ export const engineValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ),
+    )
+    .integer("The field should be an integer !"),
   TDC_WheelType: yup.string().required("This is a required field"),
   Peak_Pressure_SENSORx: yup.string().required("This is a required field"),
   Peak_Pressure_ChannelType: yup.string().required("This is a required field"),
@@ -327,7 +350,8 @@ export const engineValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ),
+    )
+    .integer("The field should be an integer !"),
   application: yup.string().required("This is a required field"),
   fuel: yup.string().required("This is a required field"),
   type: yup.string().required("This is a required field"),
