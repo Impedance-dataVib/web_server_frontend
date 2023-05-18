@@ -333,7 +333,16 @@ export const engineValidationSchema = yup.object({
     )
     .integer("The field should be an integer !"),
   Crankshaft_WheelType: yup.string().required("This is a required field"),
-  CamShaft_SENSORx: yup.string().required("This is a required field"),
+  CamShaft_SENSORx: yup
+    .string()
+    .required("This is a required field")
+    .test(
+      "Channel Validation",
+      `Error: CAM, TDC, Peak pressure channel shouldn't be same`,
+      (value, context) =>
+        value != context.parent.TDC_SENSORx &&
+        value != context.parent.Peak_Pressure_SENSORx
+    ),
   CamShaft_ChannelType: yup.string().required("This is a required field"),
   CamShaft_Teeth: yup
     .number()
@@ -344,7 +353,16 @@ export const engineValidationSchema = yup.object({
       (value) => value > 0
     ),
   CamShaft_WheelType: yup.string().required("This is a required field"),
-  TDC_SENSORx: yup.string().required("This is a required field"),
+  TDC_SENSORx: yup
+    .string()
+    .required("This is a required field")
+    .test(
+      "Channel Validation",
+      `Error: CAM, TDC, Peak pressure channel shouldn't be same`,
+      (value, context) =>
+        value != context.parent.CamShaft_SENSORx &&
+        value != context.parent.Peak_Pressure_SENSORx
+    ),
   TDC_ChannelType: yup.string().required("This is a required field"),
   TDC_Teeth: yup
     .number()
@@ -356,7 +374,16 @@ export const engineValidationSchema = yup.object({
     )
     .integer("The field should be an integer !"),
   TDC_WheelType: yup.string().required("This is a required field"),
-  Peak_Pressure_SENSORx: yup.string().required("This is a required field"),
+  Peak_Pressure_SENSORx: yup
+    .string()
+    .required("This is a required field")
+    .test(
+      "Channel Validation",
+      `Error: CAM, TDC, Peak pressure channel shouldn't be same`,
+      (value, context) =>
+        value != context.parent.CamShaft_SENSORx &&
+        value != context.parent.TDC_SENSORx
+    ),
   Peak_Pressure_ChannelType: yup.string().required("This is a required field"),
   Peak_Pressure_Teeth: yup
     .number()
