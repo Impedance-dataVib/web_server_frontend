@@ -185,12 +185,17 @@ const EngineTabContent = ({ module, moduleId }: any) => {
   const getInitialFormData = () => {
     if (data?.from_data && customerName) {
       const { configuration_id, ...rest } = data?.from_data;
-      return { ...rest, customer_name: customerName };
+      return {
+        ...rest,
+        customer_name: customerName,
+        module_type: data.module_type,
+      };
     }
     return {
       customer_name: customerName,
       asset_name: "",
       equipment_name: "",
+      module_type: data.module_type,
       sampling_rate: "",
       Crankshaft_SENSORx: "",
       Crankshaft_ChannelType: "",

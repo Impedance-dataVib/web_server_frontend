@@ -60,18 +60,18 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           error={Boolean(formContext?.errors?.[fieldProps.label])}
           helperText={formContext?.errors?.[fieldProps.label]}
           inputProps={{
+            readOnly: fieldProps?.disabled ? true : false,
             style: {
               padding: "11px 26px 13px 12px",
             },
           }}
-          disabled={fieldProps?.disabled ? true : false}
+          InputLabelProps={{ shrink: true }}
         ></TextField>
       );
     case "toggle":
       return <></>;
     default:
       return <div>No Valid Field Type</div>;
-      break;
   }
 };
 
