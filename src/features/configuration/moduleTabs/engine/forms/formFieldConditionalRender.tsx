@@ -76,13 +76,13 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
               color="primary"
             />
           }
-          label={fieldProps.name}
+          label={fieldProps?.name}
           labelPlacement="start"
+          disabled={fieldProps?.userName === "admin" ? false : true}
         />
       );
     default:
       return <div>No Valid Field Type</div>;
-      break;
   }
 };
 export default FormFieldConditionalRender;

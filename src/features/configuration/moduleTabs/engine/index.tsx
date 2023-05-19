@@ -84,9 +84,7 @@ const StepToComponentEngineModule = ({
 const EngineTabContent = ({ module, moduleId }: any) => {
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
-  const [expanded, setExpanded] = useState<string | false>(
-    "Channel Information"
-  );
+  const [expanded, setExpanded] = useState<string | false>();
   const [activeStep, setActiveStep] = useState<number>(0);
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
