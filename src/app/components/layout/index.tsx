@@ -5,7 +5,7 @@ import DrawerAppBar from "./appBar";
 import Content from "./content";
 import Sidebar from "./sidebar";
 
-const Layout = ({ children }: any) => {
+const Layout = ({ openConfirmBox, setOpenconfirmmBox, isUnsaved, setNavigatePath, children }: any) => {
   const [sidebarView, setSidebarView] = useState("expanded");
 
   return (
@@ -28,6 +28,9 @@ const Layout = ({ children }: any) => {
               // @ts-ignore
               variant={sidebarView}
               setVariant={setSidebarView}
+              isUnsaved={isUnsaved}
+              setOpenconfirmmBox={setOpenconfirmmBox}
+              setNavigatePath={setNavigatePath}
             />
             <Content>{children}</Content>
           </Box>

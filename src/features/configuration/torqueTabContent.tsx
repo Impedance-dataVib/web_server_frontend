@@ -76,7 +76,7 @@ const StepToComponentEngineModule = ({
       return <div>Invalid Step</div>;
   }
 };
-const TorqueTabContent = ({ module, moduleId }: any) => {
+const TorqueTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const [expanded, setExpanded] = useState<string | false>("Global");
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
@@ -202,6 +202,7 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
         variant: "info",
       });
       await saveModuleData(payload);
+      setIsUnsaved(false);
       enqueueSnackbar({
         message: "Module Saved",
         variant: "success",
@@ -216,6 +217,11 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
       });
     }
   };
+
+  useEffect(() => {
+    setIsUnsaved(moduleFormContext.dirty);
+  }, [moduleFormContext.dirty])
+
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper

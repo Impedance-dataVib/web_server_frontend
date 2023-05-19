@@ -12,7 +12,7 @@ export default function UploadFile() {
       }}
     >
       <Box sx={{width: '49%'}}>
-        <Typography component={"p"}>Update Licence file</Typography>
+        <Typography component={"p"}>Update License file</Typography>
         <FileUpload onChangeHandler={e=> console.log(e)}/>
       </Box>
       <Box sx={{width: '49%'}}>

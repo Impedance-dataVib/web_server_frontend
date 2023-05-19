@@ -245,7 +245,7 @@ const SystemConfiguration = () => {
                     }}
                   >
                     <Typography variant="subtitle1">
-                      License Tenure:{" "}
+                      License Tenure (Months):{" "}
                     </Typography>
                     <Typography variant="body1" sx={{ mx: 1 }}>
                       {apiData.licenseInfo?.license_tenure}

@@ -1,12 +1,9 @@
-import ContentBox from "../../app/components/content-box";
 import ConfigurationContent from "./configurationContent";
 import ManageConfigurationPage from "./configuration";
 
-const ConfigurationPage = () => {
+const ConfigurationPage = ({isUnsaved, setIsUnsaved, openConfirmBox, setOpenconfirmmBox, navigatePath}: any) => {
   return (
-    // <ContentBox title="Configuration">
-      <ConfigurationContent></ConfigurationContent>
-    // </ContentBox>
+    <ConfigurationContent navigatePath={navigatePath} isUnsaved={isUnsaved} setIsUnsaved={setIsUnsaved} openConfirmBox={openConfirmBox} setOpenconfirmmBox={setOpenconfirmmBox}></ConfigurationContent>
   );
 };
 export default ConfigurationPage;

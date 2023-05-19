@@ -12,7 +12,7 @@ import MotorTabContent from "./motorTabContent";
 import formSchema from "./formSchema";
 import Button from "@mui/material/Button";
 import { AddModule } from "../../app/services";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetConfigurationModuleByConfigId } from "./hooks";
 import AddModuleModal from "./modals/addModule";
 import { LinearProgress, Typography } from "@mui/material";
@@ -20,6 +20,7 @@ import { useSnackbar } from "notistack";
 import { Add, Delete, Remove } from "@mui/icons-material";
 import { makeStyles } from "tss-react/mui";
 import { eventBus } from "src/EventBus";
+import ConfirmDialogueBox from "./confirmDialog";
 
 function tabProps(index: number) {
   return {
@@ -47,43 +48,39 @@ const getKeysFromSchema = (schema: any) => {
   return Object.keys(schema);
 };
 
-const TabModuleRender = ({ type, moduleId }: any) => {
+const TabModuleRender = ({ type, moduleId, isUnsaved, setIsUnsaved }: any) => {
   switch (type) {
     case "Engine":
       return (
-        <EngineTabContent moduleId={moduleId} module={type}></EngineTabContent>
+        <EngineTabContent moduleId={moduleId} module={type} setIsUnsaved={setIsUnsaved} />
       );
 
     case "Torque":
       return (
-        <TorqueTabContent moduleId={moduleId} module={type}></TorqueTabContent>
+        <TorqueTabContent moduleId={moduleId} module={type} setIsUnsaved={setIsUnsaved} />
       );
     case "Turbine":
       return (
-        <TurbineTabContent
-          moduleId={moduleId}
-          module={type}
-        ></TurbineTabContent>
+        <TurbineTabContent moduleId={moduleId} module={type} setIsUnsaved={setIsUnsaved} />
       );
     case "Bearing":
       return (
-        <BearingTabContent
-          moduleId={moduleId}
-          module={type}
-        ></BearingTabContent>
+        <BearingTabContent moduleId={moduleId} module={type} setIsUnsaved={setIsUnsaved} />
       );
     case "Motor":
       return (
-        <MotorTabContent moduleId={moduleId} module={type}></MotorTabContent>
+        <MotorTabContent moduleId={moduleId} module={type} setIsUnsaved={setIsUnsaved} />
       );
     default:
       return <div> Invalid type module </div>;
   }
 };
 
-const ConfigurationContent = (props: any) => {
+const ConfigurationContent = ({isUnsaved, setIsUnsaved, openConfirmBox, setOpenconfirmmBox, navigatePath}: any) => {
+  const [midTab, setMidTab] = useState(0);
   const [tab, setTab] = useState(0);
   const [tabs, setTabs] = useState<string[] | undefined>();
+  const navigate = useNavigate();
   // const [addModules, setAddModules] = useState<any>([]);
   // const [selectedModule, setSelectedModule] = useState<any>({});
   const { configId } = useParams();
@@ -130,8 +127,13 @@ const ConfigurationContent = (props: any) => {
   const handleCloseDialog = () => {
     setOpenAddModule(false);
   };
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTab(newValue);
+  const handleChange = (event: React.SyntheticEvent, newValue: number, isUnsaved: boolean) => {
+    if(isUnsaved ) {
+      setMidTab(newValue)
+      setOpenconfirmmBox(true)
+    }else {
+      setTab(newValue);
+    }
   };
   useEffect(() => {
     eventBus.on("ModuleDelete", async () => {
@@ -180,7 +182,7 @@ const ConfigurationContent = (props: any) => {
         <Box sx={{ borderBottom: "2px solid #f7f7f7" }}>
           <Tabs
             value={tab}
-            onChange={handleChange}
+            onChange={(e, value) =>  handleChange(e, value, isUnsaved)}
             aria-label="basic tabs example"
             variant="scrollable"
           >
@@ -200,12 +202,34 @@ const ConfigurationContent = (props: any) => {
           <TabPanel key={item.id} value={tab} index={index}>
             <TabModuleRender
               moduleId={item.id}
+              isUnsaved={isUnsaved}
+              setIsUnsaved={setIsUnsaved}
               type={item.module_type}
             ></TabModuleRender>
           </TabPanel>
         ))}
       </Box>
-
+      {openConfirmBox && (
+        <ConfirmDialogueBox 
+          open={openConfirmBox}
+          handleCancel={() => {
+            setOpenconfirmmBox(false);
+          }} 
+          handleOk={() => {
+            console.log('navigatePath', navigatePath)
+            setOpenconfirmmBox(false);
+            setIsUnsaved(false);
+            if(navigatePath) {
+              const path = navigatePath;
+              setMidTab(0);
+              navigate(path);
+            } else {
+              setTab(midTab);
+              setMidTab(0);
+            }
+          }}
+        />
+      )}
       {openAddModule && (
         <AddModuleModal
           open={openAddModule}

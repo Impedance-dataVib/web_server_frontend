@@ -81,7 +81,7 @@ const StepToComponentEngineModule = ({
   }
 };
 
-const EngineTabContent = ({ module, moduleId }: any) => {
+const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
   const [expanded, setExpanded] = useState<string | false>(
@@ -130,6 +130,7 @@ const EngineTabContent = ({ module, moduleId }: any) => {
         variant: "info",
       });
       await saveModuleData(payload);
+      setIsUnsaved(false);
       enqueueSnackbar({
         message: "Module Saved!",
         variant: "success",
@@ -258,6 +259,17 @@ const EngineTabContent = ({ module, moduleId }: any) => {
     onSubmit: (values) => {},
     validationSchema: engineValidationSchema,
   });
+
+  useEffect(() => {
+    if (data?.from_data) {
+      const { configuration_id, ...rest } = data?.from_data;
+      moduleFormContext.setValues({ ...rest });
+    }
+  }, [data]);
+
+  useEffect(() => {
+    setIsUnsaved(moduleFormContext.dirty);
+  }, [moduleFormContext.dirty]);
 
   return (
     <Box sx={{ width: "auto" }}>
