@@ -413,12 +413,7 @@ export const engineValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .integer("The field should be an integer !")
-    .test(
-      "is minRPM less than ratedRPM",
-      "Error: minRPM must always be less than the rated RPM",
-      (value, context) => value > context.parent.min_speed
-    ),
+    .integer("The field should be an integer !"),
   application: yup.string().required("This is a required field"),
   fuel: yup.string().required("This is a required field"),
   type: yup.string().required("This is a required field"),
@@ -456,6 +451,10 @@ export const engineValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
+    ).test(
+      "is minRPM less than ratedRPM",
+      "Error: minRPM must always be less than the rated RPM",
+      (value, context) => value < context.parent.rated_rpm
     ),
   min_volt: yup
     .number()

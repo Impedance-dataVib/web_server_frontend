@@ -85,12 +85,17 @@ const BearingTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const getInitialFormData = () => {
     if (data?.from_data && customerName) {
       const { configuration_id, ...rest } = data?.from_data;
-      return { ...rest, customer_name: customerName };
+      return {
+        ...rest,
+        customer_name: customerName,
+        module_type: data.module_type,
+      };
     }
     return {
       customer_name: customerName,
       asset_name: "",
       equipment_name: "",
+      module_type: data.module_type,
       sampling_rate: "",
       bearing_crankshaft_sensorx: "",
       bearing_crankshaft_channel_type: "",

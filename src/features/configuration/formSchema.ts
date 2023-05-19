@@ -13,6 +13,12 @@ const formSchema = {
         type: "text",
       },
       {
+        name: "Module Type",
+        label: "module_type",
+        type: "text",
+        disabled: true,
+      },
+      {
         name: "Equipment Name",
         label: "equipment_name",
         type: "text",
@@ -443,6 +449,12 @@ const formSchema = {
         type: "text",
       },
       {
+        name: "Module Type",
+        label: "module_type",
+        type: "text",
+        disabled: true,
+      },
+      {
         name: "Equipment Name",
         label: "equipment_name",
         type: "text",
@@ -585,6 +597,12 @@ const formSchema = {
         type: "text",
       },
       {
+        name: "Module Type",
+        label: "module_type",
+        type: "text",
+        disabled: true,
+      },
+      {
         name: "Equipment Name",
         label: "equipment_name",
         type: "text",
@@ -704,6 +722,12 @@ const formSchema = {
         type: "text",
       },
       {
+        name: "Module Type",
+        label: "module_type",
+        type: "text",
+        disabled: true,
+      },
+      {
         name: "Equipment Name",
         label: "equipment_name",
         type: "text",
@@ -797,6 +821,12 @@ const formSchema = {
         name: "Asset Name",
         label: "asset_name",
         type: "text",
+      },
+      {
+        name: "Module Type",
+        label: "module_type",
+        type: "text",
+        disabled: true,
       },
       {
         name: "Equipment Name",

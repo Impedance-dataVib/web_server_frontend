@@ -1,21 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
 
 export interface IAuth {
+  userName: string | undefined;
   authToken: string | undefined;
   refreshToken: string | undefined;
   setAuthToken: (token: string) => void;
   setRefreshToken: (token: string) => void;
   signOut: () => void;
   readyState: boolean;
+  setUserName: (token: string) => void;
 }
 
 const initialState: IAuth = {
+  userName: "",
   authToken: "",
   refreshToken: "",
   setAuthToken: () => {},
   setRefreshToken: () => {},
   signOut: () => {},
   readyState: false,
+  setUserName: () => {},
 };
 
 export const AUTH_STATUS = {
@@ -27,6 +31,7 @@ export const AUTH_STATUS = {
 
 export const AUTH_TOKEN_KEY = "vib-360-auth-token";
 export const REFRESH_TOKEN_KEY = "vib-360-refresh-token";
+export const USER_NAME_ROLE = "vib-360-user-name-role";
 
 const authContext = React.createContext<IAuth>(initialState);
 
@@ -36,13 +41,15 @@ const AuthProvider = ({ children }: any) => {
   const [readFromSessionStorage, setReadFromSessionStorage] =
     useState<boolean>(false);
   const [readyState, setReadyState] = useState<boolean>(false);
+  const [userName, setUserName] = useState<string | undefined>();
 
   useEffect(() => {
     const theAuthToken = sessionStorage.getItem(AUTH_TOKEN_KEY);
     const refToken = sessionStorage.getItem(REFRESH_TOKEN_KEY);
-
+    const userNameRole = sessionStorage.getItem(USER_NAME_ROLE);
     setAuthToken(theAuthToken || "");
     setRefreshToken(refToken || "");
+    setUserName(userNameRole || "");
     setReadFromSessionStorage(true);
     setReadyState(true);
   }, []);
@@ -51,6 +58,7 @@ const AuthProvider = ({ children }: any) => {
     if (readFromSessionStorage) {
       sessionStorage.setItem(AUTH_TOKEN_KEY, authToken || "");
       sessionStorage.setItem(REFRESH_TOKEN_KEY, refreshToken || "");
+      sessionStorage.setItem(USER_NAME_ROLE, userName || "");
     }
   }, [authToken, refreshToken, readFromSessionStorage]);
 
@@ -64,12 +72,14 @@ const AuthProvider = ({ children }: any) => {
   return (
     <authContext.Provider
       value={{
+        userName,
         authToken,
         refreshToken,
         setAuthToken,
         setRefreshToken,
         signOut,
         readyState,
+        setUserName,
       }}
     >
       {children}

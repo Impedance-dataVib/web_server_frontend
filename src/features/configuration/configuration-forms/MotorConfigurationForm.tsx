@@ -62,11 +62,12 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
             padding: "1px 1px",
           }}
           inputProps={{
+            readOnly: fieldProps?.disabled ? true : false,
             style: {
               padding: "11px 26px 13px 12px",
             },
           }}
-          disabled={fieldProps?.disabled ? true : false}
+          InputLabelProps={{ shrink: true }}
         ></TextField>
       );
     case "popup":

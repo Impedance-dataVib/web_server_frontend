@@ -44,9 +44,10 @@ const LoginForm = () => {
 
   const [isExpired, setIsExpired] = useState<boolean>(false);
   const [isInactive, setInactive] = useState<boolean>(false);
-  const { licenseStatus, licenseInfo, onLoadCheckLicense } = useContext(appContext);
+  const { licenseStatus, licenseInfo, onLoadCheckLicense } =
+    useContext(appContext);
 
-  const { setAuthToken, setRefreshToken } = useAuth();
+  const { setAuthToken, setRefreshToken, setUserName } = useAuth();
 
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -92,7 +93,7 @@ const LoginForm = () => {
             setIsError(false);
             setAuthToken(res.data?.token);
             setRefreshToken(res.data?.refresh_token);
-
+            setUserName(username);
             // navigate("/dashboard");
             onLoadCheckLicense?.();
           }
