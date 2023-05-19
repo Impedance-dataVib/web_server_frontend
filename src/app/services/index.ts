@@ -87,3 +87,7 @@ export const deleteModule = (id: string) => {
 export const getSystemInfo = () => {
   return axiosInstance.get("/system-information/get-all.php");
 };
+
+export const getLicenseInfo = () => {
+  return axiosInstance.get("/license/get-license.php");
+};

@@ -4,6 +4,7 @@ import {
   getModulesByConfigId,
   getModuleById,
   getSystemInfo,
+  getLicenseInfo,
 } from "../../../app/services";
 export const useGetConfiguration = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -106,4 +107,26 @@ export const useGetSystemCustomerNameInfo = () => {
     getSystemCustomerName();
   }, []);
   return { isLoading, data, isError, getSystemCustomerName };
+};
+
+export const useGetActiveConfig = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState<number | undefined>();
+  const [isError, setIsError] = useState(false);
+  const getActiveConfig = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await getLicenseInfo();
+      setData(data.configCount);
+      setIsLoading(false);
+    } catch (e) {
+      setIsError(true);
+      setData(undefined);
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    getActiveConfig();
+  }, []);
+  return { isLoading, data, isError, getActiveConfig };
 };
