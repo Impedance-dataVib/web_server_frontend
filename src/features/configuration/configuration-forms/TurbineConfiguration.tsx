@@ -12,6 +12,8 @@ import formSchema from "../formSchema";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import HelpIcon from "@mui/icons-material/Help";
+import { useParams } from "react-router-dom";
+import { useGetChannelByConfigIdName } from "../hooks";
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
@@ -67,7 +69,6 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
             },
           }}
           InputLabelProps={{ shrink: true }}
-          
         ></TextField>
       );
     case "toggle":
@@ -109,6 +110,35 @@ export const TurbineChannelInformationForm = ({
       "Odd",
     ],
   });
+  const { configId } = useParams();
+  const { data, getChannelByConfigIdName } = useGetChannelByConfigIdName(
+    configId || "",
+    formContext?.values["turbine_crankshaft_sensorx"],
+    formContext.dirty
+  );
+  useEffect(() => {
+    if (data && formContext.dirty) {
+      formContext.setFieldValue(
+        "turbine_crankshaft_channel_type",
+        data?.channel_type,
+        false
+      );
+      formContext.setFieldValue("turbine_crankshaft_teeth", data?.teeth, false);
+      formContext.setFieldValue(
+        "turbine_crankshaft_wheel_type",
+        data?.wheel_type,
+        false
+      );
+      formContext.setErrors({});
+    } else {
+      formContext.setFieldValue("turbine_crankshaft_channel_type", "", false);
+      formContext.setFieldValue("turbine_crankshaft_teeth", "", false);
+      formContext.setFieldValue("turbine_crankshaft_wheel_type", "", false);
+      formContext.validateForm();
+    }
+    return () => {};
+  }, [formContext?.values["turbine_crankshaft_sensorx"], data]);
+
 
   return (
     <>
@@ -178,6 +208,9 @@ export const TurbineChannelInformationForm = ({
                 value={formContext?.values?.["turbine_crankshaft_channel_type"]}
                 name="turbine_crankshaft_channel_type"
                 label={"Channel_Type"}
+                inputProps={{
+                  readOnly: data ? true : false,
+                }}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -212,6 +245,7 @@ export const TurbineChannelInformationForm = ({
               error={Boolean(formContext?.errors?.["turbine_crankshaft_teeth"])}
               helperText={formContext?.errors?.["turbine_crankshaft_teeth"]}
               inputProps={{
+                readOnly: data ? true : false,
                 style: {
                   padding: "11px 26px 13px 12px",
                 },
@@ -234,6 +268,9 @@ export const TurbineChannelInformationForm = ({
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["turbine_crankshaft_wheel_type"]}
                 label={"Wheel_Type"}
+                inputProps={{
+                  readOnly: data ? true : false,
+                }}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (

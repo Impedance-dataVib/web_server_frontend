@@ -2,7 +2,7 @@ import * as yup from "yup";
 export const torqueValidationSchema = yup.object({
   asset_name: yup.string().required("This is a required field"),
   equipment_name: yup.string().required("This is a required field"),
-  sampling_rate: yup.string().required("This is a required field"),
+
   de_channel_sensorx: yup.string().required("This is a required field"),
   de_channel_channel_type: yup.string().required("This is a required field"),
   de_channel__teeth: yup
@@ -114,7 +114,7 @@ export const torqueValidationSchema = yup.object({
 export const motorValidationSchema = yup.object({
   asset_name: yup.string().required("This is a required field"),
   equipment_name: yup.string().required("This is a required field"),
-  sampling_rate: yup.string().required("This is a required field"),
+
   motor_crankshaft_sensorx: yup.string().required("This is a required field"),
   motor_crankshaft_channel_type: yup
     .string()
@@ -183,7 +183,7 @@ export const motorValidationSchema = yup.object({
 export const turbineValidationSchema = yup.object({
   asset_name: yup.string().required("This is a required field"),
   equipment_name: yup.string().required("This is a required field"),
-  sampling_rate: yup.string().required("This is a required field"),
+
   turbine_crankshaft_sensorx: yup.string().required("This is a required field"),
   turbine_crankshaft_channel_type: yup
     .string()
@@ -252,7 +252,7 @@ export const turbineValidationSchema = yup.object({
 export const bearingValidationSchema = yup.object({
   asset_name: yup.string().required("This is a required field"),
   equipment_name: yup.string().required("This is a required field"),
-  sampling_rate: yup.string().required("This is a required field"),
+
   bearing_crankshaft_sensorx: yup.string().required("This is a required field"),
   bearing_crankshaft_channel_type: yup
     .string()
@@ -320,7 +320,7 @@ export const bearingValidationSchema = yup.object({
 export const engineValidationSchema = yup.object({
   asset_name: yup.string().required("This is a required field"),
   equipment_name: yup.string().required("This is a required field"),
-  sampling_rate: yup.string().required("This is a required field"),
+
   Crankshaft_SENSORx: yup.string().required("This is a required field"),
   Crankshaft_ChannelType: yup.string().required("This is a required field"),
   Crankshaft_Teeth: yup
@@ -426,7 +426,15 @@ export const engineValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     ),
-  firing_order: yup.string().required("This is a required field"),
+  firing_order: yup
+    .string()
+    .required("This is a required field")
+    .test(
+      "Firing Order Maximum Count",
+      "Error: No Of Cylinders is not matching the count of firing order",
+      (value, context) =>
+        value.trim().split(",").length === context.parent.no_of_cylinders
+    ),
   phase_shift_mode: yup.string().required("This is a required field"),
   shift_angle: yup
     .number()
@@ -451,7 +459,8 @@ export const engineValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ).test(
+    )
+    .test(
       "is minRPM less than ratedRPM",
       "Error: minRPM must always be less than the rated RPM",
       (value, context) => value < context.parent.rated_rpm

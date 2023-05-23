@@ -141,7 +141,7 @@ const TorqueTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       asset_name: "",
       equipment_name: "",
       module_type: data.module_type,
-      sampling_rate: "",
+     
       de_channel_sensorx: "",
       de_channel_channel_type: "",
       de_channel__teeth: "",

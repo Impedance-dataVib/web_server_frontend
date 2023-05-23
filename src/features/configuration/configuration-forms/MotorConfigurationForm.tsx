@@ -13,6 +13,8 @@ import { PopupRigidity } from "../modals/calculateRigidityModal";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import HelpIcon from "@mui/icons-material/Help";
+import { useGetChannelByConfigIdName } from "../hooks";
+import { useParams } from "react-router-dom";
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
@@ -116,6 +118,34 @@ export const MotorChannelInformationForm = ({
       "Odd",
     ],
   });
+  const { configId } = useParams();
+  const { data, getChannelByConfigIdName } = useGetChannelByConfigIdName(
+    configId || "",
+    formContext?.values["motor_crankshaft_sensorx"],
+    formContext.dirty
+  );
+  useEffect(() => {
+    if (data && formContext.dirty) {
+      formContext.setFieldValue(
+        "motor_crankshaft_channel_type",
+        data?.channel_type,
+        false
+      );
+      formContext.setFieldValue("motor_crankshaft_teeth", data?.teeth, false);
+      formContext.setFieldValue(
+        "motor_crankshaft_wheel_type",
+        data?.wheel_type,
+        false
+      );
+      formContext.setErrors({});
+    } else {
+      formContext.setFieldValue("motor_crankshaft_channel_type", "", false);
+      formContext.setFieldValue("motor_crankshaft_teeth", "", false);
+      formContext.setFieldValue("motor_crankshaft_wheel_type", "", false);
+      formContext.validateForm();
+    }
+    return () => {};
+  }, [formContext?.values["motor_crankshaft_sensorx"], data]);
   return (
     <>
       <Grid
@@ -182,6 +212,9 @@ export const MotorChannelInformationForm = ({
                 value={formContext?.values?.["motor_crankshaft_channel_type"]}
                 name="motor_crankshaft_channel_type"
                 label={"Channel_Type"}
+                inputProps={{
+                  readOnly: data ? true : false,
+                }}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -216,6 +249,7 @@ export const MotorChannelInformationForm = ({
               error={Boolean(formContext?.errors?.["motor_crankshaft_teeth"])}
               helperText={formContext?.errors?.["motor_crankshaft_teeth"]}
               inputProps={{
+                readOnly: data ? true : false,
                 style: {
                   padding: "11px 26px 13px 12px",
                 },
@@ -238,6 +272,9 @@ export const MotorChannelInformationForm = ({
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["motor_crankshaft_wheel_type"]}
                 label={"Wheel_Type"}
+                inputProps={{
+                  readOnly: data ? true : false,
+                }}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -262,10 +299,7 @@ export const MotorChannelInformationForm = ({
   );
 };
 
-export const MotorAssetInformation = ({
-  handleFormData,
-  formContext,
-}: any) => {
+export const MotorAssetInformation = ({ handleFormData, formContext }: any) => {
   return (
     <>
       <Grid

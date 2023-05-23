@@ -23,12 +23,6 @@ const formSchema = {
         label: "equipment_name",
         type: "text",
       },
-      {
-        name: "Sampling rate",
-        label: "sampling_rate",
-        type: "dropdown",
-        options: ["64K", "128K", "256K"],
-      },
     ],
     "Channel Information": [
       {
@@ -459,12 +453,6 @@ const formSchema = {
         label: "equipment_name",
         type: "text",
       },
-      {
-        name: "Sampling rate",
-        label: "sampling_rate",
-        type: "dropdown",
-        options: ["64K", "128K", "256K"],
-      },
     ],
     "Channel Information": [
       {
@@ -607,12 +595,6 @@ const formSchema = {
         label: "equipment_name",
         type: "text",
       },
-      {
-        name: "Sampling rate",
-        label: "sampling_rate",
-        type: "dropdown",
-        options: ["64K", "128K", "256K"],
-      },
     ],
     "Channel Information": [
       {
@@ -732,12 +714,6 @@ const formSchema = {
         label: "equipment_name",
         type: "text",
       },
-      {
-        name: "Sampling rate",
-        label: "sampling_rate",
-        type: "dropdown",
-        options: ["64K", "128K", "256K"],
-      },
     ],
     "Channel Information": [
       {
@@ -832,12 +808,6 @@ const formSchema = {
         name: "Equipment Name",
         label: "equipment_name",
         type: "text",
-      },
-      {
-        name: "Sampling rate",
-        label: "sampling_rate",
-        type: "dropdown",
-        options: ["64K", "128K", "256K"],
       },
     ],
     "Channel Information": [

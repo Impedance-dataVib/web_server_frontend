@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import { BootstrapInput } from "../../../../../app/components/bootstarp-input";
 import {
   FormControl,
@@ -9,6 +10,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useEffect } from "react";
+import { useGetChannelByConfigIdName } from "src/features/configuration/hooks";
 
 const SENSORx = [
   "Ch1",
@@ -43,6 +46,123 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
     ChannelType,
     WheelType,
   };
+
+  const { configId } = useParams();
+  const { data: crankShatftData, getChannelByConfigIdName } =
+    useGetChannelByConfigIdName(
+      configId || "",
+      formContext?.values["Crankshaft_SENSORx"],
+      formContext.dirty
+    );
+  useEffect(() => {
+    if (crankShatftData && formContext.dirty) {
+      formContext.setFieldValue(
+        "Crankshaft_ChannelType",
+        crankShatftData?.channel_type,
+        false
+      );
+      formContext.setFieldValue(
+        "Crankshaft_Teeth",
+        crankShatftData?.teeth,
+        false
+      );
+      formContext.setFieldValue(
+        "Crankshaft_WheelType",
+        crankShatftData?.wheel_type,
+        false
+      );
+      formContext.setErrors({});
+    } else {
+      formContext.setFieldValue("Crankshaft_ChannelType", "", false);
+      formContext.setFieldValue("Crankshaft_Teeth", "", false);
+      formContext.setFieldValue("Crankshaft_WheelType", "", false);
+      formContext.validateForm();
+    }
+    return () => {};
+  }, [formContext?.values["Crankshaft_SENSORx"], crankShatftData]);
+  const { data: camShatftData } = useGetChannelByConfigIdName(
+    configId || "",
+    formContext?.values["CamShaft_SENSORx"],
+    formContext.dirty
+  );
+  useEffect(() => {
+    if (camShatftData && formContext.dirty) {
+      formContext.setFieldValue(
+        "CamShaft_ChannelType",
+        camShatftData?.channel_type,
+        false
+      );
+      formContext.setFieldValue("CamShaft_Teeth", camShatftData?.teeth, false);
+      formContext.setFieldValue(
+        "CamShaft_WheelType",
+        camShatftData?.wheel_type,
+        false
+      );
+      formContext.setErrors({});
+    } else {
+      formContext.setFieldValue("CamShaft_ChannelType", "", false);
+      formContext.setFieldValue("CamShaft_Teeth", "", false);
+      formContext.setFieldValue("CamShaft_WheelType", "", false);
+      formContext.validateForm();
+    }
+    return () => {};
+  }, [formContext?.values["CamShaft_SENSORx"], camShatftData]);
+
+  const { data: tdcData } = useGetChannelByConfigIdName(
+    configId || "",
+    formContext?.values["TDC_SENSORx"],
+    formContext.dirty
+  );
+  useEffect(() => {
+    if (tdcData && formContext.dirty) {
+      formContext.setFieldValue(
+        "TDC_ChannelType",
+        tdcData?.channel_type,
+        false
+      );
+      formContext.setFieldValue("TDC_Teeth", tdcData?.teeth, false);
+      formContext.setFieldValue("TDC_WheelType", tdcData?.wheel_type, false);
+      formContext.setErrors({});
+    } else {
+      formContext.setFieldValue("TDC_ChannelType", "", false);
+      formContext.setFieldValue("TDC_Teeth", "", false);
+      formContext.setFieldValue("TDC_WheelType", "", false);
+      formContext.validateForm();
+    }
+    return () => {};
+  }, [formContext?.values["TDC_SENSORx"], tdcData]);
+
+  const { data: peakPressureData } = useGetChannelByConfigIdName(
+    configId || "",
+    formContext?.values["Peak_Pressure_SENSORx"],
+    formContext.dirty
+  );
+  useEffect(() => {
+    if (peakPressureData && formContext.dirty) {
+      formContext.setFieldValue(
+        "Peak_Pressure_ChannelType",
+        peakPressureData?.channel_type,
+        false
+      );
+      formContext.setFieldValue(
+        "Peak_Pressure_Teeth",
+        peakPressureData?.teeth,
+        false
+      );
+      formContext.setFieldValue(
+        "Peak_Pressure_WheelType",
+        peakPressureData?.wheel_type,
+        false
+      );
+      formContext.setErrors({});
+    } else {
+      formContext.setFieldValue("Peak_Pressure_ChannelType", "", false);
+      formContext.setFieldValue("Peak_Pressure_Teeth", "", false);
+      formContext.setFieldValue("Peak_Pressure_WheelType", "", false);
+      formContext.validateForm();
+    }
+    return () => {};
+  }, [formContext?.values["Peak_Pressure_SENSORx"], peakPressureData]);
 
   return (
     <>
@@ -104,6 +224,9 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 value={formContext?.values?.["Crankshaft_ChannelType"]}
                 name="Crankshaft_ChannelType"
                 label={"ChannelType"}
+                inputProps={{
+                  readOnly: crankShatftData ? true : false,
+                }}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -135,6 +258,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               error={Boolean(formContext?.errors?.["Crankshaft_Teeth"])}
               helperText={formContext?.errors?.["Crankshaft_Teeth"]}
               inputProps={{
+                readOnly: crankShatftData ? true : false,
                 style: {
                   padding: "11px 26px 13px 12px",
                 },
@@ -157,6 +281,9 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["Crankshaft_WheelType"]}
                 label={"WheelType"}
+                inputProps={{
+                  readOnly: crankShatftData ? true : false,
+                }}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -238,6 +365,9 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 value={formContext?.values?.["CamShaft_ChannelType"]}
                 name="CamShaft_ChannelType"
                 label={"ChannelType"}
+                inputProps={{
+                  readOnly: camShatftData ? true : false,
+                }}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -270,6 +400,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               error={Boolean(formContext?.errors?.["CamShaft_Teeth"])}
               helperText={formContext?.errors?.["CamShaft_Teeth"]}
               inputProps={{
+                readOnly: camShatftData ? true : false,
                 style: {
                   padding: "11px 26px 13px 12px",
                 },
@@ -289,6 +420,9 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 name="CamShaft_WheelType"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["CamShaft_WheelType"]}
+                inputProps={{
+                  readOnly: camShatftData ? true : false,
+                }}
                 label={"WheelType"}
                 disabled
               >
@@ -365,6 +499,9 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 value={formContext?.values?.["TDC_ChannelType"]}
                 name="TDC_ChannelType"
                 label={"ChannelType"}
+                inputProps={{
+                  readOnly: tdcData ? true : false,
+                }}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -397,6 +534,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               error={Boolean(formContext?.errors?.["TDC_Teeth"])}
               helperText={formContext?.errors?.["TDC_Teeth"]}
               inputProps={{
+                readOnly: tdcData ? true : false,
                 style: {
                   padding: "11px 26px 13px 12px",
                 },
@@ -418,6 +556,9 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["TDC_WheelType"]}
                 label={"WheelType"}
+                inputProps={{
+                  readOnly: tdcData ? true : false,
+                }}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -500,6 +641,9 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 value={formContext?.values?.["Peak_Pressure_ChannelType"]}
                 name="Peak_Pressure_ChannelType"
                 label={"ChannelType"}
+                inputProps={{
+                  readOnly: peakPressureData ? true : false,
+                }}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -532,6 +676,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               error={Boolean(formContext?.errors?.["Peak_Pressure_Teeth"])}
               helperText={formContext?.errors?.["Peak_Pressure_Teeth"]}
               inputProps={{
+                readOnly: peakPressureData ? true : false,
                 style: {
                   padding: "11px 26px 13px 12px",
                 },
@@ -555,6 +700,9 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["Peak_Pressure_WheelType"]}
                 label={"WheelType"}
+                inputProps={{
+                  readOnly: peakPressureData ? true : false,
+                }}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (

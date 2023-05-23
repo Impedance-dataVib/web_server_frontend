@@ -96,7 +96,7 @@ const BearingTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       asset_name: "",
       equipment_name: "",
       module_type: data.module_type,
-      sampling_rate: "",
+      
       bearing_crankshaft_sensorx: "",
       bearing_crankshaft_channel_type: "",
       bearing_crankshaft_teeth: "",

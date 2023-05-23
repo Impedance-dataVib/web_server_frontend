@@ -154,7 +154,7 @@ const TurbineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       asset_name: "",
       equipment_name: "",
       module_type: data.module_type,
-      sampling_rate: "",
+     
       turbine_crankshaft_sensorx: "",
       turbine_crankshaft_channel_type: "",
       turbine_crankshaft_teeth: "",

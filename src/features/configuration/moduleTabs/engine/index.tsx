@@ -197,7 +197,6 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       asset_name: "",
       equipment_name: "",
       module_type: data.module_type,
-      sampling_rate: "",
       Crankshaft_SENSORx: "",
       Crankshaft_ChannelType: "",
       Crankshaft_Teeth: "",
