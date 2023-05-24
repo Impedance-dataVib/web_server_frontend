@@ -157,23 +157,24 @@ export const TorqueChannelInformationForm = ({
           deChannelData?.wheel_type,
           false
         );
-      })
+      });
       setTimeout(async () => {
         await formContext.validateForm();
       }, 100);
-      
     } else {
-      enqueueSnackbar({
-        message: "Channel is not used in another module",
-        variant: "info",
-      });
+      if (formContext.dirty) {
+        enqueueSnackbar({
+          message: "Channel is not used in another module",
+          variant: "info",
+        });
+      }
       formContext.setFieldValue("de_channel_channel_type", "", false);
       formContext.setFieldValue("de_channel__teeth", "", false);
       formContext.setFieldValue("de_channel_wheel_type", "", false);
       formContext.validateForm();
     }
     return () => {};
-  }, [ deChannelData]);
+  }, [deChannelData]);
 
   useEffect(() => {
     if (ndeChannel && formContext.dirty) {
@@ -188,24 +189,34 @@ export const TorqueChannelInformationForm = ({
           ndeChannel?.channel_type,
           false
         );
-        formContext.setFieldValue("nde_channel_teeth", ndeChannel?.teeth, false);
+        formContext.setFieldValue(
+          "nde_channel_teeth",
+          ndeChannel?.teeth,
+          false
+        );
         formContext.setFieldValue(
           "nde_channel_wheel_type",
           ndeChannel?.wheel_type,
           false
         );
-      })
+      });
       setTimeout(async () => {
         await formContext.validateForm();
       }, 100);
     } else {
+      if (formContext.dirty) {
+        enqueueSnackbar({
+          message: "Channel is not used in another module",
+          variant: "info",
+        });
+      }
       formContext.setFieldValue("nde_channel_channel_type", "", false);
       formContext.setFieldValue("nde_channel_teeth", "", false);
       formContext.setFieldValue("nde_channel_wheel_type", "", false);
       formContext.validateForm();
     }
     return () => {};
-  }, [ ndeChannel]);
+  }, [ndeChannel]);
 
   return (
     <>

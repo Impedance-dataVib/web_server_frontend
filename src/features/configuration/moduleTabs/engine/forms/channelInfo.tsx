@@ -84,10 +84,12 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
         await formContext.validateForm();
       }, 100);
     } else {
-      enqueueSnackbar({
-        message: "Channel is not used in another module",
-        variant: "info",
-      });
+      if (formContext.dirty) {
+        enqueueSnackbar({
+          message: "Channel is not used in another module",
+          variant: "info",
+        });
+      }
       formContext.validateForm().then(() => {
         formContext.setFieldValue("Crankshaft_ChannelType", "", false);
         formContext.setFieldValue("Crankshaft_Teeth", "", false);
@@ -129,10 +131,12 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
         await formContext.validateForm();
       }, 100);
     } else {
-      enqueueSnackbar({
-        message: "Channel is not used in another module",
-        variant: "info",
-      });
+      if (formContext.dirty) {
+        enqueueSnackbar({
+          message: "Channel is not used in another module",
+          variant: "info",
+        });
+      }
       formContext.setFieldValue("CamShaft_ChannelType", "", false);
       formContext.setFieldValue("CamShaft_Teeth", "", false);
       formContext.setFieldValue("CamShaft_WheelType", "", false);
@@ -166,10 +170,12 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
         await formContext.validateForm();
       }, 100);
     } else {
-      enqueueSnackbar({
-        message: "Channel is not used in another module",
-        variant: "info",
-      });
+      if (formContext.dirty) {
+        enqueueSnackbar({
+          message: "Channel is not used in another module",
+          variant: "info",
+        });
+      }
       formContext.setFieldValue("TDC_ChannelType", "", false);
       formContext.setFieldValue("TDC_Teeth", "", false);
       formContext.setFieldValue("TDC_WheelType", "", false);
@@ -211,10 +217,12 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
         await formContext.validateForm();
       }, 100);
     } else {
-      enqueueSnackbar({
-        message: "Channel is not used in another module",
-        variant: "info",
-      });
+      if (formContext.dirty) {
+        enqueueSnackbar({
+          message: "Channel is not used in another module",
+          variant: "info",
+        });
+      }
       formContext.validateForm().then(() => {
         formContext.setFieldValue("Peak_Pressure_ChannelType", "", false);
         formContext.setFieldValue("Peak_Pressure_Teeth", "", false);
@@ -738,7 +746,6 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                   name={"Peak_Pressure_Teeth"}
                   label="Teeth"
                   variant="outlined"
-                  disabled
                   sx={{
                     fontSize: "16px",
                     width: "182px",
@@ -764,7 +771,6 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                   error={Boolean(
                     formContext?.errors?.["Peak_Pressure_WheelType"]
                   )}
-                  disabled
                 >
                   <InputLabel id={`Peak_Pressure_WheelType-label`}>
                     WheelType

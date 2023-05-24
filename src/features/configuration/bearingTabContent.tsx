@@ -96,7 +96,11 @@ const BearingTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       asset_name: "",
       equipment_name: "",
       module_type: data.module_type,
-      
+      bearing_crankshaft_unit: "",
+      bearing_crankshaft_sensitivity: "",
+      bearing_crankshaft_power_source: "",
+      bearing_crankshaft_ac_dc: "",
+
       bearing_crankshaft_sensorx: "",
       bearing_crankshaft_channel_type: "",
       bearing_crankshaft_teeth: "",
@@ -207,10 +211,10 @@ const BearingTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
         });
       }
     };
-    useEffect(() => {
-      setIsUnsaved(moduleFormContext.dirty);
-    }, [moduleFormContext.dirty])
-  
+  useEffect(() => {
+    setIsUnsaved(moduleFormContext.dirty);
+  }, [moduleFormContext.dirty]);
+
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper
