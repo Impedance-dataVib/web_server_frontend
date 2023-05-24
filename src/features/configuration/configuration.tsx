@@ -56,11 +56,11 @@ const ConfigurationPageContent = () => {
   };
   useEffect(() => {
     eventBus.on("ConfigDelete", async () => {
-      console.log("triggered");
+      
       await getActiveConfig();
     });
     eventBus.on("ConfigActive", async () => {
-      console.log("triggered");
+    
       await getActiveConfig();
     });
   }, []);

@@ -15,6 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import HelpIcon from "@mui/icons-material/Help";
 import { useParams } from "react-router-dom";
 import { useGetChannelByConfigIdName } from "../hooks";
+import { useSnackbar } from "notistack";
 
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
@@ -121,6 +122,7 @@ export const TorqueChannelInformationForm = ({
   });
 
   const { configId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
   const { data: deChannelData } = useGetChannelByConfigIdName(
     configId || "",
     formContext?.values["de_channel_sensorx"],
@@ -134,6 +136,11 @@ export const TorqueChannelInformationForm = ({
   );
   useEffect(() => {
     if (deChannelData && formContext.dirty) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
       formContext.validateForm().then(() => {
         formContext.setFieldValue(
           "de_channel_channel_type",
@@ -151,19 +158,30 @@ export const TorqueChannelInformationForm = ({
           false
         );
       })
-      
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
       
     } else {
+      enqueueSnackbar({
+        message: "Channel is not used in another module",
+        variant: "info",
+      });
       formContext.setFieldValue("de_channel_channel_type", "", false);
       formContext.setFieldValue("de_channel__teeth", "", false);
       formContext.setFieldValue("de_channel_wheel_type", "", false);
       formContext.validateForm();
     }
     return () => {};
-  }, [formContext?.values["de_channel_sensorx"], deChannelData]);
+  }, [ deChannelData]);
 
   useEffect(() => {
     if (ndeChannel && formContext.dirty) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
       formContext.validateForm().then(() => {
         formContext.setFieldValue(
           "nde_channel_channel_type",
@@ -177,7 +195,9 @@ export const TorqueChannelInformationForm = ({
           false
         );
       })
-      
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
     } else {
       formContext.setFieldValue("nde_channel_channel_type", "", false);
       formContext.setFieldValue("nde_channel_teeth", "", false);
@@ -185,7 +205,7 @@ export const TorqueChannelInformationForm = ({
       formContext.validateForm();
     }
     return () => {};
-  }, [formContext?.values["nde_channel_sensorx"], ndeChannel]);
+  }, [ ndeChannel]);
 
   return (
     <>

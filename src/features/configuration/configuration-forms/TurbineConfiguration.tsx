@@ -14,6 +14,7 @@ import Tooltip from "@mui/material/Tooltip";
 import HelpIcon from "@mui/icons-material/Help";
 import { useParams } from "react-router-dom";
 import { useGetChannelByConfigIdName } from "../hooks";
+import { useSnackbar } from "notistack";
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
@@ -111,6 +112,7 @@ export const TurbineChannelInformationForm = ({
     ],
   });
   const { configId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
   const { data, getChannelByConfigIdName } = useGetChannelByConfigIdName(
     configId || "",
     formContext?.values["turbine_crankshaft_sensorx"],
@@ -118,30 +120,43 @@ export const TurbineChannelInformationForm = ({
   );
   useEffect(() => {
     if (data && formContext.dirty) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
       formContext.validateForm().then(() => {
         formContext.setFieldValue(
           "turbine_crankshaft_channel_type",
           data?.channel_type,
           false
         );
-        formContext.setFieldValue("turbine_crankshaft_teeth", data?.teeth, false);
+        formContext.setFieldValue(
+          "turbine_crankshaft_teeth",
+          data?.teeth,
+          false
+        );
         formContext.setFieldValue(
           "turbine_crankshaft_wheel_type",
           data?.wheel_type,
           false
         );
-      })
-      
-      
+      });
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
     } else {
+      enqueueSnackbar({
+        message: "Channel is not used in another module",
+        variant: "info",
+      });
       formContext.setFieldValue("turbine_crankshaft_channel_type", "", false);
       formContext.setFieldValue("turbine_crankshaft_teeth", "", false);
       formContext.setFieldValue("turbine_crankshaft_wheel_type", "", false);
       formContext.validateForm();
     }
     return () => {};
-  }, [formContext?.values["turbine_crankshaft_sensorx"], data]);
-
+  }, [data]);
 
   return (
     <>

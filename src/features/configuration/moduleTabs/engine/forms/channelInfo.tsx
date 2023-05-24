@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { useGetChannelByConfigIdName } from "src/features/configuration/hooks";
+import { useSnackbar } from "notistack";
 
 const SENSORx = [
   "Ch1",
@@ -48,6 +49,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
   };
 
   const { configId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
   const { data: crankShatftData, getChannelByConfigIdName } =
     useGetChannelByConfigIdName(
       configId || "",
@@ -56,33 +58,44 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
     );
   useEffect(() => {
     if (crankShatftData && formContext.dirty) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
       formContext.validateForm().then(() => {
         formContext.setFieldValue(
           "Crankshaft_ChannelType",
           crankShatftData?.channel_type,
-          false
+          true
         );
         formContext.setFieldValue(
           "Crankshaft_Teeth",
           crankShatftData?.teeth,
-          false
+          true
         );
         formContext.setFieldValue(
           "Crankshaft_WheelType",
           crankShatftData?.wheel_type,
-          false
+          true
         );
       });
-
-      
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
     } else {
-      formContext.setFieldValue("Crankshaft_ChannelType", "", false);
-      formContext.setFieldValue("Crankshaft_Teeth", "", false);
-      formContext.setFieldValue("Crankshaft_WheelType", "", false);
-      formContext.validateForm();
+      enqueueSnackbar({
+        message: "Channel is not used in another module",
+        variant: "info",
+      });
+      formContext.validateForm().then(() => {
+        formContext.setFieldValue("Crankshaft_ChannelType", "", false);
+        formContext.setFieldValue("Crankshaft_Teeth", "", false);
+        formContext.setFieldValue("Crankshaft_WheelType", "", false);
+      });
     }
     return () => {};
-  }, [formContext?.values["Crankshaft_SENSORx"], crankShatftData]);
+  }, [crankShatftData]);
   const { data: camShatftData } = useGetChannelByConfigIdName(
     configId || "",
     formContext?.values["CamShaft_SENSORx"],
@@ -90,6 +103,11 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
   );
   useEffect(() => {
     if (camShatftData && formContext.dirty) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
       formContext.validateForm().then(() => {
         formContext.setFieldValue(
           "CamShaft_ChannelType",
@@ -107,14 +125,21 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
           false
         );
       });
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
     } else {
+      enqueueSnackbar({
+        message: "Channel is not used in another module",
+        variant: "info",
+      });
       formContext.setFieldValue("CamShaft_ChannelType", "", false);
       formContext.setFieldValue("CamShaft_Teeth", "", false);
       formContext.setFieldValue("CamShaft_WheelType", "", false);
       formContext.validateForm();
     }
     return () => {};
-  }, [formContext?.values["CamShaft_SENSORx"], camShatftData]);
+  }, [camShatftData]);
 
   const { data: tdcData } = useGetChannelByConfigIdName(
     configId || "",
@@ -123,6 +148,11 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
   );
   useEffect(() => {
     if (tdcData && formContext.dirty) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
       formContext.validateForm().then(() => {
         formContext.setFieldValue(
           "TDC_ChannelType",
@@ -132,14 +162,21 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
         formContext.setFieldValue("TDC_Teeth", tdcData?.teeth, false);
         formContext.setFieldValue("TDC_WheelType", tdcData?.wheel_type, false);
       });
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
     } else {
+      enqueueSnackbar({
+        message: "Channel is not used in another module",
+        variant: "info",
+      });
       formContext.setFieldValue("TDC_ChannelType", "", false);
       formContext.setFieldValue("TDC_Teeth", "", false);
       formContext.setFieldValue("TDC_WheelType", "", false);
       formContext.validateForm();
     }
     return () => {};
-  }, [formContext?.values["TDC_SENSORx"], tdcData]);
+  }, [tdcData]);
 
   const { data: peakPressureData } = useGetChannelByConfigIdName(
     configId || "",
@@ -148,6 +185,11 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
   );
   useEffect(() => {
     if (peakPressureData && formContext.dirty) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
       formContext.validateForm().then(() => {
         formContext.setFieldValue(
           "Peak_Pressure_ChannelType",
@@ -165,14 +207,22 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
           false
         );
       });
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
     } else {
-      formContext.setFieldValue("Peak_Pressure_ChannelType", "", false);
-      formContext.setFieldValue("Peak_Pressure_Teeth", "", false);
-      formContext.setFieldValue("Peak_Pressure_WheelType", "", false);
-      formContext.validateForm();
+      enqueueSnackbar({
+        message: "Channel is not used in another module",
+        variant: "info",
+      });
+      formContext.validateForm().then(() => {
+        formContext.setFieldValue("Peak_Pressure_ChannelType", "", false);
+        formContext.setFieldValue("Peak_Pressure_Teeth", "", false);
+        formContext.setFieldValue("Peak_Pressure_WheelType", "", false);
+      });
     }
     return () => {};
-  }, [formContext?.values["Peak_Pressure_SENSORx"], peakPressureData]);
+  }, [peakPressureData]);
 
   return (
     <>
@@ -359,96 +409,102 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               )}
             </FormControl>
           </Grid>
-          <Grid item>
-            <FormControl
-              sx={{
-                minWidth: "182px",
-              }}
-              error={Boolean(formContext?.errors?.["CamShaft_ChannelType"])}
-            >
-              <InputLabel id={`CamShaft_ChannelType-label`}>
-                Sensor_Type
-              </InputLabel>
-              <Select
-                labelId={`CamShaft_ChannelType-label`}
-                onChange={formContext?.handleChange}
-                value={formContext?.values?.["CamShaft_ChannelType"]}
-                name="CamShaft_ChannelType"
-                label={"ChannelType"}
-                inputProps={{
-                  readOnly: camShatftData ? true : false,
-                }}
-              >
-                {optionsChannelInformation["ChannelType"].map(
-                  (option: string) => (
-                    <MenuItem key={option} value={option}>
-                      {option}
-                    </MenuItem>
-                  )
-                )}
-              </Select>
-              {Boolean(formContext?.errors?.["CamShaft_ChannelType"]) && (
-                <FormHelperText>
-                  {formContext?.errors?.["CamShaft_ChannelType"]}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Grid>
-          <Grid item>
-            <TextField
-              name={"CamShaft_Teeth"}
-              label="Teeth"
-              variant="outlined"
-              sx={{
-                fontSize: "16px",
-                width: "182px",
-                padding: "1px 1px",
-              }}
-              onChange={formContext?.handleChange}
-              value={formContext?.values?.["CamShaft_Teeth"]}
-              error={Boolean(formContext?.errors?.["CamShaft_Teeth"])}
-              helperText={formContext?.errors?.["CamShaft_Teeth"]}
-              inputProps={{
-                readOnly: camShatftData ? true : false,
-                style: {
-                  padding: "11px 26px 13px 12px",
-                },
-              }}
-            ></TextField>
-          </Grid>
-          <Grid item>
-            <FormControl
-              sx={{
-                minWidth: "182px",
-              }}
-              error={Boolean(formContext?.errors?.[""])}
-            >
-              <InputLabel id={`CamShaft_WheelType-label`}>WheelType</InputLabel>
-              <Select
-                labelId={`CamShaft_WheelType-label`}
-                name="CamShaft_WheelType"
-                onChange={formContext?.handleChange}
-                value={formContext?.values?.["CamShaft_WheelType"]}
-                inputProps={{
-                  readOnly: camShatftData ? true : false,
-                }}
-                label={"WheelType"}
-              >
-                {optionsChannelInformation["WheelType"].map(
-                  (option: string) => (
-                    <MenuItem key={option} value={option}>
-                      {option}
-                    </MenuItem>
-                  )
-                )}
-              </Select>
-              {Boolean(formContext?.errors?.["CamShaft_WheelType"]) && (
-                <FormHelperText>
-                  {formContext?.errors?.["CamShaft_WheelType"]}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Grid>
+          {formContext?.values?.["CamShaft_SENSORx"] !== "No Channel" && (
+            <>
+              <Grid item>
+                <FormControl
+                  sx={{
+                    minWidth: "182px",
+                  }}
+                  error={Boolean(formContext?.errors?.["CamShaft_ChannelType"])}
+                >
+                  <InputLabel id={`CamShaft_ChannelType-label`}>
+                    Sensor_Type
+                  </InputLabel>
+                  <Select
+                    labelId={`CamShaft_ChannelType-label`}
+                    onChange={formContext?.handleChange}
+                    value={formContext?.values?.["CamShaft_ChannelType"]}
+                    name="CamShaft_ChannelType"
+                    label={"ChannelType"}
+                    inputProps={{
+                      readOnly: camShatftData ? true : false,
+                    }}
+                  >
+                    {optionsChannelInformation["ChannelType"].map(
+                      (option: string) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      )
+                    )}
+                  </Select>
+                  {Boolean(formContext?.errors?.["CamShaft_ChannelType"]) && (
+                    <FormHelperText>
+                      {formContext?.errors?.["CamShaft_ChannelType"]}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <TextField
+                  name={"CamShaft_Teeth"}
+                  label="Teeth"
+                  variant="outlined"
+                  sx={{
+                    fontSize: "16px",
+                    width: "182px",
+                    padding: "1px 1px",
+                  }}
+                  onChange={formContext?.handleChange}
+                  value={formContext?.values?.["CamShaft_Teeth"]}
+                  error={Boolean(formContext?.errors?.["CamShaft_Teeth"])}
+                  helperText={formContext?.errors?.["CamShaft_Teeth"]}
+                  inputProps={{
+                    readOnly: camShatftData ? true : false,
+                    style: {
+                      padding: "11px 26px 13px 12px",
+                    },
+                  }}
+                ></TextField>
+              </Grid>
+              <Grid item>
+                <FormControl
+                  sx={{
+                    minWidth: "182px",
+                  }}
+                  error={Boolean(formContext?.errors?.[""])}
+                >
+                  <InputLabel id={`CamShaft_WheelType-label`}>
+                    WheelType
+                  </InputLabel>
+                  <Select
+                    labelId={`CamShaft_WheelType-label`}
+                    name="CamShaft_WheelType"
+                    onChange={formContext?.handleChange}
+                    value={formContext?.values?.["CamShaft_WheelType"]}
+                    inputProps={{
+                      readOnly: camShatftData ? true : false,
+                    }}
+                    label={"WheelType"}
+                  >
+                    {optionsChannelInformation["WheelType"].map(
+                      (option: string) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      )
+                    )}
+                  </Select>
+                  {Boolean(formContext?.errors?.["CamShaft_WheelType"]) && (
+                    <FormHelperText>
+                      {formContext?.errors?.["CamShaft_WheelType"]}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+            </>
+          )}
         </Grid>
       </Grid>
       <Grid container sx={{ mt: 1 }}>
@@ -493,96 +549,103 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               )}
             </FormControl>
           </Grid>
-          <Grid item>
-            <FormControl
-              sx={{
-                minWidth: "182px",
-              }}
-              error={Boolean(formContext?.errors?.["TDC_ChannelType"])}
-            >
-              <InputLabel id={`TDC_ChannelType-label`}>Sensor_Type</InputLabel>
-              <Select
-                labelId={`TDC_ChannelType-label`}
-                onChange={formContext?.handleChange}
-                value={formContext?.values?.["TDC_ChannelType"]}
-                name="TDC_ChannelType"
-                label={"ChannelType"}
-                inputProps={{
-                  readOnly: tdcData ? true : false,
-                }}
-              >
-                {optionsChannelInformation["ChannelType"].map(
-                  (option: string) => (
-                    <MenuItem key={option} value={option}>
-                      {option}
-                    </MenuItem>
-                  )
-                )}
-              </Select>
-              {Boolean(formContext?.errors?.["TDC_ChannelType"]) && (
-                <FormHelperText>
-                  {formContext?.errors?.["TDC_ChannelType"]}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Grid>
-          <Grid item>
-            <TextField
-              name={"TDC_Teeth"}
-              label="Teeth"
-              variant="outlined"
-              sx={{
-                fontSize: "16px",
-                width: "182px",
-                padding: "1px 1px",
-              }}
-              onChange={formContext?.handleChange}
-              value={formContext?.values?.["TDC_Teeth"]}
-              error={Boolean(formContext?.errors?.["TDC_Teeth"])}
-              helperText={formContext?.errors?.["TDC_Teeth"]}
-              inputProps={{
-                readOnly: tdcData ? true : false,
-                style: {
-                  padding: "11px 26px 13px 12px",
-                },
-              }}
-            ></TextField>
-          </Grid>
-          <Grid item>
-            <FormControl
-              sx={{
-                minWidth: "182px",
-              }}
-              error={Boolean(formContext?.errors?.["TDC_WheelType"])}
-            >
-              <InputLabel id={`TDC_WheelType-label`}>WheelType</InputLabel>
-              <Select
-                labelId={`TDC_WheelType-label`}
-                name="TDC_WheelType"
-                onChange={formContext?.handleChange}
-                value={formContext?.values?.["TDC_WheelType"]}
-                label={"WheelType"}
-                inputProps={{
-                  readOnly: tdcData ? true : false,
-                }}
-              >
-                {optionsChannelInformation["WheelType"].map(
-                  (option: string) => (
-                    <MenuItem key={option} value={option}>
-                      {option}
-                    </MenuItem>
-                  )
-                )}
-              </Select>
-              {Boolean(formContext?.errors?.["TDC_WheelType"]) && (
-                <FormHelperText>
-                  {formContext?.errors?.["TDC_WheelType"]}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Grid>
+          {formContext?.values?.["TDC_SENSORx"] !== "No Channel" && (
+            <>
+              <Grid item>
+                <FormControl
+                  sx={{
+                    minWidth: "182px",
+                  }}
+                  error={Boolean(formContext?.errors?.["TDC_ChannelType"])}
+                >
+                  <InputLabel id={`TDC_ChannelType-label`}>
+                    Sensor_Type
+                  </InputLabel>
+                  <Select
+                    labelId={`TDC_ChannelType-label`}
+                    onChange={formContext?.handleChange}
+                    value={formContext?.values?.["TDC_ChannelType"]}
+                    name="TDC_ChannelType"
+                    label={"ChannelType"}
+                    inputProps={{
+                      readOnly: tdcData ? true : false,
+                    }}
+                  >
+                    {optionsChannelInformation["ChannelType"].map(
+                      (option: string) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      )
+                    )}
+                  </Select>
+                  {Boolean(formContext?.errors?.["TDC_ChannelType"]) && (
+                    <FormHelperText>
+                      {formContext?.errors?.["TDC_ChannelType"]}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <TextField
+                  name={"TDC_Teeth"}
+                  label="Teeth"
+                  variant="outlined"
+                  sx={{
+                    fontSize: "16px",
+                    width: "182px",
+                    padding: "1px 1px",
+                  }}
+                  onChange={formContext?.handleChange}
+                  value={formContext?.values?.["TDC_Teeth"]}
+                  error={Boolean(formContext?.errors?.["TDC_Teeth"])}
+                  helperText={formContext?.errors?.["TDC_Teeth"]}
+                  inputProps={{
+                    readOnly: tdcData ? true : false,
+                    style: {
+                      padding: "11px 26px 13px 12px",
+                    },
+                  }}
+                ></TextField>
+              </Grid>
+              <Grid item>
+                <FormControl
+                  sx={{
+                    minWidth: "182px",
+                  }}
+                  error={Boolean(formContext?.errors?.["TDC_WheelType"])}
+                >
+                  <InputLabel id={`TDC_WheelType-label`}>WheelType</InputLabel>
+                  <Select
+                    labelId={`TDC_WheelType-label`}
+                    name="TDC_WheelType"
+                    onChange={formContext?.handleChange}
+                    value={formContext?.values?.["TDC_WheelType"]}
+                    label={"WheelType"}
+                    inputProps={{
+                      readOnly: tdcData ? true : false,
+                    }}
+                  >
+                    {optionsChannelInformation["WheelType"].map(
+                      (option: string) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      )
+                    )}
+                  </Select>
+                  {Boolean(formContext?.errors?.["TDC_WheelType"]) && (
+                    <FormHelperText>
+                      {formContext?.errors?.["TDC_WheelType"]}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+            </>
+          )}
         </Grid>
       </Grid>
+
       <Grid container sx={{ mt: 1 }}>
         <Grid item>
           <Typography
@@ -629,129 +692,145 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               )}
             </FormControl>
           </Grid>
-          <Grid item>
-            <FormControl
-              sx={{
-                minWidth: "182px",
-              }}
-              error={Boolean(
-                formContext?.errors?.["Peak_Pressure_ChannelType"]
-              )}
-            >
-              <InputLabel id={`Peak_Pressure_ChannelType-label`}>
-                Sensor_Type
-              </InputLabel>
-              <Select
-                labelId={`Peak_Pressure_ChannelType-label`}
-                onChange={formContext?.handleChange}
-                value={formContext?.values?.["Peak_Pressure_ChannelType"]}
-                name="Peak_Pressure_ChannelType"
-                label={"ChannelType"}
-                inputProps={{
-                  readOnly: peakPressureData ? true : false,
-                }}
-              >
-                {optionsChannelInformation["ChannelType"].map(
-                  (option: string) => (
-                    <MenuItem key={option} value={option}>
-                      {option}
-                    </MenuItem>
-                  )
-                )}
-              </Select>
-              {Boolean(formContext?.errors?.["Peak_Pressure_ChannelType"]) && (
-                <FormHelperText>
-                  {formContext?.errors?.["Peak_Pressure_ChannelType"]}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Grid>
-          <Grid item>
-            <TextField
-              name={"Peak_Pressure_Teeth"}
-              label="Teeth"
-              variant="outlined"
-              disabled
-              sx={{
-                fontSize: "16px",
-                width: "182px",
-                padding: "1px 1px",
-              }}
-              onChange={formContext?.handleChange}
-              value={formContext?.values?.["Peak_Pressure_Teeth"]}
-              error={Boolean(formContext?.errors?.["Peak_Pressure_Teeth"])}
-              helperText={formContext?.errors?.["Peak_Pressure_Teeth"]}
-              inputProps={{
-                readOnly: peakPressureData ? true : false,
-                style: {
-                  padding: "11px 26px 13px 12px",
-                },
-              }}
-            ></TextField>
-          </Grid>
-          <Grid item>
-            <FormControl
-              sx={{
-                minWidth: "182px",
-              }}
-              error={Boolean(formContext?.errors?.["Peak_Pressure_WheelType"])}
-              disabled
-            >
-              <InputLabel id={`Peak_Pressure_WheelType-label`}>
-                WheelType
-              </InputLabel>
-              <Select
-                labelId={`Peak_Pressure_WheelType-label`}
-                name="Peak_Pressure_WheelType"
-                onChange={formContext?.handleChange}
-                value={formContext?.values?.["Peak_Pressure_WheelType"]}
-                label={"WheelType"}
-                inputProps={{
-                  readOnly: peakPressureData ? true : false,
-                }}
-              >
-                {optionsChannelInformation["WheelType"].map(
-                  (option: string) => (
-                    <MenuItem key={option} value={option}>
-                      {option}
-                    </MenuItem>
-                  )
-                )}
-              </Select>
-              {Boolean(formContext?.errors?.["Peak_Pressure_WheelType"]) && (
-                <FormHelperText>
-                  {formContext?.errors?.["Peak_Pressure_WheelType"]}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Grid>
-          <Grid item>
-            <TextField
-              name={"peak_pressure_transducer_sensitivity"}
-              label="Transducer Sensitivity"
-              variant="outlined"
-              sx={{
-                fontSize: "16px",
-                width: "182px",
-                padding: "1px 1px",
-              }}
-              onChange={formContext?.handleChange}
-              error={Boolean(
-                formContext?.errors?.["peak_pressure_transducer_sensitivity"]
-              )}
-              helperText={
-                formContext?.errors?.["peak_pressure_transducer_sensitivity"]
-              }
-              value={
-                formContext?.values?.["peak_pressure_transducer_sensitivity"]
-              }
-              inputProps={{
-                style: {
-                  padding: "11px 26px 13px 12px",
-                },
-              }}
-            ></TextField>
-          </Grid>
+          {formContext?.values?.["Peak_Pressure_SENSORx"] !== "No Channel" && (
+            <>
+              <Grid item>
+                <FormControl
+                  sx={{
+                    minWidth: "182px",
+                  }}
+                  error={Boolean(
+                    formContext?.errors?.["Peak_Pressure_ChannelType"]
+                  )}
+                >
+                  <InputLabel id={`Peak_Pressure_ChannelType-label`}>
+                    Sensor_Type
+                  </InputLabel>
+                  <Select
+                    labelId={`Peak_Pressure_ChannelType-label`}
+                    onChange={formContext?.handleChange}
+                    value={formContext?.values?.["Peak_Pressure_ChannelType"]}
+                    name="Peak_Pressure_ChannelType"
+                    label={"ChannelType"}
+                    inputProps={{
+                      readOnly: peakPressureData ? true : false,
+                    }}
+                  >
+                    {optionsChannelInformation["ChannelType"].map(
+                      (option: string) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      )
+                    )}
+                  </Select>
+                  {Boolean(
+                    formContext?.errors?.["Peak_Pressure_ChannelType"]
+                  ) && (
+                    <FormHelperText>
+                      {formContext?.errors?.["Peak_Pressure_ChannelType"]}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <TextField
+                  name={"Peak_Pressure_Teeth"}
+                  label="Teeth"
+                  variant="outlined"
+                  disabled
+                  sx={{
+                    fontSize: "16px",
+                    width: "182px",
+                    padding: "1px 1px",
+                  }}
+                  onChange={formContext?.handleChange}
+                  value={formContext?.values?.["Peak_Pressure_Teeth"]}
+                  error={Boolean(formContext?.errors?.["Peak_Pressure_Teeth"])}
+                  helperText={formContext?.errors?.["Peak_Pressure_Teeth"]}
+                  inputProps={{
+                    readOnly: peakPressureData ? true : false,
+                    style: {
+                      padding: "11px 26px 13px 12px",
+                    },
+                  }}
+                ></TextField>
+              </Grid>
+              <Grid item>
+                <FormControl
+                  sx={{
+                    minWidth: "182px",
+                  }}
+                  error={Boolean(
+                    formContext?.errors?.["Peak_Pressure_WheelType"]
+                  )}
+                  disabled
+                >
+                  <InputLabel id={`Peak_Pressure_WheelType-label`}>
+                    WheelType
+                  </InputLabel>
+                  <Select
+                    labelId={`Peak_Pressure_WheelType-label`}
+                    name="Peak_Pressure_WheelType"
+                    onChange={formContext?.handleChange}
+                    value={formContext?.values?.["Peak_Pressure_WheelType"]}
+                    label={"WheelType"}
+                    inputProps={{
+                      readOnly: peakPressureData ? true : false,
+                    }}
+                  >
+                    {optionsChannelInformation["WheelType"].map(
+                      (option: string) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      )
+                    )}
+                  </Select>
+                  {Boolean(
+                    formContext?.errors?.["Peak_Pressure_WheelType"]
+                  ) && (
+                    <FormHelperText>
+                      {formContext?.errors?.["Peak_Pressure_WheelType"]}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <TextField
+                  name={"peak_pressure_transducer_sensitivity"}
+                  label="Transducer Sensitivity"
+                  variant="outlined"
+                  sx={{
+                    fontSize: "16px",
+                    width: "182px",
+                    padding: "1px 1px",
+                  }}
+                  onChange={formContext?.handleChange}
+                  error={Boolean(
+                    formContext?.errors?.[
+                      "peak_pressure_transducer_sensitivity"
+                    ]
+                  )}
+                  helperText={
+                    formContext?.errors?.[
+                      "peak_pressure_transducer_sensitivity"
+                    ]
+                  }
+                  value={
+                    formContext?.values?.[
+                      "peak_pressure_transducer_sensitivity"
+                    ]
+                  }
+                  inputProps={{
+                    style: {
+                      padding: "11px 26px 13px 12px",
+                    },
+                  }}
+                ></TextField>
+              </Grid>
+            </>
+          )}
         </Grid>
       </Grid>
     </>

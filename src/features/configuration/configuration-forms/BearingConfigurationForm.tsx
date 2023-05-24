@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import HelpIcon from "@mui/icons-material/Help";
 import { useGetChannelByConfigIdName } from "../hooks";
 import { useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
@@ -108,13 +109,20 @@ export const BearingChannelInformationForm = ({
     ],
   });
   const { configId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
   const { data, getChannelByConfigIdName } = useGetChannelByConfigIdName(
     configId || "",
     formContext?.values["bearing_crankshaft_sensorx"],
     formContext.dirty
   );
   useEffect(() => {
+    console.log('hi',data);
     if (data && formContext.dirty) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
       formContext.validateForm().then(() => {
         formContext.setFieldValue(
           "bearing_crankshaft_channel_type",
@@ -132,14 +140,21 @@ export const BearingChannelInformationForm = ({
           false
         );
       });
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
     } else {
+      enqueueSnackbar({
+        message: "Channel is not used in another module",
+        variant: "info",
+      });
       formContext.setFieldValue("bearing_crankshaft_channel_type", "", false);
       formContext.setFieldValue("bearing_crankshaft_teeth", "", false);
       formContext.setFieldValue("bearing_crankshaft_wheel_type", "", false);
       formContext.validateForm();
     }
     return () => {};
-  }, [formContext?.values["bearing_crankshaft_sensorx"], data]);
+  }, [data]);
 
   return (
     <>

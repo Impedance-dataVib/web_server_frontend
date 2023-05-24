@@ -4,7 +4,14 @@ export const torqueValidationSchema = yup.object({
   equipment_name: yup.string().required("This is a required field"),
 
   de_channel_sensorx: yup.string().required("This is a required field"),
-  de_channel_channel_type: yup.string().required("This is a required field"),
+  de_channel_channel_type: yup
+    .string()
+    .test(
+      "Channel Type Same",
+      "Field should be same for DE and NDE",
+      (value, context) => value === context.parent.nde_channel_channel_type
+    )
+    .required("This is a required field"),
   de_channel__teeth: yup
     .number()
     .required("This is a required field")
@@ -19,7 +26,14 @@ export const torqueValidationSchema = yup.object({
       (value, testConetext) => testConetext.parent.nde_channel_teeth === value
     )
     .integer("The field should be an integer !"),
-  de_channel_wheel_type: yup.string().required("This is a required field"),
+  de_channel_wheel_type: yup
+    .string()
+    .required("This is a required field")
+    .test(
+      "Field Should Be Same",
+      "Field should be same for DE and NDE",
+      (value, context) => value === context.parent.nde_channel_wheel_type
+    ),
   nde_channel_sensorx: yup.string().required("This is a required field"),
   nde_channel_channel_type: yup.string().required("This is a required field"),
   nde_channel_teeth: yup
@@ -321,7 +335,26 @@ export const engineValidationSchema = yup.object({
   asset_name: yup.string().required("This is a required field"),
   equipment_name: yup.string().required("This is a required field"),
 
-  Crankshaft_SENSORx: yup.string().required("This is a required field"),
+  Crankshaft_SENSORx: yup
+    .string()
+    .required("This is a required field")
+    .test(
+      "Channel Validation",
+      `Error: Crank, CAM, TDC, Peak pressure channel shouldn't be same`,
+      (value, context) => {
+        if (value === "No Channel") {
+          return true;
+        } else if (
+          value != context.parent.TDC_SENSORx &&
+          value != context.parent.Peak_Pressure_SENSORx &&
+          value != context.parent.CamShaft_SENSORx
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    ),
   Crankshaft_ChannelType: yup.string().required("This is a required field"),
   Crankshaft_Teeth: yup
     .number()
@@ -337,70 +370,275 @@ export const engineValidationSchema = yup.object({
     .string()
     .required("This is a required field")
     .test(
-      "Channel Validation",
-      `Error: CAM, TDC, Peak pressure channel shouldn't be same`,
-      (value, context) =>
-        value != context.parent.TDC_SENSORx &&
-        value != context.parent.Peak_Pressure_SENSORx
+      "Optional Fields",
+      "ERROR: CAM,TDC, Peak pressure at time only one can be selected",
+      (value, context) => {
+        if (
+          value !== "No Channel" &&
+          (context.parent.TDC_SENSORx !== "No Channel" ||
+            context.parent.Peak_Pressure_SENSORx !== "No Channel")
+        ) {
+          return false;
+        } else if (value === "No Channel") {
+          return true;
+        } else {
+          return true;
+        }
+      }
     ),
-  CamShaft_ChannelType: yup.string().required("This is a required field"),
+  CamShaft_ChannelType: yup
+    .string()
+    .test(
+      "is Required ?",
+      "Error: Required Field if channel selected",
+      (value: any, context) => {
+        if (
+          context.parent.CamShaft_SENSORx === "No Channel" ||
+          value?.toString().trim().length > 0
+        ) {
+          return true;
+        } else if (
+          context.parent.CamShaft_SENSORx !== "No Channel" &&
+          value?.toString().trim().length === 0
+        ) {
+          return false;
+        }
+      }
+    ),
   CamShaft_Teeth: yup
     .number()
-    .required("This is a required field")
+    .test(
+      "is Required ?",
+      "Error: Required Field if channel selected",
+      (value: any, context) => {
+        if (
+          context.parent.CamShaft_SENSORx === "No Channel" ||
+          value?.toString().trim().length > 0
+        ) {
+          return true;
+        } else if (
+          context.parent.CamShaft_SENSORx !== "No Channel" &&
+          value?.toString().trim().length === 0
+        ) {
+          return false;
+        }
+      }
+    )
     .test(
       "Is positive?",
       "ERROR: The number must be greater than 0!",
-      (value) => value > 0
+      (value: any, context) =>
+        value > 0 || context.parent.CamShaft_SENSORx === "No Channel"
     ),
-  CamShaft_WheelType: yup.string().required("This is a required field"),
+  CamShaft_WheelType: yup
+    .string()
+    .test(
+      "is Required ?",
+      "Error: Required Field if channel selected",
+      (value: any, context) => {
+        if (
+          context.parent.CamShaft_SENSORx === "No Channel" ||
+          value?.toString().trim().length > 0
+        ) {
+          return true;
+        } else if (
+          context.parent.CamShaft_SENSORx !== "No Channel" &&
+          value?.toString().trim().length === 0
+        ) {
+          return false;
+        }
+      }
+    ),
   TDC_SENSORx: yup
     .string()
     .required("This is a required field")
     .test(
-      "Channel Validation",
-      `Error: CAM, TDC, Peak pressure channel shouldn't be same`,
-      (value, context) =>
-        value != context.parent.CamShaft_SENSORx &&
-        value != context.parent.Peak_Pressure_SENSORx
+      "Optional Fields",
+      "ERROR: CAM,TDC, Peak pressure at time only one can be selected",
+      (value, context) => {
+        if (
+          value !== "No Channel" &&
+          (context.parent.CamShaft_SENSORx !== "No Channel" ||
+            context.parent.Peak_Pressure_SENSORx !== "No Channel")
+        ) {
+          return false;
+        } else if (value === "No Channel") {
+          return true;
+        } else {
+          return true;
+        }
+      }
     ),
-  TDC_ChannelType: yup.string().required("This is a required field"),
+  TDC_ChannelType: yup
+    .string()
+    .test(
+      "is Required ?",
+      "Error: Required Field if channel selected",
+      (value: any, context) => {
+        if (
+          context.parent.TDC_SENSORx === "No Channel" ||
+          value?.toString().trim().length > 0
+        ) {
+          return true;
+        } else if (
+          context.parent.TDC_SENSORx !== "No Channel" &&
+          value?.toString().trim().length === 0
+        ) {
+          return false;
+        }
+      }
+    ),
   TDC_Teeth: yup
     .number()
-    .required("This is a required field")
     .test(
       "Is positive?",
       "ERROR: The number must be greater than 0!",
-      (value) => value > 0
+      (value: any, context) =>
+        value > 0 || context.parent.TDC_SENSORx === "No Channel"
     )
-    .integer("The field should be an integer !"),
-  TDC_WheelType: yup.string().required("This is a required field"),
+    .test(
+      "is Required ?",
+      "Error: Required Field if channel selected",
+      (value: any, context) => {
+        if (
+          context.parent.TDC_SENSORx === "No Channel" ||
+          value?.toString().trim().length > 0
+        ) {
+          return true;
+        } else if (
+          context.parent.TDC_SENSORx !== "No Channel" &&
+          value?.toString().trim().length === 0
+        ) {
+          return false;
+        }
+      }
+    ),
+  TDC_WheelType: yup
+    .string()
+    .test(
+      "is Required ?",
+      "Error: Required Field if channel selected",
+      (value: any, context) => {
+        if (
+          context.parent.TDC_SENSORx === "No Channel" ||
+          value?.toString().trim().length > 0
+        ) {
+          return true;
+        } else if (
+          context.parent.TDC_SENSORx !== "No Channel" &&
+          value?.toString().trim().length === 0
+        ) {
+          return false;
+        }
+      }
+    ),
   Peak_Pressure_SENSORx: yup
     .string()
     .required("This is a required field")
     .test(
-      "Channel Validation",
-      `Error: CAM, TDC, Peak pressure channel shouldn't be same`,
-      (value, context) =>
-        value != context.parent.CamShaft_SENSORx &&
-        value != context.parent.TDC_SENSORx
+      "Optional Fields",
+      "ERROR: CAM,TDC, Peak pressure at time only one can be selected",
+      (value, context) => {
+        if (
+          value !== "No Channel" &&
+          (context.parent.CamShaft_SENSORx !== "No Channel" ||
+            context.parent.TDC_SENSORx !== "No Channel")
+        ) {
+          return false;
+        } else if (value === "No Channel") {
+          return true;
+        } else {
+          return true;
+        }
+      }
     ),
-  Peak_Pressure_ChannelType: yup.string().required("This is a required field"),
+  Peak_Pressure_ChannelType: yup
+    .string()
+    .test(
+      "is Required ?",
+      "Error: Required Field if channel selected",
+      (value: any, context) => {
+        if (
+          context.parent.Peak_Pressure_SENSORx === "No Channel" ||
+          value?.toString().trim().length > 0
+        ) {
+          return true;
+        } else if (
+          context.parent.Peak_Pressure_SENSORx !== "No Channel" &&
+          value?.toString().trim().length === 0
+        ) {
+          return false;
+        }
+      }
+    ),
   Peak_Pressure_Teeth: yup
     .number()
-    .required("This is a required field")
+    .test(
+      "is Required ?",
+      "Error: Required Field if channel selected",
+      (value: any, context) => {
+        if (
+          context.parent.Peak_Pressure_SENSORx === "No Channel" ||
+          value?.toString().trim().length > 0
+        ) {
+          return true;
+        } else if (
+          context.parent.Peak_Pressure_SENSORx !== "No Channel" &&
+          value?.toString().trim().length === 0
+        ) {
+          return false;
+        }
+      }
+    )
     .test(
       "Is positive?",
       "ERROR: The number must be greater than 0!",
-      (value) => value > 0
+      (value: any, context) =>
+        value > 0 || context.parent.Peak_Pressure_SENSORx === "No Channel"
     ),
-  Peak_Pressure_WheelType: yup.string().required("This is a required field"),
+  Peak_Pressure_WheelType: yup
+    .string()
+    .test(
+      "is Required ?",
+      "Error: Required Field if channel selected",
+      (value: any, context) => {
+        if (
+          context.parent.Peak_Pressure_SENSORx === "No Channel" ||
+          value?.toString().trim().length > 0
+        ) {
+          return true;
+        } else if (
+          context.parent.Peak_Pressure_SENSORx !== "No Channel" &&
+          value?.toString().trim().length === 0
+        ) {
+          
+          return false;
+        }
+      }
+    ),
   peak_pressure_transducer_sensitivity: yup
     .number()
-    .required("This is a required field")
+    .test(
+      "is Required ?",
+      "Error: Required Field if channel selected",
+      (value: any, context) => {
+        if (
+          context.parent.Peak_Pressure_SENSORx === "No Channel" ||
+          value?.toString().trim().length > 0
+        ) {
+          return true;
+        } else if (
+          context.parent.Peak_Pressure_SENSORx !== "No Channel" &&
+          value?.toString().trim().length === 0
+        ) {
+          return false;
+        }
+      }
+    )
     .test(
       "Is positive?",
       "ERROR: The number must be greater than 0!",
-      (value) => value > 0
+      (value: any) => value > 0
     ),
   name: yup.string().required("This is a required field"),
   serial_number: yup.string().required("This is a required field"),

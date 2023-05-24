@@ -5,7 +5,6 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormHelperText from "@mui/material/FormHelperText";
-import { BootstrapInput } from "../../../app/components/bootstarp-input";
 import { Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import formSchema from "../formSchema";
@@ -15,6 +14,7 @@ import Tooltip from "@mui/material/Tooltip";
 import HelpIcon from "@mui/icons-material/Help";
 import { useGetChannelByConfigIdName } from "../hooks";
 import { useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
@@ -119,6 +119,7 @@ export const MotorChannelInformationForm = ({
     ],
   });
   const { configId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
   const { data, getChannelByConfigIdName } = useGetChannelByConfigIdName(
     configId || "",
     formContext?.values["motor_crankshaft_sensorx"],
@@ -126,6 +127,11 @@ export const MotorChannelInformationForm = ({
   );
   useEffect(() => {
     if (data && formContext.dirty) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
       formContext.validateForm().then(() => {
         formContext.setFieldValue(
           "motor_crankshaft_channel_type",
@@ -139,14 +145,21 @@ export const MotorChannelInformationForm = ({
           false
         );
       });
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
     } else {
+      enqueueSnackbar({
+        message: "Channel is not used in another module",
+        variant: "info",
+      });
       formContext.setFieldValue("motor_crankshaft_channel_type", "", false);
       formContext.setFieldValue("motor_crankshaft_teeth", "", false);
       formContext.setFieldValue("motor_crankshaft_wheel_type", "", false);
       formContext.validateForm();
     }
     return () => {};
-  }, [formContext?.values["motor_crankshaft_sensorx"], data]);
+  }, [data]);
   return (
     <>
       <Grid
