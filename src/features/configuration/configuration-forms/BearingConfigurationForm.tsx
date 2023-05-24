@@ -115,18 +115,20 @@ export const BearingChannelInformationForm = ({
   );
   useEffect(() => {
     if (data && formContext.dirty) {
-      formContext.setFieldValue(
-        "bearing_crankshaft_channel_type",
-        data?.channel_type,
-        false
-      );
-      formContext.setFieldValue("bearing_crankshaft_teeth", data?.teeth, false);
-      formContext.setFieldValue(
-        "bearing_crankshaft_wheel_type",
-        data?.wheel_type,
-        false
-      );
-      formContext.setErrors({});
+      formContext.validateForm().then(() => {
+        formContext.setFieldValue(
+          "bearing_crankshaft_channel_type",
+          data?.channel_type,
+          false
+        );
+        formContext.setFieldValue("bearing_crankshaft_teeth", data?.teeth, false);
+        formContext.setFieldValue(
+          "bearing_crankshaft_wheel_type",
+          data?.wheel_type,
+          false
+        );
+      })
+     
     } else {
       formContext.setFieldValue("bearing_crankshaft_channel_type", "", false);
       formContext.setFieldValue("bearing_crankshaft_teeth", "", false);

@@ -56,22 +56,25 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
     );
   useEffect(() => {
     if (crankShatftData && formContext.dirty) {
-      formContext.setFieldValue(
-        "Crankshaft_ChannelType",
-        crankShatftData?.channel_type,
-        false
-      );
-      formContext.setFieldValue(
-        "Crankshaft_Teeth",
-        crankShatftData?.teeth,
-        false
-      );
-      formContext.setFieldValue(
-        "Crankshaft_WheelType",
-        crankShatftData?.wheel_type,
-        false
-      );
-      formContext.setErrors({});
+      formContext.validateForm().then(() => {
+        formContext.setFieldValue(
+          "Crankshaft_ChannelType",
+          crankShatftData?.channel_type,
+          false
+        );
+        formContext.setFieldValue(
+          "Crankshaft_Teeth",
+          crankShatftData?.teeth,
+          false
+        );
+        formContext.setFieldValue(
+          "Crankshaft_WheelType",
+          crankShatftData?.wheel_type,
+          false
+        );
+      });
+
+      
     } else {
       formContext.setFieldValue("Crankshaft_ChannelType", "", false);
       formContext.setFieldValue("Crankshaft_Teeth", "", false);
@@ -87,18 +90,23 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
   );
   useEffect(() => {
     if (camShatftData && formContext.dirty) {
-      formContext.setFieldValue(
-        "CamShaft_ChannelType",
-        camShatftData?.channel_type,
-        false
-      );
-      formContext.setFieldValue("CamShaft_Teeth", camShatftData?.teeth, false);
-      formContext.setFieldValue(
-        "CamShaft_WheelType",
-        camShatftData?.wheel_type,
-        false
-      );
-      formContext.setErrors({});
+      formContext.validateForm().then(() => {
+        formContext.setFieldValue(
+          "CamShaft_ChannelType",
+          camShatftData?.channel_type,
+          false
+        );
+        formContext.setFieldValue(
+          "CamShaft_Teeth",
+          camShatftData?.teeth,
+          false
+        );
+        formContext.setFieldValue(
+          "CamShaft_WheelType",
+          camShatftData?.wheel_type,
+          false
+        );
+      });
     } else {
       formContext.setFieldValue("CamShaft_ChannelType", "", false);
       formContext.setFieldValue("CamShaft_Teeth", "", false);
@@ -115,14 +123,15 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
   );
   useEffect(() => {
     if (tdcData && formContext.dirty) {
-      formContext.setFieldValue(
-        "TDC_ChannelType",
-        tdcData?.channel_type,
-        false
-      );
-      formContext.setFieldValue("TDC_Teeth", tdcData?.teeth, false);
-      formContext.setFieldValue("TDC_WheelType", tdcData?.wheel_type, false);
-      formContext.setErrors({});
+      formContext.validateForm().then(() => {
+        formContext.setFieldValue(
+          "TDC_ChannelType",
+          tdcData?.channel_type,
+          false
+        );
+        formContext.setFieldValue("TDC_Teeth", tdcData?.teeth, false);
+        formContext.setFieldValue("TDC_WheelType", tdcData?.wheel_type, false);
+      });
     } else {
       formContext.setFieldValue("TDC_ChannelType", "", false);
       formContext.setFieldValue("TDC_Teeth", "", false);
@@ -139,22 +148,23 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
   );
   useEffect(() => {
     if (peakPressureData && formContext.dirty) {
-      formContext.setFieldValue(
-        "Peak_Pressure_ChannelType",
-        peakPressureData?.channel_type,
-        false
-      );
-      formContext.setFieldValue(
-        "Peak_Pressure_Teeth",
-        peakPressureData?.teeth,
-        false
-      );
-      formContext.setFieldValue(
-        "Peak_Pressure_WheelType",
-        peakPressureData?.wheel_type,
-        false
-      );
-      formContext.setErrors({});
+      formContext.validateForm().then(() => {
+        formContext.setFieldValue(
+          "Peak_Pressure_ChannelType",
+          peakPressureData?.channel_type,
+          false
+        );
+        formContext.setFieldValue(
+          "Peak_Pressure_Teeth",
+          peakPressureData?.teeth,
+          false
+        );
+        formContext.setFieldValue(
+          "Peak_Pressure_WheelType",
+          peakPressureData?.wheel_type,
+          false
+        );
+      });
     } else {
       formContext.setFieldValue("Peak_Pressure_ChannelType", "", false);
       formContext.setFieldValue("Peak_Pressure_Teeth", "", false);

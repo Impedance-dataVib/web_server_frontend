@@ -134,22 +134,25 @@ export const TorqueChannelInformationForm = ({
   );
   useEffect(() => {
     if (deChannelData && formContext.dirty) {
-      formContext.setFieldValue(
-        "de_channel_channel_type",
-        deChannelData?.channel_type,
-        false
-      );
-      formContext.setFieldValue(
-        "de_channel__teeth",
-        deChannelData?.teeth,
-        false
-      );
-      formContext.setFieldValue(
-        "de_channel_wheel_type",
-        deChannelData?.wheel_type,
-        false
-      );
-      formContext.setErrors({});
+      formContext.validateForm().then(() => {
+        formContext.setFieldValue(
+          "de_channel_channel_type",
+          deChannelData?.channel_type,
+          false
+        );
+        formContext.setFieldValue(
+          "de_channel__teeth",
+          deChannelData?.teeth,
+          false
+        );
+        formContext.setFieldValue(
+          "de_channel_wheel_type",
+          deChannelData?.wheel_type,
+          false
+        );
+      })
+      
+      
     } else {
       formContext.setFieldValue("de_channel_channel_type", "", false);
       formContext.setFieldValue("de_channel__teeth", "", false);
@@ -161,18 +164,20 @@ export const TorqueChannelInformationForm = ({
 
   useEffect(() => {
     if (ndeChannel && formContext.dirty) {
-      formContext.setFieldValue(
-        "nde_channel_channel_type",
-        ndeChannel?.channel_type,
-        false
-      );
-      formContext.setFieldValue("nde_channel_teeth", ndeChannel?.teeth, false);
-      formContext.setFieldValue(
-        "nde_channel_wheel_type",
-        ndeChannel?.wheel_type,
-        false
-      );
-      formContext.setErrors({});
+      formContext.validateForm().then(() => {
+        formContext.setFieldValue(
+          "nde_channel_channel_type",
+          ndeChannel?.channel_type,
+          false
+        );
+        formContext.setFieldValue("nde_channel_teeth", ndeChannel?.teeth, false);
+        formContext.setFieldValue(
+          "nde_channel_wheel_type",
+          ndeChannel?.wheel_type,
+          false
+        );
+      })
+      
     } else {
       formContext.setFieldValue("nde_channel_channel_type", "", false);
       formContext.setFieldValue("nde_channel_teeth", "", false);
