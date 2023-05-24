@@ -121,14 +121,17 @@ export const BearingChannelInformationForm = ({
           data?.channel_type,
           false
         );
-        formContext.setFieldValue("bearing_crankshaft_teeth", data?.teeth, false);
+        formContext.setFieldValue(
+          "bearing_crankshaft_teeth",
+          data?.teeth,
+          false
+        );
         formContext.setFieldValue(
           "bearing_crankshaft_wheel_type",
           data?.wheel_type,
           false
         );
-      })
-     
+      });
     } else {
       formContext.setFieldValue("bearing_crankshaft_channel_type", "", false);
       formContext.setFieldValue("bearing_crankshaft_teeth", "", false);
@@ -198,7 +201,7 @@ export const BearingChannelInformationForm = ({
               )}
             >
               <InputLabel id={`bearing_crankshaft_channel_type-label`}>
-                Channel_Type
+                Sensor_Type
               </InputLabel>
               <Select
                 labelId="bearing_crankshaft_channel_type-label"

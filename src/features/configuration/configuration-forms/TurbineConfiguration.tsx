@@ -203,7 +203,7 @@ export const TurbineChannelInformationForm = ({
               )}
             >
               <InputLabel id={`turbine_crankshaft_channel_type-label`}>
-                Channel_Type
+                Sensor_Type
               </InputLabel>
               <Select
                 labelId="turbine_crankshaft_channel_type-label"

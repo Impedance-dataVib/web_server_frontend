@@ -104,7 +104,7 @@ export const TorqueChannelInformationForm = ({
       "CH8",
       "No Channel",
     ],
-    ChannelType: ["Speed", "Transducer"],
+    ChannelType: ["Speed"],
     WheelType: [
       "Standard",
       "1 Missing Tooth",
@@ -241,7 +241,7 @@ export const TorqueChannelInformationForm = ({
               error={Boolean(formContext?.errors?.["de_channel_channel_type"])}
             >
               <InputLabel id={`de_channel_channel_type-label`}>
-                Channel_Type
+                Sensor_Type
               </InputLabel>
               <Select
                 labelId="de_channel_channel_type-label"

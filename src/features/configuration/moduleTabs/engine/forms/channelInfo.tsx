@@ -25,7 +25,7 @@ const SENSORx = [
   "No Channel",
 ];
 
-const ChannelType = ["Speed", "Transducer"];
+const ChannelType = ["Speed"];
 const WheelType = [
   "Standard",
   "1 Missing Tooth",
@@ -226,7 +226,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               error={Boolean(formContext?.errors?.["Crankshaft_ChannelType"])}
             >
               <InputLabel id={`Crankshaft_ChannelType-label`}>
-                ChannelType
+                Sensor_Type
               </InputLabel>
               <Select
                 labelId={`Crankshaft_ChannelType-label`}
@@ -367,7 +367,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               error={Boolean(formContext?.errors?.["CamShaft_ChannelType"])}
             >
               <InputLabel id={`CamShaft_ChannelType-label`}>
-                ChannelType
+                Sensor_Type
               </InputLabel>
               <Select
                 labelId={`CamShaft_ChannelType-label`}
@@ -399,7 +399,6 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               name={"CamShaft_Teeth"}
               label="Teeth"
               variant="outlined"
-              disabled
               sx={{
                 fontSize: "16px",
                 width: "182px",
@@ -434,7 +433,6 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                   readOnly: camShatftData ? true : false,
                 }}
                 label={"WheelType"}
-                disabled
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -502,7 +500,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               }}
               error={Boolean(formContext?.errors?.["TDC_ChannelType"])}
             >
-              <InputLabel id={`TDC_ChannelType-label`}>ChannelType</InputLabel>
+              <InputLabel id={`TDC_ChannelType-label`}>Sensor_Type</InputLabel>
               <Select
                 labelId={`TDC_ChannelType-label`}
                 onChange={formContext?.handleChange}
@@ -533,7 +531,6 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               name={"TDC_Teeth"}
               label="Teeth"
               variant="outlined"
-              disabled
               sx={{
                 fontSize: "16px",
                 width: "182px",
@@ -557,7 +554,6 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 minWidth: "182px",
               }}
               error={Boolean(formContext?.errors?.["TDC_WheelType"])}
-              disabled
             >
               <InputLabel id={`TDC_WheelType-label`}>WheelType</InputLabel>
               <Select
@@ -643,7 +639,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               )}
             >
               <InputLabel id={`Peak_Pressure_ChannelType-label`}>
-                ChannelType
+                Sensor_Type
               </InputLabel>
               <Select
                 labelId={`Peak_Pressure_ChannelType-label`}

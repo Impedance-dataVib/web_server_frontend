@@ -423,8 +423,8 @@ export const engineValidationSchema = yup.object({
     .required("This is a required field")
     .test(
       "Is positive?",
-      "ERROR: The number must be greater than 0!",
-      (value) => value > 0
+      "ERROR: The number must be in whole number and greater than 0!",
+      (value) => value !== 0 && value - Math.floor(value) === 0
     ),
   firing_order: yup
     .string()

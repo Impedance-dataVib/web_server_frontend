@@ -205,7 +205,7 @@ export const MotorChannelInformationForm = ({
               )}
             >
               <InputLabel id={`motor_crankshaft_channel_type-label`}>
-                Channel_Type
+                Sensor_Type
               </InputLabel>
               <Select
                 labelId="motor_crankshaft_channel_type-label"
