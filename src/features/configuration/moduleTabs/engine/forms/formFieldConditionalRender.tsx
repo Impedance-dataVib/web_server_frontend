@@ -1,6 +1,7 @@
 import {
   FormControl,
   FormControlLabel,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -12,9 +13,15 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
       return (
-        <FormControl sx={{ minWidth: "182px" }}>
-          <InputLabel id={fieldProps.label}>{fieldProps.name}</InputLabel>
+        <FormControl
+          sx={{ minWidth: "182px" }}
+          error={Boolean(formContext?.errors?.[fieldProps.label])}
+        >
+          <InputLabel id={`${fieldProps.label}-label`}>
+            {fieldProps.name}
+          </InputLabel>
           <Select
+            labelId={`${fieldProps.label}-label`}
             name={fieldProps.label}
             onChange={formContext?.handleChange}
             value={formContext?.values?.[fieldProps.label]}
@@ -26,6 +33,11 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
               </MenuItem>
             ))}
           </Select>
+          {Boolean(formContext?.errors?.[fieldProps.label]) && (
+            <FormHelperText>
+              {formContext?.errors?.[fieldProps.label]}
+            </FormHelperText>
+          )}
         </FormControl>
       );
 
@@ -36,6 +48,8 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           label={fieldProps.name}
           onChange={formContext?.handleChange}
           value={formContext?.values?.[fieldProps.label]}
+          error={Boolean(formContext?.errors?.[fieldProps.label])}
+          helperText={formContext?.errors?.[fieldProps.label]}
           variant="outlined"
           sx={{
             fontSize: "16px",
@@ -44,10 +58,12 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
             padding: "1px 1px",
           }}
           inputProps={{
+            readOnly: fieldProps?.disabled ? true : false,
             style: {
               padding: "11px 26px 13px 12px",
             },
           }}
+          InputLabelProps={{ shrink: true }}
         ></TextField>
       );
     case "toggle":
@@ -61,13 +77,13 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
               color="primary"
             />
           }
-          label={fieldProps.name}
+          label={fieldProps?.name}
           labelPlacement="start"
+          disabled={fieldProps?.userName === "admin" ? false : true}
         />
       );
     default:
       return <div>No Valid Field Type</div>;
-      break;
   }
 };
 export default FormFieldConditionalRender;

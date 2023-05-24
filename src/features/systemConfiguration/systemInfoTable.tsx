@@ -7,50 +7,63 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import { Typography } from "@mui/material";
 
-interface SystemIndoProps {
-  systemInfo: SystemInfoObject[];
-}
 
-interface SystemInfoObject {
-    activatedModules: string;
-    numberOfLicence: string;
-    licenceNumber: string;
-    expiryDate: string;
-    isLocked: boolean;
-}
 
-export default function SystemInfoTable({ systemInfo }: SystemIndoProps) {
+export default function SystemInfoTable({ systemInfo }: any) {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="left" sx={{border: 'none'}}>Activated Modules</TableCell>
-            <TableCell align="left" sx={{border: 'none'}}>No. Of Licence</TableCell>
-            <TableCell align="left" sx={{border: 'none'}}>Licence No.</TableCell>
-            <TableCell align="left" sx={{border: 'none'}}>Expiry date</TableCell>
+            <TableCell align="left" sx={{border: 'none'}}><Typography component="p" sx={{fontSize: 'medium'}} > Activated Modules</Typography></TableCell>
+            <TableCell align="left" sx={{border: 'none'}}><Typography component="p" sx={{fontSize: 'medium'}} > Quantity</Typography></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {systemInfo.map((row, index) => (
+          
             <TableRow
-              key={index}
               sx={{ "&:td, &:th": { border: "none" } }}
             >
-              <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: row.isLocked ? 0.5: 1}}>
-                {row.isLocked ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }{row.activatedModules}
+              <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }<Typography variant="subtitle1">{'Engine'}</Typography>
               </TableCell>
-              <TableCell align="left" sx={{border: 'none', opacity: row.isLocked ? 0.5: 1}}>{row.numberOfLicence}</TableCell>
-              <TableCell align="left" sx={{border: 'none', opacity: row.isLocked ? 0.5: 1}}>{row.licenceNumber}</TableCell>
-              <TableCell align="left" sx={{border: 'none', opacity: row.isLocked ? 0.5: 1}}>{row.expiryDate}</TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}><Typography variant="subtitle1">{systemInfo?.engine_quantity}</Typography></TableCell>
             </TableRow>
-          ))}
-          {systemInfo.length ===0 && (
-            <TableRow  sx={{ "&:td, &:th": { border: "none" } }}> 
-               <TableCell colSpan={4} align="center">No records found</TableCell> 
+            <TableRow
+              sx={{ "&:td, &:th": { border: "none" } }}
+            >
+              <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }<Typography variant="subtitle1">{'Bearing'}</Typography>
+              </TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}><Typography variant="subtitle1">{systemInfo?.bearing_quantity}</Typography></TableCell>
             </TableRow>
-          )}
+            <TableRow
+              sx={{ "&:td, &:th": { border: "none" } }}
+            >
+              <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }<Typography variant="subtitle1">{'Motor'}</Typography>
+              </TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}><Typography variant="subtitle1">{systemInfo?.motor_quantity}</Typography></TableCell>
+            </TableRow>
+            <TableRow
+              sx={{ "&:td, &:th": { border: "none" } }}
+            >
+              <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }<Typography variant="subtitle1">{'Turbine'}</Typography>
+              </TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}><Typography variant="subtitle1">{systemInfo?.turbine_quantity}</Typography></TableCell>
+            </TableRow>
+            <TableRow
+              sx={{ "&:td, &:th": { border: "none" } }}
+            >
+              <TableCell align="left" sx={{ display:'flex', alignItems: "end", border: 'none', opacity: false ? 0.5: 1}}>
+                {false ? <LockIcon sx={{mr:1}}/>: <LockOpenIcon sx={{mr:1}} /> }<Typography variant="subtitle1">{'Torque'}</Typography>
+              </TableCell>
+              <TableCell align="left" sx={{border: 'none', opacity: false ? 0.5: 1}}><Typography variant="subtitle1">{systemInfo?.torque_quantity}</Typography></TableCell>
+            </TableRow>
+        
         </TableBody>
       </Table>
     </TableContainer>

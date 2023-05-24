@@ -1,8 +1,9 @@
 import formSchema from "../../../../../features/configuration/formSchema";
 import { Grid } from "@mui/material";
 import FormFieldConditionalRender from "./formFieldConditionalRender";
-
+import { useAuth } from "../../../../../app/auth";
 const AdvancedParameters = ({ handleFormData, formContext }: any) => {
+  const { userName } = useAuth();
   return (
     <Grid container spacing={1}>
       {formSchema["Engine"]["Advanced Parameters"].map((item: any) => (
@@ -10,7 +11,11 @@ const AdvancedParameters = ({ handleFormData, formContext }: any) => {
           <Grid item>
             <FormFieldConditionalRender
               type={item.type}
-              fieldProps={{ ...item, handleChange: handleFormData }}
+              fieldProps={{
+                ...item,
+                handleChange: handleFormData,
+                userName: userName,
+              }}
               formContext={formContext}
             ></FormFieldConditionalRender>
           </Grid>

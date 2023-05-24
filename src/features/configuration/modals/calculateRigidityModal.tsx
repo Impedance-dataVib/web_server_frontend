@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as yup from "yup";
-import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -17,14 +16,18 @@ import { useFormik } from "formik";
 import Stack from "@mui/material/Stack";
 
 const schema = [
-  { name: "Outer Diameter(D)(mm)", label: "outer_diameter", type: "text" },
-  { name: "Inner Diameter(d)(mm)", label: "inner_diameter", type: "text" },
-  { name: "Sheer Modulus(G)", label: "sheer_modulus", type: "text" },
-  { name: "Length(L)(mm)", label: "length", type: "text" },
-  { name: "MaxRPM", label: "max_rpm", type: "text" },
-  { name: "MaxPower", label: "max_power", type: "text" },
+  { name: "Outer Diameter(D)(mtrs)", label: "outer_diameter", type: "text" },
+  { name: "Inner Diameter(d)(mtrs)", label: "inner_diameter", type: "text" },
+  {
+    name: "Sheer Modulus(G)(Gigapascal)",
+    label: "sheer_modulus",
+    type: "text",
+  },
+  { name: "Length(L)(Mtrs)", label: "length", type: "text" },
+  { name: "MaxRPM(RPM)", label: "max_rpm", type: "text" },
+  { name: "MaxPower(Watts)", label: "max_power", type: "text" },
 ];
-const validationSchema = yup.object({
+const validationSchema: any = yup.object({
   outer_diameter: yup.number().required("This is a required field"),
   inner_diameter: yup.number().required("This is a required field"),
   sheer_modulus: yup.number().required("This is a required field"),
@@ -42,16 +45,40 @@ const getFieldObjectsInitialValues = (schema: any) => {
 export const PopupRigidity = ({ formContext, fieldProps }: any) => {
   const [open, setOpen] = useState(false);
   const formContextPopUp = useFormik({
-    initialValues: { ...getFieldObjectsInitialValues },
+    initialValues: {
+      outer_diameter: 0,
+      inner_diameter: 0,
+      sheer_modulus: 0,
+      length: 0,
+      max_rpm: 0,
+      max_power: 0,
+    },
     onSubmit: () => {},
     validationSchema: validationSchema,
   });
-  
+  const handleCalculate = () => {
+    //R = (πG (D^4 - d^4) / 32 L)
+    if (formContextPopUp.isValid) {
+      const rigidity =
+        (Math.PI *
+          formContextPopUp?.values?.sheer_modulus *
+          (Math.pow(formContextPopUp?.values?.outer_diameter, 4) -
+            Math.pow(formContextPopUp?.values?.inner_diameter, 4))) /
+        (32 * formContextPopUp?.values?.length);
+      formContext.setFieldValue(fieldProps.label, rigidity);
+      setTimeout(() => {
+        setOpen(false);
+      }, 100);
+    }
+  };
+  useEffect(() => {
+    formContextPopUp.validateForm();
+  }, [formContextPopUp.values]);
   return (
     <Stack direction={"row"}>
       <TextField
         name={fieldProps.label}
-        label={fieldProps.label}
+        placeholder={fieldProps.name}
         onChange={formContext?.handleChange}
         value={formContext?.values?.[fieldProps.label]}
         error={Boolean(formContext?.errors?.[fieldProps.label])}
@@ -69,11 +96,18 @@ export const PopupRigidity = ({ formContext, fieldProps }: any) => {
           },
         }}
       ></TextField>
-      <Button onClick={() => setOpen(true)}>Calculate</Button>
+      <Button
+        variant="contained"
+        size="medium"
+        color="primary"
+        onClick={() => setOpen(true)}
+      >
+        Calculate
+      </Button>
       <CalculateRigidityModal
         open={open}
         onClose={() => setOpen(false)}
-        onCalculate={() => console.log("")}
+        onCalculate={handleCalculate}
         formContext={formContextPopUp}
       ></CalculateRigidityModal>
     </Stack>
@@ -114,12 +148,13 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
       return (
         <TextField
           name={fieldProps.label}
-          label={fieldProps.label}
+          label={fieldProps.name}
           onChange={formContext?.handleChange}
           value={formContext?.values?.[fieldProps.label]}
           error={Boolean(formContext?.errors?.[fieldProps.label])}
           helperText={formContext?.errors?.[fieldProps.label]}
-          variant="outlined"
+          variant="standard"
+          fullWidth
           sx={{
             fontSize: "16px",
             marginBottom: "20px",
@@ -172,7 +207,7 @@ const CalculateRigidityModal = ({
           onClick={onCalculate}
           disabled={!formContext.isValid}
         >
-          Add
+          calculate
         </Button>
       </DialogActions>
     </Dialog>

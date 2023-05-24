@@ -14,14 +14,21 @@ import {
   TorqueMachineDetailsForm,
   TorqueDiagnosticDetails,
   torqueValidationSchema,
+  TorqueAssetInformation,
 } from "./configuration-forms";
 import { useFormik } from "formik";
 import { deleteModule, saveModuleData } from "../../app/services";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetConfigurationModuleByConfigId, useGetModuleById } from "./hooks";
+import {
+  useGetConfigurationModuleByConfigId,
+  useGetModuleById,
+  useGetSystemCustomerNameInfo,
+} from "./hooks";
 import { useSnackbar } from "notistack";
 import { Delete } from "@mui/icons-material";
 import { eventBus } from "src/EventBus";
+import { torqueStepperValidationSchemaGroups } from "./stepperValidationSchema";
+
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -58,14 +65,22 @@ const StepToComponentEngineModule = ({
           formContext={formContext}
         ></TorqueDiagnosticDetails>
       );
+    case "Asset Information":
+      return (
+        <TorqueAssetInformation
+          handleFormData={handleFormData}
+          formContext={formContext}
+        ></TorqueAssetInformation>
+      );
     default:
       return <div>Invalid Step</div>;
   }
 };
-const TorqueTabContent = ({ module, moduleId }: any) => {
+const TorqueTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const [expanded, setExpanded] = useState<string | false>("Global");
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
+  const [activeStep, setActiveStep] = useState<number>(0);
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const { isLoading, data, isError, getModuleDataById } =
@@ -77,12 +92,56 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
     setStepperSteps(extractSteps(formSchema, module));
   }, []);
   const navigate = useNavigate();
+  const { data: customerName } = useGetSystemCustomerNameInfo();
   const handleAccordionChange =
-    (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-      setExpanded(newExpanded ? value : false);
+    (stepIndex: number) =>
+    (value: string) =>
+    async (event: React.SyntheticEvent, newExpanded: boolean) => {
+      try {
+        const formValidation = await moduleFormContext.validateForm();
+        const getStepsInOrder = extractSteps(formSchema, module);
+
+        if (stepIndex === 0) {
+          setExpanded(newExpanded ? value : false);
+        } else if (stepIndex > 0) {
+          const validationFields =
+            torqueStepperValidationSchemaGroups[getStepsInOrder[stepIndex - 1]];
+          const stepValidation = Object.keys(formValidation).some((item) =>
+            validationFields.includes(item)
+          );
+          //Checking the validation errors of the previous step, if present true else false
+
+          if (!stepValidation) {
+            setExpanded(newExpanded ? value : false);
+            setActiveStep(stepIndex);
+          } else {
+            throw new Error(
+              `${getStepsInOrder[stepIndex - 1]} step has validation errors!`
+            );
+          }
+        }
+      } catch (error: any) {
+        enqueueSnackbar({
+          message: error?.message,
+          variant: "error",
+        });
+      }
     };
-  const moduleFormContext = useFormik({
-    initialValues: {
+  const getInitialFormData = () => {
+    if (data?.from_data && customerName) {
+      const { configuration_id, ...rest } = data?.from_data;
+      return {
+        ...rest,
+        customer_name: customerName,
+        module_type: data.module_type,
+      };
+    }
+    return {
+      customer_name: customerName,
+      asset_name: "",
+      equipment_name: "",
+      module_type: data.module_type,
+     
       de_channel_sensorx: "",
       de_channel_channel_type: "",
       de_channel__teeth: "",
@@ -100,17 +159,17 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
       power: "",
       name: "",
       rated_rpm: "",
-    },
+      vessel_type: "",
+    };
+  };
+
+  const moduleFormContext = useFormik({
+    initialValues: getInitialFormData(),
+    enableReinitialize: true,
     onSubmit: (values) => {},
     validationSchema: torqueValidationSchema,
   });
-  useEffect(() => {
-    // moduleFormContext.setValues({});
-    if (data?.from_data) {
-      const { configuration_id, ...rest } = data?.from_data;
-      moduleFormContext.setValues({ ...rest });
-    }
-  }, [data]);
+
   const handleDeleteModule = async () => {
     try {
       enqueueSnackbar({
@@ -118,7 +177,7 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
         variant: "info",
       });
       await deleteModule(moduleId);
-      eventBus.dispatch('ModuleDelete',{})
+      eventBus.dispatch("ModuleDelete", {});
       enqueueSnackbar({
         message: "Delete Succeess!",
         variant: "success",
@@ -133,6 +192,7 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
   const handleSubmit = async () => {
     try {
       const validate = await moduleFormContext.validateForm();
+
       if (Object.keys(validate).length > 0) {
         throw new Error("Form Validation Error!");
       }
@@ -147,6 +207,7 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
         variant: "info",
       });
       await saveModuleData(payload);
+      setIsUnsaved(false);
       enqueueSnackbar({
         message: "Module Saved",
         variant: "success",
@@ -161,10 +222,15 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
       });
     }
   };
+
+  useEffect(() => {
+    setIsUnsaved(moduleFormContext.dirty);
+  }, [moduleFormContext.dirty])
+
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper
-        activeStep={2}
+        activeStep={activeStep}
         alternativeLabel
         connector={<CustomConnector></CustomConnector>}
         sx={{ width: "70%", marginBottom: "66px", marginTop: "40px" }}
@@ -176,19 +242,17 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
         ))}
       </Stepper>
       <Grid container sx={{ width: "70%" }}>
-        {stepperSteps?.map((item: string) => (
+        {stepperSteps?.map((item: string, index: number) => (
           <Grid key={item} item>
             <AccordionBase
               expanded={expanded}
-              handleChange={handleAccordionChange}
+              handleChange={handleAccordionChange(index)}
               value={item}
               title={item}
             >
               <StepToComponentEngineModule
                 step={item}
-                handleFormData={(e: any) =>
-                  console.log(e.target.name, e.target.value)
-                }
+                handleFormData={(e: any) => {}}
                 formContext={moduleFormContext}
               ></StepToComponentEngineModule>
             </AccordionBase>
@@ -204,7 +268,12 @@ const TorqueTabContent = ({ module, moduleId }: any) => {
           <Button variant="contained" onClick={handleSubmit}>
             Save
           </Button>
-          <Button variant="contained">Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/configuration")}
+          >
+            Cancel
+          </Button>
           <Button
             startIcon={<Delete />}
             color="primary"

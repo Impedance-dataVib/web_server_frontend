@@ -3,6 +3,7 @@ import { WarningAmber, WarningAmberOutlined } from "@mui/icons-material";
 import { Box, Button, Grid, Typography } from "@mui/material";
 
 import CardWidget from "../../../app/components/card";
+import FullscreenView from "./fullscreenView";
 
 const AlertsAndInstructions = () => {
   const renderContent = () => {
@@ -162,6 +163,7 @@ const AlertsAndInstructions = () => {
         content={renderContent()}
         footerContent={renderFooterContent()}
         initiallyCollapsed={false}
+        fullScreenContent={<FullscreenView />}
       />
     </div>
   );

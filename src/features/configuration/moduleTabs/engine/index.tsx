@@ -4,21 +4,11 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { Grid } from "@mui/material";
-
-// import CustomConnector from "../../../../../app/components/custom-stepper";
-// import AccordionBase from "../../../app/components/accordion-base";
-// import formSchema from "../formSchema";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-// import {
-//   ChannelInformationForm,
-//   AdvancedParameters,
-//   DiagnosticDetailsForm,
-//   EngineDetailsForm,
-// } from "../configuration-forms";
+
 import { useFormik } from "formik";
-// import { saveModuleData } from "../../../app/services";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ChannelInformationForm from "./forms/channelInfo";
 import EngineDetailsForm from "./forms/engineDetails";
 import DiagnosticDetailsForm from "./forms/diagnosticDetails";
@@ -26,11 +16,15 @@ import AdvancedParameters from "./forms/advancedParams";
 import CustomConnector from "../../../../app/components/custom-stepper";
 import AccordionBase from "../../../../app/components/accordion-base";
 import formSchema from "../../formSchema";
+import EngineAssetInformation from "./forms/assetInformation";
 import { deleteModule, saveModuleData } from "../../../../app/services";
 import { useSnackbar } from "notistack";
-import { useGetModuleById } from "../../hooks";
+import { useGetModuleById, useGetSystemCustomerNameInfo } from "../../hooks";
 import { Delete } from "@mui/icons-material";
 import { eventBus } from "src/EventBus";
+import { engineValidationSchema } from "../../configuration-forms";
+import { engineStepperValidationSchemaGroups } from "../../stepperValidationSchema";
+
 const extractSteps = (schema: any, module: string) => {
   return Object.keys(schema[module]);
 };
@@ -75,43 +69,54 @@ const StepToComponentEngineModule = ({
           formContext={formContext}
         ></AdvancedParameters>
       );
+    case "Asset Information":
+      return (
+        <EngineAssetInformation
+          handleFormData={handleFormData}
+          formContext={formContext}
+        ></EngineAssetInformation>
+      );
     default:
       return <div>Invalid Step</div>;
   }
 };
 
-const EngineTabContent = ({ module, moduleId }: any) => {
+const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const [tabConfigs, setTabConfigs] = useState<any>();
   const [stepperSteps, setStepperSteps] = useState<any | []>();
-  const [expanded, setExpanded] = useState<string | false>(
-    "Channel Information"
-  );
+  const [expanded, setExpanded] = useState<string | false>();
   const [activeStep, setActiveStep] = useState<number>(0);
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const { isLoading, data, isError, getModuleDataById } =
     useGetModuleById(moduleId);
-    const handleDeleteModule = async () => {
-      try {
-        enqueueSnackbar({
-          message: "In Progress",
-          variant: "info",
-        });
-        await deleteModule(moduleId);
-        eventBus.dispatch('ModuleDelete',{})
-        enqueueSnackbar({
-          message: "Delete Succeess!",
-          variant: "success",
-        });
-      } catch (error: any) {
-        enqueueSnackbar({
-          message: "Delete Failed!",
-          variant: "error",
-        });
-      }
-    };
+  const navigate = useNavigate();
+  const { data: customerName } = useGetSystemCustomerNameInfo();
+  const handleDeleteModule = async () => {
+    try {
+      enqueueSnackbar({
+        message: "In Progress",
+        variant: "info",
+      });
+      await deleteModule(moduleId);
+      eventBus.dispatch("ModuleDelete", {});
+      enqueueSnackbar({
+        message: "Delete Succeess!",
+        variant: "success",
+      });
+    } catch (error: any) {
+      enqueueSnackbar({
+        message: "Delete Failed!",
+        variant: "error",
+      });
+    }
+  };
   const handleSubmit = async () => {
     try {
+      const validate = await moduleFormContext.validateForm();
+      if (Object.keys(validate).length > 0) {
+        throw new Error("Form Validation Error!");
+      }
       const payload = {
         configuration_id: configId,
         module_type: module,
@@ -123,16 +128,19 @@ const EngineTabContent = ({ module, moduleId }: any) => {
         variant: "info",
       });
       await saveModuleData(payload);
+      setIsUnsaved(false);
       enqueueSnackbar({
         message: "Module Saved!",
         variant: "success",
       });
-    } catch (error) {
+    } catch (error: any) {
       enqueueSnackbar({
-        message: "Module Saved Failed!",
+        message:
+          error?.message === "Form Validation Error!"
+            ? "Form Validation Error!"
+            : "Module Failed To Save",
         variant: "error",
       });
-      console.log(error);
     }
   };
 
@@ -142,12 +150,53 @@ const EngineTabContent = ({ module, moduleId }: any) => {
   }, []);
 
   const handleAccordionChange =
-    (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-      setExpanded(newExpanded ? value : false);
-    };
+    (stepIndex: number) =>
+    (value: string) =>
+    async (event: React.SyntheticEvent, newExpanded: boolean) => {
+      try {
+        const formValidation = await moduleFormContext.validateForm();
+        const getStepsInOrder = extractSteps(formSchema, module);
 
-  const moduleFormContext = useFormik({
-    initialValues: {
+        if (stepIndex === 0) {
+          setExpanded(newExpanded ? value : false);
+        } else if (stepIndex > 0) {
+          const validationFields =
+            engineStepperValidationSchemaGroups[getStepsInOrder[stepIndex - 1]];
+          const stepValidation = Object.keys(formValidation).some((item) =>
+            validationFields.includes(item)
+          );
+          //Checking the validation errors of the previous step, if present true else false
+
+          if (!stepValidation) {
+            setExpanded(newExpanded ? value : false);
+            setActiveStep(stepIndex);
+          } else {
+            throw new Error(
+              `${getStepsInOrder[stepIndex - 1]} step has validation errors!`
+            );
+          }
+        }
+      } catch (error: any) {
+        enqueueSnackbar({
+          message: error?.message,
+          variant: "error",
+        });
+      }
+    };
+  const getInitialFormData = () => {
+    if (data?.from_data && customerName) {
+      const { configuration_id, ...rest } = data?.from_data;
+      return {
+        ...rest,
+        customer_name: customerName,
+        module_type: data.module_type,
+      };
+    }
+    return {
+      customer_name: customerName,
+      asset_name: "",
+      equipment_name: "",
+      module_type: data.module_type,
       Crankshaft_SENSORx: "",
       Crankshaft_ChannelType: "",
       Crankshaft_Teeth: "",
@@ -179,6 +228,9 @@ const EngineTabContent = ({ module, moduleId }: any) => {
       phase_shift_mode: "",
       shift_angle: "",
       power: "",
+      running_hours: "",
+      engine_history: "",
+      vessel_type: "",
       min_speed: "",
       min_volt: "",
       recording_period: "",
@@ -200,16 +252,27 @@ const EngineTabContent = ({ module, moduleId }: any) => {
       engine_useInjectionAcyWeighting: "",
       engine_useInjectionDissymetryDeviation: "",
       highPass: "",
-    },
+    };
+  };
+
+  const moduleFormContext = useFormik({
+    initialValues: getInitialFormData(),
+    enableReinitialize: true,
     onSubmit: (values) => {},
+    validationSchema: engineValidationSchema,
   });
+
   useEffect(() => {
-    // moduleFormContext.setValues({});
     if (data?.from_data) {
       const { configuration_id, ...rest } = data?.from_data;
       moduleFormContext.setValues({ ...rest });
     }
   }, [data]);
+
+  useEffect(() => {
+    setIsUnsaved(moduleFormContext.dirty);
+  }, [moduleFormContext.dirty]);
+
   return (
     <Box sx={{ width: "auto" }}>
       <Stepper
@@ -227,19 +290,17 @@ const EngineTabContent = ({ module, moduleId }: any) => {
         ))}
       </Stepper>
       <Grid container sx={{ width: "auto" }}>
-        {stepperSteps?.map((item: string) => (
+        {stepperSteps?.map((item: string, index: number) => (
           <Grid key={item} item>
             <AccordionBase
               expanded={expanded}
-              handleChange={handleAccordionChange}
+              handleChange={handleAccordionChange(index)}
               value={item}
               title={item}
             >
               <StepToComponentEngineModule
                 step={item}
-                handleFormData={(e: any) =>
-                  console.log(e.target.name, e.target.value)
-                }
+                handleFormData={(e: any) => {}}
                 formContext={moduleFormContext}
               ></StepToComponentEngineModule>
             </AccordionBase>
@@ -255,7 +316,12 @@ const EngineTabContent = ({ module, moduleId }: any) => {
           <Button variant="contained" onClick={handleSubmit}>
             Save
           </Button>
-          <Button variant="contained">Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/configuration")}
+          >
+            Cancel
+          </Button>
           <Button
             startIcon={<Delete />}
             color="primary"

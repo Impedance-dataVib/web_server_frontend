@@ -10,12 +10,14 @@ import {
   FormControlLabel,
   Radio,
   TextField,
+  LinearProgress,
 } from "@mui/material";
 
 import ToggleSwitch from "../../app/components/toggle-switch";
 import { Language, radioData } from "./schema";
 import AccordionBase from "../../app/components/accordion-base";
 import SettingsApi from "./api";
+import { enqueueSnackbar } from "notistack";
 
 const defaultApiData = {
   display_date_utc: false,
@@ -36,11 +38,13 @@ const defaultApiData = {
   description: "",
   network_type: "",
   language: "",
+  disk_management: "",
 };
 const SettingsPage = () => {
   const [apiData, setApiData] = useState(defaultApiData);
   const [expanded, setExpanded] = useState<string | false>("generalSettings");
   const [showNetworkSettings, setNetworkSettings] = useState<string | false>("networkSettings");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleIpAddress = (key: string, val: string, valueLength: number) => {
     let length = val.length;
@@ -90,8 +94,22 @@ const SettingsPage = () => {
   };
 
   const saveSettings = (payload: object) => {
+    setIsLoading(true);
     SettingsApi.saveSettingsInfo(payload)
-      .then(val => console.log(val));
+      .then(val => {
+        setIsLoading(false);
+        enqueueSnackbar({
+          message: `Settings is saved`,
+          variant: "success",
+        });
+      }).catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+        enqueueSnackbar({
+          message: "Error occurred while saving Settings",
+          variant: "error",
+        });
+      });
   }
 
   useEffect(() => {
@@ -100,6 +118,11 @@ const SettingsPage = () => {
 
   return (
     <Box>
+      {isLoading && (
+          <Box sx={{ my: 1 }}>
+            <LinearProgress />
+          </Box>
+        )}
       <form>
         <Typography variant="h5">Settings</Typography>
         <Box
@@ -157,7 +180,7 @@ const SettingsPage = () => {
                     <ToggleSwitch
                       value={apiData.auto_date_ntp}
                       onChange={(e: any) => {
-                        changeEventHandler("auto_date_ntp", e.target.value === "on");
+                        changeEventHandler("auto_date_ntp", e.target.checked);
                       }}
                     />
                   </Box>
@@ -281,7 +304,7 @@ const SettingsPage = () => {
                     <ToggleSwitch
                       value={apiData.display_warming_time}
                       onChange={(e: any) => {
-                        changeEventHandler("display_warming_time", e.target.value === "on");
+                        changeEventHandler("display_warming_time", e.target.checked);
                       }}
                     />
                   </Box>
@@ -328,7 +351,7 @@ const SettingsPage = () => {
                     <ToggleSwitch
                       value={apiData.rest_api}
                       onChange={(e: any) => {
-                        changeEventHandler("rest_api", e.target.value === "on");
+                        changeEventHandler("rest_api", e.target.checked);
                       }}
                     />
                   </Box>
@@ -344,7 +367,7 @@ const SettingsPage = () => {
                     <ToggleSwitch
                       value={apiData.webdev_access}
                       onChange={(e: any) => {
-                        changeEventHandler("webdev_access", e.target.value === "on");
+                        changeEventHandler("webdev_access", e.target.checked);
                       }}
                     />
                   </Box>
@@ -394,7 +417,7 @@ const SettingsPage = () => {
                     <ToggleSwitch
                       value={apiData.ftp_access}
                       onChange={(e: any) => {
-                        changeEventHandler("ftp_access", e.target.value === "on");
+                        changeEventHandler("ftp_access", e.target.checked);
                       }}
                     />
                   </Box>
@@ -443,7 +466,8 @@ const SettingsPage = () => {
                   <Box sx={{ mx: 1 }}>
                     <input 
                       type="radio"
-                      value="circular"
+                      value={"circular"}
+                      checked={ apiData.disk_management === "circular"}
                       onChange={(e: any) => {
                         changeEventHandler("disk_management", e.target.value);
                       }}

@@ -17,7 +17,7 @@ export const getAllConfigurations = (): Promise<AxiosResponse<any, any>> => {
 };
 
 export const addConfiguration = (
-  data: AddConfiguration
+  data: any
 ): Promise<AxiosResponse<any, any>> => {
   return axiosInstance.post("/configuration/save.php", data);
 };
@@ -82,4 +82,22 @@ export const getModuleById = (id: string) => {
 
 export const deleteModule = (id: string) => {
   return axiosInstance.delete(`/module/delete.php/${id}`);
+};
+
+export const getSystemInfo = () => {
+  return axiosInstance.get("/system-information/get-all.php");
+};
+
+export const getLicenseInfo = () => {
+  return axiosInstance.get("/license/get-license.php");
+};
+
+export const getChannelByNameAndConfigID = (
+  configId: string,
+  channelName: string
+) => {
+  return axiosInstance.post(
+    "/configuration/get-channel-by-name-and-config-id.php",
+    { name: channelName, configId: configId }
+  );
 };

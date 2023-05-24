@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { ChangeEventHandler } from "react";
 
 interface FileUploadObject {
@@ -16,8 +16,8 @@ export default function fileUpload ({onChangeHandler}: FileUploadObject) {
             mt: 1
           }}
         >
-          <div style={{ position: "absolute", top: "40%", left: "20%" }}>
-            Drag and Drop your file here
+          <div style={{ position: "absolute", top: "40%", left: "30%" }}>
+            <Typography variant="body1">Drag and Drop your file here</Typography>
           </div>
           <input
             accept="image/*"

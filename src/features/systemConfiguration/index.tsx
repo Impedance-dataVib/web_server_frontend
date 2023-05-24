@@ -14,11 +14,35 @@ const SystemConfiguration = () => {
     softwareVersion: "",
     library: "",
     systemInfo: [],
+    licenseInfo: {
+      license_id: "",
+      license_number: "",
+      license_tenure: 1,
+      vbox_name: "",
+      vbox_serial_number: "",
+      vbox_software_version: "",
+      vbox_firmware_version: "",
+      client_name: "",
+      client_email: "",
+      expiry_date: null,
+      activation_date: null,
+      distributor_contact: null,
+      engine_quantity: null,
+      bearing_quantity: null,
+      motor_quantity: null,
+      turbine_quantity: null,
+      torque_quantity: null,
+    },
   });
 
-  const getSystemInfo = async () =>   {
+  const getSystemInfo = async () => {
     const response = await SystemInfoApi.getSystemInfo();
-    setApiData(response?.data);
+    setApiData((val) => {
+      return {
+        ...val,
+        ...response?.data,
+      };
+    });
   };
 
   useEffect(() => {
@@ -41,7 +65,7 @@ const SystemConfiguration = () => {
           flexDirection: "column",
         }}
       >
-        <Box sx={{ width: "50%" }}>
+        <Box sx={{ width: "100%" }}>
           <Box
             sx={{
               display: "flex",
@@ -59,51 +83,131 @@ const SystemConfiguration = () => {
             >
               <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
                   px: 4,
                   py: 2,
                 }}
               >
-                <Typography variant="h5">Hardware Details</Typography>
+                <Typography variant="h5">Hardware information</Typography>
                 <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
-                    alignItems: "center",
+                    justifyContent: "space-between",
                   }}
                 >
-                  <Typography variant="h6">Serial No : </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.serianNo}
-                  </Typography>
-                  <Typography variant="h6">Mac Id : </Typography>
-                  <Typography variant="body1" sx={{ ml: 1 }}>
-                    {apiData.macId}
-                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "50%",
+                    }}
+                  >
+                    <Typography variant="subtitle1">
+                      Hardware Serial Number :{" "}
+                    </Typography>
+                    <Typography variant="body1" sx={{ mx: 1 }}>
+                      {apiData.serianNo}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "50%",
+                    }}
+                  >
+                    <Typography variant="subtitle1">Mac ID : </Typography>
+                    <Typography variant="body1" sx={{ ml: 1 }}>
+                      {apiData.macId}
+                    </Typography>
+                  </Box>
                 </Box>
                 <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
-                    alignItems: "center",
+                    justifyContent: "flex-start",
                   }}
                 >
-                  <Typography variant="h6">Firmware Version : </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.firmwareVersion}
-                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "50%",
+                    }}
+                  >
+                    <Typography variant="subtitle1">
+                      Firmware Number :{" "}
+                    </Typography>
+                    <Typography variant="body1" sx={{ mx: 1 }}>
+                      {apiData.firmwareVersion}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography variant="subtitle1">User Manual : </Typography>
+                    <Link
+                      variant="body1"
+                      color="#002BBC"
+                      href="#"
+                      sx={{ mx: 1 }}
+                    >
+                      Download Hardware User Manual
+                    </Link>
+                  </Box>
                 </Box>
+              </Box>
+              <Divider sx={{ mx: 4 }} />
+              <Box sx={{ px: 4, py: 2 }}>
+                <Typography variant="h5">Software information</Typography>
+
                 <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
-                    alignItems: "center",
                   }}
                 >
-                  <Link variant="body1" color="#002BBC" href="#">
-                    Download Hardware User Manual
-                  </Link>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "50%",
+                    }}
+                  >
+                    <Typography variant="subtitle1">SW Version: </Typography>
+                    <Typography variant="body1" sx={{ mx: 1 }}>
+                      {process.env.REACT_APP_VERSION}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "50%",
+                    }}
+                  >
+                    <Typography variant="subtitle1">
+                      Software user manual :{" "}
+                    </Typography>
+                    <Link
+                      variant="body1"
+                      color="#002BBC"
+                      href="#"
+                      sx={{ mx: 1 }}
+                    >
+                      Download Software User Manual
+                    </Link>
+                  </Box>
                 </Box>
               </Box>
               <Divider sx={{ mx: 4 }} />
@@ -115,48 +219,75 @@ const SystemConfiguration = () => {
                   py: 2,
                 }}
               >
-                <Typography variant="h5">Software Details</Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h6">Software Version: </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.softwareVersion}
-                  </Typography>
+                <Typography variant="h5">License Details</Typography>
+                <Box sx={{ display: "flex", flexDirection: "row" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "50%",
+                    }}
+                  >
+                    <Typography variant="subtitle1">
+                      License Number:{" "}
+                    </Typography>
+                    <Typography variant="body1" sx={{ mx: 1 }}>
+                      {apiData.licenseInfo?.license_number}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "50%",
+                    }}
+                  >
+                    <Typography variant="subtitle1">
+                      License Tenure (Months) :{" "}
+                    </Typography>
+                    <Typography variant="body1" sx={{ mx: 1 }}>
+                      {apiData.licenseInfo?.license_tenure}
+                    </Typography>
+                  </Box>
                 </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h6">Library: </Typography>
-                  <Typography variant="body1" sx={{ mx: 1 }}>
-                    {apiData.library}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Link variant="body1" color="#002BBC" href="#">
-                    Download Software User Manual
-                  </Link>
+                <Box sx={{ display: "flex", flexDirection: "row" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "50%",
+                    }}
+                  >
+                    <Typography variant="subtitle1">
+                      Activation date:{" "}
+                    </Typography>
+                    <Typography variant="body1" sx={{ mx: 1 }}>
+                      {apiData.licenseInfo?.activation_date}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "50%",
+                    }}
+                  >
+                    <Typography variant="subtitle1">Expiry date: </Typography>
+                    <Typography variant="body1" sx={{ mx: 1 }}>
+                      {apiData.licenseInfo?.expiry_date}
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
             </Box>
           </Box>
           <Divider sx={{ my: 5 }} />
           <Box>
-            <SystemInfoTable systemInfo={apiData.systemInfo} />
+            <SystemInfoTable systemInfo={apiData.licenseInfo} />
           </Box>
           <Divider sx={{ my: 5 }} />
           <Box
@@ -171,7 +302,7 @@ const SystemConfiguration = () => {
             sx={{
               display: "flex",
               justifyContent: "flex-end",
-              pt: 2
+              pt: 2,
             }}
           >
             <Button variant="contained" startIcon={<CachedIcon />}>

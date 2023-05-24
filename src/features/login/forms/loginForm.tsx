@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,11 @@ import { useAuth } from "../../../app/auth";
 import AuthenticationError from "../errors/authError";
 import LoginApi from "../loginApi";
 import { makeStyles } from "tss-react/mui";
+import appContext from "src/app/context";
+import { LICENSE_STATUS } from "src/App";
+import * as dateFns from "date-fns";
+import LicenseExpiredError from "../errors/licExpiredError";
+import LicenseInActiveError from "../errors/licInactiveError";
 
 const useStyles = makeStyles()((theme) => ({
   buttons: {
@@ -37,12 +42,48 @@ const LoginForm = () => {
   const [usernameError, setUsernameError] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
 
-  const { setAuthToken, setRefreshToken } = useAuth();
+  const [isExpired, setIsExpired] = useState<boolean>(false);
+  const [isInactive, setInactive] = useState<boolean>(false);
+  const { licenseStatus, licenseInfo, onLoadCheckLicense } =
+    useContext(appContext);
+
+  const { setAuthToken, setRefreshToken, setUserName } = useAuth();
 
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   const { classes } = useStyles();
+
+  useEffect(() => {
+    setInactive(false);
+    setIsExpired(false);
+
+    if (licenseStatus === LICENSE_STATUS.INACTIVE) {
+      if (
+        licenseInfo !== undefined &&
+        licenseInfo.expiryDate &&
+        String(licenseInfo.expiryDate)?.trim()?.length > 0
+      ) {
+        const parsedExpiryDate = dateFns.parse(
+          licenseInfo.expiryDate,
+          "yyyy-MM-dd HH:mm:ss",
+          new Date()
+        );
+
+        const currentDate = new Date();
+        if (dateFns.isBefore(parsedExpiryDate, currentDate)) {
+          setIsExpired(true);
+          return;
+        } else {
+          setInactive(true);
+        }
+      }
+      setInactive(true);
+    } else if (licenseStatus === LICENSE_STATUS.ACTIVE) {
+      setInactive(false);
+      setIsExpired(false);
+    }
+  }, [licenseStatus, licenseInfo]);
 
   const submitLoginDetails = async () => {
     LoginApi.login({ username, password })
@@ -52,8 +93,9 @@ const LoginForm = () => {
             setIsError(false);
             setAuthToken(res.data?.token);
             setRefreshToken(res.data?.refresh_token);
-
-            navigate("/dashboard");
+            setUserName(username);
+            // navigate("/dashboard");
+            onLoadCheckLicense?.();
           }
         } else {
           setIsError(true);
@@ -99,10 +141,20 @@ const LoginForm = () => {
   };
 
   return (
-    <form>
+    <form style={{ maxWidth: "416px" }}>
       <Box sx={{ maxWidth: "416px", mt: { md: 4, sm: 4, xs: 4 } }}>
         <img alt="logo" src="logo_vib_360.png" />
       </Box>
+      {isExpired && (
+        <Box sx={{ maxWidth: isExpired ? "auto" : "416px", mt: 1 }}>
+          <LicenseExpiredError />
+        </Box>
+      )}
+      {isInactive && (
+        <Box sx={{ maxWidth: isInactive ? "auto" : "416px", mt: 1 }}>
+          <LicenseInActiveError />
+        </Box>
+      )}
       <Box sx={{ maxWidth: isError ? "auto" : "416px", mt: 3, mb: 2 }}>
         {isError ? (
           <AuthenticationError />

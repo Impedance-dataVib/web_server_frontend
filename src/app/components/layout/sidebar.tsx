@@ -17,7 +17,7 @@ interface SidebarItemProps {
   item: INavMenuItem;
 }
 
-const SidebarItem = ({ variant, item }: SidebarItemProps & SidebarProps) => {
+const SidebarItem = ({ variant, isUnsaved, setOpenconfirmmBox, item, setNavigatePath}: SidebarItemProps & SidebarProps) => {
   const location = useLocation();
 
   const isMatch = matchPath(
@@ -30,7 +30,7 @@ const SidebarItem = ({ variant, item }: SidebarItemProps & SidebarProps) => {
 
   return (
     <MatLink
-      to={item.path || "#"}
+      to={isUnsaved ? "#" : (item.path || "#")}
       sx={{
         textDecoration: "none",
         color: isMatch
@@ -44,6 +44,12 @@ const SidebarItem = ({ variant, item }: SidebarItemProps & SidebarProps) => {
         "& :hover": {
           backgroundColor: (theme) => theme.palette.color3.main,
         },
+      }}
+      onClick={(e) => {
+        if(isUnsaved) {
+          setOpenconfirmmBox(true);
+          setNavigatePath(item.path || "#");
+        }
       }}
       component={Link}
     >
@@ -110,9 +116,12 @@ const SidebarItem = ({ variant, item }: SidebarItemProps & SidebarProps) => {
 export interface SidebarProps {
   variant?: "expanded" | "collapsed";
   setVariant?: (str: string) => void;
+  setOpenconfirmmBox: Function;
+  isUnsaved: boolean;
+  setNavigatePath: Function;
 }
 
-const Sidebar = ({ variant = "collapsed", setVariant }: SidebarProps) => {
+const Sidebar = ({ variant = "collapsed", setVariant, isUnsaved, setOpenconfirmmBox, setNavigatePath }: SidebarProps) => {
   const onClickPinSidebar = () => {
     setVariant?.(variant === "expanded" ? "collapsed" : "expanded");
   };
@@ -187,6 +196,9 @@ const Sidebar = ({ variant = "collapsed", setVariant }: SidebarProps) => {
               <SidebarItem
                 key={`${item?.label}-${item?.path}`}
                 variant={variant}
+                isUnsaved={isUnsaved}
+                setOpenconfirmmBox={setOpenconfirmmBox}
+                setNavigatePath={setNavigatePath}
                 item={item}
               ></SidebarItem>
             ))}

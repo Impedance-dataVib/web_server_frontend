@@ -1,5 +1,29 @@
 const formSchema = {
   Engine: {
+    "Asset Information": [
+      {
+        name: "Customer Name",
+        label: "customer_name",
+        type: "text",
+        disabled: true,
+      },
+      {
+        name: "Asset Name",
+        label: "asset_name",
+        type: "text",
+      },
+      {
+        name: "Module Type",
+        label: "module_type",
+        type: "text",
+        disabled: true,
+      },
+      {
+        name: "Equipment Name",
+        label: "equipment_name",
+        type: "text",
+      },
+    ],
     "Channel Information": [
       {
         name: "Crankshaft (ChannelNum)",
@@ -166,21 +190,25 @@ const formSchema = {
         name: "Name",
         label: "name",
         type: "text",
+        helperNote: "Enter Engine Name",
       },
       {
         name: "Serial Number",
         label: "serial_number",
         type: "text",
+        helperNote: "Enter Engine Serial Number",
       },
       {
         name: "Make & Model",
         label: "make_model",
         type: "text",
+        helperNote: "Enter Engine Make & Model",
       },
       {
         name: "Rated RPM",
         label: "rated_rpm",
         type: "text",
+        helperNote: "Enter the rated max RPM",
       },
       {
         name: "Application",
@@ -192,51 +220,104 @@ const formSchema = {
           "Auxiliary DG",
           "Stationary Gensets",
         ],
+        helperNote: "Enter the Application where the Engine is used",
       },
       {
         name: "Fuel",
         label: "fuel",
         type: "dropdown",
         options: ["Diesel", "Gas"],
+        helperNote: "Select the type of fuel used",
       },
       {
         name: "Type",
         label: "type",
         type: "dropdown",
         options: ["Inline", "V"],
+        helperNote: "Select the type of engine(Inline or V)",
       },
       {
         name: "No of strokes",
         label: "no_of_strokes",
         type: "dropdown",
         options: ["2-stroke", "4-stroke"],
+        helperNote: "Select the no of strokes",
       },
       {
         name: "No of Cylinders",
         label: "no_of_cylinders",
         type: "text",
+        helperNote: "Enter the no of cylinders",
       },
       {
         name: "Firing Order",
         label: "firing_order",
-        type: "dropdown",
-        options: [1, 9, 3, 11, 2, 10, 5, 12, 8, 16, 6, 14, 7, 15, 4, 13],
+        type: "text",
+        helperNote: "Enter the firing order",
       },
       {
         name: "Phase Shift Mode",
         label: "phase_shift_mode",
         type: "dropdown",
         options: ["Manual", "Auto"],
+        helperNote: "Select the type of Phase Shift",
       },
       {
         name: "Shift Angle",
         label: "shift_angle",
         type: "text",
+        helperNote: "Phase shift of firing orders in degrees",
       },
       {
         name: "Power",
         label: "power",
         type: "text",
+        helperNote: "Power Value in Watts",
+      },
+      {
+        name: "Running Hours",
+        label: "running_hours",
+        type: "text",
+        helperNote: "Enter Current Running Hours",
+      },
+      {
+        name: "Engine History",
+        label: "engine_history",
+        type: "dropdown",
+        options: [
+          "Last Overhaul was a MOH",
+          "Overdue for a MOH",
+          "Never Overhauled",
+          "Overdue for a TOH",
+          "Approaching a MOH",
+          "Approaching a TOH",
+          "Last Overhaul was a TOH",
+        ],
+        helperNote: "Enter Current Running Hours",
+      },
+      {
+        name: "VesselType",
+        label: "vessel_type",
+        type: "dropdown",
+        options: [
+          "AHTS",
+          "PSV",
+          "OSV",
+          "Harbor Tugs",
+          "Container Ship",
+          "Large Bulk carriers",
+          "Mini Bulk Carriers",
+          "Gas Tankers",
+          "Gas Tankers",
+          "Passenger Ships",
+          "RORO",
+          "Fishing Vessel",
+          "Research Ships",
+          "War Ships",
+          "Barges",
+          "Inland Water Way Transporters",
+        ],
+        helperNote: "Enter Current Running Hours",
       },
     ],
     "Diagnostic Details": [
@@ -244,21 +325,25 @@ const formSchema = {
         name: "Min Speed(minRPM)",
         label: "min_speed",
         type: "text",
+        helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "MinVolt(LevelMin)",
+        name: "MinVolt(LevelMin)(in mV)",
         label: "min_volt",
         type: "text",
+        helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period ",
+        name: "Recording Period (in seconds)",
         label: "recording_period",
         type: "text",
+        helperNote: "time between two recordings",
       },
       {
-        name: "Recording Length",
+        name: "Recording Length (in seconds)",
         label: "recording_length",
         type: "text",
+        helperNote: "Length of Sample Collection",
       },
     ],
     "Advanced Parameters": [
@@ -345,6 +430,30 @@ const formSchema = {
     ],
   },
   Torque: {
+    "Asset Information": [
+      {
+        name: "Customer Name",
+        label: "customer_name",
+        type: "text",
+        disabled: true,
+      },
+      {
+        name: "Asset Name",
+        label: "asset_name",
+        type: "text",
+      },
+      {
+        name: "Module Type",
+        label: "module_type",
+        type: "text",
+        disabled: true,
+      },
+      {
+        name: "Equipment Name",
+        label: "equipment_name",
+        type: "text",
+      },
+    ],
     "Channel Information": [
       {
         name: "DE Channel",
@@ -389,39 +498,46 @@ const formSchema = {
     ],
     "Diagnostic Details": [
       {
-        name: "Min Speed",
+        name: "Min Speed(minRPM)",
         label: "min_speed",
         type: "text",
+        helperNote: "Enter the min rpm required to perform analysis",
       },
       {
-        name: "MinVolt",
+        name: "MinVolt (in mV)",
         label: "min_volt",
         type: "text",
+        helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period",
+        name: "Recording Period (in seconds)",
         label: "recording_period",
         type: "text",
+        helperNote: "recording time for one diagnosis",
       },
       {
-        name: "Recording Length",
+        name: "Recording Length (in seconds)",
         label: "recording_length",
         type: "text",
+        helperNote: "Length of Sample Collection",
       },
       {
-        name: "ZeroDegree",
+        name: "ZeroDegree (in degree)",
         label: "zero_degree",
         type: "text",
+        helperNote: "Enter zero degree",
       },
       {
-        name: "Rigidity(R)",
+        name: "Rigidity(R)(in N-m/rad)",
         label: "rigidity",
-        type: "text",
+        type: "popup",
+        helperNote: "Calculate the rigidity",
       },
       {
-        name: "Power",
+        name: "Power (in Watts)",
         label: "power",
         type: "text",
+        helperNote: "Enter the power in watts",
       },
     ],
     "Machine Details": [
@@ -429,11 +545,13 @@ const formSchema = {
         name: "Name",
         label: "name",
         type: "text",
+        helperNote: "Enter Equipment Name",
       },
       {
         name: "Rated RPM",
         label: "rated_rpm",
         type: "text",
+        helperNote: "Enter the rated max RPM",
       },
       {
         name: "VesselType",
@@ -449,10 +567,35 @@ const formSchema = {
           "Mini Bulk Carriers",
           "Gas Tankers",
         ],
+        helperNote: "Select the vessel type",
       },
     ],
   },
   Bearing: {
+    "Asset Information": [
+      {
+        name: "Customer Name",
+        label: "customer_name",
+        type: "text",
+        disabled: true,
+      },
+      {
+        name: "Asset Name",
+        label: "asset_name",
+        type: "text",
+      },
+      {
+        name: "Module Type",
+        label: "module_type",
+        type: "text",
+        disabled: true,
+      },
+      {
+        name: "Equipment Name",
+        label: "equipment_name",
+        type: "text",
+      },
+    ],
     "Channel Information": [
       {
         name: "Crankshaft",
@@ -508,24 +651,28 @@ const formSchema = {
     ],
     "Diagnostic Details": [
       {
-        name: "Min Speed",
+        name: "Min Speed(minRPM)",
         label: "min_speed",
         type: "text",
+        helperNote: "Enter the min rpm required to perform analysis",
       },
       {
-        name: "Min Volt",
+        name: "Min Volt (in mV)",
         label: "min_volt",
         type: "text",
+        helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period",
+        name: "Recording Period (in seconds)",
         label: "recording_period",
         type: "text",
+        helperNote: "recording time for one diagnosis",
       },
       {
-        name: "Recording Length",
+        name: "Recording Length (in seconds)",
         label: "recording_length",
         type: "text",
+        helperNote: "Length of Sample Collection",
       },
     ],
     "Machine Details": [
@@ -533,15 +680,41 @@ const formSchema = {
         name: "Name",
         label: "name",
         type: "text",
+        helperNote: "Enter Equipment Name",
       },
       {
         name: "Rated RPM",
         label: "rated_rpm",
         type: "text",
+        helperNote: "Enter the rated max RPM",
       },
     ],
   },
   Turbine: {
+    "Asset Information": [
+      {
+        name: "Customer Name",
+        label: "customer_name",
+        type: "text",
+        disabled: true,
+      },
+      {
+        name: "Asset Name",
+        label: "asset_name",
+        type: "text",
+      },
+      {
+        name: "Module Type",
+        label: "module_type",
+        type: "text",
+        disabled: true,
+      },
+      {
+        name: "Equipment Name",
+        label: "equipment_name",
+        type: "text",
+      },
+    ],
     "Channel Information": [
       {
         name: "Crankshaft",
@@ -566,24 +739,28 @@ const formSchema = {
     ],
     "Diagnostic Details": [
       {
-        name: "Min Speed",
+        name: "Min Speed(minRPM)",
         label: "min_speed",
         type: "text",
+        helperNote: "Enter the min rpm required to perform analysis",
       },
       {
-        name: "Min Volt",
+        name: "Min Volt (in mV)",
         label: "min_volt",
         type: "text",
+        helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period",
+        name: "Recording Period (in seconds)",
         label: "recording_period",
         type: "text",
+        helperNote: "recording time for one diagnosis",
       },
       {
-        name: "Recording Length",
+        name: "Recording Length (in seconds)",
         label: "recording_length",
         type: "text",
+        helperNote: "Length of Sample Collection",
       },
     ],
     "Machine Details": [
@@ -591,15 +768,48 @@ const formSchema = {
         name: "Name",
         label: "name",
         type: "text",
+        helperNote: "Enter Equipment Name",
       },
       {
         name: "Rated RPM",
         label: "rated_rpm",
         type: "text",
+        helperNote: "Enter the rated max RPM",
+      },
+
+      {
+        name: "Type",
+        label: "type",
+        type: "dropdown",
+        options: ["Gas", "Steam"],
       },
     ],
   },
   Motor: {
+    "Asset Information": [
+      {
+        name: "Customer Name",
+        label: "customer_name",
+        type: "text",
+        disabled: true,
+      },
+      {
+        name: "Asset Name",
+        label: "asset_name",
+        type: "text",
+      },
+      {
+        name: "Module Type",
+        label: "module_type",
+        type: "text",
+        disabled: true,
+      },
+      {
+        name: "Equipment Name",
+        label: "equipment_name",
+        type: "text",
+      },
+    ],
     "Channel Information": [
       {
         name: "Crankshaft",
@@ -655,36 +865,47 @@ const formSchema = {
     ],
     "Diagnostic Details": [
       {
-        name: "Min Speed",
+        name: "Min Speed(minRPM)",
         label: "min_speed",
         type: "text",
+        helperNote: "Enter the min rpm required to perform analysis",
       },
       {
-        name: "Min Volt",
+        name: "Min Volt (in mV)",
         label: "min_volt",
         type: "text",
+        helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period",
+        name: "Recording Period (in seconds)",
         label: "recording_period",
         type: "text",
+        helperNote: "recording time for one diagnosis",
       },
       {
-        name: "Recording Length",
+        name: "Recording Length (in seconds)",
         label: "recording_length",
         type: "text",
+        helperNote: "Length of Sample Collection",
       },
+      // {
+      //   name: "Rigidity(R)",
+      //   label: "rigidity",
+      //   type: "popup",
+      // }
     ],
     "Machine Details": [
       {
         name: "Name",
         label: "name",
         type: "text",
+        helperNote: "Enter Equipment Name",
       },
       {
         name: "Rated RPM",
         label: "rated_rpm",
         type: "text",
+        helperNote: "Enter the rated max RPM",
       },
     ],
   },

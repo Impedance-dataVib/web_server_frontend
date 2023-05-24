@@ -23,8 +23,9 @@ import CommonApi from "./commonApi";
 import appContext from "./app/context";
 import ProtectedRoute from "./app/components/protectedRoute";
 import { SnackbarProvider } from "notistack";
+import UnsavedPrompt from "./app/components/unsavedPrompt";
 
-const AppRoutes = (
+const AppRoutes = ({isUnsaved, setIsUnsaved, openConfirmBox, navigatePath, setOpenconfirmmBox }: any) => (
   <Routes>
     <Route path="/" element={<DashboardPage />} />
     {/* <Route path="login" element={<LoginPage />} /> */}
@@ -50,7 +51,7 @@ const AppRoutes = (
       path="/configuration/:configId"
       element={
         <ProtectedRoute>
-          <ConfigurationPage></ConfigurationPage>
+          <ConfigurationPage navigatePath={navigatePath} isUnsaved={isUnsaved} setIsUnsaved={setIsUnsaved} openConfirmBox={openConfirmBox} setOpenconfirmmBox={setOpenconfirmmBox}></ConfigurationPage>
         </ProtectedRoute>
       }
     />
@@ -118,6 +119,10 @@ export const LICENSE_STATUS = {
 };
 
 function App() {
+  const [isUnsaved, setIsUnsaved] = useState(false);
+  const [openConfirmBox, setOpenconfirmmBox] = useState(false);
+  const [navigatePath, setNavigatePath] = useState(null);
+
   const [activeTheme, setActiveTheme] = useState<any>(lightTheme);
 
   const [licenseInfo, setLicenseInfo] = useState<any>();
@@ -200,7 +205,7 @@ function App() {
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           autoHideDuration={2500}
         >
-          <appContext.Provider value={{ licenseInfo, licenseStatus }}>
+          <appContext.Provider value={{ licenseInfo, licenseStatus, onLoadCheckLicense }}>
             <ThemeProvider theme={activeTheme}>
               <CssBaseline />
               {licenseLoading ? (
@@ -210,7 +215,10 @@ function App() {
                   {path && ["/login"].includes(path.pathname) ? (
                     <>{LoginRoutes}</>
                   ) : (
-                    <Layout>{AppRoutes}</Layout>
+                    <Layout isUnsaved={isUnsaved} openConfirmBox={openConfirmBox} setOpenconfirmmBox={setOpenconfirmmBox} setNavigatePath={setNavigatePath}>
+                      <UnsavedPrompt isUnsaved={isUnsaved} />
+                      <AppRoutes navigatePath={navigatePath} isUnsaved={isUnsaved} setIsUnsaved={setIsUnsaved} openConfirmBox={openConfirmBox} setOpenconfirmmBox={setOpenconfirmmBox}/>
+                    </Layout>
                   )}
                 </>
               )}

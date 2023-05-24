@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { deleteConfig, activeConfig } from "../../app/services";
 import ConfirmDeleteConfigurationModal from "./modals/confirmDeleteConfig";
 import { useSnackbar } from "notistack";
+import { eventBus } from "src/EventBus";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -69,6 +70,7 @@ const ConfigurationTable = ({
       await deleteConfig(selectedRow?.id);
       await refetchOnDelete();
       setIsLoading(false);
+      eventBus.dispatch("ConfigDelete", {});
       enqueueSnackbar({
         message: `Configuration with name ${selectedRow?.name}-${selectedRow?.id} successfully deleted`,
         variant: "success",
@@ -88,6 +90,9 @@ const ConfigurationTable = ({
 
   const onActiveConfig = async (row: any) => {
     try {
+      if (row.status === "Active") {
+        return;
+      }
       const data = {
         records_id: row?.id,
       };
@@ -98,6 +103,9 @@ const ConfigurationTable = ({
         message: `Configuration '${row?.name}' activated successfully`,
         variant: "success",
       });
+      setTimeout(() => {
+        eventBus.dispatch("ConfigActive", {});
+      }, 500);
       setIsLoading(false);
     } catch (error) {
       enqueueSnackbar({

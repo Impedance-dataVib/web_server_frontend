@@ -9,14 +9,24 @@ import { Typography } from "@mui/material";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import formSchema from "../formSchema";
-
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import HelpIcon from "@mui/icons-material/Help";
+import { useParams } from "react-router-dom";
+import { useGetChannelByConfigIdName } from "../hooks";
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
       return (
-        <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
-          <InputLabel id={fieldProps.label}>{fieldProps.name}</InputLabel>
+        <FormControl
+          sx={{ minWidth: "182px", marginBottom: "20px" }}
+          error={Boolean(formContext?.errors?.[fieldProps.label])}
+        >
+          <InputLabel id={`${fieldProps.label}-label`}>
+            {fieldProps.name}
+          </InputLabel>
           <Select
+            labelId={`${fieldProps.label}-label`}
             name={fieldProps.label}
             onChange={formContext?.handleChange}
             value={formContext?.values?.[fieldProps.label]}
@@ -28,12 +38,11 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
               </MenuItem>
             ))}
           </Select>
-          {formContext?.touched?.[fieldProps.label] &&
-            Boolean(formContext?.errors?.[fieldProps.label]) && (
-              <FormHelperText>
-                {formContext?.errors?.[fieldProps.label]}
-              </FormHelperText>
-            )}
+          {Boolean(formContext?.errors?.[fieldProps.label]) && (
+            <FormHelperText>
+              {formContext?.errors?.[fieldProps.label]}
+            </FormHelperText>
+          )}
         </FormControl>
       );
 
@@ -44,6 +53,8 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           label={fieldProps.name}
           onChange={formContext?.handleChange}
           value={formContext?.values?.[fieldProps.label]}
+          error={Boolean(formContext?.errors?.[fieldProps.label])}
+          helperText={formContext?.errors?.[fieldProps.label]}
           variant="outlined"
           sx={{
             fontSize: "16px",
@@ -52,10 +63,12 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
             padding: "1px 1px",
           }}
           inputProps={{
+            readOnly: fieldProps?.disabled ? true : false,
             style: {
               padding: "11px 26px 13px 12px",
             },
           }}
+          InputLabelProps={{ shrink: true }}
         ></TextField>
       );
     case "toggle":
@@ -97,6 +110,38 @@ export const TurbineChannelInformationForm = ({
       "Odd",
     ],
   });
+  const { configId } = useParams();
+  const { data, getChannelByConfigIdName } = useGetChannelByConfigIdName(
+    configId || "",
+    formContext?.values["turbine_crankshaft_sensorx"],
+    formContext.dirty
+  );
+  useEffect(() => {
+    if (data && formContext.dirty) {
+      formContext.validateForm().then(() => {
+        formContext.setFieldValue(
+          "turbine_crankshaft_channel_type",
+          data?.channel_type,
+          false
+        );
+        formContext.setFieldValue("turbine_crankshaft_teeth", data?.teeth, false);
+        formContext.setFieldValue(
+          "turbine_crankshaft_wheel_type",
+          data?.wheel_type,
+          false
+        );
+      })
+      
+      
+    } else {
+      formContext.setFieldValue("turbine_crankshaft_channel_type", "", false);
+      formContext.setFieldValue("turbine_crankshaft_teeth", "", false);
+      formContext.setFieldValue("turbine_crankshaft_wheel_type", "", false);
+      formContext.validateForm();
+    }
+    return () => {};
+  }, [formContext?.values["turbine_crankshaft_sensorx"], data]);
+
 
   return (
     <>
@@ -121,12 +166,21 @@ export const TurbineChannelInformationForm = ({
         </Grid>
         <Grid container item spacing={1}>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{ minWidth: "182px", marginBottom: "20px" }}
+              error={Boolean(
+                formContext?.errors?.["turbine_crankshaft_sensorx"]
+              )}
+            >
+              <InputLabel id={`turbine_crankshaft_sensorx-label`}>
+                Sensorx
+              </InputLabel>
               <Select
+                labelId="turbine_crankshaft_sensorx-label"
                 name="turbine_crankshaft_sensorx"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["turbine_crankshaft_sensorx"]}
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Sensorx"}
               >
                 {optionsChannelInformation["SENSORx"].map((option: string) => (
                   <MenuItem key={option} value={option}>
@@ -134,15 +188,32 @@ export const TurbineChannelInformationForm = ({
                   </MenuItem>
                 ))}
               </Select>
+              {Boolean(formContext?.errors?.["turbine_crankshaft_sensorx"]) && (
+                <FormHelperText>
+                  {formContext?.errors?.["turbine_crankshaft_sensorx"]}
+                </FormHelperText>
+              )}
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{ minWidth: "182px", marginBottom: "20px" }}
+              error={Boolean(
+                formContext?.errors?.["turbine_crankshaft_channel_type"]
+              )}
+            >
+              <InputLabel id={`turbine_crankshaft_channel_type-label`}>
+                Channel_Type
+              </InputLabel>
               <Select
+                labelId="turbine_crankshaft_channel_type-label"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["turbine_crankshaft_channel_type"]}
                 name="turbine_crankshaft_channel_type"
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Channel_Type"}
+                inputProps={{
+                  readOnly: data ? true : false,
+                }}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -152,6 +223,13 @@ export const TurbineChannelInformationForm = ({
                   )
                 )}
               </Select>
+              {Boolean(
+                formContext?.errors?.["turbine_crankshaft_channel_type"]
+              ) && (
+                <FormHelperText>
+                  {formContext?.errors?.["turbine_crankshaft_channel_type"]}
+                </FormHelperText>
+              )}
             </FormControl>
           </Grid>
           <Grid item>
@@ -167,7 +245,10 @@ export const TurbineChannelInformationForm = ({
               }}
               onChange={formContext?.handleChange}
               value={formContext?.values?.["turbine_crankshaft_teeth"]}
+              error={Boolean(formContext?.errors?.["turbine_crankshaft_teeth"])}
+              helperText={formContext?.errors?.["turbine_crankshaft_teeth"]}
               inputProps={{
+                readOnly: data ? true : false,
                 style: {
                   padding: "11px 26px 13px 12px",
                 },
@@ -175,12 +256,24 @@ export const TurbineChannelInformationForm = ({
             ></TextField>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: "182px", marginBottom: "20px" }}>
+            <FormControl
+              sx={{ minWidth: "182px", marginBottom: "20px" }}
+              error={Boolean(
+                formContext?.errors?.["turbine_crankshaft_wheel_type"]
+              )}
+            >
+              <InputLabel id={`turbine_crankshaft_wheel_type-label`}>
+                Wheel_Type
+              </InputLabel>
               <Select
+                labelId="turbine_crankshaft_wheel_type-label"
                 name="turbine_crankshaft_wheel_type"
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["turbine_crankshaft_wheel_type"]}
-                input={<BootstrapInput></BootstrapInput>}
+                label={"Wheel_Type"}
+                inputProps={{
+                  readOnly: data ? true : false,
+                }}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -190,6 +283,13 @@ export const TurbineChannelInformationForm = ({
                   )
                 )}
               </Select>
+              {Boolean(
+                formContext?.errors?.["turbine_crankshaft_wheel_type"]
+              ) && (
+                <FormHelperText>
+                  {formContext?.errors?.["turbine_crankshaft_wheel_type"]}
+                </FormHelperText>
+              )}
             </FormControl>
           </Grid>
         </Grid>
@@ -198,6 +298,54 @@ export const TurbineChannelInformationForm = ({
   );
 };
 
+export const TurbineAssetInformation = ({
+  handleFormData,
+  formContext,
+}: any) => {
+  return (
+    <>
+      <Grid
+        container
+        spacing={1}
+        sx={{ marginLeft: "64px", marginTop: "28px" }}
+      >
+        {formSchema["Bearing"]["Asset Information"].map((item: any) => (
+          <Grid key={item.label} container item>
+            <Grid item>
+              <Typography
+                component={"label"}
+                sx={{
+                  width: "143px",
+                  display: "inline-block",
+                  fontSize: "16px",
+                  marginRight: "41px",
+                  marginBottom: "5px",
+                  alignItems: "right",
+                }}
+              >
+                {item.name}
+              </Typography>
+              {item?.helperNote && (
+                <Tooltip title={item.helperNote}>
+                  <IconButton>
+                    <HelpIcon></HelpIcon>
+                  </IconButton>
+                </Tooltip>
+              )}
+            </Grid>
+            <Grid item>
+              <FormFieldConditionalRender
+                type={item.type}
+                fieldProps={{ ...item, handleChange: handleFormData }}
+                formContext={formContext}
+              ></FormFieldConditionalRender>
+            </Grid>
+          </Grid>
+        ))}
+      </Grid>
+    </>
+  );
+};
 export const TurbineMachineDetailsForm = ({
   handleFormData,
   formContext,
@@ -225,6 +373,13 @@ export const TurbineMachineDetailsForm = ({
               >
                 {item.name}
               </Typography>
+              {item?.helperNote && (
+                <Tooltip title={item.helperNote}>
+                  <IconButton>
+                    <HelpIcon></HelpIcon>
+                  </IconButton>
+                </Tooltip>
+              )}
             </Grid>
             <Grid item>
               <FormFieldConditionalRender
@@ -267,6 +422,13 @@ export const TurbineDiagnosticDetails = ({
               >
                 {item.name}
               </Typography>
+              {item?.helperNote && (
+                <Tooltip title={item.helperNote}>
+                  <IconButton>
+                    <HelpIcon></HelpIcon>
+                  </IconButton>
+                </Tooltip>
+              )}
             </Grid>
             <Grid item>
               <FormFieldConditionalRender
