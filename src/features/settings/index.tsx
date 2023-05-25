@@ -166,11 +166,11 @@ const SettingsPage = () => {
                     variant="body2"
                     sx={{ width: "32%", textAlign: "end" }}
                   >
-                    Customer Name
+                    Client Name
                   </Typography>
                   <Box sx={{ mx: 1 }}>
                     <TextField
-                      placeholder="Customer name"
+                      placeholder="Client name"
                       type="text"
                       value={apiData.client_name}
                       variant="outlined"

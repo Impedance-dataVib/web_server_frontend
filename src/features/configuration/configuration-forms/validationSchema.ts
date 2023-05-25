@@ -1,3 +1,4 @@
+import { findAllByDisplayValue } from "@testing-library/react";
 import * as yup from "yup";
 export const torqueValidationSchema = yup.object({
   asset_name: yup.string().required("This is a required field"),
@@ -9,7 +10,26 @@ export const torqueValidationSchema = yup.object({
       "should not match with Asset name!"
     ),
 
-  de_channel_sensorx: yup.string().required("This is a required field"),
+  de_channel_sensorx: yup
+    .string()
+    .required("This is a required field")
+    .test(
+      "Channel Validation",
+      `Error: Crank, CAM, TDC, Peak pressure channel shouldn't be same`,
+      (value, context) => {
+        if (value === "No Channel") {
+          return true;
+        } else if (
+          value != context.parent.TDC_SENSORx &&
+          value != context.parent.Peak_Pressure_SENSORx &&
+          value != context.parent.CamShaft_SENSORx
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    ),
   de_channel_channel_type: yup
     .string()
     .test(
@@ -398,7 +418,6 @@ export const engineValidationSchema = yup.object({
   Crankshaft_WheelType: yup.string().required("This is a required field"),
   CamShaft_SENSORx: yup
     .string()
-
     .test(
       "Optional Fields",
       "ERROR: CAM,TDC, Peak pressure at time only one can be selected",
@@ -422,17 +441,10 @@ export const engineValidationSchema = yup.object({
       "is Required ?",
       "Error: Required Field if channel selected",
       (value: any, context) => {
-        if (
-          context.parent.CamShaft_SENSORx === "No Channel" ||
-          value?.toString().trim().length > 0
-        ) {
+        if (context.parent.CamShaft_SENSORx === "No Channel") {
           return true;
-        } else if (
-          context.parent.CamShaft_SENSORx !== "No Channel" &&
-          value?.toString().trim().length === 0
-        ) {
-          return false;
         }
+        return value !== null && value !== undefined;
       }
     ),
   CamShaft_Teeth: yup
@@ -441,17 +453,10 @@ export const engineValidationSchema = yup.object({
       "is Required ?",
       "Error: Required Field if channel selected",
       (value: any, context) => {
-        if (
-          context.parent.CamShaft_SENSORx === "No Channel" ||
-          value?.toString().trim().length > 0
-        ) {
+        if (context.parent.CamShaft_SENSORx === "No Channel") {
           return true;
-        } else if (
-          context.parent.CamShaft_SENSORx !== "No Channel" &&
-          value?.toString().trim().length === 0
-        ) {
-          return false;
         }
+        return value !== null && value !== undefined;
       }
     )
     .test(
@@ -459,25 +464,17 @@ export const engineValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value: any, context) =>
         value > 0 || context.parent.CamShaft_SENSORx === "No Channel"
-    )
-    .integer("The field should be an integer !"),
+    ),
   CamShaft_WheelType: yup
     .string()
     .test(
       "is Required ?",
       "Error: Required Field if channel selected",
       (value: any, context) => {
-        if (
-          context.parent.CamShaft_SENSORx === "No Channel" ||
-          value?.toString().trim().length > 0
-        ) {
+        if (context.parent.CamShaft_SENSORx === "No Channel") {
           return true;
-        } else if (
-          context.parent.CamShaft_SENSORx !== "No Channel" &&
-          value?.toString().trim().length === 0
-        ) {
-          return false;
         }
+        return value !== null && value !== undefined;
       }
     ),
   TDC_SENSORx: yup
@@ -506,17 +503,10 @@ export const engineValidationSchema = yup.object({
       "is Required ?",
       "Error: Required Field if channel selected",
       (value: any, context) => {
-        if (
-          context.parent.TDC_SENSORx === "No Channel" ||
-          value?.toString().trim().length > 0
-        ) {
+        if (context.parent.TDC_SENSORx === "No Channel") {
           return true;
-        } else if (
-          context.parent.TDC_SENSORx !== "No Channel" &&
-          value?.toString().trim().length === 0
-        ) {
-          return false;
         }
+        return value !== null && value !== undefined;
       }
     ),
   TDC_Teeth: yup
@@ -531,17 +521,10 @@ export const engineValidationSchema = yup.object({
       "is Required ?",
       "Error: Required Field if channel selected",
       (value: any, context) => {
-        if (
-          context.parent.TDC_SENSORx === "No Channel" ||
-          value?.toString().trim().length > 0
-        ) {
+        if (context.parent.TDC_SENSORx === "No Channel") {
           return true;
-        } else if (
-          context.parent.TDC_SENSORx !== "No Channel" &&
-          value?.toString().trim().length === 0
-        ) {
-          return false;
         }
+        return value !== null && value !== undefined;
       }
     )
     .integer("The field should be an integer !"),
@@ -551,17 +534,10 @@ export const engineValidationSchema = yup.object({
       "is Required ?",
       "Error: Required Field if channel selected",
       (value: any, context) => {
-        if (
-          context.parent.TDC_SENSORx === "No Channel" ||
-          value?.toString().trim().length > 0
-        ) {
+        if (context.parent.TDC_SENSORx === "No Channel") {
           return true;
-        } else if (
-          context.parent.TDC_SENSORx !== "No Channel" &&
-          value?.toString().trim().length === 0
-        ) {
-          return false;
         }
+        return value !== null && value !== undefined;
       }
     ),
   Peak_Pressure_SENSORx: yup
@@ -590,17 +566,10 @@ export const engineValidationSchema = yup.object({
       "is Required ?",
       "Error: Required Field if channel selected",
       (value: any, context) => {
-        if (
-          context.parent.Peak_Pressure_SENSORx === "No Channel" ||
-          value?.toString().trim().length > 0
-        ) {
+        if (context.parent.Peak_Pressure_SENSORx === "No Channel") {
           return true;
-        } else if (
-          context.parent.Peak_Pressure_SENSORx !== "No Channel" &&
-          value?.toString().trim().length === 0
-        ) {
-          return false;
         }
+        return value !== null && value !== undefined;
       }
     ),
   Peak_Pressure_Teeth: yup
@@ -609,17 +578,10 @@ export const engineValidationSchema = yup.object({
       "is Required ?",
       "Error: Required Field if channel selected",
       (value: any, context) => {
-        if (
-          context.parent.Peak_Pressure_SENSORx === "No Channel" ||
-          value?.toString().trim().length > 0
-        ) {
+        if (context.parent.Peak_Pressure_SENSORx === "No Channel") {
           return true;
-        } else if (
-          context.parent.Peak_Pressure_SENSORx !== "No Channel" &&
-          value?.toString().trim().length === 0
-        ) {
-          return false;
         }
+        return value !== null && value !== undefined;
       }
     )
     .test(
@@ -635,17 +597,10 @@ export const engineValidationSchema = yup.object({
       "is Required ?",
       "Error: Required Field if channel selected",
       (value: any, context) => {
-        if (
-          context.parent.Peak_Pressure_SENSORx === "No Channel" ||
-          value?.toString().trim().length > 0
-        ) {
+        if (context.parent.Peak_Pressure_SENSORx === "No Channel") {
           return true;
-        } else if (
-          context.parent.Peak_Pressure_SENSORx !== "No Channel" &&
-          value?.toString().trim().length === 0
-        ) {
-          return false;
         }
+        return value !== null && value !== undefined;
       }
     ),
   peak_pressure_transducer_sensitivity: yup
@@ -654,23 +609,21 @@ export const engineValidationSchema = yup.object({
       "is Required ?",
       "Error: Required Field if channel selected",
       (value: any, context) => {
-        if (
-          context.parent.Peak_Pressure_SENSORx === "No Channel" ||
-          value?.toString().trim().length > 0
-        ) {
+        if (context.parent.Peak_Pressure_SENSORx === "No Channel") {
           return true;
-        } else if (
-          context.parent.Peak_Pressure_SENSORx !== "No Channel" &&
-          value?.toString().trim().length === 0
-        ) {
-          return false;
         }
+        return value !== null && value !== undefined;
       }
     )
     .test(
       "Is positive?",
       "ERROR: The number must be greater than 0!",
-      (value: any) => value > 0
+      (value: any, context) => {
+        if (context.parent.Peak_Pressure_SENSORx === "No Channel") {
+          return true;
+        }
+        return value > 0;
+      }
     ),
   name: yup.string().required("This is a required field"),
   serial_number: yup.string().required("This is a required field"),
@@ -695,8 +648,9 @@ export const engineValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be in whole number and greater than 0!",
 
-      (value) => value !== 0 && value - Math.floor(value) === 0
-    ),
+      (value) => value > 0
+    )
+    .integer("The field should be an integer !"),
   firing_order: yup
     .string()
     .required("This is a required field")

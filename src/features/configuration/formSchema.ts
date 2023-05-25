@@ -2,12 +2,6 @@ const formSchema = {
   Engine: {
     "Asset Information": [
       {
-        name: "Customer Name",
-        label: "customer_name",
-        type: "text",
-        disabled: true,
-      },
-      {
         name: "Asset Name",
         label: "asset_name",
         type: "text",
@@ -342,7 +336,7 @@ const formSchema = {
       },
       {
         name: "Gap between acquisitions",
-        label: "Gap between acquisitions",
+        label: "recording_period",
         type: "text",
         helperNote: "time between two recordings",
       },
@@ -438,12 +432,6 @@ const formSchema = {
   },
   Torque: {
     "Asset Information": [
-      {
-        name: "Customer Name",
-        label: "customer_name",
-        type: "text",
-        disabled: true,
-      },
       {
         name: "Asset Name",
         label: "asset_name",
@@ -582,12 +570,6 @@ const formSchema = {
   Bearing: {
     "Asset Information": [
       {
-        name: "Customer Name",
-        label: "customer_name",
-        type: "text",
-        disabled: true,
-      },
-      {
         name: "Asset Name",
         label: "asset_name",
         type: "text",
@@ -701,12 +683,6 @@ const formSchema = {
   Turbine: {
     "Asset Information": [
       {
-        name: "Customer Name",
-        label: "customer_name",
-        type: "text",
-        disabled: true,
-      },
-      {
         name: "Asset Name",
         label: "asset_name",
         type: "text",
@@ -795,12 +771,6 @@ const formSchema = {
   },
   Motor: {
     "Asset Information": [
-      {
-        name: "Customer Name",
-        label: "customer_name",
-        type: "text",
-        disabled: true,
-      },
       {
         name: "Asset Name",
         label: "asset_name",

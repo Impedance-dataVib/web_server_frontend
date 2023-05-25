@@ -34,11 +34,7 @@ const AddConfigurationModal = ({
   const [configName, setConfigName] = useState<
     IAddConfigurationState | undefined
   >();
-  const {
-    data: customerName,
-    isLoading,
-    isError,
-  } = useGetSystemCustomerNameInfo();
+
   const onSubmitInternal = () => {
     if (onSubmit) {
       onSubmit(configName);
@@ -50,7 +46,7 @@ const AddConfigurationModal = ({
       <DialogTitle>Add Configuration</DialogTitle>
       <DialogContent>
         <Box sx={{ minWidth: "500px" }}>
-          <TextField
+          {/* <TextField
             autoFocus
             id="customerName"
             name="customerName"
@@ -65,7 +61,7 @@ const AddConfigurationModal = ({
             inputProps={{
               readOnly: true,
             }}
-          />
+          /> */}
           <TextField
             autoFocus
             id="name"
