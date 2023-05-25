@@ -398,7 +398,7 @@ export const engineValidationSchema = yup.object({
   Crankshaft_WheelType: yup.string().required("This is a required field"),
   CamShaft_SENSORx: yup
     .string()
-    .required("This is a required field")
+
     .test(
       "Optional Fields",
       "ERROR: CAM,TDC, Peak pressure at time only one can be selected",
@@ -481,7 +481,7 @@ export const engineValidationSchema = yup.object({
     ),
   TDC_SENSORx: yup
     .string()
-    .required("This is a required field")
+
     .test(
       "Optional Fields",
       "ERROR: CAM,TDC, Peak pressure at time only one can be selected",
@@ -564,7 +564,7 @@ export const engineValidationSchema = yup.object({
     ),
   Peak_Pressure_SENSORx: yup
     .string()
-    .required("This is a required field")
+
     .test(
       "Optional Fields",
       "ERROR: CAM,TDC, Peak pressure at time only one can be selected",
@@ -641,7 +641,6 @@ export const engineValidationSchema = yup.object({
           context.parent.Peak_Pressure_SENSORx !== "No Channel" &&
           value?.toString().trim().length === 0
         ) {
-          
           return false;
         }
       }
