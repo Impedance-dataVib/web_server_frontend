@@ -15,15 +15,11 @@ export const torqueValidationSchema = yup.object({
     .required("This is a required field")
     .test(
       "Channel Validation",
-      `Error: Crank, CAM, TDC, Peak pressure channel shouldn't be same`,
+      `Error: NDE and DE channel shouldn't be same`,
       (value, context) => {
         if (value === "No Channel") {
           return true;
-        } else if (
-          value != context.parent.TDC_SENSORx &&
-          value != context.parent.Peak_Pressure_SENSORx &&
-          value != context.parent.CamShaft_SENSORx
-        ) {
+        } else if (value != context.parent.nde_channel_sensorx) {
           return true;
         } else {
           return false;
@@ -60,7 +56,22 @@ export const torqueValidationSchema = yup.object({
       "Field should be same for DE and NDE",
       (value, context) => value === context.parent.nde_channel_wheel_type
     ),
-  nde_channel_sensorx: yup.string().required("This is a required field"),
+  nde_channel_sensorx: yup
+    .string()
+    .required("This is a required field")
+    .test(
+      "Channel Validation",
+      `Error: NDE and DE channel shouldn't be same`,
+      (value, context) => {
+        if (value === "No Channel") {
+          return true;
+        } else if (value != context.parent.de_channel_sensorx) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    ),
   nde_channel_channel_type: yup.string().required("This is a required field"),
   nde_channel_teeth: yup
     .number()
