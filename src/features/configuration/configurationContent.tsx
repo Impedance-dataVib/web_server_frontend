@@ -246,7 +246,7 @@ const ConfigurationContent = ({
             setOpenconfirmmBox(false);
           }}
           handleOk={() => {
-            console.log("navigatePath", navigatePath);
+            
             setOpenconfirmmBox(false);
             setIsUnsaved(false);
             if (navigatePath) {

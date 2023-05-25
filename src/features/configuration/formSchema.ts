@@ -2,12 +2,6 @@ const formSchema = {
   Engine: {
     "Asset Information": [
       {
-        name: "Customer Name",
-        label: "customer_name",
-        type: "text",
-        disabled: true,
-      },
-      {
         name: "Asset Name",
         label: "asset_name",
         type: "text",
@@ -216,8 +210,8 @@ const formSchema = {
         type: "dropdown",
         options: [
           "Prime Mover",
-          "Main Engine",
-          "Auxiliary DG",
+          "Main Propulsion Engine",
+          "Marine Gensets",
           "Stationary Gensets",
         ],
         helperNote: "Enter the Application where the Engine is used",
@@ -226,7 +220,14 @@ const formSchema = {
         name: "Fuel",
         label: "fuel",
         type: "dropdown",
-        options: ["Diesel", "Gas"],
+        options: [
+          "HFO",
+          "Dual Fuel",
+          "Hydrogen",
+          "Ammonia",
+          "Natural Gas",
+          "Others",
+        ],
         helperNote: "Select the type of fuel used",
       },
       {
@@ -293,7 +294,7 @@ const formSchema = {
           "Approaching a TOH",
           "Last Overhaul was a TOH",
         ],
-        helperNote: "Enter Current Running Hours",
+        helperNote: "Enter Current Engine History",
       },
       {
         name: "VesselType",
@@ -317,30 +318,30 @@ const formSchema = {
           "Barges",
           "Inland Water Way Transporters",
         ],
-        helperNote: "Enter Current Running Hours",
+        helperNote: "Enter Current vessel_type",
       },
     ],
     "Diagnostic Details": [
       {
-        name: "Min Speed(minRPM)",
+        name: "Min Speed",
         label: "min_speed",
         type: "text",
-        helperNote: "Enter the min volts required to perform the analysis",
+        helperNote: "Enter the min rpm required to perform the analysis",
       },
       {
-        name: "MinVolt(LevelMin)(in mV)",
+        name: "MinVolt",
         label: "min_volt",
         type: "text",
         helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period (in seconds)",
+        name: "Gap between acquisitions",
         label: "recording_period",
         type: "text",
         helperNote: "time between two recordings",
       },
       {
-        name: "Recording Length (in seconds)",
+        name: "Recording Length ",
         label: "recording_length",
         type: "text",
         helperNote: "Length of Sample Collection",
@@ -432,12 +433,6 @@ const formSchema = {
   Torque: {
     "Asset Information": [
       {
-        name: "Customer Name",
-        label: "customer_name",
-        type: "text",
-        disabled: true,
-      },
-      {
         name: "Asset Name",
         label: "asset_name",
         type: "text",
@@ -465,7 +460,7 @@ const formSchema = {
             options: ["Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "No Channel"],
           },
           {
-            name: "ChannelType Teeth(",
+            name: "ChannelType Teeth",
             type: "dropdown",
             options: ["Speed", "Transducer"],
           },
@@ -498,43 +493,43 @@ const formSchema = {
     ],
     "Diagnostic Details": [
       {
-        name: "Min Speed(minRPM)",
+        name: "Min Speed",
         label: "min_speed",
         type: "text",
         helperNote: "Enter the min rpm required to perform analysis",
       },
       {
-        name: "MinVolt (in mV)",
+        name: "MinVolt ",
         label: "min_volt",
         type: "text",
         helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period (in seconds)",
-        label: "recording_period",
+        name: "Gap between acquisitions",
+        label: "Gap between acquisitions",
         type: "text",
         helperNote: "recording time for one diagnosis",
       },
       {
-        name: "Recording Length (in seconds)",
+        name: "Recording Length ",
         label: "recording_length",
         type: "text",
         helperNote: "Length of Sample Collection",
       },
       {
-        name: "ZeroDegree (in degree)",
+        name: "ZeroDegree ",
         label: "zero_degree",
         type: "text",
         helperNote: "Enter zero degree",
       },
       {
-        name: "Rigidity(R)(in N-m/rad)",
+        name: "Rigidity",
         label: "rigidity",
         type: "popup",
         helperNote: "Calculate the rigidity",
       },
       {
-        name: "Power (in Watts)",
+        name: "Power ",
         label: "power",
         type: "text",
         helperNote: "Enter the power in watts",
@@ -542,7 +537,7 @@ const formSchema = {
     ],
     "Machine Details": [
       {
-        name: "Name",
+        name: "Make & Model",
         label: "name",
         type: "text",
         helperNote: "Enter Equipment Name",
@@ -566,6 +561,7 @@ const formSchema = {
           "Large Bulk carriers",
           "Mini Bulk Carriers",
           "Gas Tankers",
+          "Others",
         ],
         helperNote: "Select the vessel type",
       },
@@ -573,12 +569,6 @@ const formSchema = {
   },
   Bearing: {
     "Asset Information": [
-      {
-        name: "Customer Name",
-        label: "customer_name",
-        type: "text",
-        disabled: true,
-      },
       {
         name: "Asset Name",
         label: "asset_name",
@@ -598,7 +588,7 @@ const formSchema = {
     ],
     "Channel Information": [
       {
-        name: "Crankshaft",
+        name: "Sensor",
         group: "yes",
         children: [
           {
@@ -651,25 +641,25 @@ const formSchema = {
     ],
     "Diagnostic Details": [
       {
-        name: "Min Speed(minRPM)",
+        name: "Min Speed",
         label: "min_speed",
         type: "text",
         helperNote: "Enter the min rpm required to perform analysis",
       },
       {
-        name: "Min Volt (in mV)",
+        name: "Min Volt ",
         label: "min_volt",
         type: "text",
         helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period (in seconds)",
-        label: "recording_period",
+        name: "Gap between acquisitions ",
+        label: "Gap between acquisitions",
         type: "text",
         helperNote: "recording time for one diagnosis",
       },
       {
-        name: "Recording Length (in seconds)",
+        name: "Recording Length ",
         label: "recording_length",
         type: "text",
         helperNote: "Length of Sample Collection",
@@ -677,7 +667,7 @@ const formSchema = {
     ],
     "Machine Details": [
       {
-        name: "Name",
+        name: "Make & Model",
         label: "name",
         type: "text",
         helperNote: "Enter Equipment Name",
@@ -692,12 +682,6 @@ const formSchema = {
   },
   Turbine: {
     "Asset Information": [
-      {
-        name: "Customer Name",
-        label: "customer_name",
-        type: "text",
-        disabled: true,
-      },
       {
         name: "Asset Name",
         label: "asset_name",
@@ -739,25 +723,25 @@ const formSchema = {
     ],
     "Diagnostic Details": [
       {
-        name: "Min Speed(minRPM)",
+        name: "Min Speed",
         label: "min_speed",
         type: "text",
         helperNote: "Enter the min rpm required to perform analysis",
       },
       {
-        name: "Min Volt (in mV)",
+        name: "Min Volt ",
         label: "min_volt",
         type: "text",
         helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period (in seconds)",
-        label: "recording_period",
+        name: "Gap between acquisitions ",
+        label: "Gap between acquisitions",
         type: "text",
         helperNote: "recording time for one diagnosis",
       },
       {
-        name: "Recording Length (in seconds)",
+        name: "Recording Length ",
         label: "recording_length",
         type: "text",
         helperNote: "Length of Sample Collection",
@@ -765,7 +749,7 @@ const formSchema = {
     ],
     "Machine Details": [
       {
-        name: "Name",
+        name: "Make & Model",
         label: "name",
         type: "text",
         helperNote: "Enter Equipment Name",
@@ -787,12 +771,6 @@ const formSchema = {
   },
   Motor: {
     "Asset Information": [
-      {
-        name: "Customer Name",
-        label: "customer_name",
-        type: "text",
-        disabled: true,
-      },
       {
         name: "Asset Name",
         label: "asset_name",
@@ -865,25 +843,25 @@ const formSchema = {
     ],
     "Diagnostic Details": [
       {
-        name: "Min Speed(minRPM)",
+        name: "Min Speed",
         label: "min_speed",
         type: "text",
         helperNote: "Enter the min rpm required to perform analysis",
       },
       {
-        name: "Min Volt (in mV)",
+        name: "Min Volt ",
         label: "min_volt",
         type: "text",
         helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period (in seconds)",
-        label: "recording_period",
+        name: "Gap between acquisitions ",
+        label: "Gap between acquisitions",
         type: "text",
         helperNote: "recording time for one diagnosis",
       },
       {
-        name: "Recording Length (in seconds)",
+        name: "Recording Length ",
         label: "recording_length",
         type: "text",
         helperNote: "Length of Sample Collection",
@@ -896,7 +874,7 @@ const formSchema = {
     ],
     "Machine Details": [
       {
-        name: "Name",
+        name: "Make & Model",
         label: "name",
         type: "text",
         helperNote: "Enter Equipment Name",

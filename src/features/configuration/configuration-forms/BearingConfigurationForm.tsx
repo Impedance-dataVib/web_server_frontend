@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import HelpIcon from "@mui/icons-material/Help";
 import { useGetChannelByConfigIdName } from "../hooks";
 import { useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
@@ -108,35 +109,54 @@ export const BearingChannelInformationForm = ({
     ],
   });
   const { configId } = useParams();
-  const { data, getChannelByConfigIdName } = useGetChannelByConfigIdName(
+  const { enqueueSnackbar } = useSnackbar();
+  const { data, isPending } = useGetChannelByConfigIdName(
     configId || "",
     formContext?.values["bearing_crankshaft_sensorx"],
     formContext.dirty
   );
   useEffect(() => {
-    if (data && formContext.dirty) {
+    if (data && formContext.dirty && !isPending) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
       formContext.validateForm().then(() => {
         formContext.setFieldValue(
           "bearing_crankshaft_channel_type",
           data?.channel_type,
           false
         );
-        formContext.setFieldValue("bearing_crankshaft_teeth", data?.teeth, false);
+        formContext.setFieldValue(
+          "bearing_crankshaft_teeth",
+          data?.teeth,
+          false
+        );
         formContext.setFieldValue(
           "bearing_crankshaft_wheel_type",
           data?.wheel_type,
           false
         );
-      })
-     
+      });
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
     } else {
+      if (formContext.dirty && !isPending) {
+        enqueueSnackbar({
+          message: "Channel is not used in another module",
+          variant: "info",
+        });
+      }
+
       formContext.setFieldValue("bearing_crankshaft_channel_type", "", false);
       formContext.setFieldValue("bearing_crankshaft_teeth", "", false);
       formContext.setFieldValue("bearing_crankshaft_wheel_type", "", false);
       formContext.validateForm();
     }
     return () => {};
-  }, [formContext?.values["bearing_crankshaft_sensorx"], data]);
+  }, [data, isPending]);
 
   return (
     <>
@@ -156,7 +176,7 @@ export const BearingChannelInformationForm = ({
               marginBottom: "5px",
             }}
           >
-            Crankshaft
+            Sensor
           </Typography>
         </Grid>
         <Grid container item spacing={1}>
@@ -198,7 +218,7 @@ export const BearingChannelInformationForm = ({
               )}
             >
               <InputLabel id={`bearing_crankshaft_channel_type-label`}>
-                Channel_Type
+                Sensor_Type
               </InputLabel>
               <Select
                 labelId="bearing_crankshaft_channel_type-label"
@@ -227,66 +247,228 @@ export const BearingChannelInformationForm = ({
               )}
             </FormControl>
           </Grid>
-          <Grid item>
-            <TextField
-              name={"bearing_crankshaft_teeth"}
-              label="Teeth"
-              variant="outlined"
-              sx={{
-                fontSize: "16px",
-                marginBottom: "20px",
-                width: "182px",
-                padding: "1px 1px",
-              }}
-              value={formContext?.values["bearing_crankshaft_teeth"]}
-              error={Boolean(formContext?.errors?.["bearing_crankshaft_teeth"])}
-              helperText={formContext?.errors?.["bearing_crankshaft_teeth"]}
-              onChange={formContext?.handleChange}
-              inputProps={{
-                readOnly: data ? true : false,
-                style: {
-                  padding: "11px 26px 13px 12px",
-                },
-              }}
-            ></TextField>
-          </Grid>
-          <Grid item>
-            <FormControl
-              sx={{ minWidth: "182px", marginBottom: "20px" }}
-              error={Boolean(
-                formContext?.errors?.["bearing_crankshaft_wheel_type"]
-              )}
-            >
-              <InputLabel id={`bearing_crankshaft_wheel_type-label`}>
-                Wheel_Type
-              </InputLabel>
-              <Select
-                labelId="bearing_crankshaft_wheel_type-label"
-                name="bearing_crankshaft_wheel_type"
-                value={formContext?.values["bearing_crankshaft_wheel_type"]}
-                onChange={formContext?.handleChange}
-                label={"Wheel_Type"}
-                inputProps={{
-                  readOnly: data ? true : false,
-                }}
-              >
-                {optionsChannelInformation["WheelType"].map(
-                  (option: string) => (
-                    <MenuItem key={option} value={option}>
-                      {option}
-                    </MenuItem>
-                  )
-                )}
-              </Select>
-              {Boolean(
-                formContext?.errors?.["bearing_crankshaft_wheel_type"]
-              ) && (
-                <FormHelperText>
-                  {formContext?.errors?.["bearing_crankshaft_wheel_type"]}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Grid>
+          {formContext?.values["bearing_crankshaft_channel_type"] ===
+            "Speed" && (
+            <>
+              <Grid item>
+                <TextField
+                  name={"bearing_crankshaft_teeth"}
+                  label="Teeth"
+                  variant="outlined"
+                  sx={{
+                    fontSize: "16px",
+                    marginBottom: "20px",
+                    width: "182px",
+                    padding: "1px 1px",
+                  }}
+                  value={formContext?.values["bearing_crankshaft_teeth"]}
+                  error={Boolean(
+                    formContext?.errors?.["bearing_crankshaft_teeth"]
+                  )}
+                  helperText={formContext?.errors?.["bearing_crankshaft_teeth"]}
+                  onChange={formContext?.handleChange}
+                  inputProps={{
+                    readOnly: data ? true : false,
+                    style: {
+                      padding: "11px 26px 13px 12px",
+                    },
+                  }}
+                ></TextField>
+              </Grid>
+              <Grid item>
+                <FormControl
+                  sx={{ minWidth: "182px", marginBottom: "20px" }}
+                  error={Boolean(
+                    formContext?.errors?.["bearing_crankshaft_wheel_type"]
+                  )}
+                >
+                  <InputLabel id={`bearing_crankshaft_wheel_type-label`}>
+                    Wheel_Type
+                  </InputLabel>
+                  <Select
+                    labelId="bearing_crankshaft_wheel_type-label"
+                    name="bearing_crankshaft_wheel_type"
+                    value={formContext?.values["bearing_crankshaft_wheel_type"]}
+                    onChange={formContext?.handleChange}
+                    label={"Wheel_Type"}
+                    inputProps={{
+                      readOnly: data ? true : false,
+                    }}
+                  >
+                    {optionsChannelInformation["WheelType"].map(
+                      (option: string) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      )
+                    )}
+                  </Select>
+                  {Boolean(
+                    formContext?.errors?.["bearing_crankshaft_wheel_type"]
+                  ) && (
+                    <FormHelperText>
+                      {formContext?.errors?.["bearing_crankshaft_wheel_type"]}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+            </>
+          )}
+          {formContext?.values["bearing_crankshaft_channel_type"] ===
+            "Transducer" && (
+            <>
+              <Grid item>
+                <FormControl
+                  sx={{ minWidth: "182px", marginBottom: "20px" }}
+                  error={Boolean(
+                    formContext?.errors?.["bearing_crankshaft_wheel_type"]
+                  )}
+                >
+                  <InputLabel id={`bearing_crankshaft_unit-label`}>
+                    Unit
+                  </InputLabel>
+                  <Select
+                    labelId="bearing_crankshaft_unit-label"
+                    name="bearing_crankshaft_unit"
+                    value={formContext?.values["bearing_crankshaft_unit"]}
+                    onChange={formContext?.handleChange}
+                    label={"Unit"}
+                    inputProps={{
+                      readOnly: data ? true : false,
+                    }}
+                  >
+                    {["", "g", "v", "um"].map((option: string) => (
+                      <MenuItem
+                        key={option === "" ? "none" : option}
+                        value={option}
+                      >
+                        {option === "" ? "none" : option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {Boolean(
+                    formContext?.errors?.["bearing_crankshaft_unit"]
+                  ) && (
+                    <FormHelperText>
+                      {formContext?.errors?.["bearing_crankshaft_unit"]}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <FormControl
+                  sx={{ minWidth: "182px", marginBottom: "20px" }}
+                  error={Boolean(
+                    formContext?.errors?.["bearing_crankshaft_sensitivity"]
+                  )}
+                >
+                  <InputLabel id={`bearing_crankshaft_sensitivity-label`}>
+                    Sensitivity(mV)
+                  </InputLabel>
+                  <Select
+                    labelId="bearing_crankshaft_sensitivity-label"
+                    name="bearing_crankshaft_sensitivity"
+                    value={
+                      formContext?.values["bearing_crankshaft_sensitivity"]
+                    }
+                    onChange={formContext?.handleChange}
+                    label={"Sensitivity(mV)"}
+                    inputProps={{
+                      readOnly: data ? true : false,
+                    }}
+                  >
+                    {["", "10", "100", "1000"].map((option: string) => (
+                      <MenuItem
+                        key={option === "" ? "none" : option}
+                        value={option}
+                      >
+                        {option === "" ? "none" : option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {Boolean(
+                    formContext?.errors?.["bearing_crankshaft_sensitivity"]
+                  ) && (
+                    <FormHelperText>
+                      {formContext?.errors?.["bearing_crankshaft_sensitivity"]}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <FormControl
+                  sx={{ minWidth: "182px", marginBottom: "20px" }}
+                  error={Boolean(
+                    formContext?.errors?.["bearing_crankshaft_power_source"]
+                  )}
+                >
+                  <InputLabel id={`bearing_crankshaft_power_source-label`}>
+                    Power Source
+                  </InputLabel>
+                  <Select
+                    labelId="bearing_crankshaft_power_source-label"
+                    name="bearing_crankshaft_power_source"
+                    value={
+                      formContext?.values["bearing_crankshaft_power_source"]
+                    }
+                    onChange={formContext?.handleChange}
+                    label={"Power Source"}
+                    inputProps={{
+                      readOnly: data ? true : false,
+                    }}
+                  >
+                    {["None", "IEPE"].map((option: string) => (
+                      <MenuItem key={option} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {Boolean(
+                    formContext?.errors?.["bearing_crankshaft_power_source"]
+                  ) && (
+                    <FormHelperText>
+                      {formContext?.errors?.["bearing_crankshaft_power_source"]}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <FormControl
+                  sx={{ minWidth: "182px", marginBottom: "20px" }}
+                  error={Boolean(
+                    formContext?.errors?.["bearing_crankshaft_ac_dc"]
+                  )}
+                >
+                  <InputLabel id={`bearing_crankshaft_ac_dc-label`}>
+                    AC/DC
+                  </InputLabel>
+                  <Select
+                    labelId="bearing_crankshaft_ac_dc-label"
+                    name="bearing_crankshaft_ac_dc"
+                    value={formContext?.values["bearing_crankshaft_ac_dc"]}
+                    onChange={formContext?.handleChange}
+                    label={"AC/DC"}
+                    inputProps={{
+                      readOnly: data ? true : false,
+                    }}
+                  >
+                    {["None", "AC", "DC"].map((option: string) => (
+                      <MenuItem key={option} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {Boolean(
+                    formContext?.errors?.["bearing_crankshaft_ac_dc"]
+                  ) && (
+                    <FormHelperText>
+                      {formContext?.errors?.["bearing_crankshaft_ac_dc"]}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+            </>
+          )}
         </Grid>
       </Grid>
     </>

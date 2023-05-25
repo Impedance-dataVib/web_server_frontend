@@ -12,7 +12,8 @@ import ErrorBoundary from "../../../../app/components/error-boundary";
 const BearingMonitoringPage = () => {
   return (
     <ErrorBoundary>
-      <Box> BearingMonitoringPage
+      <Box>
+        BearingMonitoringPage
         {/* <Box sx={{ mt: 2 }}>
           <Grid container spacing={2}>
             <ErrorBoundary>

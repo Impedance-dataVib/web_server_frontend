@@ -15,6 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import HelpIcon from "@mui/icons-material/Help";
 import { useParams } from "react-router-dom";
 import { useGetChannelByConfigIdName } from "../hooks";
+import { useSnackbar } from "notistack";
 
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
@@ -104,7 +105,7 @@ export const TorqueChannelInformationForm = ({
       "CH8",
       "No Channel",
     ],
-    ChannelType: ["Speed", "Transducer"],
+    ChannelType: ["Speed"],
     WheelType: [
       "Standard",
       "1 Missing Tooth",
@@ -121,19 +122,27 @@ export const TorqueChannelInformationForm = ({
   });
 
   const { configId } = useParams();
-  const { data: deChannelData } = useGetChannelByConfigIdName(
-    configId || "",
-    formContext?.values["de_channel_sensorx"],
-    formContext.dirty
-  );
+  const { enqueueSnackbar } = useSnackbar();
+  const { data: deChannelData, isPending: deChannelisPending } =
+    useGetChannelByConfigIdName(
+      configId || "",
+      formContext?.values["de_channel_sensorx"],
+      formContext.dirty
+    );
 
-  const { data: ndeChannel } = useGetChannelByConfigIdName(
-    configId || "",
-    formContext?.values["nde_channel_sensorx"],
-    formContext.dirty
-  );
+  const { data: ndeChannel, isPending: ndeChannelisPending } =
+    useGetChannelByConfigIdName(
+      configId || "",
+      formContext?.values["nde_channel_sensorx"],
+      formContext.dirty
+    );
   useEffect(() => {
-    if (deChannelData && formContext.dirty) {
+    if (deChannelData && formContext.dirty && !deChannelisPending) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
       formContext.validateForm().then(() => {
         formContext.setFieldValue(
           "de_channel_channel_type",
@@ -150,42 +159,67 @@ export const TorqueChannelInformationForm = ({
           deChannelData?.wheel_type,
           false
         );
-      })
-      
-      
+      });
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
     } else {
+      console.log("trigerred");
+      if (formContext.dirty && !deChannelisPending) {
+        enqueueSnackbar({
+          message: "Channel is not used in another module",
+          variant: "info",
+        });
+      }
       formContext.setFieldValue("de_channel_channel_type", "", false);
       formContext.setFieldValue("de_channel__teeth", "", false);
       formContext.setFieldValue("de_channel_wheel_type", "", false);
       formContext.validateForm();
     }
     return () => {};
-  }, [formContext?.values["de_channel_sensorx"], deChannelData]);
+  }, [deChannelData, deChannelisPending]);
 
   useEffect(() => {
-    if (ndeChannel && formContext.dirty) {
+    if (ndeChannel && formContext.dirty && !ndeChannelisPending) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
       formContext.validateForm().then(() => {
         formContext.setFieldValue(
           "nde_channel_channel_type",
           ndeChannel?.channel_type,
           false
         );
-        formContext.setFieldValue("nde_channel_teeth", ndeChannel?.teeth, false);
+        formContext.setFieldValue(
+          "nde_channel_teeth",
+          ndeChannel?.teeth,
+          false
+        );
         formContext.setFieldValue(
           "nde_channel_wheel_type",
           ndeChannel?.wheel_type,
           false
         );
-      })
-      
+      });
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
     } else {
+      if (formContext.dirty && !ndeChannelisPending) {
+        enqueueSnackbar({
+          message: "Channel is not used in another module",
+          variant: "info",
+        });
+      }
       formContext.setFieldValue("nde_channel_channel_type", "", false);
       formContext.setFieldValue("nde_channel_teeth", "", false);
       formContext.setFieldValue("nde_channel_wheel_type", "", false);
       formContext.validateForm();
     }
     return () => {};
-  }, [formContext?.values["nde_channel_sensorx"], ndeChannel]);
+  }, [ndeChannel, ndeChannelisPending]);
 
   return (
     <>
@@ -241,7 +275,7 @@ export const TorqueChannelInformationForm = ({
               error={Boolean(formContext?.errors?.["de_channel_channel_type"])}
             >
               <InputLabel id={`de_channel_channel_type-label`}>
-                Channel_Type
+                Sensor_Type
               </InputLabel>
               <Select
                 labelId="de_channel_channel_type-label"
@@ -378,7 +412,7 @@ export const TorqueChannelInformationForm = ({
               error={Boolean(formContext?.errors?.["nde_channel_channel_type"])}
             >
               <InputLabel id={`nde_channel_channel_type-label`}>
-                Channel_Type
+                Sensor_Type
               </InputLabel>
               <Select
                 labelId="nde_channel_channel_type-label"

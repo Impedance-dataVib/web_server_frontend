@@ -154,7 +154,10 @@ const TurbineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       asset_name: "",
       equipment_name: "",
       module_type: data.module_type,
-     
+      turbine_crankshaft_ac_dc: "",
+      turbine_crankshaft_power_source: "",
+      turbine_crankshaft_sensitivity: "",
+      turbine_crankshaft_unit: "",
       turbine_crankshaft_sensorx: "",
       turbine_crankshaft_channel_type: "",
       turbine_crankshaft_teeth: "",
@@ -195,7 +198,7 @@ const TurbineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
         variant: "info",
       });
       await saveModuleData(payload);
-      setIsUnsaved(false)
+      setIsUnsaved(false);
       enqueueSnackbar({
         message: "Module Saved",
         variant: "success",
@@ -212,7 +215,7 @@ const TurbineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   };
   useEffect(() => {
     setIsUnsaved(moduleFormContext.dirty);
-  }, [moduleFormContext.dirty])
+  }, [moduleFormContext.dirty]);
 
   return (
     <Box sx={{ width: "100%" }}>

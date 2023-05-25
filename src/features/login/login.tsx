@@ -90,7 +90,7 @@ const LoginPage = () => {
                 >
                   <img
                     alt="Engine"
-                    src="engine_image.png"
+                    src="Engine_images.png"
                     height="100%"
                     width="100%"
                   ></img>

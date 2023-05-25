@@ -1,17 +1,20 @@
-import { Typography, Box, Link, Divider, Button } from "@mui/material";
+import { Typography, Box, Link, Divider, Button, Tooltip } from "@mui/material";
 import SystemInfoTable from "./systemInfoTable";
 import UploadFile from "./uploadFile";
 import CachedIcon from "@mui/icons-material/Cached";
 // import { apiData } from "./schema";
 import { useEffect, useState } from "react";
 import SystemInfoApi from "./api";
+import InfoIcon from "@mui/icons-material/Info";
 
 const SystemConfiguration = () => {
+  const [isShown, setIsShown] = useState(false);
   const [apiData, setApiData] = useState({
     serianNo: "",
     macId: "",
     firmwareVersion: "",
     softwareVersion: "",
+    softwareNote: "",
     library: "",
     systemInfo: [],
     licenseInfo: {
@@ -34,6 +37,7 @@ const SystemConfiguration = () => {
       torque_quantity: null,
     },
   });
+  console.log(apiData);
 
   const getSystemInfo = async () => {
     const response = await SystemInfoApi.getSystemInfo();
@@ -167,8 +171,26 @@ const SystemConfiguration = () => {
               </Box>
               <Divider sx={{ mx: 4 }} />
               <Box sx={{ px: 4, py: 2 }}>
-                <Typography variant="h5">Software information</Typography>
-
+                <Typography variant="h5">
+                  Software information
+                  <InfoIcon
+                    onMouseEnter={() => setIsShown(true)}
+                    onMouseLeave={() => setIsShown(false)}
+                  ></InfoIcon>
+                </Typography>
+                {isShown && (
+                  <Box
+                    component="p"
+                    sx={{
+                      bgcolor: "lightGray",
+                      position: "absolute",
+                      width: "50%",
+                      padding: "5px",
+                    }}
+                  >
+                    {apiData.softwareNote}
+                  </Box>
+                )}
                 <Box
                   sx={{
                     display: "flex",
@@ -185,7 +207,8 @@ const SystemConfiguration = () => {
                   >
                     <Typography variant="subtitle1">SW Version: </Typography>
                     <Typography variant="body1" sx={{ mx: 1 }}>
-                      {process.env.REACT_APP_VERSION}
+                      {/* {process.env.REACT_APP_VERSION} */}
+                      {apiData.softwareVersion}
                     </Typography>
                   </Box>
                   <Box
