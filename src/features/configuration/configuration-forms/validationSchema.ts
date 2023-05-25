@@ -1,7 +1,13 @@
 import * as yup from "yup";
 export const torqueValidationSchema = yup.object({
   asset_name: yup.string().required("This is a required field"),
-  equipment_name: yup.string().required("This is a required field"),
+  equipment_name: yup
+    .string()
+    .required("This is a required field")
+    .notOneOf(
+      [yup.ref("asset_name"), null],
+      "should not match with Asset name!"
+    ),
 
   de_channel_sensorx: yup.string().required("This is a required field"),
   de_channel_channel_type: yup
@@ -127,7 +133,13 @@ export const torqueValidationSchema = yup.object({
 });
 export const motorValidationSchema = yup.object({
   asset_name: yup.string().required("This is a required field"),
-  equipment_name: yup.string().required("This is a required field"),
+  equipment_name: yup
+    .string()
+    .required("This is a required field")
+    .notOneOf(
+      [yup.ref("asset_name"), null],
+      "should not match with Asset name!"
+    ),
 
   motor_crankshaft_sensorx: yup.string().required("This is a required field"),
   motor_crankshaft_channel_type: yup
@@ -196,7 +208,13 @@ export const motorValidationSchema = yup.object({
 
 export const turbineValidationSchema = yup.object({
   asset_name: yup.string().required("This is a required field"),
-  equipment_name: yup.string().required("This is a required field"),
+  equipment_name: yup
+    .string()
+    .required("This is a required field")
+    .notOneOf(
+      [yup.ref("asset_name"), null],
+      "should not match with Asset name!"
+    ),
 
   turbine_crankshaft_sensorx: yup.string().required("This is a required field"),
   turbine_crankshaft_channel_type: yup
@@ -265,7 +283,13 @@ export const turbineValidationSchema = yup.object({
 
 export const bearingValidationSchema = yup.object({
   asset_name: yup.string().required("This is a required field"),
-  equipment_name: yup.string().required("This is a required field"),
+  equipment_name: yup
+    .string()
+    .required("This is a required field")
+    .notOneOf(
+      [yup.ref("asset_name"), null],
+      "should not match with Asset name!"
+    ),
 
   bearing_crankshaft_sensorx: yup.string().required("This is a required field"),
   bearing_crankshaft_channel_type: yup
@@ -333,7 +357,13 @@ export const bearingValidationSchema = yup.object({
 });
 export const engineValidationSchema = yup.object({
   asset_name: yup.string().required("This is a required field"),
-  equipment_name: yup.string().required("This is a required field"),
+  equipment_name: yup
+    .string()
+    .required("This is a required field")
+    .notOneOf(
+      [yup.ref("asset_name"), null],
+      "should not match with Asset name!"
+    ),
 
   Crankshaft_SENSORx: yup
     .string()
@@ -662,6 +692,7 @@ export const engineValidationSchema = yup.object({
     .test(
       "Is positive?",
       "ERROR: The number must be in whole number and greater than 0!",
+
       (value) => value !== 0 && value - Math.floor(value) === 0
     ),
   firing_order: yup

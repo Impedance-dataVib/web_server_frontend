@@ -409,7 +409,7 @@ export const TorqueChannelInformationForm = ({
               error={Boolean(formContext?.errors?.["nde_channel_channel_type"])}
             >
               <InputLabel id={`nde_channel_channel_type-label`}>
-                Channel_Type
+                Sensor_Type
               </InputLabel>
               <Select
                 labelId="nde_channel_channel_type-label"

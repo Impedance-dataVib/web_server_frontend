@@ -663,8 +663,8 @@ const formSchema = {
         helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period ",
-        label: "recording_period",
+        name: "Gap between acquisitions ",
+        label: "Gap between acquisitions",
         type: "text",
         helperNote: "recording time for one diagnosis",
       },
@@ -751,7 +751,7 @@ const formSchema = {
         helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period ",
+        name: "Gap between acquisitions ",
         label: "recording_period",
         type: "text",
         helperNote: "recording time for one diagnosis",
@@ -877,7 +877,7 @@ const formSchema = {
         helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period ",
+        name: "Gap between acquisitions ",
         label: "recording_period",
         type: "text",
         helperNote: "recording time for one diagnosis",
