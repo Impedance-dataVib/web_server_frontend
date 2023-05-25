@@ -50,14 +50,14 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
 
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
-  const { data: crankShatftData, getChannelByConfigIdName } =
+  const { data: crankShatftData, isPending: crankShaftisPending } =
     useGetChannelByConfigIdName(
       configId || "",
       formContext?.values["Crankshaft_SENSORx"],
       formContext.dirty
     );
   useEffect(() => {
-    if (crankShatftData && formContext.dirty) {
+    if (crankShatftData && formContext.dirty && !crankShaftisPending) {
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -84,7 +84,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
         await formContext.validateForm();
       }, 100);
     } else {
-      if (formContext.dirty) {
+      if (formContext.dirty && !crankShaftisPending) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
           variant: "info",
@@ -97,14 +97,15 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
       });
     }
     return () => {};
-  }, [crankShatftData]);
-  const { data: camShatftData } = useGetChannelByConfigIdName(
-    configId || "",
-    formContext?.values["CamShaft_SENSORx"],
-    formContext.dirty
-  );
+  }, [crankShatftData, crankShaftisPending]);
+  const { data: camShatftData, isPending: camShaftisPending } =
+    useGetChannelByConfigIdName(
+      configId || "",
+      formContext?.values["CamShaft_SENSORx"],
+      formContext.dirty
+    );
   useEffect(() => {
-    if (camShatftData && formContext.dirty) {
+    if (camShatftData && formContext.dirty && !camShaftisPending) {
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -143,15 +144,16 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
       formContext.validateForm();
     }
     return () => {};
-  }, [camShatftData]);
+  }, [camShatftData, camShaftisPending]);
 
-  const { data: tdcData } = useGetChannelByConfigIdName(
-    configId || "",
-    formContext?.values["TDC_SENSORx"],
-    formContext.dirty
-  );
+  const { data: tdcData, isPending: tdcIsPending } =
+    useGetChannelByConfigIdName(
+      configId || "",
+      formContext?.values["TDC_SENSORx"],
+      formContext.dirty
+    );
   useEffect(() => {
-    if (tdcData && formContext.dirty) {
+    if (tdcData && formContext.dirty && !tdcIsPending) {
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -170,7 +172,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
         await formContext.validateForm();
       }, 100);
     } else {
-      if (formContext.dirty) {
+      if (formContext.dirty && !tdcIsPending) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
           variant: "info",
@@ -182,15 +184,16 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
       formContext.validateForm();
     }
     return () => {};
-  }, [tdcData]);
+  }, [tdcData, tdcIsPending]);
 
-  const { data: peakPressureData } = useGetChannelByConfigIdName(
-    configId || "",
-    formContext?.values["Peak_Pressure_SENSORx"],
-    formContext.dirty
-  );
+  const { data: peakPressureData, isPending: peakPressureIsPending } =
+    useGetChannelByConfigIdName(
+      configId || "",
+      formContext?.values["Peak_Pressure_SENSORx"],
+      formContext.dirty
+    );
   useEffect(() => {
-    if (peakPressureData && formContext.dirty) {
+    if (peakPressureData && formContext.dirty && !peakPressureIsPending) {
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -217,7 +220,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
         await formContext.validateForm();
       }, 100);
     } else {
-      if (formContext.dirty) {
+      if (formContext.dirty && !peakPressureIsPending) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
           variant: "info",
@@ -230,7 +233,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
       });
     }
     return () => {};
-  }, [peakPressureData]);
+  }, [peakPressureData, peakPressureIsPending]);
 
   return (
     <>

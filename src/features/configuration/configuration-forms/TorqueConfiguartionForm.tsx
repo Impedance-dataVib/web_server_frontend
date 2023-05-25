@@ -137,7 +137,7 @@ export const TorqueChannelInformationForm = ({
       formContext.dirty
     );
   useEffect(() => {
-    if (deChannelData && formContext.dirty) {
+    if (deChannelData && formContext.dirty && !deChannelisPending) {
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -164,7 +164,7 @@ export const TorqueChannelInformationForm = ({
         await formContext.validateForm();
       }, 100);
     } else {
-      console.log('trigerred');
+      console.log("trigerred");
       if (formContext.dirty && !deChannelisPending) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
@@ -180,7 +180,7 @@ export const TorqueChannelInformationForm = ({
   }, [deChannelData, deChannelisPending]);
 
   useEffect(() => {
-    if (ndeChannel && formContext.dirty) {
+    if (ndeChannel && formContext.dirty && !ndeChannelisPending) {
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -207,7 +207,7 @@ export const TorqueChannelInformationForm = ({
         await formContext.validateForm();
       }, 100);
     } else {
-      if (formContext.dirty) {
+      if (formContext.dirty && !ndeChannelisPending) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
           variant: "info",

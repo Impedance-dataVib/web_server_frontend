@@ -116,7 +116,7 @@ export const BearingChannelInformationForm = ({
     formContext.dirty
   );
   useEffect(() => {
-    if (data && formContext.dirty) {
+    if (data && formContext.dirty && !isPending) {
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -143,7 +143,7 @@ export const BearingChannelInformationForm = ({
         await formContext.validateForm();
       }, 100);
     } else {
-      if (formContext.dirty) {
+      if (formContext.dirty && !isPending) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
           variant: "info",

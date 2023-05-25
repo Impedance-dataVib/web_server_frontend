@@ -126,7 +126,7 @@ export const MotorChannelInformationForm = ({
     formContext.dirty
   );
   useEffect(() => {
-    if (data && formContext.dirty) {
+    if (data && formContext.dirty && !isPending) {
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -149,7 +149,7 @@ export const MotorChannelInformationForm = ({
         await formContext.validateForm();
       }, 100);
     } else {
-      if (formContext.dirty) {
+      if (formContext.dirty && !isPending) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
           variant: "info",
@@ -161,7 +161,7 @@ export const MotorChannelInformationForm = ({
       formContext.validateForm();
     }
     return () => {};
-  }, [data,isPending]);
+  }, [data, isPending]);
   return (
     <>
       <Grid
