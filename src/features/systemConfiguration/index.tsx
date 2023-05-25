@@ -180,9 +180,9 @@ const SystemConfiguration = () => {
                 </Typography>
                 {isShown && (
                   <Box
-                    component="b"
+                    component="p"
                     sx={{
-                      bgcolor: "white",
+                      bgcolor: "lightGray",
                       position: "absolute",
                       width: "50%",
                       padding: "5px",

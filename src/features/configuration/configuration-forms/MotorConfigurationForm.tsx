@@ -180,7 +180,7 @@ export const MotorChannelInformationForm = ({
               marginBottom: "5px",
             }}
           >
-            Crankshaft
+            Sensor
           </Typography>
         </Grid>
         <Grid container item spacing={1}>
@@ -348,9 +348,7 @@ export const MotorChannelInformationForm = ({
                       </MenuItem>
                     ))}
                   </Select>
-                  {Boolean(
-                    formContext?.errors?.["motor_crankshaft_unit"]
-                  ) && (
+                  {Boolean(formContext?.errors?.["motor_crankshaft_unit"]) && (
                     <FormHelperText>
                       {formContext?.errors?.["motor_crankshaft_unit"]}
                     </FormHelperText>
@@ -370,9 +368,7 @@ export const MotorChannelInformationForm = ({
                   <Select
                     labelId="motor_crankshaft_sensitivity-label"
                     name="motor_crankshaft_sensitivity"
-                    value={
-                      formContext?.values["motor_crankshaft_sensitivity"]
-                    }
+                    value={formContext?.values["motor_crankshaft_sensitivity"]}
                     onChange={formContext?.handleChange}
                     label={"Sensitivity(mV)"}
                     inputProps={{
@@ -410,9 +406,7 @@ export const MotorChannelInformationForm = ({
                   <Select
                     labelId="motor_crankshaft_power_source-label"
                     name="motor_crankshaft_power_source"
-                    value={
-                      formContext?.values["motor_crankshaft_power_source"]
-                    }
+                    value={formContext?.values["motor_crankshaft_power_source"]}
                     onChange={formContext?.handleChange}
                     label={"Power Source"}
                     inputProps={{
@@ -460,9 +454,7 @@ export const MotorChannelInformationForm = ({
                       </MenuItem>
                     ))}
                   </Select>
-                  {Boolean(
-                    formContext?.errors?.["motor_crankshaft_ac_dc"]
-                  ) && (
+                  {Boolean(formContext?.errors?.["motor_crankshaft_ac_dc"]) && (
                     <FormHelperText>
                       {formContext?.errors?.["motor_crankshaft_ac_dc"]}
                     </FormHelperText>

@@ -116,7 +116,6 @@ export const BearingChannelInformationForm = ({
     formContext.dirty
   );
   useEffect(() => {
-    
     if (data && formContext.dirty) {
       enqueueSnackbar({
         message:
@@ -177,7 +176,7 @@ export const BearingChannelInformationForm = ({
               marginBottom: "5px",
             }}
           >
-            Crankshaft
+            Sensor
           </Typography>
         </Grid>
         <Grid container item spacing={1}>

@@ -31,7 +31,7 @@ export const APP_NAV_MENU_ITEMS: INavMenuItem[] = [
     path: "/download",
   },
   {
-    label: "Auxilay Data",
+    label: "Engine Operation Parameters",
     icon: <WebAsset />,
     path: "/file-browser",
   },

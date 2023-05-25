@@ -216,8 +216,8 @@ const formSchema = {
         type: "dropdown",
         options: [
           "Prime Mover",
-          "Main Engine",
-          "Auxiliary DG",
+          "Main Propulsion Engine",
+          "Marine Gensets",
           "Stationary Gensets",
         ],
         helperNote: "Enter the Application where the Engine is used",
@@ -226,7 +226,14 @@ const formSchema = {
         name: "Fuel",
         label: "fuel",
         type: "dropdown",
-        options: ["Diesel", "Gas"],
+        options: [
+          "HFO",
+          "Dual Fuel",
+          "Hydrogen",
+          "Ammonia",
+          "Natural Gas",
+          "Others",
+        ],
         helperNote: "Select the type of fuel used",
       },
       {
@@ -334,8 +341,8 @@ const formSchema = {
         helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period ",
-        label: "recording_period",
+        name: "Gap between acquisitions",
+        label: "Gap between acquisitions",
         type: "text",
         helperNote: "time between two recordings",
       },
@@ -510,8 +517,8 @@ const formSchema = {
         helperNote: "Enter the min volts required to perform the analysis",
       },
       {
-        name: "Recording Period ",
-        label: "recording_period",
+        name: "Gap between acquisitions",
+        label: "Gap between acquisitions",
         type: "text",
         helperNote: "recording time for one diagnosis",
       },
@@ -566,6 +573,7 @@ const formSchema = {
           "Large Bulk carriers",
           "Mini Bulk Carriers",
           "Gas Tankers",
+          "Others",
         ],
         helperNote: "Select the vessel type",
       },
@@ -598,7 +606,7 @@ const formSchema = {
     ],
     "Channel Information": [
       {
-        name: "Crankshaft",
+        name: "Sensor",
         group: "yes",
         children: [
           {
@@ -752,7 +760,7 @@ const formSchema = {
       },
       {
         name: "Gap between acquisitions ",
-        label: "recording_period",
+        label: "Gap between acquisitions",
         type: "text",
         helperNote: "recording time for one diagnosis",
       },
@@ -878,7 +886,7 @@ const formSchema = {
       },
       {
         name: "Gap between acquisitions ",
-        label: "recording_period",
+        label: "Gap between acquisitions",
         type: "text",
         helperNote: "recording time for one diagnosis",
       },
