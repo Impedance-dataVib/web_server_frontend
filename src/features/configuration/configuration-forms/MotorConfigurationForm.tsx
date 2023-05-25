@@ -120,7 +120,7 @@ export const MotorChannelInformationForm = ({
   });
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
-  const { data, getChannelByConfigIdName } = useGetChannelByConfigIdName(
+  const { data, isPending } = useGetChannelByConfigIdName(
     configId || "",
     formContext?.values["motor_crankshaft_sensorx"],
     formContext.dirty
@@ -161,7 +161,7 @@ export const MotorChannelInformationForm = ({
       formContext.validateForm();
     }
     return () => {};
-  }, [data]);
+  }, [data,isPending]);
   return (
     <>
       <Grid

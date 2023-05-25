@@ -113,13 +113,14 @@ export const TurbineChannelInformationForm = ({
   });
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
-  const { data, getChannelByConfigIdName } = useGetChannelByConfigIdName(
-    configId || "",
-    formContext?.values["turbine_crankshaft_sensorx"],
-    formContext.dirty
-  );
+  const { data, getChannelByConfigIdName, isPending } =
+    useGetChannelByConfigIdName(
+      configId || "",
+      formContext?.values["turbine_crankshaft_sensorx"],
+      formContext.dirty
+    );
   useEffect(() => {
-    if (data && formContext.dirty) {
+    if (data && formContext.dirty && !isPending) {
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -146,7 +147,7 @@ export const TurbineChannelInformationForm = ({
         await formContext.validateForm();
       }, 100);
     } else {
-      if (formContext.dirty) {
+      if (formContext.dirty && !isPending) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
           variant: "info",
@@ -158,7 +159,7 @@ export const TurbineChannelInformationForm = ({
       formContext.validateForm();
     }
     return () => {};
-  }, [data]);
+  }, [data, isPending]);
 
   return (
     <>
@@ -326,7 +327,7 @@ export const TurbineChannelInformationForm = ({
                 <FormControl
                   sx={{ minWidth: "182px", marginBottom: "20px" }}
                   error={Boolean(
-                    formContext?.errors?.["turbine_crankshaft_wheel_type"]
+                    formContext?.errors?.["turbine_crankshaft_unit"]
                   )}
                 >
                   <InputLabel id={`turbine_crankshaft_unit-label`}>

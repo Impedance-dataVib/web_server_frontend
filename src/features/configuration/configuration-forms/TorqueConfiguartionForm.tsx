@@ -123,17 +123,19 @@ export const TorqueChannelInformationForm = ({
 
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
-  const { data: deChannelData } = useGetChannelByConfigIdName(
-    configId || "",
-    formContext?.values["de_channel_sensorx"],
-    formContext.dirty
-  );
+  const { data: deChannelData, isPending: deChannelisPending } =
+    useGetChannelByConfigIdName(
+      configId || "",
+      formContext?.values["de_channel_sensorx"],
+      formContext.dirty
+    );
 
-  const { data: ndeChannel } = useGetChannelByConfigIdName(
-    configId || "",
-    formContext?.values["nde_channel_sensorx"],
-    formContext.dirty
-  );
+  const { data: ndeChannel, isPending: ndeChannelisPending } =
+    useGetChannelByConfigIdName(
+      configId || "",
+      formContext?.values["nde_channel_sensorx"],
+      formContext.dirty
+    );
   useEffect(() => {
     if (deChannelData && formContext.dirty) {
       enqueueSnackbar({
@@ -162,7 +164,8 @@ export const TorqueChannelInformationForm = ({
         await formContext.validateForm();
       }, 100);
     } else {
-      if (formContext.dirty) {
+      console.log('trigerred');
+      if (formContext.dirty && !deChannelisPending) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
           variant: "info",
@@ -174,7 +177,7 @@ export const TorqueChannelInformationForm = ({
       formContext.validateForm();
     }
     return () => {};
-  }, [deChannelData]);
+  }, [deChannelData, deChannelisPending]);
 
   useEffect(() => {
     if (ndeChannel && formContext.dirty) {
@@ -216,7 +219,7 @@ export const TorqueChannelInformationForm = ({
       formContext.validateForm();
     }
     return () => {};
-  }, [ndeChannel]);
+  }, [ndeChannel, ndeChannelisPending]);
 
   return (
     <>
