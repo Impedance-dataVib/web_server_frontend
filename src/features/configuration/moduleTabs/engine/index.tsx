@@ -186,6 +186,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const getInitialFormData = () => {
     if (data?.from_data && customerName) {
       const { configuration_id, ...rest } = data?.from_data;
+      console.log(rest);
       return {
         ...rest,
         customer_name: customerName,
@@ -261,13 +262,6 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
     onSubmit: (values) => {},
     validationSchema: engineValidationSchema,
   });
-
-  useEffect(() => {
-    if (data?.from_data) {
-      const { configuration_id, ...rest } = data?.from_data;
-      moduleFormContext.setValues({ ...rest });
-    }
-  }, [data]);
 
   useEffect(() => {
     setIsUnsaved(moduleFormContext.dirty);
