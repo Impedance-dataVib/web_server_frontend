@@ -600,8 +600,8 @@ export const engineValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value: any, context) =>
         value > 0 || context.parent.Peak_Pressure_SENSORx === "No Channel"
-    )
-    .integer("The field should be an integer !"),
+    ),
+
   Peak_Pressure_WheelType: yup
     .string()
     .test(

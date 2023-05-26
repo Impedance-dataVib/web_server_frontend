@@ -20,7 +20,6 @@ import SettingsApi from "./api";
 import { enqueueSnackbar } from "notistack";
 
 const defaultApiData = {
-  client_name: "",
   display_date_utc: false,
   webdev_access: false,
   auto_date_ntp: false,
@@ -161,32 +160,6 @@ const SettingsPage = () => {
                   mt: 2,
                 }}
               >
-                <Box sx={{ display: "flex", mt: 2, alignItems: "center" }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ width: "32%", textAlign: "end" }}
-                  >
-                    Client Name
-                  </Typography>
-                  <Box sx={{ mx: 1 }}>
-                    <TextField
-                      placeholder="Client name"
-                      type="text"
-                      value={apiData.client_name}
-                      variant="outlined"
-                      onChange={(e: any) => {
-                        changeEventHandler("client_name", e.target.value);
-                      }}
-                      sx={{
-                        fontSize: "16px",
-                        mb: "20px",
-                        width: "182px",
-                        padding: "1px 1px",
-                      }}
-                    />
-                  </Box>
-                </Box>
-
                 <Box sx={{ display: "flex", mt: 2 }}>
                   <Typography
                     variant="body2"
