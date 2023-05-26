@@ -76,19 +76,19 @@ const ReportsCardContent = ({liveStatus}: IReportsCardProps) => {
     <Box>
       <Grid container spacing={1}>
         <Grid xs={12} item>
-          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "4"} icon={<TrendingUpOutlined />} reportName="Graphical Report" />
+          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"} icon={<TrendingUpOutlined />} reportName="Graphical Report" />
           <Divider sx={{ mx: 0 }} />
         </Grid>
         <Grid xs={12} item>
-          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "4"} icon={<List />} reportName="Spreadsheet Report" />
+          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"} icon={<List />} reportName="Spreadsheet Report" />
           <Divider sx={{ mx: 0 }} />
         </Grid>
         <Grid xs={12} item>
-          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "4"} icon={<TextSnippetOutlined />} reportName="Raw Data" />
+          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"} icon={<TextSnippetOutlined />} reportName="Raw Data" />
           <Divider sx={{ mx: 0 }} />
         </Grid>
         <Grid xs={12} item>
-          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "4"} icon={<ArticleOutlined />} reportName="JSON Text Report" />
+          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"} icon={<ArticleOutlined />} reportName="JSON Text Report" />
           <Divider sx={{ mx: 0 }} />
         </Grid>
       </Grid>
