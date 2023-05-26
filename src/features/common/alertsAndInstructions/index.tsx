@@ -1,171 +1,170 @@
 import React from "react";
 import { WarningAmber, WarningAmberOutlined } from "@mui/icons-material";
 import { Box, Button, Grid, Typography } from "@mui/material";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
-import CardWidget from "../../../app/components/card";
-import FullscreenView from "./fullscreenView";
-
-const AlertsAndInstructions = () => {
-  const renderContent = () => {
+const AlertsAndInstructions = ({ moduleData, isModalOpen = false }: any) => {
+  const renderInstruction = (
+    instructionIndex: any,
+    instruction: any,
+    isModalOpen: any
+  ) => {
     return (
-      <Box>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={12} lg={6}>
-            <Box>
-              <Box sx={{ display: "flex" }}>
-                <Box sx={{ mr: 1, color: "#4d4e4e" }}>
-                  <WarningAmberOutlined color="error" />
-                </Box>
-                <Box>
-                  <Typography
-                    sx={{
-                      fontSize: "18px",
-                      fontWeight: 600,
-                      color: "#4d4e4e",
-                      letterSpacing: "0.36px",
-                    }}
-                  >
-                    Injection &amp; Combustion
-                  </Typography>
-                </Box>
-              </Box>
-              <Box sx={{ color: "#4d4e4e", letterSpacing: "0.07px", pl: 3 }}>
-                <Box
-                  sx={{
-                    "&:before": {
-                      content: '"-"',
-                      float: "left",
-                      mr: 1,
-                    },
-                    mb: 1,
-                  }}
-                >
-                  <Typography>
-                    Check Relevant Fuel Injector’s for indicated cylinders
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    "&:before": {
-                      content: '"-"',
-                      float: "left",
-                      mr: 1,
-                    },
-                    mb: 1,
-                  }}
-                >
-                  <Typography>
-                    Check Relevant Fuel Injector’s for indicated cylinders
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={12} lg={6}>
-            <Box>
-              <Box sx={{ display: "flex" }}>
-                <Box sx={{ mr: 1, color: "#4d4e4e" }}>
-                  <WarningAmberOutlined color="warning" />
-                </Box>
-                <Box>
-                  <Typography
-                    sx={{
-                      fontSize: "18px",
-                      fontWeight: 600,
-                      color: "#4d4e4e",
-                      letterSpacing: "0.36px",
-                    }}
-                  >
-                    Bearing
-                  </Typography>
-                </Box>
-              </Box>
-              <Box sx={{ color: "#4d4e4e", letterSpacing: "0.07px", pl: 3 }}>
-                <Box
-                  sx={{
-                    "&:before": {
-                      content: '"-"',
-                      float: "left",
-                      mr: 1,
-                    },
-                    mb: 1,
-                  }}
-                >
-                  <Typography>
-                    Check Relevant Fuel Injector’s for indicated cylinders
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    "&:before": {
-                      content: '"-"',
-                      float: "left",
-                      mr: 1,
-                    },
-                    mb: 1,
-                  }}
-                >
-                  <Typography>
-                    Check Relevant Fuel Injector’s for indicated cylinders
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-          </Grid>
-        </Grid>
-      </Box>
-    );
-  };
-
-  const renderFooterContent = () => {
-    return (
-      <Box sx={{ width: "100%", display: "flex" }}>
-        <Box sx={{ flex: 1 }}></Box>
-        <Box>
-          <Button
-            disableRipple
-            disableFocusRipple
-            disableTouchRipple
-            disableElevation
-            variant="text"
+      <>
+        {isModalOpen || instructionIndex < 2 ? (
+          <Box
+            key={`instruction${instructionIndex}`}
             sx={{
-              textTransform: "none",
-              color: "#418CFC",
-              fontSize: "16px",
-              height: "24px",
+              color: "#4d4e4e",
               letterSpacing: "0.07px",
+              pl: 3,
             }}
           >
-            View All
-          </Button>
-        </Box>
-      </Box>
+            <Box
+              sx={{
+                "&:before": {
+                  content: '"-"',
+                  float: "left",
+                  mr: 1,
+                },
+                mb: 1,
+              }}
+            >
+              <Typography 
+                 component={'span'}
+                 variant={'body2'}
+              >
+                {instruction}
+              </Typography>
+            </Box>
+          </Box>
+        ) : null}
+      </>
     );
   };
-
   return (
-    <div>
-      <CardWidget
-        headerLabel="Alerts & Instructions"
-        headerIcon={<WarningAmber />}
-        subHeadingRight={
-          <Typography
-            sx={{
-              fontSize: "12px",
-              letterSpacing: "0.28px",
-              color: "#4D4E4E",
-              height: "20px",
-            }}
-          >
-            Updated on <strong>06.04.2023 - 05:49:53 (UTC)</strong>
-          </Typography>
-        }
-        content={renderContent()}
-        footerContent={renderFooterContent()}
-        initiallyCollapsed={false}
-        fullScreenContent={<FullscreenView />}
-      />
-    </div>
+    <Box >
+      <Grid
+        container
+        spacing={moduleData.isAlert ? 2 : 0}
+        maxHeight="240px"
+        overflow={"scroll"}
+      >
+        {moduleData.isAlert &&
+          moduleData?.alertData &&
+          moduleData.alertData.map((val: any, index: any) => (
+            <Grid
+              key={`alertData${index}`}
+              item
+              xs={12}
+              md={12}
+              lg={isModalOpen ? 4 : 6}
+            >
+              <Box>
+                <Box sx={{ display: "flex" }}>
+                  <Box sx={{ mr: 1, color: "#4d4e4e" }}>
+                    {val?.instructionType === "success" ? (
+                      <ThumbUpIcon color={val?.instructionType} />
+                    ) : (
+                      <WarningAmberOutlined color={val?.instructionType} />
+                    )}
+                  </Box>
+                  <Box>
+                    <Typography
+                      component={'span'}
+                      variant={'body2'}
+                      sx={{
+                        fontSize: "18px",
+                        fontWeight: 600,
+                        color: "#4d4e4e",
+                        letterSpacing: "0.36px",
+                      }}
+                    >
+                      {val?.instructionName}
+                    </Typography>
+                  </Box>
+                </Box>
+                {val.instructions &&
+                  val.instructions.map(
+                    (instruction: string, instructionIndex: any) =>
+                      <Box key={`ins${instructionIndex}`}>
+                      {renderInstruction(
+                        instructionIndex,
+                        instruction,
+                        isModalOpen
+                      )}
+                    </Box>
+                    //   {isModalOpen ?
+                    //     (renderInstruction(instructionIndex, instruction ))
+                    //   : ( (instructionIndex > 2) ? renderInstruction(instructionIndex, instruction ) : null)
+                    // }
+                  )}
+              </Box>
+            </Grid>
+          ))}
+        {!moduleData.isAlert &&
+          moduleData?.alertData &&
+          moduleData.alertData.map((val: any, index: any) => (
+            <Grid
+              key={`alertData${index}`}
+              direction={"column"}
+              item
+              xs={12}
+              md={12}
+            >
+              <Box>
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  {val.instructions &&
+                    val.instructions.map(
+                      (instruction: string, instructionIndex: any) => (
+                        <>
+                          <Box
+                            sx={{ mr: 1, color: "#4d4e4e", display: "flex" }}
+                          >
+                            {val?.instructionType === "success" ? (
+                              <ThumbUpIcon color={val?.instructionType} />
+                            ) : (
+                              <WarningAmberOutlined
+                                color={val?.instructionType}
+                              />
+                            )}
+
+                            <Box
+                              key={`instruction${instructionIndex}`}
+                              sx={{
+                                color: "#4d4e4e",
+                                letterSpacing: "0.07px",
+                                width: "100%",
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  "&:before": {
+                                    content: '"-"',
+                                    float: "left",
+                                    mr: 1,
+                                  },
+                                  mb: 1,
+                                }}
+                              >
+                                <Typography 
+                                  component={'span'}
+                                  variant={'body2'}
+                                >
+                                  {instruction}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          </Box>
+                        </>
+                      )
+                    )}
+                </Box>
+              </Box>
+            </Grid>
+          ))}
+      </Grid>
+    </Box>
   );
 };
 export default AlertsAndInstructions;

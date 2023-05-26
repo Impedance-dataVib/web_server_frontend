@@ -3,9 +3,13 @@ import StepConnector, {
 } from "@mui/material/StepConnector";
 import { styled } from "@mui/material/styles";
 
-const CustomConnector = styled(StepConnector)(({ theme }) => ({
+interface Props {
+  top?: any;
+}
+
+const CustomConnector = styled(StepConnector)(({ theme }) =>(props: Props) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
-    top: 10,
+    top:  parseInt(props.top || 10),
     left: "calc(-50% + 12px)",
     right: "calc(50% + 12px)",
   },
