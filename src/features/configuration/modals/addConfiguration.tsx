@@ -5,14 +5,25 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
+  InputLabel,
+  Select,
   TextField,
+  MenuItem,
+  FormHelperText,
 } from "@mui/material";
 import { useState } from "react";
+import { useGetSystemCustomerNameInfo } from "../hooks";
 
 export interface IAddConfigurationModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (value: string) => void;
+  onSubmit: (value: IAddConfigurationState | undefined) => void;
+}
+
+interface IAddConfigurationState {
+  name: string;
+  sampling_rate: string;
 }
 
 const AddConfigurationModal = ({
@@ -20,7 +31,9 @@ const AddConfigurationModal = ({
   onClose,
   onSubmit,
 }: IAddConfigurationModalProps) => {
-  const [configName, setConfigName] = useState<string>("");
+  const [configName, setConfigName] = useState<
+    IAddConfigurationState | undefined
+  >();
 
   const onSubmitInternal = () => {
     if (onSubmit) {
@@ -33,6 +46,22 @@ const AddConfigurationModal = ({
       <DialogTitle>Add Configuration</DialogTitle>
       <DialogContent>
         <Box sx={{ minWidth: "500px" }}>
+          {/* <TextField
+            autoFocus
+            id="customerName"
+            name="customerName"
+            label="Configuration Name"
+            type="text"
+            variant="standard"
+            fullWidth
+            value={customerName}
+            sx={{
+              marginBottom: "10px",
+            }}
+            inputProps={{
+              readOnly: true,
+            }}
+          /> */}
           <TextField
             autoFocus
             id="name"
@@ -41,9 +70,38 @@ const AddConfigurationModal = ({
             type="text"
             variant="standard"
             fullWidth
-            value={configName}
-            onChange={(e) => setConfigName(e?.target?.value)}
+            value={configName?.name}
+            sx={{
+              marginBottom: "10px",
+            }}
+            onChange={(e) =>
+              setConfigName((prev: any) => {
+                return { ...prev, [e.target.name]: e?.target?.value };
+              })
+            }
           />
+          <FormControl fullWidth>
+            <InputLabel id={`sampling_rate-label`}>Sampling Rate</InputLabel>
+            <Select
+              fullWidth
+              labelId={`sampling_rate-label`}
+              name={"sampling_rate"}
+              variant="standard"
+              onChange={(e) =>
+                setConfigName((prev: any) => {
+                  return { ...prev, [e.target.name]: e?.target?.value };
+                })
+              }
+              value={configName?.sampling_rate}
+              label={"Sampling Rate"}
+            >
+              {["64K", "128K", "256K"].map((option: string) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Box>
       </DialogContent>
 
@@ -55,7 +113,13 @@ const AddConfigurationModal = ({
           color="primary"
           variant="contained"
           onClick={onSubmitInternal}
-          disabled={configName?.length > 0 ? false : true}
+          disabled={
+            configName &&
+            configName?.name?.length > 0 &&
+            configName?.sampling_rate?.length > 0
+              ? false
+              : true
+          }
         >
           Add
         </Button>

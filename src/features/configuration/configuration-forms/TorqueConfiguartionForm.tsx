@@ -13,6 +13,9 @@ import { PopupRigidity } from "../modals/calculateRigidityModal";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import HelpIcon from "@mui/icons-material/Help";
+import { useParams } from "react-router-dom";
+import { useGetChannelByConfigIdName } from "../hooks";
+import { useSnackbar } from "notistack";
 
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
@@ -66,7 +69,6 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
             readOnly: fieldProps?.disabled ? true : false,
             style: {
               padding: "11px 26px 13px 12px",
-              
             },
           }}
           InputLabelProps={{ shrink: true }}
@@ -103,7 +105,7 @@ export const TorqueChannelInformationForm = ({
       "CH8",
       "No Channel",
     ],
-    ChannelType: ["Speed", "Transducer"],
+    ChannelType: ["Speed"],
     WheelType: [
       "Standard",
       "1 Missing Tooth",
@@ -118,6 +120,106 @@ export const TorqueChannelInformationForm = ({
       "Odd",
     ],
   });
+
+  const { configId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
+  const { data: deChannelData, isPending: deChannelisPending } =
+    useGetChannelByConfigIdName(
+      configId || "",
+      formContext?.values["de_channel_sensorx"],
+      formContext.dirty
+    );
+
+  const { data: ndeChannel, isPending: ndeChannelisPending } =
+    useGetChannelByConfigIdName(
+      configId || "",
+      formContext?.values["nde_channel_sensorx"],
+      formContext.dirty
+    );
+  useEffect(() => {
+    if (deChannelData && formContext.dirty && !deChannelisPending) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
+      formContext.validateForm().then(() => {
+        formContext.setFieldValue(
+          "de_channel_channel_type",
+          deChannelData?.channel_type,
+          false
+        );
+        formContext.setFieldValue(
+          "de_channel__teeth",
+          deChannelData?.teeth,
+          false
+        );
+        formContext.setFieldValue(
+          "de_channel_wheel_type",
+          deChannelData?.wheel_type,
+          false
+        );
+      });
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
+    } else {
+      console.log("trigerred");
+      if (formContext.dirty && !deChannelisPending) {
+        enqueueSnackbar({
+          message: "Channel is not used in another module",
+          variant: "info",
+        });
+      }
+      formContext.setFieldValue("de_channel_channel_type", "", false);
+      formContext.setFieldValue("de_channel__teeth", "", false);
+      formContext.setFieldValue("de_channel_wheel_type", "", false);
+      formContext.validateForm();
+    }
+    return () => {};
+  }, [deChannelData, deChannelisPending]);
+
+  useEffect(() => {
+    if (ndeChannel && formContext.dirty && !ndeChannelisPending) {
+      enqueueSnackbar({
+        message:
+          "Channel has been used in another module the value will be populate automatically or please use another channel",
+        variant: "warning",
+      });
+      formContext.validateForm().then(() => {
+        formContext.setFieldValue(
+          "nde_channel_channel_type",
+          ndeChannel?.channel_type,
+          false
+        );
+        formContext.setFieldValue(
+          "nde_channel_teeth",
+          ndeChannel?.teeth,
+          false
+        );
+        formContext.setFieldValue(
+          "nde_channel_wheel_type",
+          ndeChannel?.wheel_type,
+          false
+        );
+      });
+      setTimeout(async () => {
+        await formContext.validateForm();
+      }, 100);
+    } else {
+      if (formContext.dirty && !ndeChannelisPending) {
+        enqueueSnackbar({
+          message: "Channel is not used in another module",
+          variant: "info",
+        });
+      }
+      formContext.setFieldValue("nde_channel_channel_type", "", false);
+      formContext.setFieldValue("nde_channel_teeth", "", false);
+      formContext.setFieldValue("nde_channel_wheel_type", "", false);
+      formContext.validateForm();
+    }
+    return () => {};
+  }, [ndeChannel, ndeChannelisPending]);
 
   return (
     <>
@@ -173,7 +275,7 @@ export const TorqueChannelInformationForm = ({
               error={Boolean(formContext?.errors?.["de_channel_channel_type"])}
             >
               <InputLabel id={`de_channel_channel_type-label`}>
-                Channel_Type
+                Sensor_Type
               </InputLabel>
               <Select
                 labelId="de_channel_channel_type-label"
@@ -181,6 +283,9 @@ export const TorqueChannelInformationForm = ({
                 value={formContext?.values?.["de_channel_channel_type"]}
                 name="de_channel_channel_type"
                 label={"Channel_Type"}
+                inputProps={{
+                  readOnly: deChannelData ? true : false,
+                }}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -213,6 +318,7 @@ export const TorqueChannelInformationForm = ({
               error={Boolean(formContext?.errors?.["de_channel__teeth"])}
               helperText={formContext?.errors?.["de_channel__teeth"]}
               inputProps={{
+                readOnly: deChannelData ? true : false,
                 style: {
                   padding: "11px 26px 13px 12px",
                 },
@@ -233,6 +339,9 @@ export const TorqueChannelInformationForm = ({
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["de_channel_wheel_type"]}
                 label={"Wheel_Type"}
+                inputProps={{
+                  readOnly: deChannelData ? true : false,
+                }}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -303,7 +412,7 @@ export const TorqueChannelInformationForm = ({
               error={Boolean(formContext?.errors?.["nde_channel_channel_type"])}
             >
               <InputLabel id={`nde_channel_channel_type-label`}>
-                Channel_Type
+                Sensor_Type
               </InputLabel>
               <Select
                 labelId="nde_channel_channel_type-label"
@@ -311,6 +420,9 @@ export const TorqueChannelInformationForm = ({
                 value={formContext?.values?.["nde_channel_channel_type"]}
                 name="nde_channel_channel_type"
                 label={"Channel_Type"}
+                inputProps={{
+                  readOnly: ndeChannel ? true : false,
+                }}
               >
                 {optionsChannelInformation["ChannelType"].map(
                   (option: string) => (
@@ -343,6 +455,7 @@ export const TorqueChannelInformationForm = ({
               error={Boolean(formContext?.errors?.["nde_channel_teeth"])}
               helperText={formContext?.errors?.["nde_channel_teeth"]}
               inputProps={{
+                readOnly: ndeChannel ? true : false,
                 style: {
                   padding: "11px 26px 13px 12px",
                 },
@@ -363,6 +476,9 @@ export const TorqueChannelInformationForm = ({
                 onChange={formContext?.handleChange}
                 value={formContext?.values?.["nde_channel_wheel_type"]}
                 label={"Wheel_Type"}
+                inputProps={{
+                  readOnly: ndeChannel ? true : false,
+                }}
               >
                 {optionsChannelInformation["WheelType"].map(
                   (option: string) => (
@@ -461,12 +577,12 @@ export const TorqueMachineDetailsForm = ({
                 {item.name}
               </Typography>
               {item?.helperNote && (
-              <Tooltip title={item.helperNote}>
-                <IconButton>
-                  <HelpIcon></HelpIcon>
-                </IconButton>
-              </Tooltip>
-            )}
+                <Tooltip title={item.helperNote}>
+                  <IconButton>
+                    <HelpIcon></HelpIcon>
+                  </IconButton>
+                </Tooltip>
+              )}
             </Grid>
             <Grid item>
               <FormFieldConditionalRender
@@ -510,12 +626,12 @@ export const TorqueDiagnosticDetails = ({
                 {item.name}
               </Typography>
               {item?.helperNote && (
-              <Tooltip title={item.helperNote}>
-                <IconButton>
-                  <HelpIcon></HelpIcon>
-                </IconButton>
-              </Tooltip>
-            )}
+                <Tooltip title={item.helperNote}>
+                  <IconButton>
+                    <HelpIcon></HelpIcon>
+                  </IconButton>
+                </Tooltip>
+              )}
             </Grid>
             <Grid item>
               <FormFieldConditionalRender

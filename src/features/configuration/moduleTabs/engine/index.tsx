@@ -186,6 +186,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const getInitialFormData = () => {
     if (data?.from_data && customerName) {
       const { configuration_id, ...rest } = data?.from_data;
+      console.log(rest);
       return {
         ...rest,
         customer_name: customerName,
@@ -197,23 +198,22 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       asset_name: "",
       equipment_name: "",
       module_type: data.module_type,
-      sampling_rate: "",
       Crankshaft_SENSORx: "",
       Crankshaft_ChannelType: "",
       Crankshaft_Teeth: "",
       Crankshaft_WheelType: "",
-      CamShaft_SENSORx: "",
+      CamShaft_SENSORx: "No Channel",
       CamShaft_ChannelType: "",
-      CamShaft_Teeth: "0.5",
-      CamShaft_WheelType: "Standard",
-      TDC_SENSORx: "",
+      CamShaft_Teeth: "",
+      CamShaft_WheelType: "",
+      TDC_SENSORx: "No Channel",
       TDC_ChannelType: "",
       TDC_Teeth: "1",
-      TDC_WheelType: "Standard",
-      Peak_Pressure_SENSORx: "",
+      TDC_WheelType: "",
+      Peak_Pressure_SENSORx: "No Channel",
       Peak_Pressure_ChannelType: "",
-      Peak_Pressure_Teeth: "0.5",
-      Peak_Pressure_WheelType: "Standard",
+      Peak_Pressure_Teeth: "",
+      Peak_Pressure_WheelType: "",
       peak_pressure_transducer_sensitivity: "",
       name: "",
       serial_number: "",
@@ -262,13 +262,6 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
     onSubmit: (values) => {},
     validationSchema: engineValidationSchema,
   });
-
-  useEffect(() => {
-    if (data?.from_data) {
-      const { configuration_id, ...rest } = data?.from_data;
-      moduleFormContext.setValues({ ...rest });
-    }
-  }, [data]);
 
   useEffect(() => {
     setIsUnsaved(moduleFormContext.dirty);

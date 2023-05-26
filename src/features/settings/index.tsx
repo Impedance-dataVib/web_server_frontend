@@ -20,6 +20,7 @@ import SettingsApi from "./api";
 import { enqueueSnackbar } from "notistack";
 
 const defaultApiData = {
+  client_name: "",
   display_date_utc: false,
   webdev_access: false,
   auto_date_ntp: false,
@@ -43,24 +44,31 @@ const defaultApiData = {
 const SettingsPage = () => {
   const [apiData, setApiData] = useState(defaultApiData);
   const [expanded, setExpanded] = useState<string | false>("generalSettings");
-  const [showNetworkSettings, setNetworkSettings] = useState<string | false>("networkSettings");
+  const [showNetworkSettings, setNetworkSettings] = useState<string | false>(
+    "networkSettings"
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const handleIpAddress = (key: string, val: string, valueLength: number) => {
     let length = val.length;
-    let index = val.lastIndexOf('.') + 1;
-    let noOfDots = val.split('.').length - 1;
+    let index = val.lastIndexOf(".") + 1;
+    let noOfDots = val.split(".").length - 1;
     let updatedVal = "";
-    if(length !== index && noOfDots < 3 && valueLength < length && (length-index)%3 === 0) {
+    if (
+      length !== index &&
+      noOfDots < 3 &&
+      valueLength < length &&
+      (length - index) % 3 === 0
+    ) {
       updatedVal = val + ".";
-    } else if (noOfDots > 3 || length-index>3) {
-      let newString = val.substring(0, length-1);
+    } else if (noOfDots > 3 || length - index > 3) {
+      let newString = val.substring(0, length - 1);
       updatedVal = newString;
     } else {
       updatedVal = val;
     }
     changeEventHandler(key, updatedVal);
-  }
+  };
 
   const handleChange = (setVal: any) => {
     setVal((val: boolean) => !val);
@@ -96,13 +104,14 @@ const SettingsPage = () => {
   const saveSettings = (payload: object) => {
     setIsLoading(true);
     SettingsApi.saveSettingsInfo(payload)
-      .then(val => {
+      .then((val) => {
         setIsLoading(false);
         enqueueSnackbar({
           message: `Settings is saved`,
           variant: "success",
         });
-      }).catch((error) => {
+      })
+      .catch((error) => {
         console.log(error);
         setIsLoading(false);
         enqueueSnackbar({
@@ -110,7 +119,7 @@ const SettingsPage = () => {
           variant: "error",
         });
       });
-  }
+  };
 
   useEffect(() => {
     getSettingsInfo();
@@ -119,10 +128,10 @@ const SettingsPage = () => {
   return (
     <Box>
       {isLoading && (
-          <Box sx={{ my: 1 }}>
-            <LinearProgress />
-          </Box>
-        )}
+        <Box sx={{ my: 1 }}>
+          <LinearProgress />
+        </Box>
+      )}
       <form>
         <Typography variant="h5">Settings</Typography>
         <Box
@@ -152,6 +161,32 @@ const SettingsPage = () => {
                   mt: 2,
                 }}
               >
+                <Box sx={{ display: "flex", mt: 2, alignItems: "center" }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ width: "32%", textAlign: "end" }}
+                  >
+                    Client Name
+                  </Typography>
+                  <Box sx={{ mx: 1 }}>
+                    <TextField
+                      placeholder="Client name"
+                      type="text"
+                      value={apiData.client_name}
+                      variant="outlined"
+                      onChange={(e: any) => {
+                        changeEventHandler("client_name", e.target.value);
+                      }}
+                      sx={{
+                        fontSize: "16px",
+                        mb: "20px",
+                        width: "182px",
+                        padding: "1px 1px",
+                      }}
+                    />
+                  </Box>
+                </Box>
+
                 <Box sx={{ display: "flex", mt: 2 }}>
                   <Typography
                     variant="body2"
@@ -164,7 +199,10 @@ const SettingsPage = () => {
                       value={apiData.display_date_utc}
                       onChange={(e: any) => {
                         console.log(e.target.checked);
-                        changeEventHandler("display_date_utc", e.target.checked);
+                        changeEventHandler(
+                          "display_date_utc",
+                          e.target.checked
+                        );
                       }}
                     />
                   </Box>
@@ -205,15 +243,13 @@ const SettingsPage = () => {
                         mb: "20px",
                         width: "182px",
                         padding: "1px 1px",
-                        
                       }}
-                      
                       inputProps={{
                         style: {
                           padding: 1,
                           marginLeft: 10,
                         },
-                        pattern:"{4}-{2}-{2}",
+                        pattern: "{4}-{2}-{2}",
                         // readOnly: true,
                       }}
                     />
@@ -245,7 +281,7 @@ const SettingsPage = () => {
                           padding: 1,
                           marginLeft: 10,
                         },
-                        step:"1" 
+                        step: "1",
                       }}
                     />
                   </Box>
@@ -278,7 +314,9 @@ const SettingsPage = () => {
                           },
                         }}
                         name="language"
-                        onChange={(e) => changeEventHandler('language', e.target.value)}
+                        onChange={(e) =>
+                          changeEventHandler("language", e.target.value)
+                        }
                         autoWidth
                         size="small"
                       >
@@ -304,7 +342,10 @@ const SettingsPage = () => {
                     <ToggleSwitch
                       value={apiData.display_warming_time}
                       onChange={(e: any) => {
-                        changeEventHandler("display_warming_time", e.target.checked);
+                        changeEventHandler(
+                          "display_warming_time",
+                          e.target.checked
+                        );
                       }}
                     />
                   </Box>
@@ -321,7 +362,10 @@ const SettingsPage = () => {
                       type="number"
                       value={apiData.significant_time_diff}
                       onChange={(e: any) => {
-                        changeEventHandler("significant_time_diff", e.target.value);
+                        changeEventHandler(
+                          "significant_time_diff",
+                          e.target.value
+                        );
                       }}
                       variant="outlined"
                       sx={{
@@ -335,7 +379,7 @@ const SettingsPage = () => {
                           padding: 1,
                           marginLeft: 10,
                         },
-                        min:1,
+                        min: 1,
                       }}
                     />
                   </Box>
@@ -385,7 +429,7 @@ const SettingsPage = () => {
                       value={apiData.webdev_port}
                       variant="outlined"
                       onChange={(e: any) => {
-                        if(e.target.value.length < 5)
+                        if (e.target.value.length < 5)
                           changeEventHandler("webdev_port", e.target.value);
                       }}
                       sx={{
@@ -400,8 +444,8 @@ const SettingsPage = () => {
                           padding: 1,
                           marginLeft: 10,
                         },
-                        maxLength:"4",
-                        pattern:"\d{4}",
+                        maxLength: "4",
+                        pattern: "d{4}",
                       }}
                     />
                   </Box>
@@ -434,7 +478,7 @@ const SettingsPage = () => {
                       placeholder="00:00"
                       value={apiData.websocket_port}
                       onChange={(e: any) => {
-                        if(e.target.value.length < 5)
+                        if (e.target.value.length < 5)
                           changeEventHandler("websocket_port", e.target.value);
                       }}
                       variant="outlined"
@@ -450,8 +494,8 @@ const SettingsPage = () => {
                           padding: 1,
                           marginLeft: 10,
                         },
-                        maxLength:"4",
-                        pattern:"\d{4}",
+                        maxLength: "4",
+                        pattern: "d{4}",
                       }}
                     />
                   </Box>
@@ -464,10 +508,10 @@ const SettingsPage = () => {
                     Disk Management
                   </Typography>
                   <Box sx={{ mx: 1 }}>
-                    <input 
+                    <input
                       type="radio"
                       value={"circular"}
-                      checked={ apiData.disk_management === "circular"}
+                      checked={apiData.disk_management === "circular"}
                       onChange={(e: any) => {
                         changeEventHandler("disk_management", e.target.value);
                       }}
@@ -555,7 +599,13 @@ const SettingsPage = () => {
                     <TextField
                       placeholder="_._._._ "
                       value={apiData.ip_address}
-                      onChange={e => handleIpAddress('ip_address', e.target.value, (apiData.ip_address).length)}
+                      onChange={(e) =>
+                        handleIpAddress(
+                          "ip_address",
+                          e.target.value,
+                          apiData.ip_address.length
+                        )
+                      }
                       variant="outlined"
                       sx={{
                         fontSize: "16px",
@@ -580,7 +630,13 @@ const SettingsPage = () => {
                     <TextField
                       placeholder="_._._._ "
                       value={apiData.netmask}
-                      onChange={e => handleIpAddress('netmask', e.target.value, (apiData.netmask).length)}
+                      onChange={(e) =>
+                        handleIpAddress(
+                          "netmask",
+                          e.target.value,
+                          apiData.netmask.length
+                        )
+                      }
                       variant="outlined"
                       sx={{
                         fontSize: "16px",
@@ -605,7 +661,13 @@ const SettingsPage = () => {
                     <TextField
                       placeholder="_._._._ "
                       value={apiData.gateway}
-                      onChange={e => handleIpAddress('gateway', e.target.value, (apiData.gateway).length)}
+                      onChange={(e) =>
+                        handleIpAddress(
+                          "gateway",
+                          e.target.value,
+                          apiData.gateway.length
+                        )
+                      }
                       variant="outlined"
                       sx={{
                         fontSize: "16px",
@@ -631,7 +693,13 @@ const SettingsPage = () => {
                       placeholder="_._._._ "
                       value={apiData.dns_server}
                       variant="outlined"
-                      onChange={e => handleIpAddress('dns_server', e.target.value, (apiData.dns_server).length)}
+                      onChange={(e) =>
+                        handleIpAddress(
+                          "dns_server",
+                          e.target.value,
+                          apiData.dns_server.length
+                        )
+                      }
                       sx={{
                         fontSize: "16px",
                         mb: "20px",
@@ -661,7 +729,7 @@ const SettingsPage = () => {
                 size="small"
                 sx={{ backgroundColor: "#1D4580", m: 1, my: 3 }}
                 type="submit"
-                onClick={e => {
+                onClick={(e) => {
                   e.preventDefault();
                   saveSettings(apiData);
                 }}

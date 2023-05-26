@@ -17,7 +17,7 @@ export const getAllConfigurations = (): Promise<AxiosResponse<any, any>> => {
 };
 
 export const addConfiguration = (
-  data: AddConfiguration
+  data: any
 ): Promise<AxiosResponse<any, any>> => {
   return axiosInstance.post("/configuration/save.php", data);
 };
@@ -90,4 +90,14 @@ export const getSystemInfo = () => {
 
 export const getLicenseInfo = () => {
   return axiosInstance.get("/license/get-license.php");
+};
+
+export const getChannelByNameAndConfigID = (
+  configId: string,
+  channelName: string
+) => {
+  return axiosInstance.post(
+    "/configuration/get-channel-by-name-and-config-id.php",
+    { name: channelName, configId: configId }
+  );
 };

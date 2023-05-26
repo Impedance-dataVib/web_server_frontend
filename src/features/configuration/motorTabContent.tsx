@@ -159,7 +159,10 @@ const MotorTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       asset_name: "",
       equipment_name: "",
       module_type: data.module_type,
-      sampling_rate: "",
+      motor_crankshaft_ac_dc: "",
+      motor_crankshaft_power_source: "",
+      motor_crankshaft_sensitivity: "",
+      motor_crankshaft_unit: "",
       motor_crankshaft_sensorx: "",
       motor_crankshaft_channel_type: "",
       motor_crankshaft_teeth: "",
@@ -214,7 +217,7 @@ const MotorTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
 
   useEffect(() => {
     setIsUnsaved(moduleFormContext.dirty);
-  }, [moduleFormContext.dirty])
+  }, [moduleFormContext.dirty]);
 
   return (
     <Box sx={{ width: "100%" }}>

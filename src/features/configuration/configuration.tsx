@@ -9,12 +9,16 @@ import AddIcon from "@mui/icons-material/Add";
 import { Alert, AlertTitle, Grid, LinearProgress } from "@mui/material";
 import { useSnackbar } from "notistack";
 
-import { useGetConfiguration } from "./hooks";
+import { useGetConfiguration, useGetActiveConfig } from "./hooks";
 import ConfigurationEmptyState from "./emptyState";
 import AddConfigurationModal from "./modals/addConfiguration";
 import { addConfiguration } from "../../app/services";
-import { useGetActiveConfig } from "./hooks";
+
 import { eventBus } from "src/EventBus";
+interface IAddConfigurationState {
+  name: string;
+  sampling_rate: string;
+}
 const ConfigurationPageContent = () => {
   const [openAddConfigDialog, setOpenAddConfigDialog] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,13 +31,13 @@ const ConfigurationPageContent = () => {
     setOpenAddConfigDialog((prev) => !prev);
   };
   const { data: activeConfigCount, getActiveConfig } = useGetActiveConfig();
-  const handleAddConfig = async (name: string) => {
-    if (!name) {
+  const handleAddConfig = async (value: any) => {
+    if (!value) {
       return;
     }
     setLoading(true);
     try {
-      await addConfiguration({ name });
+      await addConfiguration({ ...value });
       enqueueSnackbar({
         message: "Configuration added successfully",
         variant: "success",
@@ -51,7 +55,12 @@ const ConfigurationPageContent = () => {
     }
   };
   useEffect(() => {
-    eventBus.on("ModuleDelete", async () => {
+    eventBus.on("ConfigDelete", async () => {
+      
+      await getActiveConfig();
+    });
+    eventBus.on("ConfigActive", async () => {
+    
       await getActiveConfig();
     });
   }, []);
