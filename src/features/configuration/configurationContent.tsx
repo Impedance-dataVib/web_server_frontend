@@ -99,6 +99,7 @@ const TabModuleRender = ({ type, moduleId, isUnsaved, setIsUnsaved }: any) => {
 const ConfigurationContent = ({
   isUnsaved,
   setIsUnsaved,
+  setNavigatePath,
   openConfirmBox,
   setOpenconfirmmBox,
   navigatePath,
@@ -244,9 +245,9 @@ const ConfigurationContent = ({
           open={openConfirmBox}
           handleCancel={() => {
             setOpenconfirmmBox(false);
+            setNavigatePath(null)
           }}
           handleOk={() => {
-            
             setOpenconfirmmBox(false);
             setIsUnsaved(false);
             if (navigatePath) {
