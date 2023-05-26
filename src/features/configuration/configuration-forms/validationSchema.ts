@@ -667,9 +667,34 @@ export const engineValidationSchema = yup.object({
     .required("This is a required field")
     .test(
       "Firing Order Maximum Count",
-      "Error: No Of Cylinders is not matching the count of firing order",
+      "Error: No Of Cylinders is not matching the count of firing order and negative values not allowed and blank value not allowed",
       (value, context) =>
-        value.trim().split(",").length === context.parent.no_of_cylinders
+        value.trim().split(",").length === context.parent.no_of_cylinders &&
+        !value
+          .trim()
+          .split(",")
+          .some((item) => Number(item) < 0) &&
+        !value
+          .trim()
+          .split(",")
+          .some((item) => item.trim() === "")
+    )
+    .test(
+      "Firing Order duplicated values",
+      "Error: some values in the firing order are duplicated!",
+      (value) => {
+        const firing_order = value.trim().split(",");
+        const countObeject = firing_order.reduce((init: any, prev) => {
+          if (Object.keys(init).includes(prev)) {
+            return { ...init, [prev]: init[prev] + 1 };
+          }
+          return {
+            ...init,
+            [prev]: 1,
+          };
+        }, {});
+        return !Object.values(countObeject).some((item) => Number(item) > 1);
+      }
     ),
   phase_shift_mode: yup.string().required("This is a required field"),
   shift_angle: yup
