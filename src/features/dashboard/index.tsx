@@ -8,16 +8,12 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import useWebSocket, { ReadyState } from "react-use-websocket";
+import useWebSocket from "react-use-websocket";
 
 import { makeStyles } from "tss-react/mui";
 import { useTranslation } from "react-i18next";
 import DashboardApi from "./dashboardApi";
 import ModuleMonitoringPage from "./pages/module";
-// import TorqueMonitoringPage from "./pages/torque";
-// import TurbineMonitoringPage from "./pages/turbine";
-// import BearingMonitoringPage from "./pages/bearing";
-// import MotorMonitoringPage from "./pages/motor";
 import TabPanel from "src/app/components/tab-panel";
 import appContext from "src/app/context";
 import * as dateFns from "date-fns";
@@ -27,7 +23,7 @@ import { webSocketData } from "./schema";
 const useStyles = makeStyles()((theme) => {
   return {
     trendsTabRoot: {
-      minHeight: 'auto'
+      minHeight: "auto",
     },
     tabsRoot: {
       height: "34px",
@@ -66,8 +62,7 @@ function tabProps(index: number) {
   };
 }
 
-
-const TabModuleRender = ({ type, moduleId, moduleData, classes }: any) => {
+const TabModuleRender = ({ type, moduleData, classes, trendsData }: any) => {
   const { t } = useTranslation();
 
   switch (type) {
@@ -78,7 +73,11 @@ const TabModuleRender = ({ type, moduleId, moduleData, classes }: any) => {
     case "Bearing":
       return (
         <Box>
-          <ModuleMonitoringPage moduleData={moduleData} classes={classes}/>
+          <ModuleMonitoringPage
+            moduleData={moduleData}
+            classes={classes}
+            trendsData={trendsData}
+          />
         </Box>
       );
     default:
@@ -95,6 +94,7 @@ const TabModuleRender = ({ type, moduleId, moduleData, classes }: any) => {
 const DashboardPage = () => {
   const [moduleTabs, setModuleTabs] = useState<any[]>([]);
   const [webSocketsData, setWebSocketsData] = useState({});
+  const [trendsData, setTrendsData] = useState({});
   const [activeModule, setActiveModule] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showLicenseExpiryMsg, setShowLicenseExpiryMsg] =
@@ -107,24 +107,35 @@ const DashboardPage = () => {
   const { licenseInfo, licenseStatus } = useContext(appContext);
   const intervalHandle = useRef();
 
-  const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket(
-    process.env.REACT_APP_WEBSOCKET_URL || "",{
-    onOpen: () => console.log('opened'),
-    onMessage: () => sendMessage(moduleTabs[activeModule].process_name),
+  const { sendMessage, lastMessage } = useWebSocket(
+    process.env.REACT_APP_WEBSOCKET_URL || "",
+    {
+      onOpen: () => console.log("opened"),
+      onMessage: () => {
+        if (sendMessage) sendMessage(moduleTabs[activeModule].process_name);
+      },
     }
   );
 
   useEffect(() => {
-    if(moduleTabs.length > 0) {
-      sendMessage(moduleTabs[activeModule].process_name)
+    if (moduleTabs.length > 0) {
+      if (moduleTabs[activeModule].process_name) {
+        sendMessage(moduleTabs[activeModule].process_name);
+        DashboardApi.getTrendsData(moduleTabs[activeModule].id).then((data) => {
+          setTrendsData(data);
+        });
+      } else {
+        setIsLoading(false);
+      }
     }
-  }, [moduleTabs, activeModule])
+  }, [moduleTabs, activeModule]);
 
   useEffect(() => {
     if (lastMessage !== undefined) {
       const data = lastMessage?.data;
       if (data) {
         const parsedData = JSON.parse(data);
+        console.log("lastMessage", parsedData);
         setWebSocketsData(parsedData);
         setIsLoading(false);
       }
@@ -173,10 +184,13 @@ const DashboardPage = () => {
   }, [licenseInfo, licenseStatus, intervalHandle]);
 
   useEffect(() => {
-    setIsLoading(true);    
+    setIsLoading(true);
     DashboardApi.getModules()
       .then((res) => {
-        setModuleTabs(res.data.data || []);
+        if (res.length) setModuleTabs(res || []);
+        else {
+          setIsLoading(false);
+        }
       })
       .catch((e) => {
         setModuleTabs([]);
@@ -267,6 +281,7 @@ const DashboardPage = () => {
             type={item.module_type}
             moduleData={webSocketsData}
             classes={classes}
+            trendsData={trendsData}
           />
         </TabPanel>
       ))}

@@ -52,6 +52,26 @@ export const webSocketData = {
       indicatorType: "error"
     },
     {
+      indicatorName: "Combustion Condition",
+      indicatorMin: 0,
+      indicatorMax: 100,
+      indicatorValue: 23,
+      isPercentage: true, 
+      indicatorUnit: "Alert",
+      isGradientColor: true,
+      indicatorType: "error"
+    },
+    {
+      indicatorName: "Combustion Condition",
+      indicatorMin: 0,
+      indicatorMax: 100,
+      indicatorValue: 23,
+      isPercentage: true, 
+      indicatorUnit: "Alert",
+      isGradientColor: true,
+      indicatorType: "error"
+    },
+    {
       indicatorName: "RPM",
       indicatorMin: 0,
       indicatorMax: 1500,
@@ -126,7 +146,7 @@ export const webSocketData = {
   }
 };
 
-const SIGNAL_STATUS_QUALITY = [
+export const SIGNAL_STATUS_QUALITY = [
     {
         id: '0',
         resultType: 'success',
@@ -187,8 +207,4 @@ const SIGNAL_STATUS_QUALITY = [
         resultType: 'error',
         description: 'Speed Mismatch between Channels'
     },
-]
-// Step 0, 3 :: enable download and view
-// Step 1, 2 :: disabled download and view
-// Download redirect to download
-
+];

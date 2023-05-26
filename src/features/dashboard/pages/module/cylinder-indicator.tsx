@@ -3,19 +3,22 @@ import "./styles.css";
 import Sunburst from "sunburst-chart";
 import { SUNBRUST_DATA } from "./schema";
 import SunburstChart from "src/features/common/graph/sunbrustChart";
-import { Box } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 
 let data = SUNBRUST_DATA;
 
 let chart = Sunburst();
 
-function CylinderIndicator({ data = [0, 1] }: any) {
+function CylinderIndicator({ cylinderSpecificIndicators, fullScreen }: any) {
+  console.log(cylinderSpecificIndicators, 'cylinder_specific_indicators');
   return (
-    <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly'}}>
-      {data.map((val: any, index: any) => (
-        <SunburstChart key={`cylinder${index}`} elementId={`sunbrust${index}`} />
+    <Grid container spacing={2} sx={{display: 'flex', flexDirection: 'row', overflow: 'scroll'}}>
+      {cylinderSpecificIndicators.map((val: any, index: any) => (
+        <Grid key={`globalIndicator${index}`} item>
+          <SunburstChart key={`cylinder${index}`} data={val} elementId={`sunbrust${index}`} fullScreen={fullScreen} />
+        </Grid>
       ))}
-    </Box>
+    </Grid>
   );
 }
-export default CylinderIndicator;
+export default React.memo(CylinderIndicator);

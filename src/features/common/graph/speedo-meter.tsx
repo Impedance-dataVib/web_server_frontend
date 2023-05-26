@@ -1,7 +1,17 @@
+import { Typography } from "@mui/material";
 import ReactSpeedometer, { Transition } from "react-d3-speedometer";
 
-export default function SpeedoMeter({ maxValue, minValue, value, isGradientColor, isPercent }: any) {
+export default function SpeedoMeter({ 
+  maxValue,
+  minValue,
+  value,
+  isGradientColor,
+  isPercent,
+  indicatorType,
+  indicatorUnit,
+ }: any) {
   return (
+    <>
     <ReactSpeedometer
       maxValue={maxValue}
       minValue={minValue}
@@ -20,5 +30,14 @@ export default function SpeedoMeter({ maxValue, minValue, value, isGradientColor
       segments={1000}
       endColor={"green"}
     />
+    <Typography 
+        variant="body1" 
+        component={"p"} 
+        textAlign={"center"} 
+        sx={{ color: indicatorType === "warning" ? "#E18442" :  ( indicatorType === "error" ? "#E21A00" : "#02B271" )}}
+      >
+      {indicatorUnit}
+    </Typography>
+    </>
     );
 }

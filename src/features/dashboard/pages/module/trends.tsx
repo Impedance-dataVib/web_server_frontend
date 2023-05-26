@@ -5,7 +5,7 @@ import { BarChart } from "src/features/common/graph/bar-chart";
 
 export default function Trends({ trends }: any) {
   return (
-    <Grid container spacing={2} sx={{ height: "240px" }}>
+    <Grid container spacing={2} sx={{ overflow: 'scroll' }}>
       {trends &&
         trends.map((val: any, index: any) => (
           <Grid item xs={4} key={`trends${index}`} sx={{display: 'flex', flexDirection: 'column'}}>

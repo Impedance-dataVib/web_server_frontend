@@ -13,6 +13,7 @@ import {
   Box,
   Dialog,
   DialogContent,
+  DialogTitle,
   Divider,
   Paper,
   Theme,
@@ -172,9 +173,9 @@ const CardWidget = ({
         <Dialog
           open={openModal}
           onClose={() => setOpenModal(false)}
-          sx={{ maxWidth: "100%" }}
+          maxWidth="md"
         >
-          <DialogContent sx={{ maxWidth: "100%" }}>
+          <DialogContent>
             <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
               <Box component="section">
                 <Box sx={{ display: "flex" }}>

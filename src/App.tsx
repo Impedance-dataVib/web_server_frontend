@@ -191,23 +191,6 @@ function App() {
     navigate("/login?inactive=true");
   }
 
-  //   Active licensne and min one config.
-  // -> dashboard
-  // -> all other pages are disabled
-
-  // active licensne and no configuration.
-  // -> login
-  // -> config screen
-  // ->dashboard inactive
-
-  // inactive license
-  // -> login with message invalid.
-  // -> redirect to system screen where user can import license.
-  useEffect(() => {
-    console.log('navigatePath', navigatePath);
-    console.log('isUnsaved', isUnsaved);
-
-  }, [navigatePath, isUnsaved])
   return (
     <div className="App">
       <Suspense fallback={<FullScreenLoader />}>
