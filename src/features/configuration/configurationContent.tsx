@@ -245,13 +245,14 @@ const ConfigurationContent = ({
           open={openConfirmBox}
           handleCancel={() => {
             setOpenconfirmmBox(false);
-            setNavigatePath(null)
+            setNavigatePath(null);
           }}
           handleOk={() => {
             setOpenconfirmmBox(false);
             setIsUnsaved(false);
             if (navigatePath) {
               const path = navigatePath;
+              setNavigatePath(null);
               setMidTab(0);
               navigate(path);
             } else {
