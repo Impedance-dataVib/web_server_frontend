@@ -37,7 +37,6 @@ const SystemConfiguration = () => {
       torque_quantity: null,
     },
   });
-  console.log(apiData);
 
   const getSystemInfo = async () => {
     const response = await SystemInfoApi.getSystemInfo();
@@ -182,10 +181,11 @@ const SystemConfiguration = () => {
                   <Box
                     component="p"
                     sx={{
-                      bgcolor: "lightGray",
+                      bgcolor: "#F5F5F5",
                       position: "absolute",
                       width: "50%",
-                      padding: "5px",
+                      padding: "7px",
+                      borderRadius: "10px",
                     }}
                   >
                     {apiData.softwareNote}

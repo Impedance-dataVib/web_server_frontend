@@ -135,7 +135,7 @@ const DashboardPage = () => {
       const data = lastMessage?.data;
       if (data) {
         const parsedData = JSON.parse(data);
-        console.log("lastMessage", parsedData);
+        // console.log("lastMessage", parsedData);
         setWebSocketsData(parsedData);
         setIsLoading(false);
       }
