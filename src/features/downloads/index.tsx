@@ -89,7 +89,7 @@ const DownloadPage = () => {
         console.log(error);
         setIsLoading(false);
         enqueueSnackbar({
-          message: "Error occurred while posting Download data",
+          message: error.response.data.Message,
           variant: "error",
         });
       });
