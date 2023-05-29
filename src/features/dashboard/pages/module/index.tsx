@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Grid, Tab, Tabs } from "@mui/material";
 import AlertsAndInstructions from "src/features/common/alertsAndInstructions";
 import CardWidget from "src/app/components/card";
@@ -8,6 +8,7 @@ import {
   TrendingUp,
   DescriptionOutlined,
   VisibilityOutlined,
+  SyncDisabled,
 } from "@mui/icons-material";
 import GlobalIndicatorChart from "../../globalIndicator";
 import ReportsCard from "src/features/common/reports";
@@ -16,14 +17,19 @@ import Signal from "./signal";
 import Trends from "./trends";
 import { WarningAmber } from "@mui/icons-material";
 import CylinderIndicator from "./cylinder-indicator";
-
+import { SIGNAL_STATUS_QUALITY } from "../../schema";
 const ModuleMonitoringPage = ({ moduleData, classes, trendsData }: any) => {
   const [activeModule, setActiveModule] = useState<number>(0);
+  const [signalData, setSignalData] = useState<any>({});
 
   const onActiveModuleChange = (event: any, params: any) => {
     setActiveModule(params);
   };
 
+  useEffect(() => {
+    const data = SIGNAL_STATUS_QUALITY.find(val => val.id == moduleData?.currentStatus );
+    setSignalData(data || SIGNAL_STATUS_QUALITY[0])
+  }, [moduleData?.currentStatus])
   return (
         <Grid container spacing={2}>
           <Grid item lg={5} md={6} sm={12}>
@@ -107,7 +113,7 @@ const ModuleMonitoringPage = ({ moduleData, classes, trendsData }: any) => {
                 
               />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item lg={4} md={12} sm={12}>
             <CardWidget
               headerLabel="Live Status"
               headerIcon={<VisibilityOutlined />}
@@ -116,16 +122,16 @@ const ModuleMonitoringPage = ({ moduleData, classes, trendsData }: any) => {
               fullScreenContent={<LiveStatus liveStatus={moduleData?.liveStatus}/>}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item lg={4} md={12} sm={12}>
             <CardWidget
-              headerLabel="Signals"
-              headerIcon={<CellTowerOutlined />}
+              headerLabel={signalData?.description || ""}
+              headerIcon={signalData?.resultType === "success" ? <CellTowerOutlined color="success"/> : <SyncDisabled color="error"/>}
               content={<Signal signals={moduleData?.signals}/>}
               initiallyCollapsed={true}
               fullScreenContent={<Signal signals={moduleData?.signals}/>}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item lg={4} md={12} sm={12}>
             <CardWidget
               headerLabel="Latest Reports"
               headerIcon={<DescriptionOutlined />}

@@ -74,11 +74,17 @@ const CardWidget = ({
             <Typography
               variant="body1" 
               component={"span"}
+              noWrap
+              title={headerLabel}
               sx={{
                 fontSize: "20px",
                 color: "#4d4e4e",
                 fontWeight: 600,
                 letterSpacing: "0.08px",
+                maxWidth: "350px",
+                cursor: "pointer"
+                // "&:hover": { overflow: 'visible', 
+                // whiteSpace: 'normal' } 
               }}
             >
               {headerLabel}

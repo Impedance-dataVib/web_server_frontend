@@ -1,13 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import Sunburst from "sunburst-chart";
-import * as d3 from "d3";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-// import { SUNBRUST_DATA } from "src/features/dashboard/pages/module/schema";
-// let data = SUNBRUST_DATA;
 
 export default function SunburstChart({ elementId, data, fullScreen }) {
-  const color = d3.scaleOrdinal(d3.schemePaired);
+
+  const getColor = (type) => {
+    switch(type) {
+      case "success":
+        return "#02B271";
+      case "error":
+        return "#E21A00";
+      case "warning": 
+        return "#E18442"
+      default:
+        return "white";
+    }
+  }
 
   useEffect(() => {
     console.log(data, elementId, document.getElementById(elementId).innerHTML);
@@ -31,7 +40,7 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
           console.log("ddd");
         })
         .color((d) => {
-          return d.fill === "success" ? "#02B271"  : ( d.fill === "error" ? "#E21A00" : "#E18442")|| color(d.name);
+          return getColor(d.fill);
         })
         .excludeRoot(true)(document.getElementById(`${elementId}${fullScreen ? "full": ""}`));
     }

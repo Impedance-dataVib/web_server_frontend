@@ -1,13 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import "./styles.css";
-import Sunburst from "sunburst-chart";
-import { SUNBRUST_DATA } from "./schema";
 import SunburstChart from "src/features/common/graph/sunbrustChart";
-import { Box, Grid, Typography } from "@mui/material";
-
-let data = SUNBRUST_DATA;
-
-let chart = Sunburst();
+import { Grid } from "@mui/material";
 
 function CylinderIndicator({ cylinderSpecificIndicators, fullScreen }: any) {
   console.log(cylinderSpecificIndicators, 'cylinder_specific_indicators');

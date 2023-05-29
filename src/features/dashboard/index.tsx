@@ -106,9 +106,9 @@ const DashboardPage = () => {
 
   const { licenseInfo, licenseStatus } = useContext(appContext);
   const intervalHandle = useRef();
-
+  console.log(process.env)
   const { sendMessage, lastMessage } = useWebSocket(
-    process.env.REACT_APP_WEBSOCKET_URL || "",
+    process.env.REACT_APP_WEBSOCKET_URL || `ws:${window.location.hostname}:8081`,
     {
       onOpen: () => console.log("opened"),
       onMessage: () => {

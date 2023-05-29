@@ -8,7 +8,7 @@ export default function Trends({ trends }: any) {
     <Grid container spacing={2} sx={{ overflow: 'scroll' }}>
       {trends &&
         trends.map((val: any, index: any) => (
-          <Grid item xs={4} key={`trends${index}`} sx={{display: 'flex', flexDirection: 'column'}}>
+          <Grid item lg={4} md={6} sm={12} key={`trends${index}`} sx={{display: 'flex', flexDirection: 'column'}}>
             <Typography variant="body1" component={"span"} textAlign={"center"}>
               {val?.trendsName}
             </Typography>
