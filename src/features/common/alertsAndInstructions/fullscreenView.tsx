@@ -5,7 +5,7 @@ const FullscreenView = () => {
     return (
         <Box>
             <Box>
-                <Typography>HI This is full screen view</Typography>
+                <Typography variant="body1" component={"span"}>HI This is full screen view</Typography>
             </Box>
         </Box>
     )

@@ -7,13 +7,16 @@ import {
   TextSnippetOutlined,
   TrendingUpOutlined,
 } from "@mui/icons-material";
-import { Box, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Divider, Grid, IconButton, Link as Matlink, Typography } from "@mui/material";
 import React from "react";
-import CardWidget from "../../../app/components/card";
+import { Link } from "react-router-dom";
 
-export interface IReportsCardProps {}
+export interface IReportsCardProps {
+  liveStatus: any
+}
 
 export interface IReportsRowProps {
+  disabled: boolean;
   icon: React.ReactNode;
   reportName: string;
   viewUrl?: string;
@@ -21,6 +24,7 @@ export interface IReportsRowProps {
 }
 
 const ReportsRow = ({
+  disabled,
   icon,
   reportName,
   viewUrl,
@@ -36,9 +40,9 @@ const ReportsRow = ({
           <Box>
             {reportName && (
               <Typography
-                variant="h6"
+                variant="subtitle1"
+                component={"span"}
                 sx={{
-                  fontSize: "16px",
                   letterSpacing: "0px",
                   color: "#5A607F",
                 }}
@@ -50,15 +54,15 @@ const ReportsRow = ({
         </Grid>
         <Grid item xs={2}>
           <Box>
-            <IconButton disabled={!viewUrl}>
-              <RemoveRedEyeOutlined sx={{ color: "#1A5DDD" }} />
+            <IconButton disabled={disabled || !viewUrl}>
+              <RemoveRedEyeOutlined sx={{ color: (disabled || !viewUrl) ? "lightgrey" : "#1A5DDD" }} />
             </IconButton>
           </Box>
         </Grid>
         <Grid item xs={2}>
           <Box>
-            <IconButton disabled={!downloadUrl}>
-              <DownloadOutlined sx={{ color: "#1A5DDD" }}/>
+            <IconButton disabled={disabled || !downloadUrl}>
+              <DownloadOutlined sx={{ color:  (disabled || !downloadUrl) ? "lightgrey" : "#1A5DDD" }}/>
             </IconButton>
           </Box>
         </Grid>
@@ -67,36 +71,44 @@ const ReportsRow = ({
   );
 };
 
-const ReportsCardContent = () => {
+const ReportsCardContent = ({liveStatus}: IReportsCardProps) => {
   return (
     <Box>
-      <Grid container spacing={2}>
+      <Grid container spacing={1}>
         <Grid xs={12} item>
-          <ReportsRow icon={<TrendingUpOutlined />} reportName="Graphical Report" />
+          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"} icon={<TrendingUpOutlined />} reportName="Graphical Report" />
+          <Divider sx={{ mx: 0 }} />
         </Grid>
         <Grid xs={12} item>
-          <ReportsRow icon={<List />} reportName="Spreadsheet Report" />
+          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"} icon={<List />} reportName="Spreadsheet Report" />
+          <Divider sx={{ mx: 0 }} />
         </Grid>
         <Grid xs={12} item>
-          <ReportsRow icon={<TextSnippetOutlined />} reportName="Raw Data" />
+          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"} icon={<TextSnippetOutlined />} reportName="Raw Data" />
+          <Divider sx={{ mx: 0 }} />
         </Grid>
         <Grid xs={12} item>
-          <ReportsRow icon={<ArticleOutlined />} reportName="JSON Text Report" />
+          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"} icon={<ArticleOutlined />} reportName="JSON Text Report" />
+          <Divider sx={{ mx: 0 }} />
         </Grid>
       </Grid>
+      <Matlink
+        component={Link}
+        variant="body1"
+        color="#002BBC"
+        to="/download"
+        sx={{ marginTop: '5px', display: 'flex', justifyContent: 'flex-end' }}
+      >
+        Download Historic Report
+      </Matlink>
     </Box>
   );
 };
 
-const ReportsCard = ({}: IReportsCardProps) => {
+const ReportsCard = ({liveStatus}: IReportsCardProps) => {
   return (
     <Box>
-      <CardWidget
-        headerLabel="Latest Reports"
-        headerIcon={<DescriptionOutlined />}
-        content={<ReportsCardContent />}
-        initiallyCollapsed={true}
-      />
+      <ReportsCardContent liveStatus={liveStatus}/>
     </Box>
   );
 };

@@ -8,20 +8,23 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
+import useWebSocket from "react-use-websocket";
+
 import { makeStyles } from "tss-react/mui";
 import { useTranslation } from "react-i18next";
 import DashboardApi from "./dashboardApi";
-import EngineMonitoringPage from "./pages/engine";
-import TorqueMonitoringPage from "./pages/torque";
-import TurbineMonitoringPage from "./pages/turbine";
-import BearingMonitoringPage from "./pages/bearing";
-import MotorMonitoringPage from "./pages/motor";
+import ModuleMonitoringPage from "./pages/module";
 import TabPanel from "src/app/components/tab-panel";
 import appContext from "src/app/context";
 import * as dateFns from "date-fns";
+import { webSocketData } from "./schema";
+// import { webSocketData } from "./schema";
 
 const useStyles = makeStyles()((theme) => {
   return {
+    trendsTabRoot: {
+      minHeight: "auto",
+    },
     tabsRoot: {
       height: "34px",
       minHeight: "34px",
@@ -59,45 +62,28 @@ function tabProps(index: number) {
   };
 }
 
-const TabModuleRender = ({ type, moduleId }: any) => {
+const TabModuleRender = ({ type, moduleData, classes, trendsData }: any) => {
   const { t } = useTranslation();
 
   switch (type) {
     case "Engine":
-      return (
-        <Box>
-          <EngineMonitoringPage />
-        </Box>
-      );
-
     case "Torque":
-      return (
-        <Box>
-          <TorqueMonitoringPage />
-        </Box>
-      );
     case "Turbine":
-      return (
-        <Box>
-          <TurbineMonitoringPage />
-        </Box>
-      );
+    case "Motor":
     case "Bearing":
       return (
         <Box>
-          <BearingMonitoringPage />
-        </Box>
-      );
-    case "Motor":
-      return (
-        <Box>
-          <MotorMonitoringPage />
+          <ModuleMonitoringPage
+            moduleData={moduleData}
+            classes={classes}
+            trendsData={trendsData}
+          />
         </Box>
       );
     default:
       return (
         <Box>
-          <Typography>
+          <Typography component="span" variant="body1">
             {t("dashboard.type.not.supported", { ns: "dashboard" })}
           </Typography>{" "}
         </Box>
@@ -107,6 +93,8 @@ const TabModuleRender = ({ type, moduleId }: any) => {
 
 const DashboardPage = () => {
   const [moduleTabs, setModuleTabs] = useState<any[]>([]);
+  const [webSocketsData, setWebSocketsData] = useState({});
+  const [trendsData, setTrendsData] = useState({});
   const [activeModule, setActiveModule] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showLicenseExpiryMsg, setShowLicenseExpiryMsg] =
@@ -118,6 +106,41 @@ const DashboardPage = () => {
 
   const { licenseInfo, licenseStatus } = useContext(appContext);
   const intervalHandle = useRef();
+  console.log(process.env)
+  const { sendMessage, lastMessage } = useWebSocket(
+    process.env.REACT_APP_WEBSOCKET_URL || `ws:${window.location.hostname}:8081`,
+    {
+      onOpen: () => console.log("opened"),
+      onMessage: () => {
+        if (sendMessage) sendMessage(moduleTabs[activeModule].process_name);
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (moduleTabs.length > 0) {
+      if (moduleTabs[activeModule].process_name) {
+        sendMessage(moduleTabs[activeModule].process_name);
+        DashboardApi.getTrendsData(moduleTabs[activeModule].id).then((data) => {
+          setTrendsData(data);
+        });
+      } else {
+        setIsLoading(false);
+      }
+    }
+  }, [moduleTabs, activeModule]);
+
+  useEffect(() => {
+    if (lastMessage !== undefined) {
+      const data = lastMessage?.data;
+      if (data) {
+        const parsedData = JSON.parse(data);
+        // console.log("lastMessage", parsedData);
+        setWebSocketsData(parsedData);
+        setIsLoading(false);
+      }
+    }
+  }, [lastMessage]);
 
   useEffect(() => {
     if (licenseInfo && licenseStatus && intervalHandle) {
@@ -162,11 +185,12 @@ const DashboardPage = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    setModuleTabs([]);
     DashboardApi.getModules()
       .then((res) => {
-        setModuleTabs(res.data.data || []);
-        setIsLoading(false);
+        if (res.length) setModuleTabs(res || []);
+        else {
+          setIsLoading(false);
+        }
       })
       .catch((e) => {
         setModuleTabs([]);
@@ -192,7 +216,7 @@ const DashboardPage = () => {
             <AlertTitle>
               {t("dashboard.lic.alert.title", { ns: "dashboard" })}
             </AlertTitle>
-            <Typography variant="caption">
+            <Typography variant="caption" component={"span"}>
               {t("dashboard.lic.alert.text.part1", { ns: "dashboard" })}{" "}
               {licExpiryText}
             </Typography>
@@ -218,7 +242,7 @@ const DashboardPage = () => {
             justifyContent: "flex-end",
           }}
         >
-          <Typography>
+          <Typography component="span" variant="body1">
             {isLoading
               ? t("dashboard.loading.module.text", { ns: "dashboard" })
               : t("dashboard.module.text", { ns: "dashboard" })}
@@ -255,7 +279,10 @@ const DashboardPage = () => {
           <TabModuleRender
             moduleId={item.id}
             type={item.module_type}
-          ></TabModuleRender>
+            moduleData={webSocketsData}
+            classes={classes}
+            trendsData={trendsData}
+          />
         </TabPanel>
       ))}
     </Box>

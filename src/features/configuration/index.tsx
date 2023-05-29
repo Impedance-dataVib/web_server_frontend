@@ -1,9 +1,16 @@
 import ConfigurationContent from "./configurationContent";
 import ManageConfigurationPage from "./configuration";
 
-const ConfigurationPage = ({isUnsaved, setIsUnsaved, openConfirmBox, setOpenconfirmmBox, navigatePath}: any) => {
+const ConfigurationPage = ({isUnsaved, setNavigatePath, setIsUnsaved, openConfirmBox, setOpenconfirmmBox, navigatePath}: any) => {
   return (
-    <ConfigurationContent navigatePath={navigatePath} isUnsaved={isUnsaved} setIsUnsaved={setIsUnsaved} openConfirmBox={openConfirmBox} setOpenconfirmmBox={setOpenconfirmmBox}></ConfigurationContent>
+    <ConfigurationContent 
+      navigatePath={navigatePath}
+      setNavigatePath={setNavigatePath}
+      isUnsaved={isUnsaved}
+      setIsUnsaved={setIsUnsaved}
+      openConfirmBox={openConfirmBox}
+      setOpenconfirmmBox={setOpenconfirmmBox}
+    />
   );
 };
 export default ConfigurationPage;

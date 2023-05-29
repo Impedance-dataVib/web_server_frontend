@@ -24,6 +24,7 @@ export interface IAddConfigurationModalProps {
 interface IAddConfigurationState {
   name: string;
   sampling_rate: string;
+  customerName: string;
 }
 
 const AddConfigurationModal = ({
@@ -46,22 +47,6 @@ const AddConfigurationModal = ({
       <DialogTitle>Add Configuration</DialogTitle>
       <DialogContent>
         <Box sx={{ minWidth: "500px" }}>
-          {/* <TextField
-            autoFocus
-            id="customerName"
-            name="customerName"
-            label="Configuration Name"
-            type="text"
-            variant="standard"
-            fullWidth
-            value={customerName}
-            sx={{
-              marginBottom: "10px",
-            }}
-            inputProps={{
-              readOnly: true,
-            }}
-          /> */}
           <TextField
             autoFocus
             id="name"
@@ -71,6 +56,23 @@ const AddConfigurationModal = ({
             variant="standard"
             fullWidth
             value={configName?.name}
+            sx={{
+              marginBottom: "10px",
+            }}
+            onChange={(e) =>
+              setConfigName((prev: any) => {
+                return { ...prev, [e.target.name]: e?.target?.value };
+              })
+            }
+          />
+          <TextField
+            id="customerName"
+            name="customerName"
+            label="Client Name"
+            type="text"
+            variant="standard"
+            fullWidth
+            value={configName?.customerName}
             sx={{
               marginBottom: "10px",
             }}
@@ -116,6 +118,7 @@ const AddConfigurationModal = ({
           disabled={
             configName &&
             configName?.name?.length > 0 &&
+            configName?.customerName?.length > 0 &&
             configName?.sampling_rate?.length > 0
               ? false
               : true

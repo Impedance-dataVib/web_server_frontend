@@ -25,7 +25,7 @@ import ProtectedRoute from "./app/components/protectedRoute";
 import { SnackbarProvider } from "notistack";
 import UnsavedPrompt from "./app/components/unsavedPrompt";
 
-const AppRoutes = ({isUnsaved, setIsUnsaved, openConfirmBox, navigatePath, setOpenconfirmmBox }: any) => (
+const AppRoutes = ({isUnsaved, setNavigatePath, setIsUnsaved, openConfirmBox, navigatePath, setOpenconfirmmBox }: any) => (
   <Routes>
     <Route path="/" element={<DashboardPage />} />
     {/* <Route path="login" element={<LoginPage />} /> */}
@@ -51,7 +51,14 @@ const AppRoutes = ({isUnsaved, setIsUnsaved, openConfirmBox, navigatePath, setOp
       path="/configuration/:configId"
       element={
         <ProtectedRoute>
-          <ConfigurationPage navigatePath={navigatePath} isUnsaved={isUnsaved} setIsUnsaved={setIsUnsaved} openConfirmBox={openConfirmBox} setOpenconfirmmBox={setOpenconfirmmBox}></ConfigurationPage>
+          <ConfigurationPage 
+            setNavigatePath={setNavigatePath}
+            navigatePath={navigatePath}
+            isUnsaved={isUnsaved}
+            setIsUnsaved={setIsUnsaved}
+            openConfirmBox={openConfirmBox}
+            setOpenconfirmmBox={setOpenconfirmmBox}
+          />
         </ProtectedRoute>
       }
     />
@@ -184,19 +191,6 @@ function App() {
     navigate("/login?inactive=true");
   }
 
-  //   Active licensne and min one config.
-  // -> dashboard
-  // -> all other pages are disabled
-
-  // active licensne and no configuration.
-  // -> login
-  // -> config screen
-  // ->dashboard inactive
-
-  // inactive license
-  // -> login with message invalid.
-  // -> redirect to system screen where user can import license.
-
   return (
     <div className="App">
       <Suspense fallback={<FullScreenLoader />}>
@@ -217,7 +211,14 @@ function App() {
                   ) : (
                     <Layout isUnsaved={isUnsaved} openConfirmBox={openConfirmBox} setOpenconfirmmBox={setOpenconfirmmBox} setNavigatePath={setNavigatePath}>
                       <UnsavedPrompt isUnsaved={isUnsaved} />
-                      <AppRoutes navigatePath={navigatePath} isUnsaved={isUnsaved} setIsUnsaved={setIsUnsaved} openConfirmBox={openConfirmBox} setOpenconfirmmBox={setOpenconfirmmBox}/>
+                      <AppRoutes 
+                        navigatePath={navigatePath}
+                        setNavigatePath={setNavigatePath}
+                        isUnsaved={isUnsaved}
+                        setIsUnsaved={setIsUnsaved}
+                        openConfirmBox={openConfirmBox}
+                        setOpenconfirmmBox={setOpenconfirmmBox}
+                      />
                     </Layout>
                   )}
                 </>

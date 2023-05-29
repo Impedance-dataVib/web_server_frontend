@@ -31,7 +31,7 @@ export const APP_NAV_MENU_ITEMS: INavMenuItem[] = [
     path: "/download",
   },
   {
-    label: "Engine Operation Parameters",
+    label: "Auxiliary data",
     icon: <WebAsset />,
     path: "/file-browser",
   },

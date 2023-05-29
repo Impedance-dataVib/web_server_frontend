@@ -13,6 +13,7 @@ import {
   Box,
   Dialog,
   DialogContent,
+  DialogTitle,
   Divider,
   Paper,
   Theme,
@@ -29,10 +30,12 @@ export interface CardWidgetProps {
   footerContent?: React.ReactNode;
   initiallyCollapsed?: boolean;
   fullScreenContent?: React.ReactNode;
+  headerContent?: React.ReactNode;
 }
 
 const CardWidget = ({
   headerLabel,
+  headerContent,
   headerIcon,
   content,
   subHeadingRight,
@@ -51,14 +54,15 @@ const CardWidget = ({
     <Paper
       sx={{
         p: 2,
+        pt: headerContent ? 0 : 2,
         borderRadius: 3,
         boxShadow: "2px 4px 8px #00000029",
         transition: "all .2s linear",
       }}
     >
       <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
-        <Box component="section">
-          <Box sx={{ display: "flex" }}>
+      {!headerContent && <Box>
+          <Box sx={{ display: "flex", alignItems: 'center' }}>
             {headerIcon && (
               <Box
                 sx={{ mr: 1, color: "#4d4e4e", height: "20px", width: "18px" }}
@@ -68,11 +72,19 @@ const CardWidget = ({
             )}
 
             <Typography
+              variant="body1" 
+              component={"span"}
+              noWrap
+              title={headerLabel}
               sx={{
                 fontSize: "20px",
                 color: "#4d4e4e",
                 fontWeight: 600,
                 letterSpacing: "0.08px",
+                maxWidth: "350px",
+                cursor: "pointer"
+                // "&:hover": { overflow: 'visible', 
+                // whiteSpace: 'normal' } 
               }}
             >
               {headerLabel}
@@ -87,8 +99,8 @@ const CardWidget = ({
               )}
             </Box>
           )}
-        </Box>
-
+        </Box>}
+        {headerContent && headerContent}
         <Box
           component="section"
           sx={{
@@ -145,7 +157,7 @@ const CardWidget = ({
           sx={{ transition: "all 0.3s ease-out", opacity: collapsed ? 0 : 1 }}
         >
           <Divider
-            sx={{ mt: 1, mb: 1, height: "0px", border: "1px solid #E8E8ED" }}
+            sx={{ mt: headerContent ? 0 : 1, mb: 1, height: "0px", border: "1px solid #E8E8ED" }}
           />
           <Box>{content}</Box>
           {footerContent && (
@@ -167,9 +179,9 @@ const CardWidget = ({
         <Dialog
           open={openModal}
           onClose={() => setOpenModal(false)}
-          sx={{ maxWidth: "100%" }}
+          maxWidth="md"
         >
-          <DialogContent sx={{ maxWidth: "100%" }}>
+          <DialogContent>
             <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
               <Box component="section">
                 <Box sx={{ display: "flex" }}>
@@ -187,6 +199,8 @@ const CardWidget = ({
                   )}
 
                   <Typography
+                    variant="body1" 
+                    component={"span"}
                     sx={{
                       fontSize: "20px",
                       color: "#4d4e4e",
