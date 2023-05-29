@@ -31,11 +31,11 @@ export const selectOption = [
 export const selectPeriod = [
   {
     label: "Last 1 Month",
-    value: "1Month",
+    value: "1",
   },
   {
     label: "Last 3 Month",
-    value: "3Month",
+    value: "3",
   },
 ];
 

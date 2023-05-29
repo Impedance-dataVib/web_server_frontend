@@ -66,7 +66,6 @@ const AddConfigurationModal = ({
             }
           />
           <TextField
-            autoFocus
             id="customerName"
             name="customerName"
             label="Client Name"
