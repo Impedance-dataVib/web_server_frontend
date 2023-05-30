@@ -18,6 +18,7 @@ import TabPanel from "src/app/components/tab-panel";
 import appContext from "src/app/context";
 import * as dateFns from "date-fns";
 import { webSocketData } from "./schema";
+import { buildData, buildSoketData } from "src/app/utils/helper";
 // import { webSocketData } from "./schema";
 
 const useStyles = makeStyles()((theme) => {
@@ -106,7 +107,6 @@ const DashboardPage = () => {
 
   const { licenseInfo, licenseStatus } = useContext(appContext);
   const intervalHandle = useRef();
-  console.log(process.env)
   const { sendMessage, lastMessage } = useWebSocket(
     process.env.REACT_APP_WEBSOCKET_URL || `ws:${window.location.hostname}:8081`,
     {
@@ -118,11 +118,14 @@ const DashboardPage = () => {
   );
 
   useEffect(() => {
+    console.log(moduleTabs, activeModule, 'trends')
     if (moduleTabs.length > 0) {
       if (moduleTabs[activeModule].process_name) {
         sendMessage(moduleTabs[activeModule].process_name);
         DashboardApi.getTrendsData(moduleTabs[activeModule].id).then((data) => {
-          setTrendsData(data);
+          const parsedData = buildData(data)
+          console.log(parsedData)
+          setTrendsData(parsedData);
         });
       } else {
         setIsLoading(false);
@@ -131,10 +134,13 @@ const DashboardPage = () => {
   }, [moduleTabs, activeModule]);
 
   useEffect(() => {
+    console.log(lastMessage, 'lastMessage');
     if (lastMessage !== undefined) {
       const data = lastMessage?.data;
       if (data) {
-        const parsedData = JSON.parse(data);
+        let parsedData = JSON.parse(data);
+        console.log(moduleTabs[activeModule]);
+        parsedData = buildSoketData(parsedData, moduleTabs[activeModule].module_type)
         // console.log("lastMessage", parsedData);
         setWebSocketsData(parsedData);
         setIsLoading(false);

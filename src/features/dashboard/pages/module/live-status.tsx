@@ -117,9 +117,7 @@ const PrettoSlider = styled(Slider)({
 });
 
 const LiveStatus = ({liveStatus}: any) => {
-  useEffect(() => {
-    console.log('liveStatus', liveStatus);
-  }, [liveStatus])
+
   return (
     <Box
       sx={{

@@ -14,7 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 import { useNavigate } from "react-router-dom";
-import { deleteConfig, activeConfig } from "../../app/services";
+import { deleteConfig, activeConfig, exportConfiguration } from "../../app/services";
 import ConfirmDeleteConfigurationModal from "./modals/confirmDeleteConfig";
 import { useSnackbar } from "notistack";
 import { eventBus } from "src/EventBus";
@@ -86,6 +86,18 @@ const ConfigurationTable = ({
 
   const onExportConfiguartion = async (id: string) => {
     // TODO
+    setIsLoading(true);
+    try {
+    const res:any = await exportConfiguration(id);
+    console.log(res)
+    setIsLoading(false);
+  } catch (e) {
+    enqueueSnackbar({
+      message: "Error occurred while exporting configuration",
+      variant: "error",
+    });
+    setIsLoading(false);
+  }
   };
 
   const onActiveConfig = async (row: any) => {
@@ -123,6 +135,7 @@ const ConfigurationTable = ({
           <TableHead>
             <TableRow>
               <StyledTableCell>Configuration Name</StyledTableCell>
+              <StyledTableCell>Active Date</StyledTableCell>
               <StyledTableCell align="left">Actions</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -131,6 +144,9 @@ const ConfigurationTable = ({
               <StyledTableRow key={row.name}>
                 <StyledTableCell component="th" scope="row">
                   {row.name}
+                </StyledTableCell>
+                <StyledTableCell component="th" scope="row">
+                  {row.status === "Active" ? row.active_date: null}
                 </StyledTableCell>
                 <StyledTableCell align="left">
                   <IconButton
