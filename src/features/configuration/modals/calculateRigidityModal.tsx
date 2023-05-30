@@ -24,8 +24,8 @@ const schema = [
     type: "text",
   },
   { name: "Length(L)(Mtrs)", label: "length", type: "text" },
-  { name: "MaxRPM(RPM)", label: "max_rpm", type: "text" },
-  { name: "MaxPower(Watts)", label: "max_power", type: "text" },
+  // { name: "MaxRPM(RPM)", label: "max_rpm", type: "text" },
+  // { name: "MaxPower(Watts)", label: "max_power", type: "text" },
 ];
 const validationSchema: any = yup.object({
   outer_diameter: yup.number().required("This is a required field"),
@@ -63,7 +63,8 @@ export const PopupRigidity = ({ formContext, fieldProps }: any) => {
         (Math.PI *
           formContextPopUp?.values?.sheer_modulus *
           (Math.pow(formContextPopUp?.values?.outer_diameter, 4) -
-            Math.pow(formContextPopUp?.values?.inner_diameter, 4))) /
+            Math.pow(formContextPopUp?.values?.inner_diameter, 4)) *
+          Math.pow(10, 9)) /
         (32 * formContextPopUp?.values?.length);
       formContext.setFieldValue(fieldProps.label, rigidity);
       setTimeout(() => {
@@ -186,7 +187,12 @@ const CalculateRigidityModal = ({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Calculate Rigidity</DialogTitle>
       <DialogContent>
-        <Box sx={{ minWidth: "500px" }}>
+        <Box
+          sx={{
+            minWidth: "500px",
+            mr: "10px",
+          }}
+        >
           {schema.map((item) => (
             <FormFieldConditionalRender
               type={item.type}

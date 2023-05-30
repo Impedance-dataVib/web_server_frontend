@@ -1,4 +1,4 @@
-import { Typography, Box, Link, Divider, Button, Tooltip } from "@mui/material";
+import { Typography, Box, Link, Divider, Button } from "@mui/material";
 import SystemInfoTable from "./systemInfoTable";
 import UploadFile from "./uploadFile";
 import CachedIcon from "@mui/icons-material/Cached";
@@ -8,6 +8,9 @@ import SystemInfoApi from "./api";
 import InfoIcon from "@mui/icons-material/Info";
 
 const SystemConfiguration = () => {
+  const [file1, setFile1] = useState<File>();
+  const [file2, setFile2] = useState<File>();
+
   const [isShown, setIsShown] = useState(false);
   const [apiData, setApiData] = useState({
     serianNo: "",
@@ -51,6 +54,7 @@ const SystemConfiguration = () => {
   useEffect(() => {
     getSystemInfo();
   }, []);
+  console.log(file1, file2);
 
   return (
     <Box>
@@ -319,7 +323,7 @@ const SystemConfiguration = () => {
               // p: 2,
             }}
           >
-            <UploadFile />
+            <UploadFile setFile1={setFile1} setFile2={setFile2} />
           </Box>
           <Box
             sx={{
