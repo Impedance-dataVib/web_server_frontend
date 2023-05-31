@@ -352,33 +352,8 @@ const formSchema = {
     "Advanced Parameters": [
       {
         name: "overwrite",
-        label: "over_write",
-        type: "toggle",
-      },
-      {
-        name: "overwriteType",
-        label: "over_writeType",
-        type: "toggle",
-      },
-      {
-        name: "overwriteMin",
-        label: "over_writeMin",
-        type: "toggle",
-      },
-      {
-        name: "overwriteMedian",
-        label: "over_writeMedian",
-        type: "toggle",
-      },
-      {
-        name: "overwriteMiddle",
-        label: "over_writeMiddle",
-        type: "toggle",
-      },
-      {
-        name: "overwriteMax",
-        label: "over_writeMax",
-        type: "toggle",
+        label: "overWrite",
+        type: "array_overwrite",
       },
       {
         name: "Filter_lowDecim",
@@ -568,6 +543,29 @@ const formSchema = {
         helperNote: "Select the vessel type",
       },
     ],
+    "Advanced Parameters": [
+      {
+        name: "overwrite",
+        label: "overWrite",
+        type: "array_overwrite",
+      },
+      {
+        name: "Filter_lowDecim",
+        label: "Filter_lowDecim",
+        type: "toggle",
+      },
+      {
+        name: "Filter_low",
+        label: "Filter_low",
+        type: "toggle",
+      },
+
+      {
+        name: "highPass",
+        label: "highPass",
+        type: "toggle",
+      },
+    ],
   },
   Bearing: {
     "Asset Information": [
@@ -681,6 +679,29 @@ const formSchema = {
         helperNote: "Enter the rated max RPM",
       },
     ],
+    "Advanced Parameters": [
+      {
+        name: "overwrite",
+        label: "overWrite",
+        type: "array_overwrite",
+      },
+      {
+        name: "Filter_lowDecim",
+        label: "Filter_lowDecim",
+        type: "toggle",
+      },
+      {
+        name: "Filter_low",
+        label: "Filter_low",
+        type: "toggle",
+      },
+
+      {
+        name: "highPass",
+        label: "highPass",
+        type: "toggle",
+      },
+    ],
   },
   Turbine: {
     "Asset Information": [
@@ -768,6 +789,29 @@ const formSchema = {
         label: "type",
         type: "dropdown",
         options: ["Gas", "Steam"],
+      },
+    ],
+    "Advanced Parameters": [
+      {
+        name: "overwrite",
+        label: "overWrite",
+        type: "array_overwrite",
+      },
+      {
+        name: "Filter_lowDecim",
+        label: "Filter_lowDecim",
+        type: "toggle",
+      },
+      {
+        name: "Filter_low",
+        label: "Filter_low",
+        type: "toggle",
+      },
+
+      {
+        name: "highPass",
+        label: "highPass",
+        type: "toggle",
       },
     ],
   },
@@ -886,6 +930,29 @@ const formSchema = {
         label: "rated_rpm",
         type: "text",
         helperNote: "Enter the rated max RPM",
+      },
+    ],
+    "Advanced Parameters": [
+      {
+        name: "overwrite",
+        label: "overWrite",
+        type: "array_overwrite",
+      },
+      {
+        name: "Filter_lowDecim",
+        label: "Filter_lowDecim",
+        type: "toggle",
+      },
+      {
+        name: "Filter_low",
+        label: "Filter_low",
+        type: "toggle",
+      },
+
+      {
+        name: "highPass",
+        label: "highPass",
+        type: "toggle",
       },
     ],
   },

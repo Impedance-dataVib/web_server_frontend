@@ -15,6 +15,7 @@ import {
   MotorChannelInformationForm,
   motorValidationSchema,
   MotorAssetInformation,
+  MotorAdvancedParameters
 } from "./configuration-forms";
 import { useFormik } from "formik";
 import { deleteModule, saveModuleData } from "../../app/services";
@@ -69,6 +70,13 @@ const StepToComponentEngineModule = ({
           handleFormData={handleFormData}
           formContext={formContext}
         ></MotorAssetInformation>
+      );
+      case "Advanced Parameters":
+      return (
+        <MotorAdvancedParameters
+          handleFormData={handleFormData}
+          formContext={formContext}
+        ></MotorAdvancedParameters>
       );
     default:
       return <div>Invalid Step</div>;
@@ -148,11 +156,20 @@ const MotorTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const getInitialFormData = () => {
     if (data?.from_data && customerName) {
       const { configuration_id, ...rest } = data?.from_data;
-      return {
-        ...rest,
-        customer_name: customerName,
-        module_type: data.module_type,
-      };
+      if (rest?.overWrite) {
+        return {
+          ...rest,
+          customer_name: customerName,
+          module_type: data.module_type,
+        };
+      } else {
+        return {
+          ...rest,
+          overWrite: [],
+          customer_name: customerName,
+          module_type: data.module_type,
+        };
+      }
     }
     return {
       customer_name: customerName,
@@ -173,6 +190,10 @@ const MotorTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       recording_length: "",
       name: "",
       rated_rpm: "",
+      overWrite: [],
+      Filter_lowDecim: "",
+      Filter_low: "",
+      highPass: "",
     };
   };
   const moduleFormContext = useFormik({

@@ -108,7 +108,8 @@ const DashboardPage = () => {
   const { licenseInfo, licenseStatus } = useContext(appContext);
   const intervalHandle = useRef();
   const { sendMessage, lastMessage } = useWebSocket(
-    process.env.REACT_APP_WEBSOCKET_URL || `ws:${window.location.hostname}:8081`,
+    process.env.REACT_APP_WEBSOCKET_URL ||
+      `ws:${window.location.hostname}:8081`,
     {
       onOpen: () => console.log("opened"),
       onMessage: () => {
@@ -118,13 +119,13 @@ const DashboardPage = () => {
   );
 
   useEffect(() => {
-    console.log(moduleTabs, activeModule, 'trends')
+    console.log(moduleTabs, activeModule, "trends");
     if (moduleTabs.length > 0) {
       if (moduleTabs[activeModule].process_name) {
         sendMessage(moduleTabs[activeModule].process_name);
         DashboardApi.getTrendsData(moduleTabs[activeModule].id).then((data) => {
-          const parsedData = buildData(data)
-          console.log(parsedData)
+          const parsedData = buildData(data);
+          console.log(parsedData);
           setTrendsData(parsedData);
         });
       } else {
@@ -134,13 +135,16 @@ const DashboardPage = () => {
   }, [moduleTabs, activeModule]);
 
   useEffect(() => {
-    console.log(lastMessage, 'lastMessage');
+    console.log(lastMessage, "lastMessage");
     if (lastMessage !== undefined) {
       const data = lastMessage?.data;
       if (data) {
         let parsedData = JSON.parse(data);
         console.log(moduleTabs[activeModule]);
-        parsedData = buildSoketData(parsedData, moduleTabs[activeModule].module_type)
+        parsedData = buildSoketData(
+          parsedData,
+          moduleTabs[activeModule].module_type
+        );
         // console.log("lastMessage", parsedData);
         setWebSocketsData(parsedData);
         setIsLoading(false);

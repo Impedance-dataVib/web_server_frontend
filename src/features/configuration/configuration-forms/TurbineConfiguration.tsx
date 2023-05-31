@@ -5,7 +5,14 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { BootstrapInput } from "../../../app/components/bootstarp-input";
-import { Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  FormControlLabel,
+  Switch,
+  Typography,
+} from "@mui/material";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import formSchema from "../formSchema";
@@ -15,6 +22,8 @@ import HelpIcon from "@mui/icons-material/Help";
 import { useParams } from "react-router-dom";
 import { useGetChannelByConfigIdName } from "../hooks";
 import { useSnackbar } from "notistack";
+import { FieldArray, FieldArrayRenderProps, FormikProvider } from "formik";
+import { useAuth } from "src/app/auth";
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
@@ -73,7 +82,136 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
         ></TextField>
       );
     case "toggle":
-      return <></>;
+      return (
+        <FormControlLabel
+          control={
+            <Switch
+              name={fieldProps.label}
+              onChange={formContext?.handleChange}
+              value={formContext?.values?.[fieldProps.label]}
+              color="primary"
+            />
+          }
+          label={fieldProps?.name}
+          labelPlacement="start"
+          disabled={fieldProps?.userName === "admin" ? false : true}
+        />
+      );
+    case "array_overwrite":
+      return (
+        <FormikProvider value={formContext}>
+          <FieldArray name={fieldProps.label}>
+            {(formHelper: FieldArrayRenderProps) => {
+              return (
+                <Box>
+                  {formContext?.values?.[fieldProps.label].map(
+                    (item: any, index: number) => (
+                      <Box key={index}>
+                        <TextField
+                          name={`${fieldProps.label}[${index}].overwrite`}
+                          label={`overwrite`}
+                          onChange={formContext?.handleChange}
+                          value={item.overwrite}
+                          variant="outlined"
+                          sx={{
+                            fontSize: "16px",
+                            marginBottom: "20px",
+                            width: "182px",
+                            padding: "1px 1px",
+                          }}
+                          inputProps={{
+                            style: {
+                              padding: "11px 26px 13px 12px",
+                            },
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                        ></TextField>
+                        <TextField
+                          name={`${fieldProps.label}[${index}].overwriteMin`}
+                          label={`overwriteMin`}
+                          onChange={formContext?.handleChange}
+                          value={item.overwriteMin}
+                          variant="outlined"
+                          sx={{
+                            fontSize: "16px",
+                            marginBottom: "20px",
+                            width: "182px",
+                            padding: "1px 1px",
+                          }}
+                          inputProps={{
+                            style: {
+                              padding: "11px 26px 13px 12px",
+                            },
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                        ></TextField>
+                        <TextField
+                          name={`${fieldProps.label}[${index}].overwriteMiddle`}
+                          label={`overwriteMiddle`}
+                          onChange={formContext?.handleChange}
+                          value={item.overwriteMiddle}
+                          variant="outlined"
+                          sx={{
+                            fontSize: "16px",
+                            marginBottom: "20px",
+                            width: "182px",
+                            padding: "1px 1px",
+                          }}
+                          inputProps={{
+                            style: {
+                              padding: "11px 26px 13px 12px",
+                            },
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                        ></TextField>
+                        <TextField
+                          name={`${fieldProps.label}[${index}].overwriteMax`}
+                          label={`overwriteMax`}
+                          onChange={formContext?.handleChange}
+                          value={item.overwriteMax}
+                          variant="outlined"
+                          sx={{
+                            fontSize: "16px",
+                            marginBottom: "20px",
+                            width: "182px",
+                            padding: "1px 1px",
+                          }}
+                          inputProps={{
+                            style: {
+                              padding: "11px 26px 13px 12px",
+                            },
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                        ></TextField>
+                        <Button
+                          color="secondary"
+                          onClick={() => formHelper.remove(index)}
+                        >
+                          Remove
+                        </Button>
+                      </Box>
+                    )
+                  )}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() =>
+                      formHelper.push({
+                        overwrite: "",
+                        overwriteMin: "",
+                        overwriteMiddle: "",
+                        overwriteMax: "",
+                      })
+                    }
+                  >
+                    Add
+                  </Button>
+                </Box>
+              );
+            }}
+          </FieldArray>
+        </FormikProvider>
+      );
     default:
       return <div>No Valid Field Type</div>;
       break;
@@ -624,5 +762,32 @@ export const TurbineDiagnosticDetails = ({
         ))}
       </Grid>
     </>
+  );
+};
+
+export const TurbineAdvancedParameters = ({ handleFormData, formContext }: any) => {
+  const { userName } = useAuth();
+
+  return (
+    <Grid container spacing={1}>
+      <Container sx={{ color: "grey" }}>
+        *Advance Parameter Can Be Change By Admin Only
+      </Container>
+      {formSchema["Turbine"]["Advanced Parameters"].map((item: any) => (
+        <Grid key={item.label} container item>
+          <Grid item>
+            <FormFieldConditionalRender
+              type={item.type}
+              fieldProps={{
+                ...item,
+                handleChange: handleFormData,
+                userName: userName,
+              }}
+              formContext={formContext}
+            ></FormFieldConditionalRender>
+          </Grid>
+        </Grid>
+      ))}
+    </Grid>
   );
 };

@@ -109,3 +109,11 @@ export const getChannelByNameAndConfigID = (
     { name: channelName, configId: configId }
   );
 };
+
+export const getAllTrendsService = (id: string) => {
+  return axiosInstance.get(`/dashboard/trends.php/${id}`);
+};
+
+export const getModules = () => {
+  return axiosInstance.get("/module/get-all.php");
+};
