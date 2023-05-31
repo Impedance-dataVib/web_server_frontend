@@ -6,18 +6,18 @@ export interface IUnsavedPromptProps {
 }
 
 const UnsavedPrompt = ({ isUnsaved }: IUnsavedPromptProps) => {
-  useBeforeUnload(
-    useCallback(
-      (event: any) => {
-        if (isUnsaved) {
-          event.preventDefault();
-          event.returnValue = "";
-        }
-      },
-      [isUnsaved]
-    ),
-    { capture: true }
-  );
+  // useBeforeUnload(
+  //   useCallback(
+  //     (event: any) => {
+  //       if (isUnsaved) {
+  //         event.preventDefault();
+  //         event.returnValue = "";
+  //       }
+  //     },
+  //     [isUnsaved]
+  //   ),
+  //   { capture: true }
+  // );
 
   return <></>;
 };

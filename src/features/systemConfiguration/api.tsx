@@ -4,8 +4,8 @@ const getSystemInfo = () => {
   return api.get("/system-information/get-all.php");
 };
 
-const updateSystemConfigFile = (payload: object) => {
-  return api.post("", payload);
+const updateSystemConfigFile = (payload: any) => {
+  return api.post("/update/vbox-frimware-update.php", payload);
 };
 
 const SystemInfoApi = {

@@ -16,6 +16,14 @@ export const getAllConfigurations = (): Promise<AxiosResponse<any, any>> => {
   return axiosInstance.get("/configuration/get-all.php");
 };
 
+export const importConfiguration = (data: any): Promise<AxiosResponse<any, any>> => {
+  return axiosInstance.post("/configuration/import-configuration.php", data);
+};
+
+export const exportConfiguration = (id:any): Promise<AxiosResponse<any, any>> => {
+  return axiosInstance.get("/configuration/export-configuration.php"+id);
+};
+
 export const addConfiguration = (
   data: any
 ): Promise<AxiosResponse<any, any>> => {

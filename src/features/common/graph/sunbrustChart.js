@@ -19,7 +19,6 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
   }
 
   useEffect(() => {
-    console.log(data, elementId, document.getElementById(elementId).innerHTML);
     if (data?.graphData) {
       document.getElementById(`${elementId}${fullScreen ? "full": ""}`).innerHTML = "";
       let chart = Sunburst();
@@ -37,7 +36,6 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
         .radiusScaleExponent(1)
         .labelOrientation("auto")
         .onClick(() => {
-          console.log("ddd");
         })
         .color((d) => {
           return getColor(d.fill);

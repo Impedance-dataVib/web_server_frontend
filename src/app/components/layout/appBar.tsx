@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import {
   AppBar,
   Avatar,
@@ -13,23 +14,26 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  Menu,
   MenuItem,
   Toolbar,
   Typography,
   Link as MatLink,
   Theme,
+  Menu,
+  fabClasses,
 } from "@mui/material";
 
 import { Link, useLocation, matchPath } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { KeyboardArrowDown, NotificationsOutlined } from "@mui/icons-material";
 import { APP_NAV_MENU_ITEMS, INavMenuItem } from "../../../contants";
-
+import DownloadInfoApi from "src/features/downloads/api";
+import fileDownload from "js-file-download";
 const drawerWidth = 240;
 
 const DrawerAppBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
 
   const [navMenuItems, setNavMenuItems] =
     useState<INavMenuItem[]>(APP_NAV_MENU_ITEMS);
@@ -37,6 +41,19 @@ const DrawerAppBar = () => {
   const location = useLocation();
 
   const theme = useTheme();
+
+  const getFile = () => {
+    DownloadInfoApi.getDownloadFile()
+      .then((res) => {
+        fileDownload(res.data, "downloaded.zip");
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const togglePoppup = () => {
+    setNotificationOpen(!notificationOpen);
+  };
 
   const handleToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -82,7 +99,12 @@ const DrawerAppBar = () => {
       </Box>
 
       <Divider />
-      <Box sx={{ flex: 1, backgroundColor: (theme: Theme) => theme.palette.color37.main }}>
+      <Box
+        sx={{
+          flex: 1,
+          backgroundColor: (theme: Theme) => theme.palette.color37.main,
+        }}
+      >
         <List>
           {navMenuItems.map((item) => (
             <MatLink
@@ -234,7 +256,7 @@ const DrawerAppBar = () => {
               color="inherit"
               aria-label="open drawer"
               edge="start"
-              onClick={handleToggle}
+              onClick={togglePoppup}
               sx={{
                 mr: 2,
                 display: {
@@ -248,10 +270,29 @@ const DrawerAppBar = () => {
                 },
               }}
             >
-              <Badge badgeContent={4} color="error">
+              <Badge badgeContent={1} color="error">
                 <NotificationsOutlined />
               </Badge>
             </IconButton>
+
+            <Menu
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={notificationOpen}
+              onClose={() => setNotificationOpen(false)}
+            >
+              <MenuItem onClick={getFile}>
+                <Box sx={{ mr: "5px" }}>Your Download is Ready</Box>
+                <CloudDownloadIcon />
+              </MenuItem>
+            </Menu>
           </Box>
           {/* <Box sx={{ display: "flex", alignItems: "center" }}>
             <Avatar sx={{ width: "30px", height: "30px", mr: 1 }}></Avatar>

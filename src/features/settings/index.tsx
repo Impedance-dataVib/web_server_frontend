@@ -83,10 +83,6 @@ const SettingsPage = () => {
 
   const changeEventHandler = (key: string, val: any) => {
     setApiData((value) => {
-      console.log({
-        ...value,
-        [key]: val,
-      });
       return {
         ...value,
         [key]: val,
@@ -111,7 +107,6 @@ const SettingsPage = () => {
         });
       })
       .catch((error) => {
-        console.log(error);
         setIsLoading(false);
         enqueueSnackbar({
           message: "Error occurred while saving Settings",
@@ -171,7 +166,6 @@ const SettingsPage = () => {
                     <ToggleSwitch
                       value={apiData.display_date_utc}
                       onChange={(e: any) => {
-                        console.log(e.target.checked);
                         changeEventHandler(
                           "display_date_utc",
                           e.target.checked
