@@ -186,12 +186,20 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const getInitialFormData = () => {
     if (data?.from_data && customerName) {
       const { configuration_id, ...rest } = data?.from_data;
-      console.log(rest);
-      return {
-        ...rest,
-        customer_name: customerName,
-        module_type: data.module_type,
-      };
+      if (rest?.overWrite) {
+        return {
+          ...rest,
+          customer_name: customerName,
+          module_type: data.module_type,
+        };
+      } else {
+        return {
+          ...rest,
+          overWrite: [],
+          customer_name: customerName,
+          module_type: data.module_type,
+        };
+      }
     }
     return {
       customer_name: customerName,
@@ -236,12 +244,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       min_volt: "",
       recording_period: "",
       recording_length: "",
-      over_write: "",
-      over_writeType: "",
-      over_writeMin: "",
-      over_writeMiddle: "",
-      over_writeMedian: "",
-      over_writeMax: "",
+      overWrite: [],
       Filter_lowDecim: "",
       Filter_low: "",
       engine_useSmallEngineLogic: "",

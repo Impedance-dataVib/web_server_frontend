@@ -15,6 +15,7 @@ import {
   TurbineChannelInformationForm,
   turbineValidationSchema,
   TurbineAssetInformation,
+  TurbineAdvancedParameters,
 } from "./configuration-forms";
 import { useFormik } from "formik";
 import { deleteModule, saveModuleData } from "../../app/services";
@@ -65,6 +66,13 @@ const StepToComponentEngineModule = ({
           handleFormData={handleFormData}
           formContext={formContext}
         ></TurbineAssetInformation>
+      );
+    case "Advanced Parameters":
+      return (
+        <TurbineAdvancedParameters
+          handleFormData={handleFormData}
+          formContext={formContext}
+        ></TurbineAdvancedParameters>
       );
     default:
       return <div>Invalid Step</div>;
@@ -143,11 +151,20 @@ const TurbineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const getInitialFormData = () => {
     if (data?.from_data && customerName) {
       const { configuration_id, ...rest } = data?.from_data;
-      return {
-        ...rest,
-        customer_name: customerName,
-        module_type: data.module_type,
-      };
+      if (rest?.overWrite) {
+        return {
+          ...rest,
+          customer_name: customerName,
+          module_type: data.module_type,
+        };
+      } else {
+        return {
+          ...rest,
+          overWrite: [],
+          customer_name: customerName,
+          module_type: data.module_type,
+        };
+      }
     }
     return {
       customer_name: customerName,
@@ -172,6 +189,10 @@ const TurbineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       name: "",
       rated_rpm: "",
       type: "",
+      overWrite: [],
+      Filter_lowDecim: "",
+      Filter_low: "",
+      highPass: "",
     };
   };
   const moduleFormContext = useFormik({

@@ -1,4 +1,6 @@
 import {
+  Box,
+  Button,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -8,7 +10,9 @@ import {
   Switch,
   TextField,
 } from "@mui/material";
-
+import { FieldArray, FieldArrayRenderProps, FormikProvider } from "formik";
+import debounce from "lodash/debounce";
+import { useCallback } from "react";
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
@@ -82,6 +86,122 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           disabled={fieldProps?.userName === "admin" ? false : true}
         />
       );
+    case "array_overwrite":
+      return (
+        <FormikProvider value={formContext}>
+          <FieldArray name={fieldProps.label}>
+            {(formHelper: FieldArrayRenderProps) => {
+              return (
+                <Box>
+                  {formContext?.values?.[fieldProps.label].map(
+                    (item: any, index: number) => (
+                      <Box key={index}>
+                        <TextField
+                          name={`${fieldProps.label}[${index}].overwrite`}
+                          label={`overwrite`}
+                          onChange={formContext?.handleChange}
+                          value={item.overwrite}
+                          variant="outlined"
+                          sx={{
+                            fontSize: "16px",
+                            marginBottom: "20px",
+                            width: "182px",
+                            padding: "1px 1px",
+                          }}
+                          inputProps={{
+                            style: {
+                              padding: "11px 26px 13px 12px",
+                            },
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                        ></TextField>
+                        <TextField
+                          name={`${fieldProps.label}[${index}].overwriteMin`}
+                          label={`overwriteMin`}
+                          onChange={formContext?.handleChange}
+                          value={item.overwriteMin}
+                          variant="outlined"
+                          sx={{
+                            fontSize: "16px",
+                            marginBottom: "20px",
+                            width: "182px",
+                            padding: "1px 1px",
+                          }}
+                          inputProps={{
+                            style: {
+                              padding: "11px 26px 13px 12px",
+                            },
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                        ></TextField>
+                        <TextField
+                          name={`${fieldProps.label}[${index}].overwriteMiddle`}
+                          label={`overwriteMiddle`}
+                          onChange={formContext?.handleChange}
+                          value={item.overwriteMiddle}
+                          variant="outlined"
+                          sx={{
+                            fontSize: "16px",
+                            marginBottom: "20px",
+                            width: "182px",
+                            padding: "1px 1px",
+                          }}
+                          inputProps={{
+                            style: {
+                              padding: "11px 26px 13px 12px",
+                            },
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                        ></TextField>
+                        <TextField
+                          name={`${fieldProps.label}[${index}].overwriteMax`}
+                          label={`overwriteMax`}
+                          onChange={formContext?.handleChange}
+                          value={item.overwriteMax}
+                          variant="outlined"
+                          sx={{
+                            fontSize: "16px",
+                            marginBottom: "20px",
+                            width: "182px",
+                            padding: "1px 1px",
+                          }}
+                          inputProps={{
+                            style: {
+                              padding: "11px 26px 13px 12px",
+                            },
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                        ></TextField>
+                        <Button
+                          color="secondary"
+                          onClick={() => formHelper.remove(index)}
+                        >
+                          Remove
+                        </Button>
+                      </Box>
+                    )
+                  )}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() =>
+                      formHelper.push({
+                        overwrite: "",
+                        overwriteMin: "",
+                        overwriteMiddle: "",
+                        overwriteMax: "",
+                      })
+                    }
+                  >
+                    Add
+                  </Button>
+                </Box>
+              );
+            }}
+          </FieldArray>
+        </FormikProvider>
+      );
+
     default:
       return <div>No Valid Field Type</div>;
   }

@@ -15,6 +15,7 @@ import {
   BearingDiagnosticDetails,
   bearingValidationSchema,
   BearingAssetInformation,
+  BearningAdvancedParameters,
 } from "./configuration-forms";
 import { deleteModule, saveModuleData } from "../../app/services";
 import { useFormik } from "formik";
@@ -66,6 +67,13 @@ const StepToComponentEngineModule = ({
           formContext={formContext}
         ></BearingAssetInformation>
       );
+    case "Advanced Parameters":
+      return (
+        <BearningAdvancedParameters
+          handleFormData={handleFormData}
+          formContext={formContext}
+        ></BearningAdvancedParameters>
+      );
     default:
       return <div>Invalid Step</div>;
   }
@@ -85,11 +93,20 @@ const BearingTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const getInitialFormData = () => {
     if (data?.from_data && customerName) {
       const { configuration_id, ...rest } = data?.from_data;
-      return {
-        ...rest,
-        customer_name: customerName,
-        module_type: data.module_type,
-      };
+      if (rest?.overWrite) {
+        return {
+          ...rest,
+          customer_name: customerName,
+          module_type: data.module_type,
+        };
+      } else {
+        return {
+          ...rest,
+          overWrite: [],
+          customer_name: customerName,
+          module_type: data.module_type,
+        };
+      }
     }
     return {
       customer_name: customerName,
@@ -111,6 +128,10 @@ const BearingTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       recording_length: "",
       name: "",
       rated_rpm: "",
+      overWrite: [],
+      Filter_lowDecim: "",
+      Filter_low: "",
+      highPass: "",
     };
   };
   const moduleFormContext = useFormik({
