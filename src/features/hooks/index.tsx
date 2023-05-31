@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { getAllTrendsService, getModules } from "../../app/services";
-
-export const useGetAllTrends = (id: []) => {
+import { buildData } from "src/app/utils/helper";
+export const useGetAllTrends = (id: string) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<any>([]);
   const [isError, setIsError] = useState(false);
-  const promiseObject = id.map((id) => getAllTrendsService(id));
-  const getAllTrends = async () => {
+
+  const getAllTrends = async (id: string) => {
     try {
       setIsLoading(true);
-      const result = await Promise.all(promiseObject);
-      console.log(result);
-      const trendsData = result.map(({ data }) => data.trends);
-      setData(trendsData);
+      const result = await getAllTrendsService(id);
+
+      setData(buildData(result.data).trends);
       setIsLoading(false);
     } catch (e) {
       setIsError(true);
@@ -22,8 +21,8 @@ export const useGetAllTrends = (id: []) => {
   };
 
   useEffect(() => {
-    if (id.length > 0) {
-      getAllTrends();
+    if (id && id !== "") {
+      getAllTrends(id);
     }
   }, [id.length]);
   return { isLoading, data, isError, getAllTrends };
