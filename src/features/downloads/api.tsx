@@ -8,9 +8,14 @@ const postDownloadInfo = (payload: object) => {
   return api.post("/download/download-request.php", payload);
 };
 
+const getDownloadFile = () => {
+  return api.get("/download/file_download.php");
+};
+
 const DownloadInfoApi = {
   getModuleInfo,
   postDownloadInfo,
+  getDownloadFile,
 };
 
 export default DownloadInfoApi;

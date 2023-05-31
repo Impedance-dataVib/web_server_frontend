@@ -6,10 +6,12 @@ import CachedIcon from "@mui/icons-material/Cached";
 import { useEffect, useState } from "react";
 import SystemInfoApi from "./api";
 import InfoIcon from "@mui/icons-material/Info";
+import FileUploadComponent from "src/app/components/fileUpload";
+import { enqueueSnackbar } from "notistack";
 
 const SystemConfiguration = () => {
-  const [file1, setFile1] = useState<File>();
-  const [file2, setFile2] = useState<File>();
+  const [file1, setFile1] = useState<FileList | null>(null);
+  const [file2, setFile2] = useState<FileList | null>(null);
 
   const [isShown, setIsShown] = useState(false);
   const [apiData, setApiData] = useState({
@@ -54,7 +56,25 @@ const SystemConfiguration = () => {
   useEffect(() => {
     getSystemInfo();
   }, []);
-  console.log(file1, file2);
+  const handleUpdate = (e: any) => {
+    e.preventDefault();
+    console.log(file1, file2);
+    SystemInfoApi.updateSystemConfigFile({ file1, file2 })
+      .then((val) => {
+        enqueueSnackbar({
+          message: `You have Successfully updated the data`,
+          variant: "success",
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+
+        enqueueSnackbar({
+          message: error.response.data.Message,
+          variant: "error",
+        });
+      });
+  };
 
   return (
     <Box>
@@ -332,7 +352,11 @@ const SystemConfiguration = () => {
               pt: 2,
             }}
           >
-            <Button variant="contained" startIcon={<CachedIcon />}>
+            <Button
+              variant="contained"
+              startIcon={<CachedIcon />}
+              onClick={handleUpdate}
+            >
               Update
             </Button>
           </Box>

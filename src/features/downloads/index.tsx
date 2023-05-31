@@ -254,7 +254,7 @@ const DownloadPage = () => {
                         >
                           {selectReportType.map((val) => (
                             <FormControlLabel
-                              value={val.value}
+                              value={val?.value}
                               control={<Radio size="small" />}
                               label={val.label}
                             ></FormControlLabel>

@@ -46,14 +46,14 @@ export const selectReportType = [
   },
   {
     label: "SpreadSheet",
-    value: "SpreadSheet",
+    value: "spreadsheet",
   },
   {
     label: "Raw Data",
-    value: "rawData",
+    value: "raw",
   },
   {
     label: "Jason Test Report",
-    value: "jasonTestReport",
+    value: "json",
   },
 ];
