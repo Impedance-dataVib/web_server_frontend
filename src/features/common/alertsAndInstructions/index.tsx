@@ -71,7 +71,7 @@ const AlertsAndInstructions = ({ moduleData, isModalOpen = false }: any) => {
                       component={"span"}
                       variant={"body2"}
                       sx={{
-                        fontSize: "14px",
+                        fontSize: "12px",
                         fontWeight: 600,
                         color: "#4d4e4e",
                         letterSpacing: "0.36px",
