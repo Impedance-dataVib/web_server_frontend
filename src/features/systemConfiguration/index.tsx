@@ -59,7 +59,7 @@ const SystemConfiguration = () => {
   const handleUpdate = (e: any) => {
     e.preventDefault();
     console.log(file1, file2);
-    SystemInfoApi.updateSystemConfigFile({ file1, file2 })
+    SystemInfoApi.updateSystemConfigFile(file1, file2)
       .then((val) => {
         enqueueSnackbar({
           message: `You have Successfully updated the data`,
@@ -70,7 +70,7 @@ const SystemConfiguration = () => {
         console.log(error);
 
         enqueueSnackbar({
-          message: error.response.data.Message,
+          message: error.Message,
           variant: "error",
         });
       });

@@ -19,7 +19,7 @@ export default function fileUpload({ onChangeHandler }: FileUploadObject) {
         <Typography variant="body1">Drag and Drop your file here</Typography>
       </div>
       <input
-        accept="zip"
+        accept="zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed"
         multiple
         type="file"
         style={{ opacity: 0, width: "100%", height: "100%" }}

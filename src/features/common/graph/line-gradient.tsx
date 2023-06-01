@@ -22,7 +22,13 @@ ChartJS.register(
   Filler
 );
 
-export default function LineGradient({minValue, maxValue, avgValue, datapoints, labels}: any) {
+export default function LineGradient({
+  minValue,
+  maxValue,
+  avgValue,
+  datapoints,
+  labels,
+}: any) {
   let width: any, height: any, gradient: any;
   function getGradient(ctx: any, chartArea: any) {
     const chartWidth = chartArea.right - chartArea.left;
@@ -46,7 +52,7 @@ export default function LineGradient({minValue, maxValue, avgValue, datapoints, 
   }
 
   const DATA_COUNT = 12;
- 
+
   const data = {
     labels: labels,
     datasets: [
@@ -71,6 +77,7 @@ export default function LineGradient({minValue, maxValue, avgValue, datapoints, 
       },
     ],
   };
+
   const config = {
     responsive: true,
     maintainAspectRatio: false,
@@ -85,7 +92,7 @@ export default function LineGradient({minValue, maxValue, avgValue, datapoints, 
       plugins: {
         title: {
           display: true,
-        //   text: "Increase Fuel Consumption",
+          //   text: "Increase Fuel Consumption",
         },
       },
       interaction: {
@@ -94,7 +101,7 @@ export default function LineGradient({minValue, maxValue, avgValue, datapoints, 
       scales: {
         x: {
           display: true,
-          labelString: 'probability',
+          labelString: "probability",
           title: {
             display: true,
           },

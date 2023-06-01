@@ -30,10 +30,7 @@ const AlertsAndInstructions = ({ moduleData, isModalOpen = false }: any) => {
                 mb: 1,
               }}
             >
-              <Typography 
-                 component={'span'}
-                 variant={'body2'}
-              >
+              <Typography component={"span"} variant={"body2"}>
                 {instruction}
               </Typography>
             </Box>
@@ -43,7 +40,7 @@ const AlertsAndInstructions = ({ moduleData, isModalOpen = false }: any) => {
     );
   };
   return (
-    <Box >
+    <Box>
       <Grid
         container
         spacing={moduleData.isAlert ? 2 : 0}
@@ -71,10 +68,10 @@ const AlertsAndInstructions = ({ moduleData, isModalOpen = false }: any) => {
                   </Box>
                   <Box>
                     <Typography
-                      component={'span'}
-                      variant={'body2'}
+                      component={"span"}
+                      variant={"body2"}
                       sx={{
-                        fontSize: "18px",
+                        fontSize: "14px",
                         fontWeight: 600,
                         color: "#4d4e4e",
                         letterSpacing: "0.36px",
@@ -86,14 +83,15 @@ const AlertsAndInstructions = ({ moduleData, isModalOpen = false }: any) => {
                 </Box>
                 {val.instructions &&
                   val.instructions.map(
-                    (instruction: string, instructionIndex: any) =>
+                    (instruction: string, instructionIndex: any) => (
                       <Box key={`ins${instructionIndex}`}>
-                      {renderInstruction(
-                        instructionIndex,
-                        instruction,
-                        isModalOpen
-                      )}
-                    </Box>
+                        {renderInstruction(
+                          instructionIndex,
+                          instruction,
+                          isModalOpen
+                        )}
+                      </Box>
+                    )
                     //   {isModalOpen ?
                     //     (renderInstruction(instructionIndex, instruction ))
                     //   : ( (instructionIndex > 2) ? renderInstruction(instructionIndex, instruction ) : null)
@@ -147,9 +145,9 @@ const AlertsAndInstructions = ({ moduleData, isModalOpen = false }: any) => {
                                   mb: 1,
                                 }}
                               >
-                                <Typography 
-                                  component={'span'}
-                                  variant={'body2'}
+                                <Typography
+                                  component={"span"}
+                                  variant={"body2"}
                                 >
                                   {instruction}
                                 </Typography>

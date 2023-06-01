@@ -538,10 +538,14 @@ function buildTrendChart(data, name) {
 }
 
 function checkFillColor(value) {
-  if (value === 100) {
-    return "success";
+  if (value <= 30) {
+    return "error";
   }
-  return "error";
+  if (value > 30 && value <= 60) {
+    return "warning";
+  }
+
+  return "success";
 }
 
 function buildCompressionData(first, second, compressionData, graphLabel) {
@@ -580,7 +584,7 @@ function buildCompressionData(first, second, compressionData, graphLabel) {
     graphData: [
       {
         name: "",
-        fill: "white",
+        fill: checkFillColor(compressionData["valueInHealth"]),
         showValue: compressionData["valueInHealth"],
         children: children,
       },

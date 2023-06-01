@@ -55,14 +55,13 @@ const CardWidget = ({
   );
 
   useEffect(() => {
-    if(setIsLatestReportOpen) {
-      setIsLatestReportOpen(!collapsed)
+    if (setIsLatestReportOpen) {
+      setIsLatestReportOpen(!collapsed);
     }
-    if(setIsLiveStatusOpen) {
-      setIsLiveStatusOpen(!collapsed)
+    if (setIsLiveStatusOpen) {
+      setIsLiveStatusOpen(!collapsed);
     }
-    
-  }, [collapsed])
+  }, [collapsed]);
 
   return (
     <Paper
@@ -97,7 +96,7 @@ const CardWidget = ({
                 noWrap
                 title={headerLabel}
                 sx={{
-                  fontSize: "20px",
+                  fontSize: "12px",
                   color: "#4d4e4e",
                   fontWeight: 600,
                   letterSpacing: "0.08px",
@@ -147,7 +146,7 @@ const CardWidget = ({
               </Box>
               <Box component="section" sx={{ mr: "4px", cursor: "pointer" }}>
                 <OpenInFull
-                  sx={{ fontSize: "16px" }}
+                  sx={{ fontSize: "14px" }}
                   onClick={() => setOpenModal(true)}
                 />
               </Box>
@@ -159,14 +158,14 @@ const CardWidget = ({
               <>
                 <CropFreeOutlined
                   onClick={() => setCollapsed((prev) => !prev)}
-                  sx={{ fontSize: "16px", cursor: "pointer" }}
+                  sx={{ fontSize: "14px", cursor: "pointer" }}
                 />
               </>
             ) : (
               <>
                 <Remove
                   onClick={() => setCollapsed((prev) => !prev)}
-                  sx={{ fontSize: "16px", cursor: "pointer" }}
+                  sx={{ fontSize: "14px", cursor: "pointer" }}
                 />
               </>
             )}

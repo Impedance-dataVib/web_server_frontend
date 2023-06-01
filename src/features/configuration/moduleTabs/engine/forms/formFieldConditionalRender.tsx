@@ -15,7 +15,6 @@ import debounce from "lodash/debounce";
 import { useCallback } from "react";
 
 const MultipleFields = ({ fieldProps, formContext }: any) => {
-  
   return (
     <FormikProvider value={formContext}>
       <FieldArray name={fieldProps.label}>
