@@ -66,7 +66,7 @@ const AccordionBase = ({
       >
         <Typography>{title}</Typography>
       </AccordionSummary>
-      <AccordionDetails>{children}</AccordionDetails>
+      <AccordionDetails sx={{ width: "100%" }}>{children}</AccordionDetails>
     </Accordion>
   );
 };

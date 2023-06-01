@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
+  Button,
   FormControl,
   Grid,
   MenuItem,
@@ -12,12 +13,18 @@ import CircleIcon from "@mui/icons-material/Circle";
 import { BarChart } from "src/features/common/graph/bar-chart";
 import { useGetAllTrends, useGetAllModules } from "../hooks";
 import FullScreenLoader from "../../app/components/fullscreen-loader";
-
+import DatePickerModal from "./modals/DatePickerModal";
 const TrendsPage = () => {
   const { data: allModules } = useGetAllModules();
 
   const [moduleId, setModuleId] = useState<string>("");
   const { data, isLoading, getAllTrends, isError } = useGetAllTrends(moduleId);
+  const [toggleDatePicker, setToggleDatePicker] = useState(false);
+  const [dateRangeValues, setDateRangeValues] = useState<Object>({
+    startDate: "",
+    endDate: "",
+    key: "selection",
+  });
   const assetHandler = (e: any) => {
     setModuleId(e.target.value);
   };
@@ -53,6 +60,16 @@ const TrendsPage = () => {
             marginRight: 5,
           }}
         >
+          <Box>
+            <Typography></Typography>
+            <Button
+              variant="text"
+              color="primary"
+              onClick={() => setToggleDatePicker(true)}
+            >
+              Select Date Range
+            </Button>
+          </Box>
           <FormControl sx={{ py: 0, width: "110px" }}>
             <Select
               value={moduleId}
@@ -163,6 +180,12 @@ const TrendsPage = () => {
           ))}
         </Grid>
       </Box>
+      <DatePickerModal
+        open={toggleDatePicker}
+        onClose={() => setToggleDatePicker(false)}
+        dateRangeValues={dateRangeValues}
+        setDateRangeValues={setDateRangeValues}
+      ></DatePickerModal>
     </Box>
   );
 };

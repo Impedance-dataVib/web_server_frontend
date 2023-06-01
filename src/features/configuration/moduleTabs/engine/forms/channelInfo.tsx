@@ -237,7 +237,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
 
   return (
     <>
-      <Grid container spacing={1}>
+      <Grid container spacing={1} width={"100%"}>
         <Grid item>
           <Typography
             component={"label"}

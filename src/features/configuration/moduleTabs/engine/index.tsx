@@ -288,7 +288,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       </Stepper>
       <Grid container sx={{ width: "auto" }}>
         {stepperSteps?.map((item: string, index: number) => (
-          <Grid key={item} item>
+          <Grid key={item} item sx={{ width: "100%" }}>
             <AccordionBase
               expanded={expanded}
               handleChange={handleAccordionChange(index)}

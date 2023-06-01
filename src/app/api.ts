@@ -25,7 +25,6 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalConfig = error.config;
     if (error.response) {
-      console.log(originalConfig, error.response);
       if (
         error.response.status === 401 &&
         !originalConfig._retry &&
@@ -40,9 +39,11 @@ axiosInstance.interceptors.response.use(
             "/auth/refreshToken.php",
             data
           );
-          console.log("refreshToken", refreshToken);
 
-          sessionStorage.setItem(AUTH_TOKEN_KEY, refreshToken?.data.token || "");
+          sessionStorage.setItem(
+            AUTH_TOKEN_KEY,
+            refreshToken?.data.token || ""
+          );
           return axiosInstance(originalConfig);
         } catch (error) {
           console.log("error", error, originalConfig);
@@ -50,11 +51,11 @@ axiosInstance.interceptors.response.use(
         // Do something, call refreshToken() request for example;
         // return a request
         return axiosInstance(originalConfig);
-      } else if(
+      } else if (
         error.response.status === 401 &&
         originalConfig.url === "/auth/refreshToken.php"
-      ){
-        window.location.replace("/logout")
+      ) {
+        window.location.replace("/logout");
       }
 
       // Do something

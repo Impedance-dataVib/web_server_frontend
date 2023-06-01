@@ -15,7 +15,7 @@ import {
   TorqueDiagnosticDetails,
   torqueValidationSchema,
   TorqueAssetInformation,
-  TorqueAdvancedParameters
+  TorqueAdvancedParameters,
 } from "./configuration-forms";
 import { useFormik } from "formik";
 import { deleteModule, saveModuleData } from "../../app/services";
@@ -73,7 +73,7 @@ const StepToComponentEngineModule = ({
           formContext={formContext}
         ></TorqueAssetInformation>
       );
-      case "Advanced Parameters":
+    case "Advanced Parameters":
       return (
         <TorqueAdvancedParameters
           handleFormData={handleFormData}
@@ -158,7 +158,7 @@ const TorqueTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       asset_name: "",
       equipment_name: "",
       module_type: data.module_type,
-     
+
       de_channel_sensorx: "",
       de_channel_channel_type: "",
       de_channel__teeth: "",
@@ -246,7 +246,7 @@ const TorqueTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
 
   useEffect(() => {
     setIsUnsaved(moduleFormContext.dirty);
-  }, [moduleFormContext.dirty])
+  }, [moduleFormContext.dirty]);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -254,7 +254,7 @@ const TorqueTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
         activeStep={activeStep}
         alternativeLabel
         connector={<CustomConnector></CustomConnector>}
-        sx={{ width: "70%", marginBottom: "66px", marginTop: "40px" }}
+        sx={{ width: "auto", mb: 3, mt: 2 }}
       >
         {stepperSteps?.map((label: string) => (
           <Step key={label}>
@@ -262,9 +262,9 @@ const TorqueTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
           </Step>
         ))}
       </Stepper>
-      <Grid container sx={{ width: "70%" }}>
+      <Grid container sx={{ width: "auto" }}>
         {stepperSteps?.map((item: string, index: number) => (
-          <Grid key={item} item>
+          <Grid key={item} item sx={{ width: "100%" }}>
             <AccordionBase
               expanded={expanded}
               handleChange={handleAccordionChange(index)}
@@ -280,7 +280,7 @@ const TorqueTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
           </Grid>
         ))}
       </Grid>
-      <Box sx={{ marginTop: "48px", width: "70%" }}>
+      <Box sx={{ mt: 2 }}>
         <Stack
           spacing={1}
           direction="row"

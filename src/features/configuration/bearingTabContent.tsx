@@ -237,12 +237,12 @@ const BearingTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   }, [moduleFormContext.dirty]);
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "auto" }}>
       <Stepper
         activeStep={activeStep}
         alternativeLabel
         connector={<CustomConnector></CustomConnector>}
-        sx={{ width: "70%", marginBottom: "66px", marginTop: "40px" }}
+        sx={{ width: "auto", mb: 3, mt: 2 }}
       >
         {stepperSteps?.map((label: string) => (
           <Step key={label}>
@@ -250,9 +250,9 @@ const BearingTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
           </Step>
         ))}
       </Stepper>
-      <Grid container sx={{ width: "70%" }}>
+      <Grid container sx={{ width: "auto" }}>
         {stepperSteps?.map((item: string, index: number) => (
-          <Grid key={item} item>
+          <Grid key={item} item sx={{ width: "100%" }}>
             <AccordionBase
               expanded={expanded}
               handleChange={handleAccordionChange(index)}
@@ -268,7 +268,7 @@ const BearingTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
           </Grid>
         ))}
       </Grid>
-      <Box sx={{ marginTop: "48px", width: "70%" }}>
+      <Box sx={{ mt: 2 }}>
         <Stack
           spacing={1}
           direction="row"
