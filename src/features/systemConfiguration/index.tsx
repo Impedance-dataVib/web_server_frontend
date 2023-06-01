@@ -58,7 +58,6 @@ const SystemConfiguration = () => {
   }, []);
   const handleUpdate = (e: any) => {
     e.preventDefault();
-    console.log(file1, file2);
     SystemInfoApi.updateSystemConfigFile(file2)
       .then((val) => {
         enqueueSnackbar({
@@ -67,7 +66,6 @@ const SystemConfiguration = () => {
         });
       })
       .catch((error) => {
-        console.log(error);
 
         enqueueSnackbar({
           message: error.Message,

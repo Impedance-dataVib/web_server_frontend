@@ -28,7 +28,6 @@ const DateRangePickerModal = memo(
     dateRangeValues,
     setDateRangeValues,
   }: DateRangePickerModalProps) => {
-    console.log("child component", dateRangeValues);
     return (
       <>
         <Dialog open={open} onClose={onClose}>

@@ -89,7 +89,6 @@ const ConfigurationTable = ({
     setIsLoading(true);
     try {
     const res:any = await exportConfiguration(id);
-    console.log(res)
     setIsLoading(false);
   } catch (e) {
     enqueueSnackbar({

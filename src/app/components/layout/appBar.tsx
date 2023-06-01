@@ -46,7 +46,6 @@ const DrawerAppBar = () => {
     DownloadInfoApi.getDownloadFile()
       .then((res) => {
         fileDownload(res.data, "downloaded.zip");
-        console.log(res);
       })
       .catch((err) => console.log(err));
   };

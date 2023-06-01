@@ -49,17 +49,14 @@ const ModuleMonitoringPage = ({ moduleData, classes, trendsData, processName, fo
   );
 
   useEffect(() => {
-    console.log( "liveStatus", lastMessage);
     if (lastMessage !== undefined) {
       const data = lastMessage?.data;
       if (data) {
         let parsedData = (data);
-        console.log(parsedData);
         if(parsedData?.Status === "Failed") {
           // setLiveStatus(parsedData?.Message)
         } else {
           parsedData = buildLiveStatusData(parsedData)
-          console.log(parsedData);
           setLiveStatus(parsedData)
           // setWebSocketsData(parsedData);
         }

@@ -80,7 +80,7 @@ const ConfigurationPageContent = () => {
       console.log(ex?.response, ex?.response?.data?.Message, ex, ex?.message);
       e.target.value =null;
     }
-    // console.log(e.target.files, res)
+   
   }
 
   useEffect(() => {

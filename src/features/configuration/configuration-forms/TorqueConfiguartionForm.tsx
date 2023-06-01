@@ -303,7 +303,6 @@ export const TorqueChannelInformationForm = ({
         await formContext.validateForm();
       }, 100);
     } else {
-      console.log("trigerred");
       if (formContext.dirty && !deChannelisPending) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
