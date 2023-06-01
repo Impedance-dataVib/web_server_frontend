@@ -8,7 +8,7 @@ const GlobalIndicatorChart = ({ globalIndicator, fullScreen }: any) => {
     setStyling(
       fullScreen
         ? { display: "flex", flexDirection: "row" }
-        : { overflow: "scroll", display: "flex", flexDirection: "column" }
+        : { overflow: "auto", display: "flex", flexDirection: "column" }
     );
   }, [fullScreen]);
   return (

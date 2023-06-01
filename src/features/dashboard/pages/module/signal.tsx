@@ -64,7 +64,7 @@ const Signal = ({ signals, formData, moduleType }: any) => {
         width: "100%",
         display: "flex",
         flexDirection: isLoading ? "column" :  "row",
-        overflowX: "scroll",
+        overflowX: "auto",
         height: "200px",
       }}
     >

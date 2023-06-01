@@ -45,7 +45,7 @@ const AlertsAndInstructions = ({ moduleData, isModalOpen = false }: any) => {
         container
         spacing={moduleData.isAlert ? 2 : 0}
         maxHeight="240px"
-        overflow={"scroll"}
+        overflow={"auto"}
       >
         {moduleData.isAlert &&
           moduleData?.alertData &&
