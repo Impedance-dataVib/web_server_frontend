@@ -2,38 +2,27 @@ import { Box, Typography } from "@mui/material";
 import FileUpload from "../../app/components/file-upload";
 export default function UploadFile({ setFile1, setFile2 }: any) {
   const handleFile1 = (e: any) => {
-    const fileList = e.target.files[0];
-    if (!fileList) {
+    const file1 = e.target.files[0];
+    console.log(file1);
+
+    if (!file1) {
       return;
     }
     const data = new FormData();
-    data.append("file1", fileList);
-    // const files = fileList ? [...fileList] : [];
-    // console.log(files);
-
-    // const formdata1 = new FormData();
-    // files.map((file: any, i: any) => {
-    //   formdata1.append(`file1-${i}`, file);
-    // });
+    data.append("file", file1);
     setFile1(data);
     console.log(data);
   };
   const handleFile2 = (e: any) => {
-    const fileList = e.target.files[0];
+    const file2 = e.target.files[0];
+    console.log(file2);
 
-    if (!fileList) {
+    if (!file2) {
       return;
     }
 
     const formdata = new FormData();
-    formdata.append("file2", fileList);
-    // const files = fileList ? [...fileList] : [];
-    // console.log(files);
-
-    // const formdata2 = new FormData();
-    // files.map((file: any, i: any) => {
-    //   formdata2.append(`file2-${i}`, file);
-    // });
+    formdata.append("file", file2);
     setFile2(formdata);
     console.log(formdata);
   };

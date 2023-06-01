@@ -10,8 +10,8 @@ import FileUploadComponent from "src/app/components/fileUpload";
 import { enqueueSnackbar } from "notistack";
 
 const SystemConfiguration = () => {
-  const [file1, setFile1] = useState<FileList | null>(null);
-  const [file2, setFile2] = useState<FileList | null>(null);
+  const [file1, setFile1] = useState<File | null>(null);
+  const [file2, setFile2] = useState<File | null>(null);
 
   const [isShown, setIsShown] = useState(false);
   const [apiData, setApiData] = useState({
@@ -59,7 +59,7 @@ const SystemConfiguration = () => {
   const handleUpdate = (e: any) => {
     e.preventDefault();
     console.log(file1, file2);
-    SystemInfoApi.updateSystemConfigFile(file1, file2)
+    SystemInfoApi.updateSystemConfigFile(file2)
       .then((val) => {
         enqueueSnackbar({
           message: `You have Successfully updated the data`,
