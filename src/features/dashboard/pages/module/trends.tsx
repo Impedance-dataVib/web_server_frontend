@@ -3,12 +3,12 @@ import LineGradient from "src/features/common/graph/line-gradient";
 import CircleIcon from "@mui/icons-material/Circle";
 import { BarChart } from "src/features/common/graph/bar-chart";
 
-export default function Trends({ trends }: any) {
+export default function Trends({ trends,fullScreen }: any) {
   return (
     <Grid container spacing={2} sx={{ overflow: 'scroll' }}>
       {trends &&
         trends.map((val: any, index: any) => (
-          <Grid item lg={4} md={6} sm={12} key={`trends${index}`} sx={{display: 'flex', flexDirection: 'column'}}>
+          <Grid item lg={fullScreen ? 6: 4} md={6} sm={12} key={`trends${index}`} sx={{display: 'flex', flexDirection: 'column'}}>
             <Typography variant="body1" component={"span"} textAlign={"center"}>
               {val?.trendsName}
             </Typography>

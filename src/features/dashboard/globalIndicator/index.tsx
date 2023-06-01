@@ -23,6 +23,7 @@ const GlobalIndicatorChart = ({ globalIndicator, fullScreen }: any) => {
             key={`globalIndicator${index}`}
             item
             sx={{ display: "flex", flexDirection: "column" }}
+            lg={fullScreen ? 6: 4}
           >
             <Typography
               variant="body1"

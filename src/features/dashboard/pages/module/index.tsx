@@ -159,11 +159,11 @@ const ModuleMonitoringPage = ({ moduleData, classes, trendsData, processName, fo
                   </Tabs>
                 </>
               }
-              headerLabel={""}
+              headerLabel={activeModule === 0 ? "Trends" : "Cylinder Specific Indicator"}
               headerIcon={<></>}
               content={(activeModule === 0 ? <Trends trends={trendsData?.trends} />: <CylinderIndicator cylinderSpecificIndicators={trendsData?.cylinder_specific_indicators} />)}
               initiallyCollapsed={false}
-              fullScreenContent={(activeModule === 0 ? <Trends trends={trendsData?.trends} />: <CylinderIndicator cylinderSpecificIndicators={trendsData?.cylinder_specific_indicators} fullScreen={true}/>)}
+              fullScreenContent={(activeModule === 0 ? <Trends trends={trendsData?.trends} fullScreen={true}/>: <CylinderIndicator cylinderSpecificIndicators={trendsData?.cylinder_specific_indicators} fullScreen={true}/>)}
               
             />
           </Grid>

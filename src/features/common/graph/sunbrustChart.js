@@ -10,7 +10,7 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
       case "success":
         return "#02B271";
       case "error":
-        return "#E21A00";
+        return "#fe8474";
       case "warning": 
         return "#E18442"
       default:
