@@ -18,7 +18,7 @@ import TabPanel from "src/app/components/tab-panel";
 import appContext from "src/app/context";
 import * as dateFns from "date-fns";
 import { webSocketData } from "./schema";
-import { buildData, buildSoketData } from "src/app/utils/helper";
+import { buildData, buildSoketData, isEmptyObject } from "src/app/utils/helper";
 // import { webSocketData } from "./schema";
 
 const useStyles = makeStyles()((theme) => {
@@ -63,7 +63,7 @@ function tabProps(index: number) {
   };
 }
 
-const TabModuleRender = ({ type, moduleData, classes, trendsData }: any) => {
+const TabModuleRender = ({ type, moduleData, classes, trendsData, processName, formData, moduleType }: any) => {
   const { t } = useTranslation();
 
   switch (type) {
@@ -74,11 +74,14 @@ const TabModuleRender = ({ type, moduleData, classes, trendsData }: any) => {
     case "Bearing":
       return (
         <Box>
-          <ModuleMonitoringPage
+          {isEmptyObject(moduleData) && <ModuleMonitoringPage
             moduleData={moduleData}
             classes={classes}
             trendsData={trendsData}
-          />
+            processName={processName}
+            formData={formData}
+            moduleType={moduleType}
+          />}
         </Box>
       );
     default:
@@ -95,6 +98,7 @@ const TabModuleRender = ({ type, moduleData, classes, trendsData }: any) => {
 const DashboardPage = () => {
   const [moduleTabs, setModuleTabs] = useState<any[]>([]);
   const [webSocketsData, setWebSocketsData] = useState({});
+  const [isDataAvailable, setIsDataAvailable] = useState<any>(undefined) 
   const [trendsData, setTrendsData] = useState({});
   const [activeModule, setActiveModule] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -115,17 +119,22 @@ const DashboardPage = () => {
       onMessage: () => {
         if (sendMessage) sendMessage(moduleTabs[activeModule].process_name);
       },
+      onError: (e) => {
+        setIsDataAvailable('Something went wrong!. Please try again.')
+        setIsLoading(false);
+      }
     }
   );
 
   useEffect(() => {
-    console.log(moduleTabs, activeModule, "trends");
     if (moduleTabs.length > 0) {
       if (moduleTabs[activeModule].process_name) {
+        setIsLoading(true)
+        setWebSocketsData({})
+        setTrendsData({});
         sendMessage(moduleTabs[activeModule].process_name);
         DashboardApi.getTrendsData(moduleTabs[activeModule].id).then((data) => {
-          const parsedData = buildData(data);
-          console.log(parsedData);
+          const parsedData = buildData(data)
           setTrendsData(parsedData);
         });
       } else {
@@ -135,18 +144,19 @@ const DashboardPage = () => {
   }, [moduleTabs, activeModule]);
 
   useEffect(() => {
-    console.log(lastMessage, "lastMessage");
     if (lastMessage !== undefined) {
       const data = lastMessage?.data;
       if (data) {
         let parsedData = JSON.parse(data);
-        console.log(moduleTabs[activeModule]);
-        parsedData = buildSoketData(
-          parsedData,
-          moduleTabs[activeModule].module_type
-        );
-        // console.log("lastMessage", parsedData);
-        setWebSocketsData(parsedData);
+        
+        if(parsedData?.Status === "Failed") {
+          setIsDataAvailable(parsedData?.Message)
+          setWebSocketsData({})
+        } else {
+          parsedData = buildSoketData(parsedData, moduleTabs[activeModule].module_type, moduleTabs[activeModule].from_data)
+          setIsDataAvailable(undefined)
+          setWebSocketsData(parsedData);
+        }
         setIsLoading(false);
       }
     }
@@ -289,12 +299,33 @@ const DashboardPage = () => {
           <TabModuleRender
             moduleId={item.id}
             type={item.module_type}
+            processName={item.process_name}
+            formData={item.from_data}
             moduleData={webSocketsData}
             classes={classes}
             trendsData={trendsData}
+            moduleType={item.module_type}
           />
         </TabPanel>
       ))}
+      {isDataAvailable && (
+        <Box sx={{ my: 1 }}>
+          <Alert
+            severity="error"
+            onClose={() => {
+              clearInterval(intervalHandle.current);
+              setShowLicenseExpiryMsg(false);
+            }}
+          >
+            <AlertTitle>
+              {isDataAvailable}
+            </AlertTitle>
+            <Typography variant="caption" component={"span"}>
+              {isDataAvailable}
+            </Typography>
+          </Alert>
+        </Box>
+      )}
     </Box>
   );
 };

@@ -1,8 +1,10 @@
-export function buildSoketData(response, modelType) {
+export const isEmptyObject = (obj) => Object.keys(obj).length > 0 
+
+export function buildSoketData(response, modelType, formData) {
   const firstKey = Object.keys(response)[0];
-
+  const parserFormData = JSON.parse(formData);
+  const maxRPMThrshhold = parseInt(parserFormData.rated_rpm);
   const data = response[firstKey];
-
   let globalIndicator = [];
 
   let isAlert = true;
@@ -12,7 +14,7 @@ export function buildSoketData(response, modelType) {
       buildIndicatorData("Combustion Condition", data["EngineEfficiency"])
     );
 
-    globalIndicator.push(buildRpmData("RPM", data["ChannelSpeed"]));
+    globalIndicator.push(buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold));
 
     globalIndicator.push(
       buildIndicatorData("Engine Health", data["MechanicalHealth"])
@@ -52,7 +54,7 @@ export function buildSoketData(response, modelType) {
       buildIndicatorData("Coupling", data["MechanicalHealth"])
     );
 
-    globalIndicator.push(buildRpmData("RPM", data["ChannelSpeed"]));
+    globalIndicator.push(buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold));
 
     globalIndicator.push(
       buildIndicatorData("Coupling", data["MechanicalHealth"])
@@ -74,7 +76,7 @@ export function buildSoketData(response, modelType) {
       buildIndicatorData("Bearing", data["EngineEfficiency"])
     );
 
-    globalIndicator.push(buildRpmData("RPM", data["ChannelSpeed"]));
+    globalIndicator.push(buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold));
 
     globalIndicator.push(
       buildIndicatorData("Friction", data["MechanicalHealth"])
@@ -139,9 +141,9 @@ export function buildSoketData(response, modelType) {
     },
 
     signals: {
-      crankShaft: 1170,
+      // crankShaft: 1170,
 
-      tdc: 1170,
+      // tdc: 1170,
     },
   };
 }
@@ -166,22 +168,15 @@ function buildIndicatorData(indicator_title, data) {
   };
 }
 
-function buildRpmData(indicator_title, data) {
+function buildRpmData(indicator_title, data, maxValue) {
   return {
     indicatorName: indicator_title,
-
     indicatorMin: 0,
-
-    indicatorMax: 100,
-
+    indicatorMax: maxValue || parseInt(data)*2,
     indicatorValue: data,
-
-    isPercentage: true,
-
+    isPercentage: false,
     indicatorUnit: "Alert",
-
-    isGradientColor: true,
-
+    isGradientColor: false,
     indicatorType: "error",
   };
 }
@@ -592,4 +587,80 @@ function buildCompressionData(first, second, compressionData, graphLabel) {
     ],
   };
   return compression;
+}
+
+export function buildLiveStatusData(data) {
+  let currentStep = 1;
+  if (data.includes("RECORDING")) {
+    currentStep = 2;
+  } else if (data.includes("(300")) {
+    currentStep = 3;
+  } else if (data.includes("(400")) {
+    currentStep = 4;
+  }
+  return {
+    currentStep: currentStep,
+    currentMode: "Auto",
+    stepProgress: 25,
+    currentMessage: "Initiate Manual Measurement",
+  };
+}
+
+export function buildSignalData(data) {
+
+  let returnArray = [];
+  for (let item of data) {
+      const firstKey = Object.keys(item)[0];
+      const itemData = item[firstKey];
+
+      if (!itemData.hasOwnProperty('Status')) {
+          const itemDataFirstKey = Object.keys(itemData)[0];
+          const channelData = itemData[itemDataFirstKey];
+          returnArray.push({
+              title: firstKey,
+              value: channelData['ChannelSpeed']
+          })
+      }
+  }
+  return returnArray;
+}
+
+
+export function getCommaSepratedChannel(data, type) {
+  data = JSON.parse(data);
+  if (type === 'Engine') {
+      let channel = buildChannelName(data['Crankshaft_SENSORx']);
+      if (data['CamShaft_SENSORx'] !== 'No Channel') {
+          return (channel + ',' + buildChannelName(data['CamShaft_SENSORx']));
+      }
+      if (data['TDC_SENSORx'] !== 'No Channel') {
+          return (channel + ',' + buildChannelName(data['TDC_SENSORx']));
+      }
+      if (data['Peak_Pressure_SENSORx'] !== 'No Channel') {
+          return (channel + ',' + buildChannelName(data['Peak_Pressure_SENSORx']));
+      }
+      return channel;
+  }
+  if (type === 'Torque') {
+      let channel = buildChannelName(data['de_channel_sensorx']);
+      if (data['nde_channel_sensorx'] !== 'No Channel') {
+          channel = (channel + ',' + buildChannelName(data['nde_channel_sensorx']));
+      }
+      return channel;
+  }
+  if (type === 'Turbine') {
+      return buildChannelName(data['turbine_crankshaft_sensorx']);
+  }
+  if (type === 'Motor') {
+      return buildChannelName(data['motor_crankshaft_sensorx']);
+  }
+
+  if (type === 'Bearing') {
+      return buildChannelName(data['bearing_crankshaft_sensorx']);
+  }
+  
+}
+
+function buildChannelName(channel) {
+  return "CHANNEL" + channel.substr(channel.length - 1);
 }

@@ -1,8 +1,6 @@
 import axios from "axios";
 import { AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY } from "./auth";
 
-const refreshToken = () => {};
-
 const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 });

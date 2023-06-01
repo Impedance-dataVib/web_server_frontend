@@ -20,7 +20,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export interface CardWidgetProps {
   headerLabel: string;
@@ -29,6 +29,8 @@ export interface CardWidgetProps {
   subHeadingRight?: React.ReactNode;
   footerContent?: React.ReactNode;
   initiallyCollapsed?: boolean;
+  setIsLatestReportOpen?: Function;
+  setIsLiveStatusOpen?: Function;
   fullScreenContent?: React.ReactNode;
   headerContent?: React.ReactNode;
 }
@@ -40,6 +42,8 @@ const CardWidget = ({
   content,
   subHeadingRight,
   footerContent,
+  setIsLatestReportOpen,
+  setIsLiveStatusOpen,
   initiallyCollapsed,
   fullScreenContent,
 }: CardWidgetProps) => {
@@ -49,6 +53,16 @@ const CardWidget = ({
   const isBelow1800Pixel = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down(1800)
   );
+
+  useEffect(() => {
+    if(setIsLatestReportOpen) {
+      setIsLatestReportOpen(!collapsed)
+    }
+    if(setIsLiveStatusOpen) {
+      setIsLiveStatusOpen(!collapsed)
+    }
+    
+  }, [collapsed])
 
   return (
     <Paper
@@ -61,45 +75,52 @@ const CardWidget = ({
       }}
     >
       <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
-      {!headerContent && <Box>
-          <Box sx={{ display: "flex", alignItems: 'center' }}>
-            {headerIcon && (
-              <Box
-                sx={{ mr: 1, color: "#4d4e4e", height: "20px", width: "18px" }}
-              >
-                {headerIcon}
-              </Box>
-            )}
-
-            <Typography
-              variant="body1" 
-              component={"span"}
-              noWrap
-              title={headerLabel}
-              sx={{
-                fontSize: "20px",
-                color: "#4d4e4e",
-                fontWeight: 600,
-                letterSpacing: "0.08px",
-                maxWidth: "350px",
-                cursor: "pointer"
-                // "&:hover": { overflow: 'visible', 
-                // whiteSpace: 'normal' } 
-              }}
-            >
-              {headerLabel}
-            </Typography>
-          </Box>
-          {isBelow1800Pixel && (
-            <Box>
-              {subHeadingRight && (
-                <Box sx={{ mr: isBelow1800Pixel ? 0 : 1, ml: 1 }}>
-                  {subHeadingRight}
+        {!headerContent && (
+          <Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              {headerIcon && (
+                <Box
+                  sx={{
+                    mr: 1,
+                    color: "#4d4e4e",
+                    height: "20px",
+                    width: "18px",
+                  }}
+                >
+                  {headerIcon}
                 </Box>
               )}
+
+              <Typography
+                variant="body1"
+                component={"span"}
+                noWrap
+                title={headerLabel}
+                sx={{
+                  fontSize: "20px",
+                  color: "#4d4e4e",
+                  fontWeight: 600,
+                  letterSpacing: "0.08px",
+                  maxWidth: "350px",
+                  cursor: "pointer",
+                  // "&:hover": { overflow: 'visible',
+                  // whiteSpace: 'normal' }
+                }}
+              >
+                {headerLabel}
+              </Typography>
             </Box>
-          )}
-        </Box>}
+            {isBelow1800Pixel && (
+              <Box>
+                {subHeadingRight && (
+                  <Box sx={{ mr: isBelow1800Pixel ? 0 : 1, ml: 1 }}>
+                    {subHeadingRight}
+                  </Box>
+                )}
+              </Box>
+            )}
+          </Box>
+        )}
         {headerContent && headerContent}
         <Box
           component="section"
@@ -157,7 +178,12 @@ const CardWidget = ({
           sx={{ transition: "all 0.3s ease-out", opacity: collapsed ? 0 : 1 }}
         >
           <Divider
-            sx={{ mt: headerContent ? 0 : 1, mb: 1, height: "0px", border: "1px solid #E8E8ED" }}
+            sx={{
+              mt: headerContent ? 0 : 1,
+              mb: 1,
+              height: "0px",
+              border: "1px solid #E8E8ED",
+            }}
           />
           <Box>{content}</Box>
           {footerContent && (
@@ -199,7 +225,7 @@ const CardWidget = ({
                   )}
 
                   <Typography
-                    variant="body1" 
+                    variant="body1"
                     component={"span"}
                     sx={{
                       fontSize: "20px",

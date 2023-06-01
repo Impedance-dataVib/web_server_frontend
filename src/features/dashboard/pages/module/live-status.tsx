@@ -5,7 +5,7 @@ import {
   StepLabel,
   Typography,
   Slider,
-  sliderClasses,
+  LinearProgress,
 } from "@mui/material";
 import CustomConnector from "src/app/components/custom-stepper";
 import Check from "@mui/icons-material/Check";
@@ -13,6 +13,7 @@ import { StepIconProps } from "@mui/material/StepIcon";
 import { styled } from "@mui/material/styles";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import { useEffect } from "react";
+import { isEmptyObject } from "src/app/utils/helper";
 const apiData = {
   steps: [
     {
@@ -32,7 +33,7 @@ const apiData = {
       bottomText: "Report",
     },
   ],
-  currentMode: 'Auto'
+  currentMode: "Auto",
 };
 
 const QontoStepIconRoot = styled("div")<{ ownerState: { active?: boolean } }>(
@@ -116,75 +117,88 @@ const PrettoSlider = styled(Slider)({
   },
 });
 
-const LiveStatus = ({liveStatus}: any) => {
-
+const LiveStatus = ({ liveStatus }: any) => {
   return (
-    <Box
-      sx={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        // alignItems: "center",
-        height: '200px',
-      }}
-    >
-      {apiData.steps.length && (
-        <Stepper
-          activeStep={liveStatus?.currentStep}
-          alternativeLabel
-          connector={<CustomConnector top="38" />}
-        >
-          {apiData.steps.map((label, index) => (
-            <Step
-              key={index}
-              // completed={completed[index]}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Typography variant="body1" component={"span"} sx={{ mb: 1 }}>{label.topText}</Typography>
-              <StepLabel
-                StepIconComponent={QontoStepIcon}
-                sx={{ display: "flex", flexDirection: "column" }}
-              >
-                {label.bottomText}
-              </StepLabel>
-            </Step>
-            //   <Step key={label}>
-            //     <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
-            //   </Step>
-          ))}
-        </Stepper>
-      )}
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <PrettoSlider
-          min={0}
-          max={100}
-          value={liveStatus?.stepProgress || 0}
-          aria-label="Default"
-          valueLabelDisplay="auto"
-          // disabled
-        />
-      </Box>
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="body1" component={"span"}>Current Mode : {liveStatus?.currentMode}</Typography>
+    <>
+      {isEmptyObject(liveStatus) ? (
         <Box
           sx={{
-            backgroundColor: "#1D4580",
-            width: "60%",
-            px: 1,
+            width: "100%",
             display: "flex",
-            justifyContent: "space-between",
+            flexDirection: "column",
+            justifyContent: "center",
+            // alignItems: "center",
+            height: "200px",
           }}
         >
-          <Check sx={{ color: "white" }} />
-          <Typography variant="body1" component={"span"} color="white">{liveStatus?.currentMessage}</Typography>
+          {apiData.steps.length && (
+            <Stepper
+              activeStep={liveStatus?.currentStep}
+              alternativeLabel
+              connector={<CustomConnector top="38" />}
+            >
+              {apiData.steps.map((label, index) => (
+                <Step
+                  key={index}
+                  // completed={completed[index]}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="body1" component={"span"} sx={{ mb: 1 }}>
+                    {label.topText}
+                  </Typography>
+                  <StepLabel
+                    StepIconComponent={QontoStepIcon}
+                    sx={{ display: "flex", flexDirection: "column" }}
+                  >
+                    {label.bottomText}
+                  </StepLabel>
+                </Step>
+                //   <Step key={label}>
+                //     <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
+                //   </Step>
+              ))}
+            </Stepper>
+          )}
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <PrettoSlider
+              min={0}
+              max={100}
+              value={liveStatus?.stepProgress || 0}
+              aria-label="Default"
+              valueLabelDisplay="auto"
+              // disabled
+            />
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="body1" component={"span"}>
+              Current Mode : {liveStatus?.currentMode}
+            </Typography>
+            <Box
+              sx={{
+                backgroundColor: "#1D4580",
+                width: "60%",
+                px: 1,
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Check sx={{ color: "white" }} />
+              <Typography variant="body1" component={"span"} color="white">
+                {liveStatus?.currentMessage}
+              </Typography>
+            </Box>
+          </Box>
         </Box>
-      </Box>
-    </Box>
+      ) : (
+        <Box sx={{ my: 1 }}>
+          <LinearProgress />
+        </Box>
+      )}
+    </>
   );
 };
 

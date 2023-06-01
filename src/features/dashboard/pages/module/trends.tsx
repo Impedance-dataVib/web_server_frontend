@@ -35,7 +35,7 @@ export default function Trends({ trends }: any) {
                 alignItems="center"
                 display={"flex"}
               >
-                <CircleIcon color="primary" />
+                <CircleIcon color="primary" sx={{mr:1}}/>
                 {val?.trendsName}
               </Typography>
               <Typography

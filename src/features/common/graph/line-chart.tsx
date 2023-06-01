@@ -21,7 +21,7 @@ ChartJS.register(
   Legend
 );
 
-export function LineChart({data}: any) {
+export function LineChart({data, max}: any) {
   const options = {
     responsive: true,
     indexAxis: "x" as const,
@@ -31,12 +31,10 @@ export function LineChart({data}: any) {
     scales: {
       y: {
         beginAtZero: true,
-        max: 2000,
-      //   step: 500,
+        max: max+400,
         min: 0,
         ticks: {
-          // forces step size to be 50 units
-          stepSize: 500
+          stepSize: max/4
         },
         gridLines: {
           display: false,
