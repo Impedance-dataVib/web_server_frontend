@@ -178,6 +178,7 @@ const TorqueTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       rated_rpm: "",
       vessel_type: "",
       overWrite: [],
+      has_filter_options: [],
       Filter_lowDecim: "",
       Filter_low: "",
       highPass: "",

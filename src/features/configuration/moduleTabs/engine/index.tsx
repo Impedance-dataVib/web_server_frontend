@@ -245,6 +245,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       recording_period: "",
       recording_length: "",
       overWrite: [],
+      has_filter_options: false,
       Filter_lowDecim: "",
       Filter_low: "",
       engine_useSmallEngineLogic: "",

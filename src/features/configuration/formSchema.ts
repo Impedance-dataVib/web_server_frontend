@@ -356,14 +356,9 @@ const formSchema = {
         type: "array_overwrite",
       },
       {
-        name: "Filter_lowDecim",
-        label: "Filter_lowDecim",
-        type: "toggle",
-      },
-      {
-        name: "Filter_low",
-        label: "Filter_low",
-        type: "toggle",
+        name: "has_filter_options",
+        label: "Has Filter Options",
+        type: "filter_parameters",
       },
       {
         name: "engine_useSmallEngineLogic",
@@ -398,11 +393,6 @@ const formSchema = {
       {
         name: "engine_useInjectionDissymetryDeviation",
         label: "engine_useInjectionDissymetryDeviation",
-        type: "toggle",
-      },
-      {
-        name: "highPass",
-        label: "highPass",
         type: "toggle",
       },
     ],
@@ -550,20 +540,9 @@ const formSchema = {
         type: "array_overwrite",
       },
       {
-        name: "Filter_lowDecim",
-        label: "Filter_lowDecim",
-        type: "toggle",
-      },
-      {
-        name: "Filter_low",
-        label: "Filter_low",
-        type: "toggle",
-      },
-
-      {
-        name: "highPass",
-        label: "highPass",
-        type: "toggle",
+        name: "has_filter_options",
+        label: "Has Filter Options",
+        type: "filter_parameters",
       },
     ],
   },
@@ -686,20 +665,9 @@ const formSchema = {
         type: "array_overwrite",
       },
       {
-        name: "Filter_lowDecim",
-        label: "Filter_lowDecim",
-        type: "toggle",
-      },
-      {
-        name: "Filter_low",
-        label: "Filter_low",
-        type: "toggle",
-      },
-
-      {
-        name: "highPass",
-        label: "highPass",
-        type: "toggle",
+        name: "has_filter_options",
+        label: "Has Filter Options",
+        type: "filter_parameters",
       },
     ],
   },
@@ -798,20 +766,9 @@ const formSchema = {
         type: "array_overwrite",
       },
       {
-        name: "Filter_lowDecim",
-        label: "Filter_lowDecim",
-        type: "toggle",
-      },
-      {
-        name: "Filter_low",
-        label: "Filter_low",
-        type: "toggle",
-      },
-
-      {
-        name: "highPass",
-        label: "highPass",
-        type: "toggle",
+        name: "has_filter_options",
+        label: "Has Filter Options",
+        type: "filter_parameters",
       },
     ],
   },
@@ -939,20 +896,9 @@ const formSchema = {
         type: "array_overwrite",
       },
       {
-        name: "Filter_lowDecim",
-        label: "Filter_lowDecim",
-        type: "toggle",
-      },
-      {
-        name: "Filter_low",
-        label: "Filter_low",
-        type: "toggle",
-      },
-
-      {
-        name: "highPass",
-        label: "highPass",
-        type: "toggle",
+        name: "has_filter_options",
+        label: "Has Filter Options",
+        type: "filter_parameters",
       },
     ],
   },

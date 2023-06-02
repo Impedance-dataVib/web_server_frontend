@@ -23,6 +23,7 @@ import { useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { FormikProvider, FieldArray, FieldArrayRenderProps } from "formik";
 import { useAuth } from "src/app/auth";
+
 const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
   switch (type) {
     case "dropdown":
@@ -211,6 +212,107 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           </FieldArray>
         </FormikProvider>
       );
+
+    case "filter_parameters": {
+      return (
+        <Grid item container direction={"column"}>
+          <Grid item>
+            <FormControlLabel
+              control={
+                <Switch
+                  name={fieldProps.name}
+                  onChange={(e) => {
+                    formContext?.setFieldValue(e.target.name, e.target.checked);
+                  }}
+                  value={formContext?.values?.[fieldProps.name]}
+                  color="primary"
+                />
+              }
+              label={fieldProps?.name}
+              labelPlacement="start"
+              disabled={fieldProps?.userName === "admin" ? false : true}
+            />
+          </Grid>
+
+          {formContext?.values?.[fieldProps.name] && (
+            <>
+              <Grid item>
+                <TextField
+                  name={"Filter_lowDecim"}
+                  label={"Filter Low Decim"}
+                  onChange={formContext?.handleChange}
+                  value={formContext?.values?.["Filter_lowDecim"]}
+                  variant="outlined"
+                  sx={{
+                    fontSize: "16px",
+                    marginBottom: "20px",
+                    width: "182px",
+                    padding: "1px 1px",
+                  }}
+                  error={Boolean(formContext?.errors?.[fieldProps.label])}
+                  helperText={formContext?.errors?.[fieldProps.label]}
+                  inputProps={{
+                    readOnly: fieldProps?.disabled ? true : false,
+                    style: {
+                      padding: "11px 26px 13px 12px",
+                    },
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                ></TextField>
+              </Grid>
+              <Grid item>
+                <TextField
+                  name={"Filter Low"}
+                  label={"Filter_low"}
+                  onChange={formContext?.handleChange}
+                  value={formContext?.values?.["Filter_low"]}
+                  variant="outlined"
+                  sx={{
+                    fontSize: "16px",
+                    marginBottom: "20px",
+                    width: "182px",
+                    padding: "1px 1px",
+                  }}
+                  error={Boolean(formContext?.errors?.[fieldProps.label])}
+                  helperText={formContext?.errors?.[fieldProps.label]}
+                  inputProps={{
+                    readOnly: fieldProps?.disabled ? true : false,
+                    style: {
+                      padding: "11px 26px 13px 12px",
+                    },
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                ></TextField>
+              </Grid>
+              <Grid item>
+                <TextField
+                  name={"highPass"}
+                  label={"HighPass"}
+                  onChange={formContext?.handleChange}
+                  value={formContext?.values?.["highPass"]}
+                  variant="outlined"
+                  sx={{
+                    fontSize: "16px",
+                    marginBottom: "20px",
+                    width: "182px",
+                    padding: "1px 1px",
+                  }}
+                  error={Boolean(formContext?.errors?.[fieldProps.label])}
+                  helperText={formContext?.errors?.[fieldProps.label]}
+                  inputProps={{
+                    readOnly: fieldProps?.disabled ? true : false,
+                    style: {
+                      padding: "11px 26px 13px 12px",
+                    },
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                ></TextField>
+              </Grid>
+            </>
+          )}
+        </Grid>
+      );
+    }
     default:
       return <div>No Valid Field Type</div>;
   }
@@ -761,7 +863,10 @@ export const BearingAssetInformation = ({
   );
 };
 
-export const BearningAdvancedParameters = ({ handleFormData, formContext }: any) => {
+export const BearningAdvancedParameters = ({
+  handleFormData,
+  formContext,
+}: any) => {
   const { userName } = useAuth();
 
   return (

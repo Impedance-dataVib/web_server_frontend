@@ -191,6 +191,7 @@ const MotorTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       name: "",
       rated_rpm: "",
       overWrite: [],
+      has_filter_options: [],
       Filter_lowDecim: "",
       Filter_low: "",
       highPass: "",

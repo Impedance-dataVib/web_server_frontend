@@ -190,6 +190,7 @@ const TurbineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       rated_rpm: "",
       type: "",
       overWrite: [],
+      has_filter_options: [],
       Filter_lowDecim: "",
       Filter_low: "",
       highPass: "",

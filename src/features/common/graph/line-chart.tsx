@@ -21,20 +21,19 @@ ChartJS.register(
   Legend
 );
 
-export function LineChart({data, max}: any) {
+export function LineChart({ data, max }: any) {
   const options = {
     responsive: true,
     indexAxis: "x" as const,
     maintainAspectRatio: false,
-  
-    
+
     scales: {
       y: {
         beginAtZero: true,
-        max: max+400,
+        max: max + 400,
         min: 0,
         ticks: {
-          stepSize: max/4
+          stepSize: max / 4,
         },
         gridLines: {
           display: false,
@@ -43,7 +42,7 @@ export function LineChart({data, max}: any) {
       },
       x: {
         beginAtZero: true,
-  
+
         display: false,
         pointRadius: 0,
       },
@@ -60,6 +59,12 @@ export function LineChart({data, max}: any) {
       },
     },
   };
-  
-  return <Line options={options} data={data} style={{height: '200px', width: '200px'}} />;
+
+  return (
+    <Line
+      options={options}
+      data={data}
+      style={{ height: "200px", width: "200px" }}
+    />
+  );
 }
