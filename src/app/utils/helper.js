@@ -654,7 +654,6 @@ function buildEngineAlertData(data) {
 
     if (is_all_error) {
       instructions.push("CAUTION - *Cyl_x* Misfired");
-      instructions.push("Check Gas quality");
       instructions.push("Check Spark Plug");
       instructions.push("Reduce the Load");
     }
@@ -684,6 +683,7 @@ function buildEngineAlertData(data) {
 export function buildData(response) {
   const fileData = response["file_data"];
   const from_data = response["from_data"];
+  const historical_data = response["historical_data"];
   const firstKey = Object.keys(fileData)[0];
   const data = fileData[firstKey];
   // process engine data
@@ -732,16 +732,16 @@ export function buildData(response) {
       cylinder_specific_indicators.push(miss_firing);
     }
     let trends = [];
-    const increase_fuel_consumption = buildTrendChart(
-      data["PowerLoss"],
-      "Increase Fuel Consumption",
-      "LineGradient"
+    const increase_fuel_consumption = buildLineGradientChart(
+      historical_data,
+      "PowerLoss",
+      "increase fuel consumption"
     );
     const peak_pressure = buildPeekPressureChart(data["Pressure"], firingOrder);
-    const mechanical_health = buildTrendChart(
-      data["MechanicalHealth"],
-      "Mechanical Health",
-      "LineGradient"
+    const mechanical_health = buildLineGradientChart(
+      historical_data,
+      "MechanicalHealth",
+      "Mechanical Health"
     );
     trends.push(increase_fuel_consumption);
     trends.push(peak_pressure);
@@ -1182,4 +1182,30 @@ export function getCommaSepratedChannel(data, type) {
 
 function buildChannelName(channel) {
   return "CHANNEL" + channel.substr(channel.length - 1);
+}
+function buildLineGradientChart(data, key, title) {
+  let labels = [];
+  let datapoints = [];
+  if (data) {
+    for (let item of data) {
+      const objectData = JSON.parse(item["jsondata"]);
+      const firstKey = Object.keys(objectData)[0];
+      const moduleData = objectData[firstKey];
+      labels.push(firstKey);
+      const valueObject = moduleData[key];
+      datapoints.push(valueObject["value"]);
+    }
+  }
+
+  return {
+    trendsName: title,
+    min: 0,
+    max: 100,
+    avg: 50,
+    datapoints: datapoints,
+    labels: labels,
+    chartType: "LineGradient",
+    xLabel: title,
+    yLabel: "Time",
+  };
 }

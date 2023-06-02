@@ -20,7 +20,6 @@ export default function fileUpload({ onChangeHandler }: FileUploadObject) {
       </div>
       <input
         accept=".zip"
-        multiple
         type="file"
         style={{ opacity: 0, width: "100%", height: "100%" }}
         onChange={onChangeHandler}

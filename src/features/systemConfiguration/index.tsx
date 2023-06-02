@@ -58,7 +58,13 @@ const SystemConfiguration = () => {
   }, []);
   const handleUpdate = (e: any) => {
     e.preventDefault();
-    SystemInfoApi.updateSystemConfigFile(file2)
+    let file: any = "";
+    if (file1 === null && file2) {
+      file = file2;
+    } else {
+      file = file1;
+    }
+    SystemInfoApi.updateSystemConfigFile(file)
       .then((val) => {
         enqueueSnackbar({
           message: `You have Successfully updated the data`,
@@ -66,7 +72,6 @@ const SystemConfiguration = () => {
         });
       })
       .catch((error) => {
-
         enqueueSnackbar({
           message: error.Message,
           variant: "error",
@@ -341,7 +346,7 @@ const SystemConfiguration = () => {
               // p: 2,
             }}
           >
-            <UploadFile setFile1={setFile1} setFile2={setFile2} />
+            <UploadFile setFile1={setFile1} setFile2={setFile2} file1={file1} />
           </Box>
           <Box
             sx={{

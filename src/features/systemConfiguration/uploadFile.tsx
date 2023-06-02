@@ -1,30 +1,28 @@
 import { Box, Typography } from "@mui/material";
 import FileUpload from "../../app/components/file-upload";
-export default function UploadFile({ setFile1, setFile2 }: any) {
+import { useState } from "react";
+export default function UploadFile({ setFile1, setFile2, file1 }: any) {
   const handleFile1 = (e: any) => {
     const file1 = e.target.files[0];
-    console.log(file1);
-
     if (!file1) {
       return;
     }
     const data = new FormData();
     data.append("file", file1);
+    data.append("upload_type", "license_file");
     setFile1(data);
-    console.log(data);
   };
   const handleFile2 = (e: any) => {
     const file2 = e.target.files[0];
-    console.log(file2);
-
     if (!file2) {
       return;
     }
 
     const formdata = new FormData();
     formdata.append("file", file2);
+    formdata.append("upload_type", "software_file");
+
     setFile2(formdata);
-    console.log(formdata);
   };
   return (
     <Box
