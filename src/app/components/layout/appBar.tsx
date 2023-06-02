@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import {
@@ -34,6 +34,7 @@ const drawerWidth = 240;
 const DrawerAppBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
 
   const [navMenuItems, setNavMenuItems] =
     useState<INavMenuItem[]>(APP_NAV_MENU_ITEMS);
@@ -41,6 +42,21 @@ const DrawerAppBar = () => {
   const location = useLocation();
 
   const theme = useTheme();
+
+  const getNotification = () => {
+    DownloadInfoApi.getNotification()
+      .then((res) => setNotificationCount(res.data.count))
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getNotification();
+    }, 60 * 1000);
+
+    //Clearing the interval
+    return () => clearInterval(interval);
+  }, [notificationCount]);
 
   const getFile = () => {
     DownloadInfoApi.getDownloadFile()
@@ -269,7 +285,7 @@ const DrawerAppBar = () => {
                 },
               }}
             >
-              <Badge badgeContent={1} color="error">
+              <Badge badgeContent={notificationCount} color="error">
                 <NotificationsOutlined />
               </Badge>
             </IconButton>
@@ -287,10 +303,12 @@ const DrawerAppBar = () => {
               open={notificationOpen}
               onClose={() => setNotificationOpen(false)}
             >
-              <MenuItem onClick={getFile}>
-                <Box sx={{ mr: "5px" }}>Your Download is Ready</Box>
-                <CloudDownloadIcon />
-              </MenuItem>
+              {notificationCount > 0 && (
+                <MenuItem onClick={getFile}>
+                  <Box sx={{ mr: "5px" }}>Your Download is Ready</Box>
+                  <CloudDownloadIcon />
+                </MenuItem>
+              )}
             </Menu>
           </Box>
           {/* <Box sx={{ display: "flex", alignItems: "center" }}>

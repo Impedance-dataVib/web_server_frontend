@@ -11,6 +11,7 @@ export default function UploadFile({ setFile1, setFile2, file1 }: any) {
     data.append("file", file1);
     data.append("upload_type", "license_file");
     setFile1(data);
+    console.log(data.get("file"));
   };
   const handleFile2 = (e: any) => {
     const file2 = e.target.files[0];

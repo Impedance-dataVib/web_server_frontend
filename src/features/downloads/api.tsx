@@ -12,10 +12,15 @@ const getDownloadFile = () => {
   return api.get("/download/file_download.php");
 };
 
+const getNotification = () => {
+  return api.get("/notification/get.php");
+};
+
 const DownloadInfoApi = {
   getModuleInfo,
   postDownloadInfo,
   getDownloadFile,
+  getNotification,
 };
 
 export default DownloadInfoApi;

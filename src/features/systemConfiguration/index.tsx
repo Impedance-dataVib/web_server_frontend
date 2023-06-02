@@ -59,17 +59,25 @@ const SystemConfiguration = () => {
   const handleUpdate = (e: any) => {
     e.preventDefault();
     let file: any = "";
-    if (file1 === null && file2) {
+    console.log(file2);
+
+    if (file2) {
       file = file2;
+      setFile1(null);
     } else {
       file = file1;
+      setFile2(null);
     }
+    console.log(file.get("file"));
+
     SystemInfoApi.updateSystemConfigFile(file)
       .then((val) => {
         enqueueSnackbar({
           message: `You have Successfully updated the data`,
           variant: "success",
         });
+        setFile1(null);
+        setFile2(null);
       })
       .catch((error) => {
         enqueueSnackbar({
