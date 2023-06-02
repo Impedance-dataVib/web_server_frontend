@@ -11,7 +11,11 @@ export function buildSoketData(response, modelType, formData) {
   let alertData = [];
   if (modelType === "Engine") {
     globalIndicator.push(
-      buildIndicatorData("Combustion Condition", data["EngineEfficiency"])
+      buildIndicatorData(
+        "Combustion Condition",
+        data["EngineEfficiency"],
+        "valueInHealth"
+      )
     );
 
     globalIndicator.push(
@@ -19,54 +23,85 @@ export function buildSoketData(response, modelType, formData) {
     );
 
     globalIndicator.push(
-      buildIndicatorData("Engine Health", data["MechanicalHealth"])
+      buildIndicatorData(
+        "Engine Health",
+        data["MechanicalHealth"],
+        "valueInHealth"
+      )
     );
     alertData = buildEngineAlertData(data);
   } else if (modelType === "Torque") {
     isAlert = false;
 
     globalIndicator.push(
-      buildIndicatorData("Torsion", data["EngineEfficiency"])
+      buildIndicatorData("Torsion", data["StaticTorsion"], "value")
     );
 
     globalIndicator.push(
-      buildIndicatorData("Torque", data["EngineEfficiency"])
+      buildIndicatorData("Torque", data["StaticTorque"], "value")
     );
 
-    globalIndicator.push(buildIndicatorData("Power", data["MechanicalHealth"]));
+    globalIndicator.push(
+      buildIndicatorData("Power", data["StaticPower"], "value")
+    );
 
-    globalIndicator.push(buildIndicatorData("Speed", data["MechanicalHealth"]));
+    globalIndicator.push(
+      buildRpmData("Speed", data["ChannelSpeed"], maxRPMThrshhold)
+    );
   } else if (modelType === "Turbine") {
     globalIndicator.push(
-      buildIndicatorData("Regularity/Deviation", data["RegularityDeviation"])
+      buildIndicatorData(
+        "Regularity/Deviation",
+        data["RegularityDeviation"],
+        "valueInHealth"
+      )
     );
     globalIndicator.push(
-      buildIndicatorData("Bearing Status", data["BearingStatus"])
+      buildIndicatorData(
+        "Bearing Status",
+        data["BearingStatus"],
+        "valueInHealth"
+      )
     );
     globalIndicator.push(
-      buildIndicatorData("Shaft Health", data["BladeStatus"])
+      buildIndicatorData("Shaft Health", data["BladeStatus"], "valueInHealth")
     );
     globalIndicator.push(
-      buildIndicatorData("Coupling", data["TurbineCoupling"])
+      buildIndicatorData("Coupling", data["TurbineCoupling"], "valueInHealth")
     );
     globalIndicator.push(
-      buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold)
+      buildRpmData(
+        "RPM",
+        data["ChannelSpeed"],
+        "valueInHealth",
+        maxRPMThrshhold
+      )
     );
     //TODO
-    globalIndicator.push(buildIndicatorData("Combustion Kit", data["abc"]));
+    globalIndicator.push(
+      buildIndicatorData("Combustion Kit", data["abc"], "valueInHealth")
+    );
 
     alertData = buildTurbineAlertData(data);
   } else if (modelType === "Motor") {
-    globalIndicator.push(buildIndicatorData("Stability", data["MElectromag"]));
-    globalIndicator.push(buildIndicatorData("Bearing", data["MBearing"]));
     globalIndicator.push(
-      buildIndicatorData("Electromagnetic Stress", data["MStressStability"])
+      buildIndicatorData("Stability", data["MElectromag"], "valueInHealth")
+    );
+    globalIndicator.push(
+      buildIndicatorData("Bearing", data["MBearing"], "valueInHealth")
+    );
+    globalIndicator.push(
+      buildIndicatorData(
+        "Electromagnetic Stress",
+        data["MStressStability"],
+        "valueInHealth"
+      )
     );
 
     alertData = buildMotorAlertData(data);
   } else if (modelType === "Bearing") {
     globalIndicator.push(
-      buildIndicatorData("Bearing", data["EngineEfficiency"])
+      buildIndicatorData("Bearing", data["BearingGlobal"], "value")
     );
 
     globalIndicator.push(
@@ -74,7 +109,7 @@ export function buildSoketData(response, modelType, formData) {
     );
 
     globalIndicator.push(
-      buildIndicatorData("Friction", data["MechanicalHealth"])
+      buildIndicatorData("Friction", data["GlobalLevel"], "value")
     );
   }
 
@@ -91,8 +126,8 @@ export function buildSoketData(response, modelType, formData) {
   };
 }
 
-function buildIndicatorData(indicator_title, data) {
-  const value = data ? data["valueInHealth"] : 0;
+function buildIndicatorData(indicator_title, data, key) {
+  const value = data ? data[key] : 0;
 
   let indicatorUnit = "Stable";
   let indicatorType = "success";
