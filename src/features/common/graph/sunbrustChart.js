@@ -10,9 +10,9 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
       case "success":
         return "#02B271";
       case "error":
-        return "#fe8474";
+        return "#FF0000";
       case "warning": 
-        return "#E18442"
+        return "#FFA326"
       default:
         return "white";
     }
@@ -38,7 +38,7 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
         .onClick(() => {
         })
         .color((d) => {
-          return getColor(d.fill);
+          return getColor("error");
         })
         .excludeRoot(true)(document.getElementById(`${elementId}${fullScreen ? "full": ""}`));
     }

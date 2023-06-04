@@ -147,6 +147,7 @@ const DashboardPage = () => {
     if (lastMessage !== undefined) {
       const data = lastMessage?.data;
       if (data) {
+        try {
         let parsedData = JSON.parse(data);
         
         if(parsedData?.Status === "Failed") {
@@ -158,6 +159,11 @@ const DashboardPage = () => {
           setWebSocketsData(parsedData);
         }
         setIsLoading(false);
+      } catch (ex) {
+        console.log(ex);
+        setIsLoading(false);
+        setIsDataAvailable('Something went wrong')
+      }
       }
     }
   }, [lastMessage]);

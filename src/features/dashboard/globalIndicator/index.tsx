@@ -15,7 +15,7 @@ const GlobalIndicatorChart = ({ globalIndicator, fullScreen }: any) => {
     <Grid
       container
       spacing={1}
-      sx={{ height: globalIndicator && !fullScreen ? "240px" : "", ...styling }}
+      sx={{ height: globalIndicator && !fullScreen ? "100%" : "", ...styling, maxHeight: globalIndicator && !fullScreen ? "240px" : "" }}
     >
       {globalIndicator &&
         globalIndicator.map((val: any, index: any) => (
@@ -23,7 +23,9 @@ const GlobalIndicatorChart = ({ globalIndicator, fullScreen }: any) => {
             key={`globalIndicator${index}`}
             item
             sx={{ display: "flex", flexDirection: "column" }}
-            lg={fullScreen ? 6: 4}
+            lg={6}
+            md={12} 
+            sm={12}
           >
             <Typography
               variant="body1"
