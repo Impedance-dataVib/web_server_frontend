@@ -45,8 +45,8 @@ const DrawerAppBar = () => {
 
   const getNotification = () => {
     DownloadInfoApi.getNotification()
-      .then((res) => setNotificationCount(res.data.count))
-      .catch((err) => console.log(err));
+      .then((res: any) => setNotificationCount(res.data.count))
+      .catch((err: any) => console.log(err));
   };
 
   useEffect(() => {
@@ -289,27 +289,26 @@ const DrawerAppBar = () => {
                 <NotificationsOutlined />
               </Badge>
             </IconButton>
-
-            <Menu
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={notificationOpen}
-              onClose={() => setNotificationOpen(false)}
-            >
-              {notificationCount > 0 && (
+            {notificationCount > 0 && (
+              <Menu
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={notificationOpen}
+                onClose={() => setNotificationOpen(false)}
+              >
                 <MenuItem onClick={getFile}>
                   <Box sx={{ mr: "5px" }}>Your Download is Ready</Box>
                   <CloudDownloadIcon />
                 </MenuItem>
-              )}
-            </Menu>
+              </Menu>
+            )}
           </Box>
           {/* <Box sx={{ display: "flex", alignItems: "center" }}>
             <Avatar sx={{ width: "30px", height: "30px", mr: 1 }}></Avatar>

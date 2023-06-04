@@ -77,15 +77,19 @@ export function buildSoketData(response, modelType, formData) {
         maxRPMThrshhold
       )
     );
-    //TODO
+
     globalIndicator.push(
-      buildIndicatorData("Combustion Kit", data["abc"], "valueInHealth")
+      buildIndicatorData(
+        "Combustion Kit",
+        data["CombustionKit"],
+        "valueInHealth"
+      )
     );
 
     alertData = buildTurbineAlertData(data);
   } else if (modelType === "Motor") {
     globalIndicator.push(
-      buildIndicatorData("Stability", data["MElectromag"], "valueInHealth")
+      buildIndicatorData("Stability", data["MStressStability"], "valueInHealth")
     );
     globalIndicator.push(
       buildIndicatorData("Bearing", data["MBearing"], "valueInHealth")
@@ -93,7 +97,7 @@ export function buildSoketData(response, modelType, formData) {
     globalIndicator.push(
       buildIndicatorData(
         "Electromagnetic Stress",
-        data["MStressStability"],
+        data["MElectromag"],
         "valueInHealth"
       )
     );
@@ -788,7 +792,11 @@ export function buildData(response) {
   }
   // process Torque data
   if (response["type"] === "Torque") {
-    //TODO:
+    return {
+      cylinder_specific_indicators: [],
+      trends: [],
+      alert: buildTorqueAlertData(historical_data),
+    };
   }
   // process Turbine data
   if (response["type"] === "Turbine") {
@@ -969,26 +977,75 @@ function buildChannelName(channel) {
 function buildLineGradientChart(data, key, title) {
   let labels = [];
   let datapoints = [];
+  let count = 0;
   if (data) {
     for (let item of data) {
+      if (count === 7) {
+        break;
+      }
       const objectData = JSON.parse(item["jsondata"]);
       const firstKey = Object.keys(objectData)[0];
       const moduleData = objectData[firstKey];
       labels.push(firstKey);
       const valueObject = moduleData[key];
       datapoints.push(valueObject["value"]);
+      count++;
     }
   }
+  let sum = 0;
+  for (let i = 0; i < datapoints.length; i++) {
+    sum += parseInt(datapoints[i], 10); //don't forget to add the base
+  }
+
+  let avg = sum / datapoints.length;
 
   return {
     trendsName: title,
-    min: 0,
-    max: 100,
-    avg: 50,
+    min: Math.min(...datapoints),
+    max: Math.max(...datapoints),
+    avg: avg,
     datapoints: datapoints,
     labels: labels,
     chartType: "LineGradient",
     xLabel: title,
     yLabel: "Time",
   };
+}
+const message_data = {
+  0: { status: "Success", message: "All Ok" },
+  1: { status: "Success", message: "Good Signal, No Synchronisation with TDC" },
+  2: { status: "Success", message: "Good Signal, Synchronisated with TDC" },
+  3: { status: "Success", message: "Good Signal, Synchronisated with CAM" },
+  "-1": { status: "Fail", message: "Failed to apply configuration" },
+  "-2": { status: "Fail", message: "Failed to load recorded signal" },
+  "-3": { status: "Fail", message: "Unstable Speed." },
+  "-4": {
+    status: "Fail",
+    message: "Too low speed. Check minRPM settings in Config",
+  },
+  "-5": { status: "Fail", message: "Too much speed variation." },
+  "-6": { status: "Fail", message: "No Valid License" },
+  "-7": { status: "Fail", message: "Unstable Speed." },
+  "-8": { status: "Fail", message: "Signal Level - Too low" },
+  "-10": { status: "Fail", message: "Speed Mismatch between Channels" },
+  "-9": { status: "Fail", message: "Mismatch between config & channels info." },
+};
+
+function buildTorqueAlertData(data) {
+  let returnArray = [];
+  if (data) {
+    for (let item of data) {
+      const objectData = JSON.parse(item["jsondata"]);
+      const firstKey = Object.keys(objectData)[0];
+      const moduleData = objectData[firstKey];
+      const code = moduleData["Status"];
+      const message = message_data[code];
+      returnArray.push({
+        instructionName: message["status"],
+        instructionType: message["status"] === "Success" ? "success" : "error",
+        instructions: [{ message: message["message"], time: firstKey }],
+      });
+    }
+  }
+  return returnArray;
 }
