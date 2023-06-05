@@ -120,8 +120,12 @@ const TorqueTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
           //Checking the validation errors of the previous step, if present true else false
 
           if (!stepValidation) {
+            if (getStepsInOrder.length - 1 === stepIndex && !newExpanded) {
+              setActiveStep(stepIndex + 1);
+            } else {
+              setActiveStep(stepIndex);
+            }
             setExpanded(newExpanded ? value : false);
-            setActiveStep(stepIndex);
           } else {
             throw new Error(
               `${getStepsInOrder[stepIndex - 1]} step has validation errors!`
