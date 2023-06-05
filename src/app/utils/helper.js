@@ -165,7 +165,7 @@ function buildPeekPressureChart(data, firingOrder) {
     min: 0,
     max: 100,
     avg: 50,
-    datapoints: data["cylinderHealth"],
+    datapoints: data["cylinderValues"],
     labels: labels,
     chartType: "bar",
     xLabel: "Peek Pressure",
