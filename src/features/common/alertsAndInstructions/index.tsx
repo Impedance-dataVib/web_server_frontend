@@ -41,7 +41,7 @@ const AlertsAndInstructions = ({ moduleData, isModalOpen = false }: any) => {
   };
   return (
     <Box 
-      sx={{height: isModalOpen ? "" : "240px", overflowX:"auto"}}
+      sx={{height: isModalOpen ? "" : "225px", overflowX:"auto"}}
     >
       <Grid
         container
