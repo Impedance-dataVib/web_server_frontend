@@ -4,13 +4,17 @@ const getSystemInfo = () => {
   return api.get("/system-information/get-all.php");
 };
 
-const updateSystemConfigFile = (payload: any) => {
+const updateSystemSoftwareFile = (payload: any) => {
   return api.post("/update/vbox-frimware-update.php", payload);
+};
+const updateSystemLicenseFile = (payload: any) => {
+  return api.post("/license/import-license.php", payload);
 };
 
 const SystemInfoApi = {
   getSystemInfo,
-  updateSystemConfigFile,
+  updateSystemSoftwareFile,
+  updateSystemLicenseFile,
 };
 
 export default SystemInfoApi;

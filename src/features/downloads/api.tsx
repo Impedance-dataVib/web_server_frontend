@@ -9,7 +9,9 @@ const postDownloadInfo = (payload: object) => {
 };
 
 const getDownloadFile = () => {
-  return api.get("/download/file_download.php");
+  return api.get("/download/file_download.php", {
+    responseType: "blob",
+  });
 };
 
 const getNotification = () => {

@@ -35,6 +35,7 @@ const DrawerAppBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
+  const [notificationType, setNotificationType] = useState<any>("");
 
   const [navMenuItems, setNavMenuItems] =
     useState<INavMenuItem[]>(APP_NAV_MENU_ITEMS);
@@ -45,23 +46,42 @@ const DrawerAppBar = () => {
 
   const getNotification = () => {
     DownloadInfoApi.getNotification()
-      .then((res: any) => setNotificationCount(res.data.count))
+      .then((res: any) => {
+        setNotificationCount(res.data.count);
+        setNotificationType(res.data.report_type);
+      })
       .catch((err: any) => console.log(err));
   };
 
   useEffect(() => {
+    getNotification();
     const interval = setInterval(() => {
       getNotification();
     }, 60 * 1000);
 
     //Clearing the interval
     return () => clearInterval(interval);
-  }, [notificationCount]);
+  }, []);
+  console.log(notificationType);
 
   const getFile = () => {
     DownloadInfoApi.getDownloadFile()
       .then((res) => {
-        fileDownload(res.data, "downloaded.zip");
+        console.log(res);
+        const url = window.URL.createObjectURL(res.data);
+        const link = document.createElement("a");
+        link.href = url;
+        if (notificationType === "json") {
+          link.setAttribute("download", "data.json");
+        } else if (notificationType === "raw") {
+          link.setAttribute("download", "raw-data.wav");
+        } else if (notificationType === "spreadsheet") {
+          link.setAttribute("download", "spreadsheet.excel");
+        } else if (notificationType === "graphical") {
+          link.setAttribute("download", "graphical-report.pdf");
+        }
+        document.body.appendChild(link);
+        link.click();
       })
       .catch((err) => console.log(err));
   };

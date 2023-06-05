@@ -3,9 +3,13 @@ import { ChangeEventHandler } from "react";
 
 interface FileUploadObject {
   onChangeHandler: ChangeEventHandler;
+  file: string;
 }
 
-export default function fileUpload({ onChangeHandler }: FileUploadObject) {
+export default function fileUpload({
+  onChangeHandler,
+  file,
+}: FileUploadObject) {
   return (
     <Box
       sx={{
@@ -19,7 +23,7 @@ export default function fileUpload({ onChangeHandler }: FileUploadObject) {
         <Typography variant="body1">Drag and Drop your file here</Typography>
       </div>
       <input
-        accept=".zip"
+        accept={file}
         type="file"
         style={{ opacity: 0, width: "100%", height: "100%" }}
         onChange={onChangeHandler}
