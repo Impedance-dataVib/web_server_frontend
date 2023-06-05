@@ -86,7 +86,7 @@ const DownloadPage = () => {
         console.log(error);
         setIsLoading(false);
         enqueueSnackbar({
-          message: error.response.data.Message,
+          message: error.Message,
           variant: "error",
         });
       });

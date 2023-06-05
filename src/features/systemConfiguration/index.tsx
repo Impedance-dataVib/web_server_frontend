@@ -10,9 +10,6 @@ import FileUploadComponent from "src/app/components/fileUpload";
 import { enqueueSnackbar } from "notistack";
 
 const SystemConfiguration = () => {
-  const [file1, setFile1] = useState<File | null>(null);
-  const [file2, setFile2] = useState<File | null>(null);
-
   const [isShown, setIsShown] = useState(false);
   const [apiData, setApiData] = useState({
     serianNo: "",
@@ -56,34 +53,6 @@ const SystemConfiguration = () => {
   useEffect(() => {
     getSystemInfo();
   }, []);
-  const handleUpdate = (e: any) => {
-    e.preventDefault();
-    let file: any = "";
-
-    if (file2) {
-      file = file2;
-      setFile1(null);
-    } else {
-      file = file1;
-      setFile2(null);
-    }
-
-    SystemInfoApi.updateSystemConfigFile(file)
-      .then((val) => {
-        enqueueSnackbar({
-          message: `You have Successfully updated the data`,
-          variant: "success",
-        });
-        setFile1(null);
-        setFile2(null);
-      })
-      .catch((error) => {
-        enqueueSnackbar({
-          message: error.Message,
-          variant: "error",
-        });
-      });
-  };
 
   return (
     <Box>
@@ -352,9 +321,9 @@ const SystemConfiguration = () => {
               // p: 2,
             }}
           >
-            <UploadFile setFile1={setFile1} setFile2={setFile2} file1={file1} />
+            <UploadFile />
           </Box>
-          <Box
+          {/* <Box
             sx={{
               display: "flex",
               justifyContent: "flex-end",
@@ -368,7 +337,7 @@ const SystemConfiguration = () => {
             >
               Update
             </Button>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
     </Box>
