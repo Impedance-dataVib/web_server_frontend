@@ -13,7 +13,7 @@ const Signal = ({ signals, formData, moduleType }: any) => {
   // REACT_APP_SIGNAL_WEBSOCKET_URL
   const { sendMessage, lastMessage } = useWebSocket(
     process.env.REACT_APP_SIGNAL_WEBSOCKET_URL ||
-      `ws:${window.location.hostname}:8082`,
+      `ws:${window.location.hostname}:8083`,
     {
       onOpen: () => console.log("Signal opened"),
       onMessage: () => {

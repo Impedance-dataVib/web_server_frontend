@@ -40,7 +40,9 @@ const AlertsAndInstructions = ({ moduleData, isModalOpen = false }: any) => {
     );
   };
   return (
-    <Box sx={{height: isModalOpen ? "" : "225px", overflow:"scroll"}}>
+    <Box 
+      sx={{height: isModalOpen ? "" : "240px", overflowX:"auto"}}
+    >
       <Grid
         container
         spacing={moduleData.isAlert ? 2 : 0}
