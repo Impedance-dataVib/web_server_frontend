@@ -70,11 +70,7 @@ export function buildSoketData(response, modelType, formData) {
       buildIndicatorData("Coupling", data["TurbineCoupling"], "valueInHealth")
     );
     globalIndicator.push(
-      buildRpmData(
-        "RPM",
-        data["ChannelSpeed"],
-        maxRPMThrshhold
-      )
+      buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold)
     );
 
     globalIndicator.push(
@@ -103,17 +99,10 @@ export function buildSoketData(response, modelType, formData) {
 
     alertData = buildMotorAlertData(data);
   } else if (modelType === "Bearing") {
-    globalIndicator.push(
-      buildIndicatorData("Bearing", data["BearingGlobal"], "value")
-    );
-
-    globalIndicator.push(
-      buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold)
-    );
-
-    globalIndicator.push(
-      buildIndicatorData("Friction", data["GlobalLevel"], "value")
-    );
+    globalIndicator.push(buildIndicatorData("Bearing", data["4KMixed"]));
+    globalIndicator.push(buildRpmData("RPM", data["ChannelSpeed"]));
+    globalIndicator.push(buildIndicatorData("Friction", data["8KMixed"]));
+    alertData = buildBearingAlertData(data);
   }
 
   return {
@@ -1048,5 +1037,56 @@ function buildTorqueAlertData(data) {
       });
     }
   }
+  return returnArray;
+}
+function buildBearingAlertData(data) {
+  let returnArray = [];
+  const mechanicalHealth = data["BearingGlobal"];
+  const global_ = data["GlobalMixed"];
+
+  if (mechanicalHealth) {
+    const val = mechanicalHealth["value"];
+    if (val <= 30) {
+      returnArray.push({
+        instructionName: "Mechanical Health",
+        instructionType: "error",
+        instructions: [
+          "The continuation of the operation presents an aggravation of the damages evolving towards the loss of function. An intervention is to be expected",
+        ],
+      });
+    }
+    if (val > 30 && val <= 70) {
+      returnArray.push({
+        instructionName: "Mechanical Health",
+        instructionType: "warning",
+        instructions: [
+          "OK for operation under supervision,due to the presence of damages or significant dysfunctions.",
+        ],
+      });
+    }
+  }
+
+  if (global_) {
+    const val = global_["value"];
+    if (val <= 30) {
+      returnArray.push({
+        instructionName: "Global(Imbalance/Alignment/Loosness)",
+        instructionType: "error",
+        instructions: [
+          "Check for Bending/cracking of bearings, Unbalances & Looseing of support structures",
+        ],
+      });
+    }
+    if (val > 30 && val <= 70) {
+      returnArray.push({
+        instructionName: "Global(Imbalance/Alignment/Loosness)",
+        instructionType: "warning",
+        instructions: [
+          "Check for unbalance, Loosening of Support structure & Coupling clearances",
+        ],
+      });
+    }
+  }
+
   return returnArray;
 }
