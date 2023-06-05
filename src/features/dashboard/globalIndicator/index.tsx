@@ -35,7 +35,16 @@ const GlobalIndicatorChart = ({ globalIndicator, fullScreen }: any) => {
             >
               {val?.indicatorName}
             </Typography>
-            <Box sx={{ height: "65%" }}>
+            <Box 
+              sx={{ 
+                height: "65%",
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                alignItems: 'center',
+                marginTop: '20px' 
+              }}
+            >
               <SpeedoMeter
                 maxValue={val.indicatorMax}
                 minValue={val?.indicatorMin}

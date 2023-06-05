@@ -73,7 +73,6 @@ export function buildSoketData(response, modelType, formData) {
       buildRpmData(
         "RPM",
         data["ChannelSpeed"],
-        "valueInHealth",
         maxRPMThrshhold
       )
     );
@@ -774,13 +773,14 @@ export function buildData(response) {
     const increase_fuel_consumption = buildLineGradientChart(
       historical_data,
       "PowerLoss",
-      "increase fuel consumption"
+      "Increase fuel consumption"
     );
     const peak_pressure = buildPeekPressureChart(data["Pressure"], firingOrder);
     const mechanical_health = buildLineGradientChart(
       historical_data,
       "MechanicalHealth",
-      "Mechanical Health"
+      "Mechanical Health",
+      true
     );
     trends.push(increase_fuel_consumption);
     trends.push(peak_pressure);
@@ -974,7 +974,7 @@ export function getCommaSepratedChannel(data, type) {
 function buildChannelName(channel) {
   return "CHANNEL" + channel.substr(channel.length - 1);
 }
-function buildLineGradientChart(data, key, title) {
+function buildLineGradientChart(data, key, title, isGradientOpposite) {
   let labels = [];
   let datapoints = [];
   let count = 0;
@@ -1009,6 +1009,7 @@ function buildLineGradientChart(data, key, title) {
     chartType: "LineGradient",
     xLabel: title,
     yLabel: "Time",
+    isGradientOpposite: isGradientOpposite ?? false,
   };
 }
 const message_data = {

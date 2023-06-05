@@ -28,9 +28,10 @@ export default function LineGradient({
   avgValue,
   datapoints,
   labels,
+  isGradientOpposite
 }: any) {
   let width: any, height: any, gradient: any;
-  function getGradient(ctx: any, chartArea: any) {
+  function getGradient(ctx: any, chartArea: any, isGradientOpposite:boolean) {
     const chartWidth = chartArea.right - chartArea.left;
     const chartHeight = chartArea.bottom - chartArea.top;
     if (!gradient || width !== chartWidth || height !== chartHeight) {
@@ -44,14 +45,13 @@ export default function LineGradient({
         0,
         chartArea.top
       );
-      gradient.addColorStop(0.8, "#02B271");
-      gradient.addColorStop(0.2, "#d6a79f");
+      gradient.addColorStop(isGradientOpposite ? 0.6: 0.1, "#02B271");
+      gradient.addColorStop(isGradientOpposite ? 0.1: 0.3, "#d6a79f");
     }
 
     return gradient;
   }
 
-  const DATA_COUNT = 12;
 
   const data = {
     labels: labels,
@@ -71,7 +71,7 @@ export default function LineGradient({
             // This case happens on initial chart load
             return;
           }
-          return getGradient(ctx, chartArea);
+          return getGradient(ctx, chartArea, isGradientOpposite);
         },
         fill: true,
       },

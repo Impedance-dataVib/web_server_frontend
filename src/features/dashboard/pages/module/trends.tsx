@@ -20,6 +20,7 @@ export default function Trends({ trends,fullScreen }: any) {
                   avgValue={val?.avg}
                   datapoints={val?.datapoints}
                   labels={val?.labels}
+                  isGradientOpposite={val?.isGradientOpposite}
                 />
               ) : (
                 <BarChart

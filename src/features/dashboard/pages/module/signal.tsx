@@ -30,12 +30,11 @@ const Signal = ({ signals, formData, moduleType }: any) => {
     if (lastMessage !== undefined) {
       const data = lastMessage?.data;
       if (data) {
-        let parsedData = data;
+        let parsedData = JSON.parse(data);
         if (parsedData?.Status === "Failed") {
+
         } else {
-          console.log(JSON.parse(parsedData));
-          parsedData = buildSignalData(JSON.parse(parsedData));
-          console.log(parsedData);
+          parsedData = buildSignalData(parsedData);
           setGraphData(parsedData);
         }
         setIsLoading(false);
