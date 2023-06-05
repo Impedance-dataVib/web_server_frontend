@@ -42,17 +42,14 @@ const DownloadPage = () => {
   }, []);
 
   const assetHandler = (e: SelectChangeEvent) => {
-    console.log(e.target.value);
     setAsset(e.target.value);
   };
 
   const periodHandler = (e: SelectChangeEvent) => {
-    console.log(e.target.value);
     setPeriod(e.target.value);
   };
 
   const reportTypeHandler = (e: SelectChangeEvent) => {
-    console.log(e.target.value);
     setReportType(e.target.value);
   };
 
@@ -94,7 +91,6 @@ const DownloadPage = () => {
         });
       });
   };
-  // console.log(assetModule);
 
   return (
     <Box>

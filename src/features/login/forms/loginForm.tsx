@@ -137,7 +137,6 @@ const LoginForm = () => {
   };
 
   const onClickSignUpButton = () => {
-    console.log("sign up button called");
   };
 
   return (

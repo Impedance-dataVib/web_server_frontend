@@ -59,7 +59,6 @@ const SystemConfiguration = () => {
   const handleUpdate = (e: any) => {
     e.preventDefault();
     let file: any = "";
-    console.log(file2);
 
     if (file2) {
       file = file2;
@@ -68,7 +67,6 @@ const SystemConfiguration = () => {
       file = file1;
       setFile2(null);
     }
-    console.log(file.get("file"));
 
     SystemInfoApi.updateSystemConfigFile(file)
       .then((val) => {

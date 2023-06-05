@@ -41,7 +41,6 @@ const ModuleMonitoringPage = ({ moduleData, classes, trendsData, processName, fo
       onMessage: () => {
         if (sendMessage) sendMessage(processName);
       },
-      onReconnectStop: () => console.log(true),
       shouldReconnect: (closeEvent) => true,
 
     },

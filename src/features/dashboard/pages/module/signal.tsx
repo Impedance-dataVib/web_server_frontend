@@ -19,14 +19,12 @@ const Signal = ({ signals, formData, moduleType }: any) => {
       onMessage: () => {
         if (sendMessage) sendMessage(channelNames);
       },
-      onReconnectStop: () => console.log(true),
       shouldReconnect: (closeEvent) => true,
       onClose: () => console.log("Signal closed")
     }
   );
 
   useEffect(() => {
-    console.log("signal", lastMessage);
     if (lastMessage !== undefined) {
       const data = lastMessage?.data;
       if (data) {
@@ -43,11 +41,6 @@ const Signal = ({ signals, formData, moduleType }: any) => {
   }, [lastMessage]);
 
   useEffect(() => {
-    console.log(
-      JSON.parse(formData),
-      moduleType,
-      getCommaSepratedChannel(formData, moduleType)
-    );
     setChannelNames(getCommaSepratedChannel(formData, moduleType));
   }, [moduleType, formData]);
 
