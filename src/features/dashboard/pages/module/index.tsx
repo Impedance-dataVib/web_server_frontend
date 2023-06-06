@@ -21,13 +21,20 @@ import { WarningAmber } from "@mui/icons-material";
 import CylinderIndicator from "./cylinder-indicator";
 import { SIGNAL_STATUS_QUALITY } from "../../schema";
 import { buildLiveStatusData } from "src/app/utils/helper";
-const ModuleMonitoringPage = ({ moduleData, classes, trendsData, processName, formData, moduleType }: any) => {
+const ModuleMonitoringPage = ({
+  moduleData,
+  classes,
+  trendsData,
+  processName,
+  formData,
+  moduleType,
+}: any) => {
   const [activeModule, setActiveModule] = useState<number>(0);
   const [signalData, setSignalData] = useState<any>({});
   const [isLiveSocket, setIsliveSocket] = useState<boolean>(false);
   const [isLatestReportOpen, setIsLatestReportOpen] = useState<boolean>(false);
-  const [isLiveStatusOpen,   setIsLiveStatusOpen] = useState<boolean>(false);
-  
+  const [isLiveStatusOpen, setIsLiveStatusOpen] = useState<boolean>(false);
+
   const [liveStatus, setLiveStatus] = useState<any>({});
   const onActiveModuleChange = (event: any, params: any) => {
     setActiveModule(params);
@@ -42,7 +49,6 @@ const ModuleMonitoringPage = ({ moduleData, classes, trendsData, processName, fo
         if (sendMessage) sendMessage(processName);
       },
       shouldReconnect: (closeEvent) => true,
-
     },
     isLiveSocket
   );
@@ -51,12 +57,12 @@ const ModuleMonitoringPage = ({ moduleData, classes, trendsData, processName, fo
     if (lastMessage !== undefined) {
       const data = lastMessage?.data;
       if (data) {
-        let parsedData = (data);
-        if(parsedData?.Status === "Failed") {
+        let parsedData = data;
+        if (parsedData?.Status === "Failed") {
           // setLiveStatus(parsedData?.Message)
         } else {
-          parsedData = buildLiveStatusData(parsedData)
-          setLiveStatus(parsedData)
+          parsedData = buildLiveStatusData(parsedData);
+          setLiveStatus(parsedData);
           // setWebSocketsData(parsedData);
         }
         // setIsLoading(false);
@@ -65,134 +71,170 @@ const ModuleMonitoringPage = ({ moduleData, classes, trendsData, processName, fo
   }, [lastMessage]);
 
   useEffect(() => {
-    if(isLiveSocket) {
+    if (isLiveSocket) {
       sendMessage(processName);
     }
-  }, [isLiveSocket])
+  }, [isLiveSocket]);
 
   useEffect(() => {
-    const data = SIGNAL_STATUS_QUALITY.find(val => val.id == moduleData?.currentStatus );
-    setSignalData(data || SIGNAL_STATUS_QUALITY[0])
+    const data = SIGNAL_STATUS_QUALITY.find(
+      (val) => val.id == moduleData?.currentStatus
+    );
+    setSignalData(data || SIGNAL_STATUS_QUALITY[0]);
   }, [moduleData?.currentStatus]);
 
   useEffect(() => {
     setIsliveSocket(isLatestReportOpen || isLiveStatusOpen);
   }, [isLatestReportOpen, isLiveStatusOpen]);
 
-
   return (
-        <Grid container spacing={2}>
-          <Grid item lg={5} md={6} sm={12}>
-            <CardWidget
-              headerLabel={
-                moduleData?.isAlert
-                  ? "Alerts & Instructions"
-                  : "Status Messages"
-              }
-              headerIcon={<WarningAmber />}
-              content={<AlertsAndInstructions moduleData={moduleData} />}
-              initiallyCollapsed={false}
-              fullScreenContent={
-                <AlertsAndInstructions
-                  moduleData={moduleData}
-                  isModalOpen={true}
-                />
-              }
+    <Grid container spacing={2}>
+      <Grid item lg={5} md={6} sm={12}>
+        <CardWidget
+          headerLabel={
+            moduleData?.isAlert ? "Alerts & Instructions" : "Status Messages"
+          }
+          headerIcon={<WarningAmber />}
+          content={<AlertsAndInstructions moduleData={moduleData} />}
+          initiallyCollapsed={false}
+          fullScreenContent={
+            <AlertsAndInstructions moduleData={moduleData} isModalOpen={true} />
+          }
+        />
+      </Grid>
+      <Grid item xs={12} md={6} lg={7}>
+        <CardWidget
+          headerLabel="Global Indicators"
+          headerIcon={<SignpostOutlined />}
+          content={
+            <GlobalIndicatorChart
+              globalIndicator={moduleData?.globalIndicator}
+              fullScreen={false}
             />
-          </Grid>
-          <Grid item xs={12} md={6} lg={7}>
-            <CardWidget
-              headerLabel="Global Indicators"
-              headerIcon={<SignpostOutlined />}
-              content={
-                <GlobalIndicatorChart
-                  globalIndicator={moduleData?.globalIndicator}
-                  fullScreen={false}
-                />
-              }
-              initiallyCollapsed={false}
-              fullScreenContent={
-                <GlobalIndicatorChart
-                  globalIndicator={moduleData?.globalIndicator}
-                  fullScreen={true}
-                />
-              }
+          }
+          initiallyCollapsed={false}
+          fullScreenContent={
+            <GlobalIndicatorChart
+              globalIndicator={moduleData?.globalIndicator}
+              fullScreen={true}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <CardWidget
-            headerContent={
-                <>
-                  <Tabs
-                    value={activeModule}
-                    onChange={onActiveModuleChange}
-                    aria-label="select modules"
-                    sx={{ marginTop: '10px' }}
-                  >
-                    {["Trends", "Cylinder Specific Indicator"]?.map(
-                      (tabElement: any, index: number) => (
-                        <Tab
-                          key={index}
-                          label={tabElement}
-                          icon={
-                            tabElement === "Trends" ? (
-                              <TrendingUp sx={{ mr: 1 }} />
-                            ) : (
-                              <TrendingUp />
-                            )
-                          }
-                          sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                          }}
-                          classes={{
-                            root: classes.trendsTabRoot,
-                          }}
-                        />
-                      )
-                    )}
-                  </Tabs>
-                </>
-              }
-              headerLabel={activeModule === 0 ? "Trends" : "Cylinder Specific Indicator"}
-              headerIcon={<></>}
-              content={(activeModule === 0 ? <Trends trends={trendsData?.trends} />: <CylinderIndicator cylinderSpecificIndicators={trendsData?.cylinder_specific_indicators} />)}
-              initiallyCollapsed={false}
-              fullScreenContent={(activeModule === 0 ? <Trends trends={trendsData?.trends} fullScreen={true}/>: <CylinderIndicator cylinderSpecificIndicators={trendsData?.cylinder_specific_indicators} fullScreen={true}/>)}
-              
+          }
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <CardWidget
+          headerContent={
+            <>
+              <Tabs
+                value={activeModule}
+                onChange={onActiveModuleChange}
+                aria-label="select modules"
+                sx={{ marginTop: "10px" }}
+              >
+                {["Trends", "Cylinder Specific Indicator"]?.map(
+                  (tabElement: any, index: number) => (
+                    <Tab
+                      key={index}
+                      label={tabElement}
+                      icon={
+                        tabElement === "Trends" ? (
+                          <TrendingUp sx={{ mr: 1 }} />
+                        ) : (
+                          <TrendingUp />
+                        )
+                      }
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                      classes={{
+                        root: classes.trendsTabRoot,
+                      }}
+                    />
+                  )
+                )}
+              </Tabs>
+            </>
+          }
+          headerLabel={
+            activeModule === 0 ? "Trends" : "Cylinder Specific Indicator"
+          }
+          headerIcon={<></>}
+          content={
+            activeModule === 0 ? (
+              <Trends trends={trendsData?.trends} />
+            ) : (
+              <CylinderIndicator
+                cylinderSpecificIndicators={
+                  trendsData?.cylinder_specific_indicators
+                }
+              />
+            )
+          }
+          initiallyCollapsed={false}
+          fullScreenContent={
+            activeModule === 0 ? (
+              <Trends trends={trendsData?.trends} fullScreen={true} />
+            ) : (
+              <CylinderIndicator
+                cylinderSpecificIndicators={
+                  trendsData?.cylinder_specific_indicators
+                }
+                fullScreen={true}
+              />
+            )
+          }
+        />
+      </Grid>
+      <Grid item lg={4} md={12} sm={12}>
+        <CardWidget
+          headerLabel="Live Status"
+          headerIcon={<VisibilityOutlined />}
+          content={<LiveStatus liveStatus={liveStatus} />}
+          initiallyCollapsed={true}
+          setIsLiveStatusOpen={setIsLiveStatusOpen}
+          fullScreenContent={<LiveStatus liveStatus={liveStatus} />}
+        />
+      </Grid>
+      <Grid item lg={4} md={12} sm={12}>
+        <CardWidget
+          headerLabel={signalData?.description || ""}
+          headerIcon={
+            signalData?.resultType === "success" ? (
+              <CellTowerOutlined color="success" />
+            ) : (
+              <SyncDisabled color="error" />
+            )
+          }
+          content={
+            <Signal
+              moduleType={moduleType}
+              signals={moduleData?.signals}
+              formData={formData}
             />
-          </Grid>
-          <Grid item lg={4} md={12} sm={12}>
-            <CardWidget
-              headerLabel="Live Status"
-              headerIcon={<VisibilityOutlined />}
-              content={<LiveStatus liveStatus={liveStatus} />}
-              initiallyCollapsed={true}
-              setIsLiveStatusOpen={setIsLiveStatusOpen}
-              fullScreenContent={<LiveStatus liveStatus={liveStatus}/>}
+          }
+          initiallyCollapsed={true}
+          fullScreenContent={
+            <Signal
+              moduleType={moduleType}
+              signals={moduleData?.signals}
+              formData={formData}
             />
-          </Grid>
-          <Grid item lg={4} md={12} sm={12}>
-            <CardWidget
-              headerLabel={signalData?.description || ""}
-              headerIcon={signalData?.resultType === "success" ? <CellTowerOutlined color="success"/> : <SyncDisabled color="error"/>}
-              content={<Signal moduleType={moduleType} signals={moduleData?.signals} formData={formData}/>}
-              initiallyCollapsed={true}
-              fullScreenContent={<Signal moduleType={moduleType} signals={moduleData?.signals} formData={formData}/>}
-            />
-          </Grid>
-          <Grid item lg={4} md={12} sm={12}>
-            <CardWidget
-              headerLabel="Latest Reports"
-              setIsLatestReportOpen={setIsLatestReportOpen}
-              headerIcon={<DescriptionOutlined />}
-              content={<ReportsCard liveStatus={liveStatus} />}
-              initiallyCollapsed={true}
-              fullScreenContent={<ReportsCard liveStatus={liveStatus} />}
-            />
-          </Grid>
-        </Grid>
+          }
+        />
+      </Grid>
+      <Grid item lg={4} md={12} sm={12}>
+        <CardWidget
+          headerLabel="Latest Reports"
+          setIsLatestReportOpen={setIsLatestReportOpen}
+          headerIcon={<DescriptionOutlined />}
+          content={<ReportsCard liveStatus={liveStatus} />}
+          initiallyCollapsed={true}
+          fullScreenContent={<ReportsCard liveStatus={liveStatus} />}
+        />
+      </Grid>
+    </Grid>
   );
 };
 export default ModuleMonitoringPage;
