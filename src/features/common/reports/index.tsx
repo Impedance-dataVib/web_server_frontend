@@ -1,5 +1,5 @@
 import {
-    ArticleOutlined,
+  ArticleOutlined,
   DescriptionOutlined,
   DownloadOutlined,
   List,
@@ -7,12 +7,19 @@ import {
   TextSnippetOutlined,
   TrendingUpOutlined,
 } from "@mui/icons-material";
-import { Box, Divider, Grid, IconButton, Link as Matlink, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Grid,
+  IconButton,
+  Link as Matlink,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 
 export interface IReportsCardProps {
-  liveStatus: any
+  liveStatus: any;
 }
 
 export interface IReportsRowProps {
@@ -34,7 +41,7 @@ const ReportsRow = ({
     <Box>
       <Grid container>
         <Grid item xs={2}>
-          <Box sx={{ textAlign: 'center'}}>{icon}</Box>
+          <Box sx={{ textAlign: "center" }}>{icon}</Box>
         </Grid>
         <Grid item xs={6}>
           <Box>
@@ -55,14 +62,20 @@ const ReportsRow = ({
         <Grid item xs={2}>
           <Box>
             <IconButton disabled={disabled || !viewUrl}>
-              <RemoveRedEyeOutlined sx={{ color: (disabled || !viewUrl) ? "lightgrey" : "#1A5DDD" }} />
+              <RemoveRedEyeOutlined
+                sx={{ color: disabled || !viewUrl ? "lightgrey" : "#1A5DDD" }}
+              />
             </IconButton>
           </Box>
         </Grid>
         <Grid item xs={2}>
           <Box>
             <IconButton disabled={disabled || !downloadUrl}>
-              <DownloadOutlined sx={{ color:  (disabled || !downloadUrl) ? "lightgrey" : "#1A5DDD" }}/>
+              <DownloadOutlined
+                sx={{
+                  color: disabled || !downloadUrl ? "lightgrey" : "#1A5DDD",
+                }}
+              />
             </IconButton>
           </Box>
         </Grid>
@@ -71,24 +84,48 @@ const ReportsRow = ({
   );
 };
 
-const ReportsCardContent = ({liveStatus}: IReportsCardProps) => {
+const ReportsCardContent = ({ liveStatus }: IReportsCardProps) => {
   return (
     <Box>
       <Grid container spacing={1}>
         <Grid xs={12} item>
-          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"} icon={<TrendingUpOutlined />} reportName="Graphical Report" />
+          <ReportsRow
+            disabled={
+              liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"
+            }
+            icon={<TrendingUpOutlined />}
+            reportName="Graphical Report"
+          />
           <Divider sx={{ mx: 0 }} />
         </Grid>
         <Grid xs={12} item>
-          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"} icon={<List />} reportName="Spreadsheet Report" />
+          <ReportsRow
+            disabled={
+              liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"
+            }
+            icon={<List />}
+            reportName="Spreadsheet Report"
+          />
           <Divider sx={{ mx: 0 }} />
         </Grid>
         <Grid xs={12} item>
-          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"} icon={<TextSnippetOutlined />} reportName="Raw Data" />
+          <ReportsRow
+            disabled={
+              liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"
+            }
+            icon={<TextSnippetOutlined />}
+            reportName="Raw Data"
+          />
           <Divider sx={{ mx: 0 }} />
         </Grid>
         <Grid xs={12} item>
-          <ReportsRow disabled={liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"} icon={<ArticleOutlined />} reportName="JSON Text Report" />
+          <ReportsRow
+            disabled={
+              liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"
+            }
+            icon={<ArticleOutlined />}
+            reportName="JSON Text Report"
+          />
           <Divider sx={{ mx: 0 }} />
         </Grid>
       </Grid>
@@ -97,7 +134,7 @@ const ReportsCardContent = ({liveStatus}: IReportsCardProps) => {
         variant="body1"
         color="#002BBC"
         to="/download"
-        sx={{ marginTop: '5px', display: 'flex', justifyContent: 'flex-end' }}
+        sx={{ marginTop: "5px", display: "flex", justifyContent: "flex-end" }}
       >
         Download Historic Report
       </Matlink>
@@ -105,10 +142,10 @@ const ReportsCardContent = ({liveStatus}: IReportsCardProps) => {
   );
 };
 
-const ReportsCard = ({liveStatus}: IReportsCardProps) => {
+const ReportsCard = ({ liveStatus }: IReportsCardProps) => {
   return (
     <Box>
-      <ReportsCardContent liveStatus={liveStatus}/>
+      <ReportsCardContent liveStatus={liveStatus} />
     </Box>
   );
 };
