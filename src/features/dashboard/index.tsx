@@ -136,6 +136,8 @@ const DashboardPage = () => {
         DashboardApi.getTrendsData(moduleTabs[activeModule].id).then((data) => {
           const parsedData = buildData(data)
           setTrendsData(parsedData);
+        }).catch(() => {
+          setTrendsData({});
         });
       } else {
         setIsLoading(false);
