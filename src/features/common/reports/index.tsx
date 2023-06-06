@@ -1,4 +1,5 @@
 import {
+  Api,
   ArticleOutlined,
   DescriptionOutlined,
   DownloadOutlined,
@@ -17,9 +18,11 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
+import api from "../../../app/api";
 
 export interface IReportsCardProps {
   liveStatus: any;
+  processName: any;
 }
 
 export interface IReportsRowProps {
@@ -28,6 +31,7 @@ export interface IReportsRowProps {
   reportName: string;
   viewUrl?: string;
   downloadUrl?: string;
+  processName: any;
 }
 
 const ReportsRow = ({
@@ -36,7 +40,47 @@ const ReportsRow = ({
   reportName,
   viewUrl,
   downloadUrl,
+  processName,
 }: IReportsRowProps) => {
+  // console.log(processName);
+
+  const handleDownload = (reportName: any) => {
+    let type: string = "";
+    if (reportName === "Graphical Report") {
+      type = "graphical";
+    } else if (reportName === "Spreadsheet Report") {
+      type = "spredsheet";
+    } else if (reportName === "Raw Data") {
+      type = "raw";
+    } else if (reportName === "JSON Text Report") {
+      type = "json";
+    }
+    api
+      .get(
+        `/download/current_download.php?process_name=${processName}&type=${type}`,
+        {
+          responseType: "blob",
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const url = window.URL.createObjectURL(res.data);
+        const link = document.createElement("a");
+        link.href = url;
+        if (type === "json") {
+          link.setAttribute("download", "data.json");
+        } else if (type === "raw") {
+          link.setAttribute("download", "raw-data.wav");
+        } else if (type === "spredsheet") {
+          link.setAttribute("download", "spreadsheet.excel");
+        } else if (type === "graphical") {
+          link.setAttribute("download", "graphical-report.pdf");
+        }
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <Box>
       <Grid container>
@@ -63,17 +107,19 @@ const ReportsRow = ({
           <Box>
             <IconButton disabled={disabled || !viewUrl}>
               <RemoveRedEyeOutlined
-                sx={{ color: disabled || !viewUrl ? "lightgrey" : "#1A5DDD" }}
+                sx={{ color: disabled ? "lightgrey" : "#1A5DDD" }}
               />
             </IconButton>
           </Box>
         </Grid>
         <Grid item xs={2}>
           <Box>
-            <IconButton disabled={disabled || !downloadUrl}>
+            {/* disabled={disabled || !downloadUrl} */}
+            <IconButton>
               <DownloadOutlined
+                onClick={() => handleDownload(reportName)}
                 sx={{
-                  color: disabled || !downloadUrl ? "lightgrey" : "#1A5DDD",
+                  color: disabled ? "lightgrey" : "#1A5DDD",
                 }}
               />
             </IconButton>
@@ -84,7 +130,7 @@ const ReportsRow = ({
   );
 };
 
-const ReportsCardContent = ({ liveStatus }: IReportsCardProps) => {
+const ReportsCardContent = ({ liveStatus, processName }: IReportsCardProps) => {
   return (
     <Box>
       <Grid container spacing={1}>
@@ -95,6 +141,7 @@ const ReportsCardContent = ({ liveStatus }: IReportsCardProps) => {
             }
             icon={<TrendingUpOutlined />}
             reportName="Graphical Report"
+            processName={processName}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -105,6 +152,7 @@ const ReportsCardContent = ({ liveStatus }: IReportsCardProps) => {
             }
             icon={<List />}
             reportName="Spreadsheet Report"
+            processName={processName}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -115,6 +163,7 @@ const ReportsCardContent = ({ liveStatus }: IReportsCardProps) => {
             }
             icon={<TextSnippetOutlined />}
             reportName="Raw Data"
+            processName={processName}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -125,6 +174,7 @@ const ReportsCardContent = ({ liveStatus }: IReportsCardProps) => {
             }
             icon={<ArticleOutlined />}
             reportName="JSON Text Report"
+            processName={processName}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -142,10 +192,10 @@ const ReportsCardContent = ({ liveStatus }: IReportsCardProps) => {
   );
 };
 
-const ReportsCard = ({ liveStatus }: IReportsCardProps) => {
+const ReportsCard = ({ liveStatus, processName }: IReportsCardProps) => {
   return (
     <Box>
-      <ReportsCardContent liveStatus={liveStatus} />
+      <ReportsCardContent liveStatus={liveStatus} processName={processName} />
     </Box>
   );
 };

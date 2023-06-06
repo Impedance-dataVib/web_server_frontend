@@ -53,21 +53,21 @@ export function buildSoketData(response, modelType, formData) {
       buildIndicatorData(
         "Regularity/Deviation",
         data["RegularityDeviation"],
-        "valueInHealth"
+        "valueInPercent"
       )
     );
     globalIndicator.push(
       buildIndicatorData(
         "Bearing Status",
         data["BearingStatus"],
-        "valueInHealth"
+        "valueInPercent"
       )
     );
     globalIndicator.push(
-      buildIndicatorData("Shaft Health", data["BladeStatus"], "valueInHealth")
+      buildIndicatorData("Shaft Health", data["BladeStatus"], "valueInPercent")
     );
     globalIndicator.push(
-      buildIndicatorData("Coupling", data["TurbineCoupling"], "valueInHealth")
+      buildIndicatorData("Coupling", data["TurbineCoupling"], "valueInPercent")
     );
     globalIndicator.push(
       buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold)
@@ -77,7 +77,7 @@ export function buildSoketData(response, modelType, formData) {
       buildIndicatorData(
         "Combustion Kit",
         data["CombustionKit"],
-        "valueInHealth"
+        "valueInPercent"
       )
     );
 
@@ -99,9 +99,13 @@ export function buildSoketData(response, modelType, formData) {
 
     alertData = buildMotorAlertData(data);
   } else if (modelType === "Bearing") {
-    globalIndicator.push(buildIndicatorData("Bearing", data["4KMixed"]));
+    globalIndicator.push(
+      buildIndicatorData("Bearing", data["4KMixed"], "valueInHealth")
+    );
     globalIndicator.push(buildRpmData("RPM", data["ChannelSpeed"]));
-    globalIndicator.push(buildIndicatorData("Friction", data["8KMixed"]));
+    globalIndicator.push(
+      buildIndicatorData("Friction", data["8KMixed"], "valueInHealth")
+    );
     alertData = buildBearingAlertData(data);
   }
 
@@ -901,7 +905,7 @@ export function buildLiveStatusData(data) {
     currentStep = 4;
   }
   return {
-    currentStep: currentStep,
+    currentStep: "currentStep",
     currentMode: "Auto",
     stepProgress: 25,
     currentMessage: "Initiate Manual Measurement",
@@ -977,7 +981,12 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
       const moduleData = objectData[firstKey];
       labels.push(firstKey);
       const valueObject = moduleData[key];
-      datapoints.push(valueObject["value"]);
+      if (isGradientOpposite) {
+        datapoints.push(valueObject["valueInHealth"]);
+      } else {
+        datapoints.push(valueObject["value"]);
+      }
+
       count++;
     }
   }

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState, useRef, createContext } from "react";
 import {
   Alert,
   AlertTitle,
@@ -63,7 +63,15 @@ function tabProps(index: number) {
   };
 }
 
-const TabModuleRender = ({ type, moduleData, classes, trendsData, processName, formData, moduleType }: any) => {
+const TabModuleRender = ({
+  type,
+  moduleData,
+  classes,
+  trendsData,
+  processName,
+  formData,
+  moduleType,
+}: any) => {
   const { t } = useTranslation();
 
   switch (type) {
@@ -74,14 +82,16 @@ const TabModuleRender = ({ type, moduleData, classes, trendsData, processName, f
     case "Bearing":
       return (
         <Box>
-          {isEmptyObject(moduleData) && <ModuleMonitoringPage
-            moduleData={moduleData}
-            classes={classes}
-            trendsData={trendsData}
-            processName={processName}
-            formData={formData}
-            moduleType={moduleType}
-          />}
+          {isEmptyObject(moduleData) && (
+            <ModuleMonitoringPage
+              moduleData={moduleData}
+              classes={classes}
+              trendsData={trendsData}
+              processName={processName}
+              formData={formData}
+              moduleType={moduleType}
+            />
+          )}
         </Box>
       );
     default:
@@ -98,13 +108,18 @@ const TabModuleRender = ({ type, moduleData, classes, trendsData, processName, f
 const DashboardPage = () => {
   const [moduleTabs, setModuleTabs] = useState<any[]>([]);
   const [webSocketsData, setWebSocketsData] = useState({});
-  const [isDataAvailable, setIsDataAvailable] = useState<any>(undefined) 
+  const [isDataAvailable, setIsDataAvailable] = useState<any>(undefined);
   const [trendsData, setTrendsData] = useState({});
   const [activeModule, setActiveModule] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showLicenseExpiryMsg, setShowLicenseExpiryMsg] =
     useState<boolean>(false);
   const [licExpiryText, setLicExpiryText] = useState<string>("");
+  // console.log(moduleTabs[activeModule].process_name);
+
+  //  const processName=()=>{
+  //   return moduleTabs[activeModule].process_name;
+  // }
 
   const { classes } = useStyles();
   const { t } = useTranslation();
@@ -120,21 +135,21 @@ const DashboardPage = () => {
         if (sendMessage) sendMessage(moduleTabs[activeModule].process_name);
       },
       onError: (e) => {
-        setIsDataAvailable('Something went wrong!. Please try again.')
+        setIsDataAvailable("Something went wrong!. Please try again.");
         setIsLoading(false);
-      }
+      },
     }
   );
 
   useEffect(() => {
     if (moduleTabs.length > 0) {
       if (moduleTabs[activeModule].process_name) {
-        setIsLoading(true)
-        setWebSocketsData({})
+        setIsLoading(true);
+        setWebSocketsData({});
         setTrendsData({});
         sendMessage(moduleTabs[activeModule].process_name);
         DashboardApi.getTrendsData(moduleTabs[activeModule].id).then((data) => {
-          const parsedData = buildData(data)
+          const parsedData = buildData(data);
           setTrendsData(parsedData);
         }).catch(() => {
           setTrendsData({});
@@ -150,22 +165,26 @@ const DashboardPage = () => {
       const data = lastMessage?.data;
       if (data) {
         try {
-        let parsedData = JSON.parse(data);
-        
-        if(parsedData?.Status === "Failed") {
-          setIsDataAvailable(parsedData?.Message)
-          setWebSocketsData({})
-        } else {
-          parsedData = buildSoketData(parsedData, moduleTabs[activeModule].module_type, moduleTabs[activeModule].from_data)
-          setIsDataAvailable(undefined)
-          setWebSocketsData(parsedData);
+          let parsedData = JSON.parse(data);
+
+          if (parsedData?.Status === "Failed") {
+            setIsDataAvailable(parsedData?.Message);
+            setWebSocketsData({});
+          } else {
+            parsedData = buildSoketData(
+              parsedData,
+              moduleTabs[activeModule].module_type,
+              moduleTabs[activeModule].from_data
+            );
+            setIsDataAvailable(undefined);
+            setWebSocketsData(parsedData);
+          }
+          setIsLoading(false);
+        } catch (ex) {
+          console.log(ex);
+          setIsLoading(false);
+          setIsDataAvailable("Something went wrong");
         }
-        setIsLoading(false);
-      } catch (ex) {
-        console.log(ex);
-        setIsLoading(false);
-        setIsDataAvailable('Something went wrong')
-      }
       }
     }
   }, [lastMessage]);
@@ -325,9 +344,7 @@ const DashboardPage = () => {
               setShowLicenseExpiryMsg(false);
             }}
           >
-            <AlertTitle>
-              {isDataAvailable}
-            </AlertTitle>
+            <AlertTitle>{isDataAvailable}</AlertTitle>
             <Typography variant="caption" component={"span"}>
               {isDataAvailable}
             </Typography>

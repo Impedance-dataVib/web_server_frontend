@@ -229,9 +229,13 @@ const ModuleMonitoringPage = ({
           headerLabel="Latest Reports"
           setIsLatestReportOpen={setIsLatestReportOpen}
           headerIcon={<DescriptionOutlined />}
-          content={<ReportsCard liveStatus={liveStatus} />}
+          content={
+            <ReportsCard liveStatus={liveStatus} processName={processName} />
+          }
           initiallyCollapsed={true}
-          fullScreenContent={<ReportsCard liveStatus={liveStatus} />}
+          fullScreenContent={
+            <ReportsCard liveStatus={liveStatus} processName={processName} />
+          }
         />
       </Grid>
     </Grid>
