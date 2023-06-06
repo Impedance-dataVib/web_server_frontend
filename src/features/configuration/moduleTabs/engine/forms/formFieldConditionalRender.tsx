@@ -227,6 +227,9 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                             width: "182px",
                             padding: "1px 1px",
                           }}
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           inputProps={{
                             style: {
                               padding: "11px 26px 13px 12px",
@@ -251,6 +254,9 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                               padding: "11px 26px 13px 12px",
                             },
                           }}
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           InputLabelProps={{ shrink: true }}
                         ></TextField>
                         <TextField
@@ -270,6 +276,9 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                               padding: "11px 26px 13px 12px",
                             },
                           }}
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           InputLabelProps={{ shrink: true }}
                         ></TextField>
                         <TextField
@@ -289,10 +298,16 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                               padding: "11px 26px 13px 12px",
                             },
                           }}
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           InputLabelProps={{ shrink: true }}
                         ></TextField>
                         <Button
                           color="secondary"
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           onClick={() => formHelper.remove(index)}
                         >
                           Remove
@@ -303,6 +318,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   <Button
                     variant="contained"
                     color="primary"
+                    disabled={fieldProps?.userName === "admin" ? false : true}
                     onClick={() =>
                       formHelper.push({
                         overwrite: "",
@@ -321,6 +337,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
         </FormikProvider>
       );
     case "filter_parameters": {
+      console.log(formContext?.values);
       return (
         <Grid item container direction={"column"}>
           <Grid item>
@@ -331,7 +348,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   onChange={(e) => {
                     formContext?.setFieldValue(e.target.name, e.target.checked);
                   }}
-                  value={formContext?.values?.[fieldProps.name]}
+                  checked={formContext?.values?.[fieldProps.name]}
                   color="primary"
                 />
               }
@@ -361,7 +378,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   error={Boolean(formContext?.errors?.[fieldProps.label])}
                   helperText={formContext?.errors?.[fieldProps.label]}
                   inputProps={{
-                    readOnly: fieldProps?.disabled ? true : false,
+                    readOnly: fieldProps?.userName === "admin" ? false : true,
                     style: {
                       padding: "11px 26px 13px 12px",
                     },
@@ -385,7 +402,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   error={Boolean(formContext?.errors?.[fieldProps.label])}
                   helperText={formContext?.errors?.[fieldProps.label]}
                   inputProps={{
-                    readOnly: fieldProps?.disabled ? true : false,
+                    readOnly: fieldProps?.userName === "admin" ? false : true,
                     style: {
                       padding: "11px 26px 13px 12px",
                     },
@@ -409,7 +426,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   error={Boolean(formContext?.errors?.[fieldProps.label])}
                   helperText={formContext?.errors?.[fieldProps.label]}
                   inputProps={{
-                    readOnly: fieldProps?.disabled ? true : false,
+                    readOnly: fieldProps?.userName === "admin" ? false : true,
                     style: {
                       padding: "11px 26px 13px 12px",
                     },

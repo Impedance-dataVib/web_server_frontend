@@ -88,7 +88,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
             <Switch
               name={fieldProps.label}
               onChange={formContext?.handleChange}
-              value={formContext?.values?.[fieldProps.label]}
+              checked={formContext?.values?.[fieldProps.label]}
               color="primary"
             />
           }
@@ -113,6 +113,9 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           onChange={formContext?.handleChange}
                           value={item.overwrite}
                           variant="outlined"
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           sx={{
                             fontSize: "16px",
                             marginBottom: "20px",
@@ -132,6 +135,9 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           onChange={formContext?.handleChange}
                           value={item.overwriteMin}
                           variant="outlined"
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           sx={{
                             fontSize: "16px",
                             marginBottom: "20px",
@@ -151,6 +157,9 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           onChange={formContext?.handleChange}
                           value={item.overwriteMiddle}
                           variant="outlined"
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           sx={{
                             fontSize: "16px",
                             marginBottom: "20px",
@@ -170,6 +179,9 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           onChange={formContext?.handleChange}
                           value={item.overwriteMax}
                           variant="outlined"
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           sx={{
                             fontSize: "16px",
                             marginBottom: "20px",
@@ -185,6 +197,9 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                         ></TextField>
                         <Button
                           color="secondary"
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           onClick={() => formHelper.remove(index)}
                         >
                           Remove
@@ -195,6 +210,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   <Button
                     variant="contained"
                     color="primary"
+                    disabled={fieldProps?.userName === "admin" ? false : true}
                     onClick={() =>
                       formHelper.push({
                         overwrite: "",
@@ -224,7 +240,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   onChange={(e) => {
                     formContext?.setFieldValue(e.target.name, e.target.checked);
                   }}
-                  value={formContext?.values?.[fieldProps.name]}
+                  checked={formContext?.values?.[fieldProps.name]}
                   color="primary"
                 />
               }
@@ -243,6 +259,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   onChange={formContext?.handleChange}
                   value={formContext?.values?.["Filter_lowDecim"]}
                   variant="outlined"
+                  disabled={fieldProps?.userName === "admin" ? false : true}
                   sx={{
                     fontSize: "16px",
                     marginBottom: "20px",
@@ -267,6 +284,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   onChange={formContext?.handleChange}
                   value={formContext?.values?.["Filter_low"]}
                   variant="outlined"
+                  disabled={fieldProps?.userName === "admin" ? false : true}
                   sx={{
                     fontSize: "16px",
                     marginBottom: "20px",
@@ -291,6 +309,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   onChange={formContext?.handleChange}
                   value={formContext?.values?.["highPass"]}
                   variant="outlined"
+                  disabled={fieldProps?.userName === "admin" ? false : true}
                   sx={{
                     fontSize: "16px",
                     marginBottom: "20px",
