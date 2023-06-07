@@ -70,7 +70,7 @@ export default function UploadFile() {
     >
       <Box sx={{ width: "49%" }}>
         <Typography component={"p"}>Update License file</Typography>
-        <FileUpload onChangeHandler={handleFile1} file=".zip" />
+        <FileUpload onChangeHandler={handleFile1} file=".dat" />
         {fileName1 ? (
           <Box sx={{ color: "green" }}>{fileName1}</Box>
         ) : (
@@ -79,7 +79,7 @@ export default function UploadFile() {
       </Box>
       <Box sx={{ width: "49%" }}>
         <Typography component={"p"}>Update Software Version file</Typography>
-        <FileUpload onChangeHandler={handleFile2} file=".dat" />
+        <FileUpload onChangeHandler={handleFile2} file=".zip" />
         {fileName2 ? (
           <Box sx={{ color: "green" }}>{fileName2}</Box>
         ) : (
