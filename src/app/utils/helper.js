@@ -160,9 +160,6 @@ function buildPeekPressureChart(data, firingOrder) {
   }
   const increase_fuel_consumption = {
     trendsName: "Peek Pressure",
-    min: 0,
-    max: 100,
-    avg: 50,
     datapoints: data["cylinderValues"],
     labels: labels,
     chartType: "bar",
@@ -515,6 +512,7 @@ function buildTorqueAlertData(data) {
       const message = message_data[code];
       returnArray.push({
         instructionName: message["status"],
+        isTorque: true,
         instructionType: message["status"] === "Success" ? "success" : "error",
         instructions: [{ message: message["message"], time: firstKey }],
       });

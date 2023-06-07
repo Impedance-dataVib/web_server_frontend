@@ -115,11 +115,6 @@ const DashboardPage = () => {
   const [showLicenseExpiryMsg, setShowLicenseExpiryMsg] =
     useState<boolean>(false);
   const [licExpiryText, setLicExpiryText] = useState<string>("");
-  // console.log(moduleTabs[activeModule].process_name);
-
-  //  const processName=()=>{
-  //   return moduleTabs[activeModule].process_name;
-  // }
 
   const { classes } = useStyles();
   const { t } = useTranslation();

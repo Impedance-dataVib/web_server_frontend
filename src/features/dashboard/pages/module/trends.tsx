@@ -18,6 +18,7 @@ export default function Trends({ trends,fullScreen }: any) {
                   minValue={val?.min}
                   maxValue={val?.max}
                   avgValue={val?.avg}
+                  trendsName={val?.trendsName}
                   datapoints={val?.datapoints}
                   labels={val?.labels}
                   isGradientOpposite={val?.isGradientOpposite}
@@ -30,7 +31,7 @@ export default function Trends({ trends,fullScreen }: any) {
               )}
             </Box>
             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-              <Typography
+            {val?.chartType === "LineGradient" && <Typography
                 component="span"
                 textAlign={"left"}
                 alignItems="center"
@@ -38,31 +39,31 @@ export default function Trends({ trends,fullScreen }: any) {
               >
                 <CircleIcon color="primary" sx={{mr:1}}/>
                 {val?.trendsName}
-              </Typography>
-              <Typography
+              </Typography>}
+              {val.min && <Typography
                 component="span"
                 textAlign={"left"}
                 alignItems="center"
                 display={"flex"}
               >
-                Min.
-              </Typography>
-              <Typography
+                Min. {val?.min}
+              </Typography>}
+              {val.max && <Typography
                 component="span"
                 textAlign={"left"}
                 alignItems="center"
                 display={"flex"}
               >
-                Max.
-              </Typography>
-              <Typography
+                Max. {val?.max}
+              </Typography>}
+              {val?.avg && <Typography
                 component="span"
                 textAlign={"left"}
                 alignItems="center"
                 display={"flex"}
               >
-                Avg.
-              </Typography>
+                Avg. {val?.avg}
+              </Typography>}
             </Box>
           </Grid>
         ))}

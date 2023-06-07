@@ -95,10 +95,10 @@ const ModuleMonitoringPage = ({
             moduleData?.isAlert ? "Alerts & Instructions" : "Status Messages"
           }
           headerIcon={<WarningAmber />}
-          content={<AlertsAndInstructions moduleData={moduleData} />}
+          content={<AlertsAndInstructions moduleData={moduleData} alertData={trendsData?.alert} />}
           initiallyCollapsed={false}
           fullScreenContent={
-            <AlertsAndInstructions moduleData={moduleData} isModalOpen={true} />
+            <AlertsAndInstructions moduleData={moduleData} alertData={trendsData?.alert} isModalOpen={true} />
           }
         />
       </Grid>
