@@ -107,19 +107,20 @@ const ReportsRow = ({
           <Box>
             <IconButton disabled={disabled || !viewUrl}>
               <RemoveRedEyeOutlined
-                sx={{ color: disabled ? "lightgrey" : "#1A5DDD" }}
+                sx={{
+                  color: disabled || !downloadUrl ? "lightgrey" : "#1A5DDD",
+                }}
               />
             </IconButton>
           </Box>
         </Grid>
         <Grid item xs={2}>
           <Box>
-            {/* disabled={disabled || !downloadUrl} */}
-            <IconButton>
+            <IconButton disabled={disabled || !downloadUrl}>
               <DownloadOutlined
                 onClick={() => handleDownload(reportName)}
                 sx={{
-                  color: disabled ? "lightgrey" : "#1A5DDD",
+                  color: disabled || !downloadUrl ? "lightgrey" : "#1A5DDD",
                 }}
               />
             </IconButton>
