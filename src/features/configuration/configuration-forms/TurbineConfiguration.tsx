@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
-import formSchema from "../formSchema";
+import formSchema, { OVER_WRITE_INDICATORS } from "../formSchema";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import HelpIcon from "@mui/icons-material/Help";
@@ -107,33 +107,51 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   {formContext?.values?.[fieldProps.label].map(
                     (item: any, index: number) => (
                       <Box key={index}>
-                        <TextField
-                          name={`${fieldProps.label}[${index}].overwrite`}
-                          label={`overwrite`}
-                          onChange={formContext?.handleChange}
-                          value={item.overwrite}
-                          variant="outlined"
-                          disabled={fieldProps?.userName === "admin" ? false : true}
-                          sx={{
-                            fontSize: "16px",
-                            marginBottom: "20px",
-                            width: "182px",
-                            padding: "1px 1px",
-                          }}
-                          inputProps={{
-                            style: {
-                              padding: "11px 26px 13px 12px",
-                            },
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                        ></TextField>
+                        <FormControl
+                          sx={{ minWidth: "182px", marginBottom: "20px" }}
+                          // error={Boolean(
+                          //   formContext?.errors?.[fieldProps.label]
+                          // )}
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
+                        >
+                          <InputLabel
+                            id={`${fieldProps.label}[${index}]-overwrite-label`}
+                          >
+                            {`overwrite`}
+                          </InputLabel>
+                          <Select
+                            labelId={`${fieldProps.label}[${index}]-overwrite-label`}
+                            name={`${fieldProps.label}[${index}].overwrite`}
+                            onChange={formContext?.handleChange}
+                            label={`overwrite`}
+                            value={item.overwrite}
+                          >
+                            <MenuItem value={""}>None</MenuItem>
+                            {OVER_WRITE_INDICATORS["Turbine"].map(
+                              (option: string) => (
+                                <MenuItem key={option} value={option}>
+                                  {option}
+                                </MenuItem>
+                              )
+                            )}
+                          </Select>
+                          {/* {Boolean(formContext?.errors?.[fieldProps.label]) && (
+                            <FormHelperText>
+                              {formContext?.errors?.[fieldProps.label]}
+                            </FormHelperText>
+                          )} */}
+                        </FormControl>
                         <TextField
                           name={`${fieldProps.label}[${index}].overwriteMin`}
                           label={`overwriteMin`}
                           onChange={formContext?.handleChange}
                           value={item.overwriteMin}
                           variant="outlined"
-                          disabled={fieldProps?.userName === "admin" ? false : true}
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           sx={{
                             fontSize: "16px",
                             marginBottom: "20px",
@@ -142,7 +160,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           }}
                           inputProps={{
                             style: {
-                              padding: "11px 26px 13px 12px",
+                              padding: "11px 26px 18px 12px",
                             },
                           }}
                           InputLabelProps={{ shrink: true }}
@@ -153,7 +171,9 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           onChange={formContext?.handleChange}
                           value={item.overwriteMiddle}
                           variant="outlined"
-                          disabled={fieldProps?.userName === "admin" ? false : true}
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           sx={{
                             fontSize: "16px",
                             marginBottom: "20px",
@@ -162,7 +182,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           }}
                           inputProps={{
                             style: {
-                              padding: "11px 26px 13px 12px",
+                              padding: "11px 26px 18px 12px",
                             },
                           }}
                           InputLabelProps={{ shrink: true }}
@@ -173,7 +193,9 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           onChange={formContext?.handleChange}
                           value={item.overwriteMax}
                           variant="outlined"
-                          disabled={fieldProps?.userName === "admin" ? false : true}
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           sx={{
                             fontSize: "16px",
                             marginBottom: "20px",
@@ -182,14 +204,16 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           }}
                           inputProps={{
                             style: {
-                              padding: "11px 26px 13px 12px",
+                              padding: "11px 26px 18px 12px",
                             },
                           }}
                           InputLabelProps={{ shrink: true }}
                         ></TextField>
                         <Button
                           color="secondary"
-                          disabled={fieldProps?.userName === "admin" ? false : true}
+                          disabled={
+                            fieldProps?.userName === "admin" ? false : true
+                          }
                           onClick={() => formHelper.remove(index)}
                         >
                           Remove

@@ -14,6 +14,7 @@ import {
 import { FieldArray, FieldArrayRenderProps, FormikProvider } from "formik";
 import debounce from "lodash/debounce";
 import { useCallback } from "react";
+import { OVER_WRITE_INDICATORS } from "src/features/configuration/formSchema";
 
 const MultipleFields = ({ fieldProps, formContext }: any) => {
   return (
@@ -215,28 +216,42 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   {formContext?.values?.[fieldProps.label].map(
                     (item: any, index: number) => (
                       <Box key={index}>
-                        <TextField
-                          name={`${fieldProps.label}[${index}].overwrite`}
-                          label={`overwrite`}
-                          onChange={formContext?.handleChange}
-                          value={item.overwrite}
-                          variant="outlined"
-                          sx={{
-                            fontSize: "16px",
-                            marginBottom: "20px",
-                            width: "182px",
-                            padding: "1px 1px",
-                          }}
+                        <FormControl
+                          sx={{ minWidth: "182px", marginBottom: "20px" }}
+                          // error={Boolean(
+                          //   formContext?.errors?.[fieldProps.label]
+                          // )}
                           disabled={
                             fieldProps?.userName === "admin" ? false : true
                           }
-                          inputProps={{
-                            style: {
-                              padding: "11px 26px 13px 12px",
-                            },
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                        ></TextField>
+                        >
+                          <InputLabel
+                            id={`${fieldProps.label}[${index}]-overwrite-label`}
+                          >
+                            {`overwrite`}
+                          </InputLabel>
+                          <Select
+                            labelId={`${fieldProps.label}[${index}]-overwrite-label`}
+                            name={`${fieldProps.label}[${index}].overwrite`}
+                            onChange={formContext?.handleChange}
+                            label={`overwrite`}
+                            value={item.overwrite}
+                          >
+                            <MenuItem value={""}>None</MenuItem>
+                            {OVER_WRITE_INDICATORS["Engine"].map(
+                              (option: string) => (
+                                <MenuItem key={option} value={option}>
+                                  {option}
+                                </MenuItem>
+                              )
+                            )}
+                          </Select>
+                          {/* {Boolean(formContext?.errors?.[fieldProps.label]) && (
+                            <FormHelperText>
+                              {formContext?.errors?.[fieldProps.label]}
+                            </FormHelperText>
+                          )} */}
+                        </FormControl>
                         <TextField
                           name={`${fieldProps.label}[${index}].overwriteMin`}
                           label={`overwriteMin`}
@@ -251,7 +266,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           }}
                           inputProps={{
                             style: {
-                              padding: "11px 26px 13px 12px",
+                              padding: "11px 26px 18px 12px",
                             },
                           }}
                           disabled={
@@ -273,7 +288,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           }}
                           inputProps={{
                             style: {
-                              padding: "11px 26px 13px 12px",
+                              padding: "11px 26px 18px 12px",
                             },
                           }}
                           disabled={
@@ -295,7 +310,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           }}
                           inputProps={{
                             style: {
-                              padding: "11px 26px 13px 12px",
+                              padding: "11px 26px 18px 12px",
                             },
                           }}
                           disabled={
