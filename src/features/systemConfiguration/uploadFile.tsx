@@ -2,9 +2,14 @@ import { Box, Typography } from "@mui/material";
 import FileUpload from "../../app/components/file-upload";
 import SystemInfoApi from "./api";
 import { enqueueSnackbar } from "notistack";
+import { useState } from "react";
 export default function UploadFile() {
+  const [fileName1, setFileName1] = useState<any>();
+  const [fileName2, setFileName2] = useState<any>();
   const handleFile1 = (e: any) => {
     const file1 = e.target.files[0];
+    const filename = e.target.files[0]?.name;
+    setFileName1(filename);
     if (!file1) {
       return;
     }
@@ -29,6 +34,8 @@ export default function UploadFile() {
   };
   const handleFile2 = (e: any) => {
     const file2 = e.target.files[0];
+    const filename = e.target.files[0]?.name;
+    setFileName2(filename);
     if (!file2) {
       return;
     }
@@ -64,10 +71,20 @@ export default function UploadFile() {
       <Box sx={{ width: "49%" }}>
         <Typography component={"p"}>Update License file</Typography>
         <FileUpload onChangeHandler={handleFile1} file=".zip" />
+        {fileName1 ? (
+          <Box sx={{ color: "green" }}>{fileName1}</Box>
+        ) : (
+          "No file Chosen"
+        )}
       </Box>
       <Box sx={{ width: "49%" }}>
         <Typography component={"p"}>Update Software Version file</Typography>
         <FileUpload onChangeHandler={handleFile2} file=".dat" />
+        {fileName2 ? (
+          <Box sx={{ color: "green" }}>{fileName2}</Box>
+        ) : (
+          "No file Chosen"
+        )}
       </Box>
     </Box>
   );
