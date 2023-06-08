@@ -383,9 +383,43 @@ export function buildLiveStatusData(data) {
   };
 }
 
-export function buildSignalData(data) {
+export function buildSignalData(data, formData, type) {
+  let firstChannelName = "";
+  let secondChannelName = "";
+  formData = JSON.parse(formData);
+  if (type === "Engine") {
+    firstChannelName = "Crankshaft";
+    if (formData["CamShaft_SENSORx"] !== "No Channel") {
+      secondChannelName = "CamShaft";
+    }
+    if (formData["TDC_SENSORx"] !== "No Channel") {
+      secondChannelName = "TDC";
+    }
+    if (formData["Peak_Pressure_SENSORx"] !== "No Channel") {
+      secondChannelName = "Peak Pressure";
+    }
+  }
+  if (type === "Torque") {
+    firstChannelName = "DE Channel";
+    if (formData["nde_channel_sensorx"] !== "No Channel") {
+      secondChannelName = "NDE Channel";
+    }
+  }
+  if (type === "Turbine") {
+    firstChannelName = "Sensor";
+  }
+  if (type === "Motor") {
+    firstChannelName = "Sensor";
+  }
+
+  if (type === "Bearing") {
+    firstChannelName = "Sensor";
+  }
+
   let returnArray = [];
-  for (let item of data) {
+
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i];
     const firstKey = Object.keys(item)[0];
     const itemData = item[firstKey];
 
@@ -393,7 +427,7 @@ export function buildSignalData(data) {
       const itemDataFirstKey = Object.keys(itemData)[0];
       const channelData = itemData[itemDataFirstKey];
       returnArray.push({
-        title: firstKey,
+        title: i === 0 ? firstChannelName : secondChannelName,
         value: channelData["ChannelSpeed"],
       });
     }

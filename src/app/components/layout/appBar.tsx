@@ -22,6 +22,7 @@ import {
   Menu,
   fabClasses,
 } from "@mui/material";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
 import { Link, useLocation, matchPath } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
@@ -296,7 +297,19 @@ const DrawerAppBar = () => {
               />
             </Box>
           </Box>
-          <Box sx={{ color: "black", mr: 3 }}>
+          <Box
+            sx={{
+              color: "black",
+              mr: 3,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <AccessTimeIcon
+              sx={{
+                mr: "3px",
+              }}
+            />
             <Typography>{currtime}</Typography>
           </Box>
           <Box>
