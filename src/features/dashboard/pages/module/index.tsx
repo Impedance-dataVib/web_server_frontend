@@ -88,8 +88,8 @@ const ModuleMonitoringPage = ({
   }, [isLatestReportOpen, isLiveStatusOpen]);
 
   return (
-    <Grid container spacing={2}>
-      <Grid item lg={5} md={6} sm={12}>
+    <Grid container spacing={1}>
+      <Grid item lg={3} md={12} sm={12}>
         <CardWidget
           headerLabel={
             moduleData?.isAlert ? "Alerts & Instructions" : "Status Messages"
@@ -102,7 +102,7 @@ const ModuleMonitoringPage = ({
           }
         />
       </Grid>
-      <Grid item xs={12} md={6} lg={7}>
+      <Grid item xs={12} md={12} lg={9}>
         <CardWidget
           headerLabel="Global Indicators"
           headerIcon={<SignpostOutlined />}
