@@ -12,6 +12,13 @@ export function buildSoketData(response, modelType, formData) {
   if (modelType === "Engine") {
     globalIndicator.push(
       buildIndicatorData(
+        "Engine Health",
+        data["MechanicalHealth"],
+        "valueInHealth"
+      )
+    );
+    globalIndicator.push(
+      buildIndicatorData(
         "Combustion Condition",
         data["EngineEfficiency"],
         "valueInHealth"
@@ -20,14 +27,6 @@ export function buildSoketData(response, modelType, formData) {
 
     globalIndicator.push(
       buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold)
-    );
-
-    globalIndicator.push(
-      buildIndicatorData(
-        "Engine Health",
-        data["MechanicalHealth"],
-        "valueInHealth"
-      )
     );
   } else if (modelType === "Torque") {
     isAlert = false;
@@ -49,6 +48,9 @@ export function buildSoketData(response, modelType, formData) {
     );
   } else if (modelType === "Turbine") {
     globalIndicator.push(
+      buildRpmData("Speed", data["ChannelSpeed"], maxRPMThrshhold)
+    );
+    globalIndicator.push(
       buildIndicatorData(
         "Regularity/Deviation",
         data["RegularityDeviation"],
@@ -65,20 +67,23 @@ export function buildSoketData(response, modelType, formData) {
     globalIndicator.push(
       buildIndicatorData("Shaft Health", data["BladeStatus"], "valueInPercent")
     );
-    globalIndicator.push(
-      buildIndicatorData("Coupling", data["TurbineCoupling"], "valueInPercent")
-    );
-    globalIndicator.push(
-      buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold)
-    );
-
-    globalIndicator.push(
-      buildIndicatorData(
-        "Combustion Kit",
-        data["CombustionKit"],
-        "valueInPercent"
-      )
-    );
+    if (JSON.parse(formData).type === "Steam") {
+      globalIndicator.push(
+        buildIndicatorData(
+          "Coupling",
+          data["TurbineCoupling"],
+          "valueInPercent"
+        )
+      );
+    } else {
+      globalIndicator.push(
+        buildIndicatorData(
+          "Combustion Kit",
+          data["CombustionKit"],
+          "valueInPercent"
+        )
+      );
+    }
   } else if (modelType === "Motor") {
     globalIndicator.push(
       buildIndicatorData("Stability", data["MStressStability"], "valueInHealth")
@@ -355,7 +360,7 @@ function buildCompressionData(first, second, compressionData, graphLabel) {
     graphLabel: graphLabel,
     graphData: [
       {
-        name: "",
+        name: "Global",
         fill: checkFillColor(compressionData["valueInHealth"]),
         showValue: compressionData["valueInHealth"],
         children: children,
