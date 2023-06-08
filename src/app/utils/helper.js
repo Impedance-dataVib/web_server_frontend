@@ -146,9 +146,8 @@ function buildRpmData(indicator_title, data, maxValue) {
     indicatorName: indicator_title,
     indicatorMin: 0,
     indicatorMax: maxValue || parseInt(data) * 2,
-    indicatorValue: data,
+    indicatorValue: data ? Math.floor(data) : 0,
     isPercentage: false,
-    indicatorUnit: "Alert",
     isGradientColor: false,
     indicatorType: "error",
   };
@@ -370,13 +369,13 @@ export function buildLiveStatusData(data) {
   let currentStep = 1;
   if (data.includes("RECORDING")) {
     currentStep = 2;
-  } else if (data.includes("(300")) {
+  } else if (data.includes("Processing")) {
     currentStep = 3;
   } else if (data.includes("(400")) {
     currentStep = 4;
   }
   return {
-    currentStep: "currentStep",
+    currentStep: currentStep,
     currentMode: "Auto",
     stepProgress: 25,
     currentMessage: "Initiate Manual Measurement",
