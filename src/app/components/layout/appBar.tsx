@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import {
@@ -22,13 +22,14 @@ import {
   Menu,
   fabClasses,
 } from "@mui/material";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
 import { Link, useLocation, matchPath } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { KeyboardArrowDown, NotificationsOutlined } from "@mui/icons-material";
 import { APP_NAV_MENU_ITEMS, INavMenuItem } from "../../../contants";
 import DownloadInfoApi from "src/features/downloads/api";
-import fileDownload from "js-file-download";
+import CommonApi from "src/commonApi";
 const drawerWidth = 240;
 
 const DrawerAppBar = () => {
@@ -36,6 +37,7 @@ const DrawerAppBar = () => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
   const [notificationType, setNotificationType] = useState<any>("");
+  const [currtime, setCurrTime] = useState<any>();
 
   const [navMenuItems, setNavMenuItems] =
     useState<INavMenuItem[]>(APP_NAV_MENU_ITEMS);
@@ -85,7 +87,15 @@ const DrawerAppBar = () => {
       })
       .catch((err) => console.log(err));
   };
+  const currentTime = () => {
+    return CommonApi.getLicenseInfo()
+      .then((res) => setCurrTime(res.data.currant_time))
+      .catch((error) => console.log(error));
+  };
 
+  useEffect(() => {
+    currentTime();
+  }, []);
   const togglePoppup = () => {
     setNotificationOpen(!notificationOpen);
   };
@@ -230,6 +240,7 @@ const DrawerAppBar = () => {
 
   const container =
     window !== undefined ? () => window.document.body : undefined;
+  console.log(currtime);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -286,6 +297,21 @@ const DrawerAppBar = () => {
               />
             </Box>
           </Box>
+          <Box
+            sx={{
+              color: "black",
+              mr: 3,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <AccessTimeIcon
+              sx={{
+                mr: "3px",
+              }}
+            />
+            <Typography>{currtime}</Typography>
+          </Box>
           <Box>
             <IconButton
               color="inherit"
@@ -330,6 +356,7 @@ const DrawerAppBar = () => {
               </Menu>
             )}
           </Box>
+
           {/* <Box sx={{ display: "flex", alignItems: "center" }}>
             <Avatar sx={{ width: "30px", height: "30px", mr: 1 }}></Avatar>
             <Typography

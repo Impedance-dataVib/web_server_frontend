@@ -20,7 +20,7 @@ const Signal = ({ signals, formData, moduleType }: any) => {
         if (sendMessage) sendMessage(channelNames);
       },
       shouldReconnect: (closeEvent) => true,
-      onClose: () => console.log("Signal closed")
+      onClose: () => console.log("Signal closed"),
     }
   );
 
@@ -30,9 +30,8 @@ const Signal = ({ signals, formData, moduleType }: any) => {
       if (data) {
         let parsedData = JSON.parse(data);
         if (parsedData?.Status === "Failed") {
-
         } else {
-          parsedData = buildSignalData(parsedData);
+          parsedData = buildSignalData(parsedData, formData, moduleType);
           setGraphData(parsedData);
         }
         setIsLoading(false);
@@ -45,7 +44,7 @@ const Signal = ({ signals, formData, moduleType }: any) => {
   }, [moduleType, formData]);
 
   useEffect(() => {
-    if (channelNames) { 
+    if (channelNames) {
       setIsLoading(true);
       sendMessage(channelNames);
     }
@@ -55,29 +54,35 @@ const Signal = ({ signals, formData, moduleType }: any) => {
       sx={{
         width: "100%",
         display: "flex",
-        flexDirection: isLoading ? "column" :  "row",
+        flexDirection: isLoading ? "column" : "row",
         overflowX: "auto",
         height: "200px",
       }}
     >
       {isLoading && (
-        <Box sx={{ my: 1, width: '100%' }}>
+        <Box sx={{ my: 1, width: "100%" }}>
           <LinearProgress />
         </Box>
       )}
       {graphData &&
-        graphData.map((val:any, index) => (
-          <Box sx={{ width: graphData.length ===1 ? "100%" : "50%" }} key={`signalgraph${index}`}>
+        graphData.map((val: any, index) => (
+          <Box
+            sx={{ width: graphData.length === 1 ? "100%" : "50%" }}
+            key={`signalgraph${index}`}
+          >
             <LineChart
-              max={parseInt(val?.value)+20}
+              max={parseInt(val?.value) + 20}
               data={{
                 labels,
                 datasets: [
                   {
                     label: `${val.title} - ${parseInt(val?.value) || 0}`,
-                    data: [parseInt(val?.value) || 0, parseInt(val?.value) || 0],
-                    borderColor: (index%2)? '#E18442': "#02B271",
-                    backgroundColor: (index%2)? '#E18442': "#02B271",
+                    data: [
+                      parseInt(val?.value) || 0,
+                      parseInt(val?.value) || 0,
+                    ],
+                    borderColor: index % 2 ? "#E18442" : "#02B271",
+                    backgroundColor: index % 2 ? "#E18442" : "#02B271",
                   },
                 ],
               }}

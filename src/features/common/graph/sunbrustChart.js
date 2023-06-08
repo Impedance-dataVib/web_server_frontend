@@ -38,7 +38,7 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
         .onClick(() => {
         })
         .color((d) => {
-          return getColor("error");
+          return getColor(d.fill);
         })
         .excludeRoot(true)(document.getElementById(`${elementId}${fullScreen ? "full": ""}`));
     }

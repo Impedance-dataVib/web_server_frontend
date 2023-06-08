@@ -146,9 +146,8 @@ function buildRpmData(indicator_title, data, maxValue) {
     indicatorName: indicator_title,
     indicatorMin: 0,
     indicatorMax: maxValue || parseInt(data) * 2,
-    indicatorValue: data,
+    indicatorValue: data ? Math.floor(data) : 0,
     isPercentage: false,
-    indicatorUnit: "Alert",
     isGradientColor: false,
     indicatorType: "error",
   };
@@ -160,9 +159,6 @@ function buildPeekPressureChart(data, firingOrder) {
   }
   const increase_fuel_consumption = {
     trendsName: "Peek Pressure",
-    min: 0,
-    max: 100,
-    avg: 50,
     datapoints: data["cylinderValues"],
     labels: labels,
     chartType: "bar",
@@ -373,22 +369,56 @@ export function buildLiveStatusData(data) {
   let currentStep = 1;
   if (data.includes("RECORDING")) {
     currentStep = 2;
-  } else if (data.includes("(300")) {
+  } else if (data.includes("Processing")) {
     currentStep = 3;
   } else if (data.includes("(400")) {
     currentStep = 4;
   }
   return {
-    currentStep: "currentStep",
+    currentStep: currentStep,
     currentMode: "Auto",
     stepProgress: 25,
     currentMessage: "Initiate Manual Measurement",
   };
 }
 
-export function buildSignalData(data) {
+export function buildSignalData(data, formData, type) {
+  let firstChannelName = "";
+  let secondChannelName = "";
+  formData = JSON.parse(formData);
+  if (type === "Engine") {
+    firstChannelName = "Crankshaft";
+    if (formData["CamShaft_SENSORx"] !== "No Channel") {
+      secondChannelName = "CamShaft";
+    }
+    if (formData["TDC_SENSORx"] !== "No Channel") {
+      secondChannelName = "TDC";
+    }
+    if (formData["Peak_Pressure_SENSORx"] !== "No Channel") {
+      secondChannelName = "Peak Pressure";
+    }
+  }
+  if (type === "Torque") {
+    firstChannelName = "DE Channel";
+    if (formData["nde_channel_sensorx"] !== "No Channel") {
+      secondChannelName = "NDE Channel";
+    }
+  }
+  if (type === "Turbine") {
+    firstChannelName = "Sensor";
+  }
+  if (type === "Motor") {
+    firstChannelName = "Sensor";
+  }
+
+  if (type === "Bearing") {
+    firstChannelName = "Sensor";
+  }
+
   let returnArray = [];
-  for (let item of data) {
+
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i];
     const firstKey = Object.keys(item)[0];
     const itemData = item[firstKey];
 
@@ -396,7 +426,7 @@ export function buildSignalData(data) {
       const itemDataFirstKey = Object.keys(itemData)[0];
       const channelData = itemData[itemDataFirstKey];
       returnArray.push({
-        title: firstKey,
+        title: i === 0 ? firstChannelName : secondChannelName,
         value: channelData["ChannelSpeed"],
       });
     }
@@ -515,6 +545,7 @@ function buildTorqueAlertData(data) {
       const message = message_data[code];
       returnArray.push({
         instructionName: message["status"],
+        isTorque: true,
         instructionType: message["status"] === "Success" ? "success" : "error",
         instructions: [{ message: message["message"], time: firstKey }],
       });

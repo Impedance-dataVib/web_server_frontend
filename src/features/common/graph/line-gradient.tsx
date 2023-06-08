@@ -26,6 +26,7 @@ export default function LineGradient({
   minValue,
   maxValue,
   avgValue,
+  trendsName,
   datapoints,
   labels,
   isGradientOpposite
@@ -52,12 +53,11 @@ export default function LineGradient({
     return gradient;
   }
 
-
   const data = {
     labels: labels,
     datasets: [
       {
-        label: "Increase Fuel Consumption",
+        label: trendsName,
         data: datapoints,
         borderColor: "red",
         cubicInterpolationMode: "monotone" as const,

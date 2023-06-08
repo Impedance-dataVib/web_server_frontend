@@ -142,7 +142,7 @@ const TrendsPage = () => {
                 )}
               </Box>
               <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-                <Typography
+                {val?.chartType === "LineGradient" && (<Typography
                   component="span"
                   textAlign={"left"}
                   alignItems="center"
@@ -150,31 +150,31 @@ const TrendsPage = () => {
                 >
                   <CircleIcon color="primary" />
                   {val?.trendsName}
-                </Typography>
-                <Typography
+                </Typography>)}
+                {val?.min && <Typography
                   component="span"
                   textAlign={"left"}
                   alignItems="center"
                   display={"flex"}
                 >
-                  Min.
-                </Typography>
-                <Typography
+                  Min. {val.min} 
+                </Typography>}
+                {val?.max && <Typography
                   component="span"
                   textAlign={"left"}
                   alignItems="center"
                   display={"flex"}
                 >
-                  Max.
-                </Typography>
-                <Typography
+                  Max. {val.max} 
+                </Typography>}
+                {val?.avg && <Typography
                   component="span"
                   textAlign={"left"}
                   alignItems="center"
                   display={"flex"}
                 >
-                  Avg.
-                </Typography>
+                  Avg. {val?.avg}
+                </Typography>}
               </Box>
             </Grid>
           ))}
