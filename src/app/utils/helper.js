@@ -240,7 +240,7 @@ export function buildData(response) {
     const mechanical_health = buildLineGradientChart(
       historical_data,
       "MechanicalHealth",
-      "Mechanical Health",
+      "Engine Health",
       true
     );
 
