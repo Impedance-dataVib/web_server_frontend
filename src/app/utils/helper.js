@@ -230,15 +230,20 @@ export function buildData(response) {
       "PowerLoss",
       "Increase fuel consumption"
     );
-    const peak_pressure = buildPeekPressureChart(data["Pressure"], firingOrder);
+    trends.push(increase_fuel_consumption);
+    const peakPressure = data["Pressure"];
+
+    if (parseInt(peakPressure["value"]) !== 0) {
+      const peak_pressure = buildPeekPressureChart(peakPressure, firingOrder);
+      trends.push(peak_pressure);
+    }
     const mechanical_health = buildLineGradientChart(
       historical_data,
       "MechanicalHealth",
       "Mechanical Health",
       true
     );
-    trends.push(increase_fuel_consumption);
-    trends.push(peak_pressure);
+
     trends.push(mechanical_health);
     return {
       cylinder_specific_indicators: cylinder_specific_indicators,
@@ -482,18 +487,15 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
   let count = 0;
   if (data) {
     for (let item of data) {
-      if (count === 7) {
-        break;
-      }
       const objectData = JSON.parse(item["jsondata"]);
       const firstKey = Object.keys(objectData)[0];
       const moduleData = objectData[firstKey];
       labels.push(firstKey);
       const valueObject = moduleData[key];
       if (isGradientOpposite) {
-        datapoints.push(valueObject["valueInHealth"]);
+        datapoints.push(round(valueObject["valueInHealth"]));
       } else {
-        datapoints.push(valueObject["value"]);
+        datapoints.push(round(valueObject["value"]));
       }
 
       count++;
@@ -508,9 +510,9 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
 
   return {
     trendsName: title,
-    min: Math.min(...datapoints),
-    max: Math.max(...datapoints),
-    avg: avg,
+    min: round(Math.min(...datapoints)),
+    max: round(Math.max(...datapoints)),
+    avg: round(avg),
     datapoints: datapoints,
     labels: labels,
     chartType: "LineGradient",
@@ -1223,4 +1225,7 @@ function average(datapoints) {
   }
 
   return sum / datapoints.length;
+}
+function round(num) {
+  return Math.round(num * 100) / 100;
 }

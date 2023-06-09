@@ -26,7 +26,7 @@ const apiData = {
     },
     {
       topText: "Step 2",
-      bottomText: "Next",
+      bottomText: "Analyse",
     },
     {
       topText: "Step 3",
