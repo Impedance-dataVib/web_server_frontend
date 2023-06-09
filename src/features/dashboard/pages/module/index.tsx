@@ -88,15 +88,19 @@ const ModuleMonitoringPage = ({
   }, [isLatestReportOpen, isLiveStatusOpen]);
 
   useEffect(() => {
-    const trendsCylinderArr = ['Trends'];
+    const trendsCylinderArr = ["Trends"];
     // if(trendsData.trends.length > 0) {
     //   trendsCylinderArr.push('Trends')
     // }
-    if(trendsData.cylinder_specific_indicators.length > 0) {
-      trendsCylinderArr.push('Cylinder Specific Indicator')
+
+    if (
+      trendsData.cylinder_specific_indicators &&
+      trendsData.cylinder_specific_indicators.length > 0
+    ) {
+      trendsCylinderArr.push("Cylinder Specific Indicator");
     }
     setTrendsCylinder(trendsCylinderArr);
-  }, [trendsData])
+  }, [trendsData]);
   return (
     <Grid container spacing={1}>
       <Grid item lg={3} md={12} sm={12}>
@@ -105,10 +109,19 @@ const ModuleMonitoringPage = ({
             moduleData?.isAlert ? "Alerts & Instructions" : "Status Messages"
           }
           headerIcon={<WarningAmber />}
-          content={<AlertsAndInstructions moduleData={moduleData} alertData={trendsData?.alert} />}
+          content={
+            <AlertsAndInstructions
+              moduleData={moduleData}
+              alertData={trendsData?.alert}
+            />
+          }
           initiallyCollapsed={false}
           fullScreenContent={
-            <AlertsAndInstructions moduleData={moduleData} alertData={trendsData?.alert} isModalOpen={true} />
+            <AlertsAndInstructions
+              moduleData={moduleData}
+              alertData={trendsData?.alert}
+              isModalOpen={true}
+            />
           }
         />
       </Grid>
@@ -141,29 +154,27 @@ const ModuleMonitoringPage = ({
                 aria-label="select modules"
                 sx={{ marginTop: "10px" }}
               >
-                {trendsCylinder?.map(
-                  (tabElement: any, index: number) => (
-                    <Tab
-                      key={index}
-                      label={tabElement}
-                      icon={
-                        tabElement === "Trends" ? (
-                          <TrendingUp sx={{ mr: 1 }} />
-                        ) : (
-                          <TrendingUp />
-                        )
-                      }
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                      classes={{
-                        root: classes.trendsTabRoot,
-                      }}
-                    />
-                  )
-                )}
+                {trendsCylinder?.map((tabElement: any, index: number) => (
+                  <Tab
+                    key={index}
+                    label={tabElement}
+                    icon={
+                      tabElement === "Trends" ? (
+                        <TrendingUp sx={{ mr: 1 }} />
+                      ) : (
+                        <TrendingUp />
+                      )
+                    }
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                    classes={{
+                      root: classes.trendsTabRoot,
+                    }}
+                  />
+                ))}
               </Tabs>
             </>
           }
@@ -209,7 +220,11 @@ const ModuleMonitoringPage = ({
       </Grid>
       <Grid item lg={4} md={12} sm={12}>
         <CardWidget
-          headerLabel={moduleType !== "Turbine"? (signalData?.description || "") : (signalData?.turbineMessage || signalData?.description || "")}
+          headerLabel={
+            moduleType !== "Turbine"
+              ? signalData?.description || ""
+              : signalData?.turbineMessage || signalData?.description || ""
+          }
           headerIcon={
             signalData?.resultType === "success" ? (
               <CellTowerOutlined color="success" />

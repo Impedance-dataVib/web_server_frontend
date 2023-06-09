@@ -143,17 +143,35 @@ const DashboardPage = () => {
         setWebSocketsData({});
         setTrendsData({});
         sendMessage(moduleTabs[activeModule].process_name);
-        DashboardApi.getTrendsData(moduleTabs[activeModule].id).then((data) => {
-          const parsedData = buildData(data);
-          setTrendsData(parsedData);
-        }).catch(() => {
-          setTrendsData({});
-        });
+        // DashboardApi.getTrendsData(moduleTabs[activeModule].id).then((data) => {
+        //   const parsedData = buildData(data);
+        //   setTrendsData(parsedData);
+        // }).catch(() => {
+        //   setTrendsData({});
+        // });
+        dashBoardApiCall(moduleTabs[activeModule].id);
+        const interval = setInterval(() => {
+          dashBoardApiCall(moduleTabs[activeModule].id);
+        }, 3 * 60 * 1000);
+
+        //Clearing the interval
+        return () => clearInterval(interval);
       } else {
         setIsLoading(false);
       }
     }
   }, [moduleTabs, activeModule]);
+
+  function dashBoardApiCall(datas: any) {
+    DashboardApi.getTrendsData(datas)
+      .then((data) => {
+        const parsedData = buildData(data);
+        setTrendsData(parsedData);
+      })
+      .catch(() => {
+        setTrendsData({});
+      });
+  }
 
   useEffect(() => {
     if (lastMessage !== undefined) {

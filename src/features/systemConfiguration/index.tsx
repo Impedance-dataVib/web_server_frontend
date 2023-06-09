@@ -8,6 +8,8 @@ import SystemInfoApi from "./api";
 import InfoIcon from "@mui/icons-material/Info";
 import FileUploadComponent from "src/app/components/fileUpload";
 import { enqueueSnackbar } from "notistack";
+import api from "../../app/api";
+import axios from "axios";
 
 const SystemConfiguration = () => {
   const [isShown, setIsShown] = useState(false);
@@ -54,9 +56,38 @@ const SystemConfiguration = () => {
     getSystemInfo();
   }, []);
 
+  const handleClick = () => {
+    console.log("clicked");
+    axios
+      .get(
+        "http://192.168.1.249/client-portal-api/app/start_dashboard_socket.php"
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+    axios
+      .get("http://192.168.1.249/client-portal-api/app/start_signal_socket.php")
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+    axios
+      .get("http://192.168.1.249/client-portal-api/app/start_status_socket.php")
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Box>
-      <Typography variant="h5">System Configuration</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography variant="h5">System Configuration</Typography>
+        <Button sx={{ mr: "13px" }} variant="outlined" onClick={handleClick}>
+          Restart WebSocket
+        </Button>
+      </Box>
       <Box
         sx={{
           m: 2,
