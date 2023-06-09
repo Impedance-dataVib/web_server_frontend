@@ -26,8 +26,8 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
         .data({
           children: data?.graphData || [],
         })
-        .width(300)
-        .height(300)
+        .width(200)
+        .height(200)
         .sort((a, b) => b.value - a.value)
         .tooltipContent((a) => {
           return `Health Value: ${a.showValue}`;

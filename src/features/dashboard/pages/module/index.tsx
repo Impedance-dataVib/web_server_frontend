@@ -34,7 +34,7 @@ const ModuleMonitoringPage = ({
   const [isLiveSocket, setIsliveSocket] = useState<boolean>(false);
   const [isLatestReportOpen, setIsLatestReportOpen] = useState<boolean>(false);
   const [isLiveStatusOpen, setIsLiveStatusOpen] = useState<boolean>(false);
-
+  const [trendsCylinder, setTrendsCylinder] = useState<string[]>([]);
   const [liveStatus, setLiveStatus] = useState<any>({});
   const onActiveModuleChange = (event: any, params: any) => {
     setActiveModule(params);
@@ -87,6 +87,16 @@ const ModuleMonitoringPage = ({
     setIsliveSocket(isLatestReportOpen || isLiveStatusOpen);
   }, [isLatestReportOpen, isLiveStatusOpen]);
 
+  useEffect(() => {
+    const trendsCylinderArr = ['Trends'];
+    // if(trendsData.trends.length > 0) {
+    //   trendsCylinderArr.push('Trends')
+    // }
+    if(trendsData.cylinder_specific_indicators.length > 0) {
+      trendsCylinderArr.push('Cylinder Specific Indicator')
+    }
+    setTrendsCylinder(trendsCylinderArr);
+  }, [trendsData])
   return (
     <Grid container spacing={1}>
       <Grid item lg={3} md={12} sm={12}>
@@ -131,7 +141,7 @@ const ModuleMonitoringPage = ({
                 aria-label="select modules"
                 sx={{ marginTop: "10px" }}
               >
-                {["Trends", "Cylinder Specific Indicator"]?.map(
+                {trendsCylinder?.map(
                   (tabElement: any, index: number) => (
                     <Tab
                       key={index}
@@ -199,7 +209,7 @@ const ModuleMonitoringPage = ({
       </Grid>
       <Grid item lg={4} md={12} sm={12}>
         <CardWidget
-          headerLabel={signalData?.description || ""}
+          headerLabel={moduleType !== "Turbine"? (signalData?.description || "") : (signalData?.turbineMessage || signalData?.description || "")}
           headerIcon={
             signalData?.resultType === "success" ? (
               <CellTowerOutlined color="success" />

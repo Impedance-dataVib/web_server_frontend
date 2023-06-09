@@ -21,7 +21,7 @@ function CylinderIndicator({ cylinderSpecificIndicators, fullScreen }: any) {
           item
           md={fullScreen ? 6 : 6}
           sm={fullScreen ? 6 : 6}
-          lg={fullScreen ? 6 : 4}
+          lg={fullScreen ? 6 : 3}
           xs={fullScreen ? 6 : 12}
         >
           <SunburstChart

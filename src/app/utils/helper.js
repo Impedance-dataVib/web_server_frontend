@@ -514,6 +514,7 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
     max: round(Math.max(...datapoints)),
     avg: round(avg),
     datapoints: datapoints,
+    dataPointsY1: datapoints,
     labels: labels,
     chartType: "LineGradient",
     xLabel: title,

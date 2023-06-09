@@ -150,61 +150,74 @@ export const SIGNAL_STATUS_QUALITY = [
     {
         id: '0',
         resultType: 'success',
+        turbineMessage: '',
         description: ''
     },
     {
         id: '1',
         resultType: 'success',
+        turbineMessage: 'Good Signal',
         description: 'Good Signal, No Synchronisation with TDC'
     },
     {
         id: '2',
         resultType: 'success',
+        turbineMessage: 'Good Signal',
         description: 'Good Signal, Synchronisated with TDC'
     },
     {
         id: '3',
         resultType: 'success',
+        turbineMessage: 'Good Signal',
         description: 'Good Signal, Synchronisated with CAM'
     },
     {
         id: '-1',
         resultType: 'error',
+        turbineMessage: 'Failed to apply configuration',
         description: 'Failed to apply configuration'
     },
     {
         id: '-3',
         resultType: 'error',
+        turbineMessage: 'Unstable Speed',
         description: 'Unstable Speed'
     },
     {
         id: '-4',
         resultType: 'error',
+        turbineMessage: 'Too low speed. Check minRPM settings in Config',
         description: 'Too low speed. Check minRPM settings in Config'
     },
     {
         id: '-5',
         resultType: 'error',
+        turbineMessage: 'Too much speed variation',
         description: 'Too much speed variation'
     },{
         id: '-6',
         resultType: 'error',
+        turbineMessage: 'No Valid License',
         description: 'No Valid License'
     },{
         id: '-7',
         resultType: 'error',
+        turbineMessage: 'Unstable Speed',
         description: 'Unstable Speed'
     },{
         id: '-8',
         resultType: 'error',
+        turbineMessage: 'Signal Level - Too low',
         description: 'Signal Level - Too low'
     },{
         id: '-9',
         resultType: 'error',
+        turbineMessage: 'Mismatch between config & channels info',
         description: 'Mismatch between config & channels info'
     },{
         id: '-10',
         resultType: 'error',
+        turbineMessage: 'Speed Mismatch between Channels',
         description: 'Speed Mismatch between Channels'
     },
 ];
