@@ -77,12 +77,18 @@ const CardWidget = ({
     >
       <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
         {!headerContent && (
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-between",
               }}
             >
               {headerIcon && (
@@ -116,28 +122,45 @@ const CardWidget = ({
               >
                 {headerLabel}
               </Typography>
+            </Box>
+            {headerLabel === "Alerts & Instructions" && (
               <Typography
-                component={"b"}
                 sx={{
-                  position: "absolute",
-                  right: "150px",
                   fontWeight: "500",
-                  fontSize: "12px",
+                  fontSize: "9px",
+                  mr: "20px",
                 }}
               >
-                {showDate ? ` Updated on ${showDate} (UTC)` : ""}
+                {showDate ? ` ${showDate}` : ""}
               </Typography>
-            </Box>
-
-            {isBelow1800Pixel && (
-              <Box>
-                {subHeadingRight && (
-                  <Box sx={{ mr: isBelow1800Pixel ? 0 : 1, ml: 1 }}>
-                    {subHeadingRight}
-                  </Box>
-                )}
-              </Box>
             )}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {headerLabel === "Global Indicators" && (
+                <Typography
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "9px",
+                    mr: "20px",
+                  }}
+                >
+                  {showDate ? ` Updated on ${showDate} (UTC)` : ""}
+                </Typography>
+              )}
+              {isBelow1800Pixel && (
+                <Box>
+                  {subHeadingRight && (
+                    <Box sx={{ mr: isBelow1800Pixel ? 0 : 1, ml: 1 }}>
+                      {subHeadingRight}
+                    </Box>
+                  )}
+                </Box>
+              )}
+            </Box>
           </Box>
         )}
         {headerContent && headerContent}

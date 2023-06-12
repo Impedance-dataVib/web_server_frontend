@@ -22,7 +22,7 @@ const AlertsAndInstructions = ({
             sx={{
               color: "#4d4e4e",
               letterSpacing: "0.07px",
-              pl: isTorque ? 0:3,
+              pl: isTorque ? 0 : 3,
             }}
           >
             <Box
@@ -36,7 +36,7 @@ const AlertsAndInstructions = ({
               }}
             >
               {!isTorque && (
-                <Typography component={"span"} variant={"body2"} >
+                <Typography component={"span"} variant={"body2"}>
                   {instruction}
                 </Typography>
               )}
@@ -45,7 +45,11 @@ const AlertsAndInstructions = ({
                   <Typography component={"span"} variant={"body2"} sx={{}}>
                     {instruction?.message}
                   </Typography>
-                  <Typography component={"span"} variant={"body2"}sx={{marginLeft: 1, fontWeight: 300}}>
+                  <Typography
+                    component={"span"}
+                    variant={"body2"}
+                    sx={{ marginLeft: 1, fontWeight: 300 }}
+                  >
                     [{instruction?.time}]
                   </Typography>
                 </>
@@ -71,10 +75,12 @@ const AlertsAndInstructions = ({
               item
               xs={12}
               md={12}
-              lg={isModalOpen ? 4 : (!val?.isTorque ? 6: 12)}
+              lg={isModalOpen ? 4 : !val?.isTorque ? 6 : 12}
             >
-              <Box 
-                sx={val?.isTorque ? {display: 'flex', flexDirection: 'row'}: {}}
+              <Box
+                sx={
+                  val?.isTorque ? { display: "flex", flexDirection: "row" } : {}
+                }
               >
                 <Box sx={{ display: "flex" }}>
                   <Box sx={{ mr: 1, color: "#4d4e4e" }}>
