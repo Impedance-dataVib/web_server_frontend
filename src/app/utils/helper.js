@@ -500,38 +500,11 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
       const firstKey = Object.keys(objectData)[0];
       const moduleData = objectData[firstKey];
       labels.push(firstKey);
-      labels.push(firstKey);
-      labels.push(firstKey);
-      labels.push(firstKey);
-      labels.push(firstKey);
-      labels.push(firstKey);
-      labels.push(firstKey);
-      labels.push(firstKey);
-      labels.push(firstKey);
-      labels.push(firstKey);
       zAxisDataPoints.push(moduleData?.ChannelSpeed);
       const valueObject = moduleData[key];
       if (isGradientOpposite) {
         datapoints.push(round(valueObject["valueInHealth"]));
-        datapoints.push(round(valueObject["valueInHealth"]));
-        datapoints.push(round(valueObject["valueInHealth"]));
-        datapoints.push(round(valueObject["valueInHealth"]));
-        datapoints.push(round(valueObject["valueInHealth"]));
-        datapoints.push(round(valueObject["valueInHealth"]));
-        datapoints.push(round(valueObject["valueInHealth"]));
-        datapoints.push(round(valueObject["valueInHealth"]));
-        datapoints.push(round(valueObject["valueInHealth"]));
-        datapoints.push(round(valueObject["valueInHealth"]));
       } else {
-        datapoints.push(round(valueObject["value"]));
-        datapoints.push(round(valueObject["value"]));
-        datapoints.push(round(valueObject["value"]));
-        datapoints.push(round(valueObject["value"]));
-        datapoints.push(round(valueObject["value"]));
-        datapoints.push(round(valueObject["value"]));
-        datapoints.push(round(valueObject["value"]));
-        datapoints.push(round(valueObject["value"]));
-        datapoints.push(round(valueObject["value"]));
         datapoints.push(round(valueObject["value"]));
       }
 
