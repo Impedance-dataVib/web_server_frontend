@@ -105,6 +105,7 @@ const ModuleMonitoringPage = ({
     <Grid container spacing={1}>
       <Grid item xl={5} lg={3} md={12} sm={12}>
         <CardWidget
+          showDate={trendsData?.alertUpdatedOn}
           headerLabel={
             moduleData?.isAlert ? "Alerts & Instructions" : "Status Messages"
           }
@@ -127,6 +128,7 @@ const ModuleMonitoringPage = ({
       </Grid>
       <Grid item xs={12} md={12} lg={9} xl={7}>
         <CardWidget
+          showDate={trendsData.alertUpdatedOn}
           headerLabel="Global Indicators"
           headerIcon={<SignpostOutlined />}
           content={

@@ -24,6 +24,7 @@ import React, { useEffect, useState } from "react";
 
 export interface CardWidgetProps {
   headerLabel: string;
+  showDate?: string;
   headerIcon?: React.ReactElement;
   content: React.ReactNode;
   subHeadingRight?: React.ReactNode;
@@ -38,6 +39,7 @@ export interface CardWidgetProps {
 
 const CardWidget = ({
   headerLabel,
+  showDate,
   headerContent,
   headerIcon,
   content,
@@ -88,8 +90,20 @@ const CardWidget = ({
     >
       <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
         {!headerContent && (
-          <Box>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               {headerIcon && (
                 <Box
                   sx={{
@@ -122,15 +136,44 @@ const CardWidget = ({
                 {headerLabel}
               </Typography>
             </Box>
-            {isBelow1800Pixel && (
-              <Box>
-                {subHeadingRight && (
-                  <Box sx={{ mr: isBelow1800Pixel ? 0 : 1, ml: 1 }}>
-                    {subHeadingRight}
-                  </Box>
-                )}
-              </Box>
+            {headerLabel === "Alerts & Instructions" && (
+              <Typography
+                sx={{
+                  fontWeight: "500",
+                  fontSize: "9px",
+                  mr: "20px",
+                }}
+              >
+                {showDate ? ` ${showDate}` : ""}
+              </Typography>
             )}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {headerLabel === "Global Indicators" && (
+                <Typography
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "9px",
+                    mr: "20px",
+                  }}
+                >
+                  {showDate ? ` Updated on ${showDate} (UTC)` : ""}
+                </Typography>
+              )}
+              {isBelow1800Pixel && (
+                <Box>
+                  {subHeadingRight && (
+                    <Box sx={{ mr: isBelow1800Pixel ? 0 : 1, ml: 1 }}>
+                      {subHeadingRight}
+                    </Box>
+                  )}
+                </Box>
+              )}
+            </Box>
           </Box>
         )}
         {headerContent && headerContent}

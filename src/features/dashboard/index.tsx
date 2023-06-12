@@ -164,14 +164,20 @@ const DashboardPage = () => {
 
   function dashBoardApiCall(datas: any) {
     DashboardApi.getTrendsData(datas)
-      .then((data) => {
-        const parsedData = buildData(data);
+      .then((val) => {
+        console.log(val);
+
+        const parsedData = buildData(val);
+        console.log(parsedData);
+
         setTrendsData(parsedData);
       })
       .catch(() => {
         setTrendsData({});
       });
   }
+
+  console.log(trendsData);
 
   useEffect(() => {
     if (lastMessage !== undefined) {

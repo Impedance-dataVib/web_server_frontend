@@ -58,18 +58,16 @@ const SystemConfiguration = () => {
 
   const handleClick = () => {
     console.log("clicked");
-    axios
-      .get(
-        "http://192.168.1.249/client-portal-api/app/start_dashboard_socket.php"
-      )
+    api
+      .get("/app/start_dashboard_socket.php")
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
-    axios
-      .get("http://192.168.1.249/client-portal-api/app/start_signal_socket.php")
+    api
+      .get("/app/start_signal_socket.php")
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
-    axios
-      .get("http://192.168.1.249/client-portal-api/app/start_status_socket.php")
+    api
+      .get("/app/start_status_socket.php")
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
