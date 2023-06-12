@@ -33,6 +33,7 @@ export interface CardWidgetProps {
   setIsLiveStatusOpen?: Function;
   fullScreenContent?: React.ReactNode;
   headerContent?: React.ReactNode;
+  section?: "top" | "middle" | "bottom";
 }
 
 const CardWidget = ({
@@ -46,6 +47,7 @@ const CardWidget = ({
   setIsLiveStatusOpen,
   initiallyCollapsed,
   fullScreenContent,
+  section,
 }: CardWidgetProps) => {
   const [collapsed, setCollapsed] = useState(initiallyCollapsed || false);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -65,13 +67,24 @@ const CardWidget = ({
 
   return (
     <Paper
-      sx={{
-        p: 2,
-        pt: headerContent ? 0 : 2,
-        borderRadius: 3,
-        boxShadow: "2px 4px 8px #00000029",
-        transition: "all .2s linear",
-      }}
+      sx={
+        section === "middle"
+          ? {
+              p: 2,
+              pt: headerContent ? 0 : 2,
+              borderRadius: 3,
+              boxShadow: "2px 4px 8px #00000029",
+              transition: "all .2s linear",
+              minHeight: "40vh",
+            }
+          : {
+              p: 2,
+              pt: headerContent ? 0 : 2,
+              borderRadius: 3,
+              boxShadow: "2px 4px 8px #00000029",
+              transition: "all .2s linear",
+            }
+      }
     >
       <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
         {!headerContent && (
