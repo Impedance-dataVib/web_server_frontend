@@ -77,7 +77,7 @@ const CardWidget = ({
               borderRadius: 3,
               boxShadow: "2px 4px 8px #00000029",
               transition: "all .2s linear",
-              minHeight: "40vh",
+              minHeight: "20vh",
             }
           : {
               p: 2,
