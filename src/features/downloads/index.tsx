@@ -31,11 +31,15 @@ const DownloadPage = () => {
   const [reportType, setReportType] = useState(initial);
   const [assetModule, setAssetModule] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [assetError, setAssetError] = useState(false);
+  const [periodError, setPeriodError] = useState(false);
+  const [reportTypeError, setReportTypeError] = useState(false);
 
   const getAssetInfo = async () => {
     const response = await DownloadInfoApi.getModuleInfo();
     setAssetModule(response.data.data);
   };
+  console.log("dataselection", dataSelection);
 
   useEffect(() => {
     getAssetInfo();
@@ -43,14 +47,17 @@ const DownloadPage = () => {
 
   const assetHandler = (e: SelectChangeEvent) => {
     setAsset(e.target.value);
+    setAssetError(false);
   };
 
   const periodHandler = (e: SelectChangeEvent) => {
     setPeriod(e.target.value);
+    setPeriodError(false);
   };
 
   const reportTypeHandler = (e: SelectChangeEvent) => {
     setReportType(e.target.value);
+    setReportTypeError(false);
   };
 
   const downloadOptionHandler = (e: SelectChangeEvent) => {
@@ -58,6 +65,9 @@ const DownloadPage = () => {
     setAsset(initial);
     setPeriod(initial);
     setReportType(initial);
+    setAssetError(false);
+    setPeriodError(false);
+    setReportTypeError(false);
   };
 
   const cancelHandler = () => {
@@ -68,6 +78,16 @@ const DownloadPage = () => {
   };
   const postDownloadHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (asset == "") {
+      setAssetError(true);
+      return;
+    } else if (period == "") {
+      setPeriodError(true);
+      return;
+    } else if (reportType == "" && dataSelection == "data") {
+      setReportTypeError(true);
+      return;
+    }
     setIsLoading(true);
     DownloadInfoApi.postDownloadInfo({
       type: dataSelection,
@@ -192,6 +212,9 @@ const DownloadPage = () => {
                         </MenuItem>
                       ))}
                     </Select>
+                    {assetError && (
+                      <Box sx={{ color: "red" }}>This is required field</Box>
+                    )}
                   </FormControl>
                 </Box>
                 <Box
@@ -224,10 +247,13 @@ const DownloadPage = () => {
                           ></FormControlLabel>
                         ))}
                       </RadioGroup>
+                      {periodError && (
+                        <Box sx={{ color: "red" }}>This is required field</Box>
+                      )}
                     </FormControl>
                   </Box>
                 </Box>
-                {dataSelection === "downloadData" && (
+                {dataSelection === "data" && (
                   <Box
                     sx={{
                       display: "flex",
@@ -256,6 +282,11 @@ const DownloadPage = () => {
                             ></FormControlLabel>
                           ))}
                         </RadioGroup>
+                        {reportTypeError && (
+                          <Box sx={{ color: "red" }}>
+                            This is required field
+                          </Box>
+                        )}
                       </FormControl>
                     </Box>
                   </Box>

@@ -34,6 +34,7 @@ export interface CardWidgetProps {
   setIsLiveStatusOpen?: Function;
   fullScreenContent?: React.ReactNode;
   headerContent?: React.ReactNode;
+  section?: "top" | "middle" | "bottom";
 }
 
 const CardWidget = ({
@@ -48,6 +49,7 @@ const CardWidget = ({
   setIsLiveStatusOpen,
   initiallyCollapsed,
   fullScreenContent,
+  section,
 }: CardWidgetProps) => {
   const [collapsed, setCollapsed] = useState(initiallyCollapsed || false);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -67,22 +69,39 @@ const CardWidget = ({
 
   return (
     <Paper
-      sx={{
-        p: 2,
-        pt: headerContent ? 0 : 2,
-        borderRadius: 3,
-        boxShadow: "2px 4px 8px #00000029",
-        transition: "all .2s linear",
-      }}
+      sx={
+        section === "middle"
+          ? {
+              p: 2,
+              pt: headerContent ? 0 : 2,
+              borderRadius: 3,
+              boxShadow: "2px 4px 8px #00000029",
+              transition: "all .2s linear",
+              minHeight: "20vh",
+            }
+          : {
+              p: 2,
+              pt: headerContent ? 0 : 2,
+              borderRadius: 3,
+              boxShadow: "2px 4px 8px #00000029",
+              transition: "all .2s linear",
+            }
+      }
     >
       <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
         {!headerContent && (
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-between",
               }}
             >
               {headerIcon && (
@@ -116,28 +135,45 @@ const CardWidget = ({
               >
                 {headerLabel}
               </Typography>
+            </Box>
+            {headerLabel === "Alerts & Instructions" && (
               <Typography
-                component={"b"}
                 sx={{
-                  position: "absolute",
-                  right: "150px",
                   fontWeight: "500",
-                  fontSize: "12px",
+                  fontSize: "9px",
+                  mr: "20px",
                 }}
               >
-                {showDate ? ` Updated on ${showDate} (UTC)` : ""}
+                {showDate ? ` ${showDate}` : ""}
               </Typography>
-            </Box>
-
-            {isBelow1800Pixel && (
-              <Box>
-                {subHeadingRight && (
-                  <Box sx={{ mr: isBelow1800Pixel ? 0 : 1, ml: 1 }}>
-                    {subHeadingRight}
-                  </Box>
-                )}
-              </Box>
             )}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {headerLabel === "Global Indicators" && (
+                <Typography
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "9px",
+                    mr: "20px",
+                  }}
+                >
+                  {showDate ? ` Updated on ${showDate} (UTC)` : ""}
+                </Typography>
+              )}
+              {isBelow1800Pixel && (
+                <Box>
+                  {subHeadingRight && (
+                    <Box sx={{ mr: isBelow1800Pixel ? 0 : 1, ml: 1 }}>
+                      {subHeadingRight}
+                    </Box>
+                  )}
+                </Box>
+              )}
+            </Box>
           </Box>
         )}
         {headerContent && headerContent}

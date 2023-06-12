@@ -20,11 +20,11 @@ export const assetData = [
 export const selectOption = [
   {
     label: "Download latest data",
-    value: "downloadData",
+    value: "data",
   },
   {
     label: "Automatic Health Reports",
-    value: "downloadHistoricReports",
+    value: "historicReports",
   },
 ];
 
