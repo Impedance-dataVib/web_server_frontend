@@ -24,6 +24,7 @@ import React, { useEffect, useState } from "react";
 
 export interface CardWidgetProps {
   headerLabel: string;
+  showDate?: string;
   headerIcon?: React.ReactElement;
   content: React.ReactNode;
   subHeadingRight?: React.ReactNode;
@@ -37,6 +38,7 @@ export interface CardWidgetProps {
 
 const CardWidget = ({
   headerLabel,
+  showDate,
   headerContent,
   headerIcon,
   content,
@@ -76,7 +78,13 @@ const CardWidget = ({
       <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
         {!headerContent && (
           <Box>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
               {headerIcon && (
                 <Box
                   sx={{
@@ -108,7 +116,19 @@ const CardWidget = ({
               >
                 {headerLabel}
               </Typography>
+              <Typography
+                component={"b"}
+                sx={{
+                  position: "absolute",
+                  right: "150px",
+                  fontWeight: "500",
+                  fontSize: "12px",
+                }}
+              >
+                {showDate ? ` Updated on ${showDate} (UTC)` : ""}
+              </Typography>
             </Box>
+
             {isBelow1800Pixel && (
               <Box>
                 {subHeadingRight && (

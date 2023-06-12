@@ -115,7 +115,7 @@ export function buildSoketData(response, modelType, formData) {
 
     currentStatus: data["Status"],
 
-    alertsUpdatedOn: "06.04.2023 - 05:49:53 (UTC)",
+    globalIndicatorTime: firstKey,
 
     alertData: alertData,
   };
@@ -211,6 +211,8 @@ export function buildData(response) {
       data["BearingBis"],
       "Condition of cyl moving parts"
     );
+    console.log("datacoming3", firstKey);
+
     cylinder_specific_indicators.push(compression);
     cylinder_specific_indicators.push(injection_Condition);
     cylinder_specific_indicators.push(bearing_Condition);
@@ -249,6 +251,7 @@ export function buildData(response) {
       cylinder_specific_indicators: cylinder_specific_indicators,
       trends: trends,
       alert: buildEngineAlertData(historical_data),
+      alertUpdatedOn: firstKey,
     };
   }
   // process Torque data
@@ -257,6 +260,7 @@ export function buildData(response) {
       cylinder_specific_indicators: [],
       trends: [],
       alert: buildTorqueAlertData(historical_data),
+      alertUpdatedOn: firstKey,
     };
   }
   // process Turbine data
@@ -265,6 +269,7 @@ export function buildData(response) {
       cylinder_specific_indicators: [],
       trends: [],
       alert: buildTurbineAlertData(historical_data),
+      alertUpdatedOn: firstKey,
     };
   }
   // process Motor data
@@ -273,6 +278,7 @@ export function buildData(response) {
       cylinder_specific_indicators: [],
       trends: [],
       alert: buildMotorAlertData(historical_data),
+      alertUpdatedOn: firstKey,
     };
   }
   // process Bearing data
@@ -281,6 +287,7 @@ export function buildData(response) {
       cylinder_specific_indicators: [],
       trends: [],
       alert: buildBearingAlertData(historical_data),
+      alertUpdatedOn: firstKey,
     };
   }
 
@@ -542,42 +549,91 @@ const message_data = {
   "-9": { status: "Fail", message: "Mismatch between config & channels info." },
 };
 
-function buildTorqueAlertData(data) {
-  let returnArray = [];
-  if (data) {
-    for (let item of data) {
-      const objectData = JSON.parse(item["jsondata"]);
-      const firstKey = Object.keys(objectData)[0];
-      const moduleData = objectData[firstKey];
-      const code = moduleData["Status"];
-      const message = message_data[code];
-      returnArray.push({
-        instructionName: message["status"],
-        isTorque: true,
-        instructionType: message["status"] === "Success" ? "success" : "error",
-        instructions: [{ message: message["message"], time: firstKey }],
-      });
+function average(datapoints) {
+  let sum = 0;
+  for (let i = 0; i < datapoints.length; i++) {
+    if (datapoints[i]) {
+      sum += datapoints[i];
     }
   }
+
+  return sum / datapoints.length;
+}
+function round(num) {
+  return Math.round(num * 100) / 100;
+}
+function checkForAlert(datapoints, min, max) {
+  if (!datapoints) return 0; //return success
+  let sum = 0;
+  for (let i = 0; i < datapoints.length; i++) {
+    sum += datapoints[i];
+  }
+
+  const avg = sum / datapoints.length;
+  if (avg <= min) {
+    return 1; // return error
+  }
+  if (avg > min && avg <= max) {
+    return 2; //return warning
+  }
+  return 0; //return success
+}
+function buildTorqueAlertData(data) {
+  let returnArray = [];
+
+  if (data) {
+    let tempCode = 999;
+    for (let item of data) {
+      const objectData = JSON.parse(item["jsondata"]);
+
+      const firstKey = Object.keys(objectData)[0];
+
+      const moduleData = objectData[firstKey];
+
+      const code = moduleData["Status"];
+
+      if (tempCode !== code) {
+        const message = message_data[code];
+        returnArray.push({
+          instructionName: message["status"],
+          isTorque: true,
+          instructionType:
+            message["status"] === "Success" ? "success" : "error",
+          instructions: [{ message: message["message"], time: firstKey }],
+        });
+      }
+      tempCode = code;
+    }
+  }
+
   return returnArray;
 }
 
 function buildBearingAlertData(data) {
   const mechanicalHealth = [];
+
   const global_ = [];
+
   if (data) {
     for (let i = 0; i < data.length; i++) {
       const item = data[i];
+
       const objectData = JSON.parse(item["jsondata"]);
+
       const firstKey = Object.keys(objectData)[0];
+
       const moduleData = objectData[firstKey];
+
       const bearingGlobal = moduleData["BearingGlobal"];
+
       if (bearingGlobal) {
-        mechanicalHealth.push(bearingGlobal["value"]);
+        mechanicalHealth.push(bearingGlobal["valueInHealth"]);
       }
+
       const globalMixed = moduleData["GlobalMixed"];
+
       if (globalMixed) {
-        global_.push(globalMixed["value"]);
+        global_.push(globalMixed["valueInHealth"]);
       }
     }
   }
@@ -608,6 +664,7 @@ function buildBearingAlertData(data) {
 
   if (global_) {
     const val = average(global_);
+
     if (val <= 30) {
       returnArray.push({
         instructionName: "Global(Imbalance/Alignment/Loosness)",
@@ -617,6 +674,7 @@ function buildBearingAlertData(data) {
         ],
       });
     }
+
     if (val > 30 && val <= 70) {
       returnArray.push({
         instructionName: "Global(Imbalance/Alignment/Loosness)",
@@ -627,33 +685,42 @@ function buildBearingAlertData(data) {
       });
     }
   }
-
   return returnArray;
 }
 
 function buildMotorAlertData(data) {
   let returnArray = [];
+
   const electroMag = []; // data['MElectromag'];
+
   const bearing = []; //data['MBearing'];
+
   const stressStability = []; // data['MStressStability'];
 
   if (data) {
     for (let i = 0; i < data.length; i++) {
       const item = data[i];
+
       const objectData = JSON.parse(item["jsondata"]);
+
       const firstKey = Object.keys(objectData)[0];
+
       const moduleData = objectData[firstKey];
+
       const mElectromag = moduleData["MElectromag"];
+
       if (mElectromag) {
-        electroMag.push(mElectromag["value"]);
+        electroMag.push(mElectromag["valueInHealth"]);
       }
+
       const MBearing = moduleData["MBearing"];
       if (MBearing) {
-        bearing.push(MBearing["value"]);
+        bearing.push(MBearing["valueInHealth"]);
       }
+
       const MStressStability = moduleData["MStressStability"];
       if (MStressStability) {
-        stressStability.push(MStressStability["value"]);
+        stressStability.push(MStressStability["valueInHealth"]);
       }
     }
   }
@@ -663,116 +730,164 @@ function buildMotorAlertData(data) {
     if (val <= 30) {
       returnArray.push({
         instructionName: "Electromagnetic Stress",
+
         instructionType: "error",
+
         instructions: [
           "Breakage or cracking of a short-circuit ring (also results in abnormal heating of the rotor at the point of cracking or rupture and an increase in current.)",
         ],
       });
-    }
-    if (val > 30 && val <= 70) {
+    } else if (val > 30 && val <= 70) {
       returnArray.push({
         instructionName: "Electromagnetic Stress",
+
         instructionType: "warning",
+
         instructions: [
           "Damage to the winding insulation",
+
           "Deterioration of the mechanical strength of the windings in the slots (can also result in defective or even detached slot shims)",
         ],
       });
     }
   }
+
   if (bearing) {
     const val = average(bearing);
+
     if (val <= 30) {
       returnArray.push({
         instructionName: "Bearing",
+
         instructionType: "error",
+
         instructions: [
           "Check for Air Gap in the case of an electric motor",
+
           "Check for tilting in the case of vertical axis installations",
+
           "Check for the degradation of bearings",
+
           "Check if Loosening at the level of the support structure (assembly at the level of the supports)",
         ],
       });
     }
+
     if (val > 30 && val <= 70) {
       returnArray.push({
         instructionName: "Bearing",
+
         instructionType: "warning",
+
         instructions: [
           "Check for Air Gap in the case of an electric motor",
+
           "Check for tilting in the case of vertical axis installations",
+
           "Check for the degradation of bearings",
+
           "Check if Loosening at the level of the support structure (assembly at the level of the supports)",
         ],
       });
     }
   }
+
   if (stressStability) {
     const val = average(stressStability);
+
     if (val <= 30) {
       returnArray.push({
         instructionName: "Stress/Stability",
+
         instructionType: "error",
+
         instructions: [
           "Check for Instability of the power supply (network / transformer / drive) which will also result in a significant variation in power",
+
           "Check for Phase imbalance (which will result in uneven intensity across all three phases)",
+
           "Check for Mechanical overload which will also result in a rise in intensity and abnormal heating",
+
           "Check for Uneven air gap (or off-center rotor in the stator), possibly also caused by a wobbly foot (or lame foot)",
+
           "Check for Stator deformation (thermal or mechanical deformation)",
+
           "In the case of a direct current motor, the possible cause may also be due to a falling armature insulation or a badly adjusted neutral line.",
         ],
       });
     }
+
     if (val > 30 && val <= 70) {
       returnArray.push({
         instructionName: "Stress/Stability",
+
         instructionType: "warning",
+
         instructions: [
           "Check for Instability of the power supply (network / transformer / drive) which will also result in a significant variation in power",
+
           "Check for Phase imbalance (which will result in uneven intensity across all three phases)",
+
           "Check for Stator deformation (thermal or mechanical deformation)",
+
           "In the case of a direct current motor, the possible cause may also be due to a falling armature insulation or a badly adjusted neutral line.",
         ],
       });
     }
   }
+
   return returnArray;
 }
 
 function buildTurbineAlertData(data) {
   let returnArray = [];
+
   const regularityDeviation = []; //data['RegularityDeviation'];
+
   const bearingStatus = []; //data['BearingStatus'];
+
   const bladeStatus = []; //data['BladeStatus'];
+
   const turbineCoupling = []; //data['TurbineCoupling'];
 
   if (data) {
     for (let i = 0; i < data.length; i++) {
       const item = data[i];
+
       const objectData = JSON.parse(item["jsondata"]);
+
       const firstKey = Object.keys(objectData)[0];
+
       const moduleData = objectData[firstKey];
+
       const RegularityDeviation = moduleData["RegularityDeviation"];
+
       if (RegularityDeviation) {
-        regularityDeviation.push(RegularityDeviation["valueInHealth"]);
+        regularityDeviation.push(RegularityDeviation["valueInPercent"]);
       }
+
       const BearingStatus = moduleData["BearingStatus"];
+
       if (BearingStatus) {
-        bearingStatus.push(BearingStatus["valueInHealth"]);
+        bearingStatus.push(BearingStatus["valueInPercent"]);
       }
+
       const BladeStatus = moduleData["BladeStatus"];
+
       if (BladeStatus) {
-        bladeStatus.push(BladeStatus["valueInHealth"]);
+        bladeStatus.push(BladeStatus["valueInPercent"]);
       }
+
       const TurbineCoupling = moduleData["TurbineCoupling"];
       if (TurbineCoupling) {
-        turbineCoupling.push(TurbineCoupling["valueInHealth"]);
+        turbineCoupling.push(TurbineCoupling["valueInPercent"]);
       }
     }
   }
 
   if (turbineCoupling) {
     const val = average(turbineCoupling);
+
     if (val <= 30) {
       returnArray.push({
         instructionName: "Shaft/Blades Health",
@@ -781,8 +896,7 @@ function buildTurbineAlertData(data) {
           "Inspection of coupling condition Checking the settings on the evaluation of the alignment factors between the turbine and the coupled element",
         ],
       });
-    }
-    if (val > 30 && val <= 70) {
+    } else if (val > 30 && val <= 70) {
       returnArray.push({
         instructionName: "Shaft/Blades Health",
         instructionType: "warning",
@@ -795,19 +909,25 @@ function buildTurbineAlertData(data) {
 
   if (bladeStatus) {
     const val = average(bladeStatus);
+
     if (val <= 30) {
       returnArray.push({
         instructionName: "Shaft/Blades Health",
+
         instructionType: "error",
+
         instructions: [
           "Check for clamping, dynamic instabilities, damage to rotating blades",
         ],
       });
     }
+
     if (val > 30 && val <= 70) {
       returnArray.push({
         instructionName: "Shaft/Blades Health",
+
         instructionType: "warning",
+
         instructions: [
           "Check for clamping, dynamic instabilities, damage to rotating blades",
         ],
@@ -816,27 +936,39 @@ function buildTurbineAlertData(data) {
   }
 
   if (bearingStatus) {
-    const val = bearingStatus["valueInHealth"];
+    const val = average(bearingStatus);
+
     if (val <= 30) {
       returnArray.push({
         instructionName: "Bearing Status",
+
         instructionType: "error",
+
         instructions: [
           "Check Cylinder defect (bore/bearing shell)",
+
           "Check for structure/support bending",
+
           "Check for the excessive dynamic gearmesh force  ",
+
           "Check for misalignment see Coupling indicator",
         ],
       });
     }
+
     if (val > 30 && val <= 70) {
       returnArray.push({
         instructionName: "Bearing Status",
+
         instructionType: "warning",
+
         instructions: [
           "Check Cylinder defect (bore/bearing shell)",
+
           "Check for structure/support bending",
+
           "Check for the excessive dynamic gearmesh force  ",
+
           "Check for misalignment see Coupling indicator",
         ],
       });
@@ -844,24 +976,23 @@ function buildTurbineAlertData(data) {
   }
 
   if (regularityDeviation) {
-    const val = regularityDeviation["valueInHealth"];
+    const val = average(regularityDeviation);
     if (val <= 30) {
       returnArray.push({
         instructionName: "Regularity/Deviation",
         instructionType: "error",
         instructions: [
           "Check for the Faults in Steam Intake",
-          " Check the lubrication of the bearings and thrust bearings",
+          "Check the lubrication of the bearings and thrust bearings",
         ],
       });
-    }
-    if (val > 30 && val <= 70) {
+    } else if (val > 30 && val <= 70) {
       returnArray.push({
         instructionName: "Regularity/Deviation",
         instructionType: "warning",
         instructions: [
           "Check for the Faults in Steam Intake",
-          " Check the lubrication of the bearings and thrust bearings",
+          "Check the lubrication of the bearings and thrust bearings",
         ],
       });
     }
@@ -877,222 +1008,197 @@ function buildEngineAlertData(historical_data) {
     return returnArray;
   }
 
+  const buildData = {
+    engineHealth: [],
+    engineEfficiency: [],
+    powerLoss: [],
+    Damper: [],
+    Unbalance: [],
+    CamPump: [],
+  };
+  for (let item of historical_data) {
+    const objectData = JSON.parse(item["jsondata"]);
+
+    const firstKey = Object.keys(objectData)[0];
+
+    const data = objectData[firstKey];
+
+    if (data["MechanicalHealth"]) {
+      buildData.engineHealth.push(data["MechanicalHealth"]["valueInHealth"]);
+    }
+    if (data["EngineEfficiency"]) {
+      buildData.engineEfficiency.push(
+        data["EngineEfficiency"]["valueInHealth"]
+      );
+    }
+    if (data["PowerLoss"]) {
+      buildData.powerLoss.push(data["PowerLoss"]["value"]);
+    }
+    if (data["Damper"]) {
+      buildData.Damper.push(data["Damper"]["valueInHealth"]);
+    }
+    if (data["Unbalance"]) {
+      buildData.Unbalance.push(data["Unbalance"]["valueInHealth"]);
+    }
+    if (data["CamPump"]) {
+      buildData.CamPump.push(data["CamPump"]["valueInHealth"]);
+    }
+  }
+
+  let conditionValue = checkForAlert(buildData.CamPump, 30, 70);
+  if (conditionValue === 2) {
+    returnArray.push({
+      instructionName: "Governing and Crank driven Access",
+      instructionType: "warning",
+      instructions: [
+        "If engine has just been overhauled, check for faulty assembly",
+        "Check governor/control system functioning.",
+        "Check gear condition/Backlash",
+        "Check Irregularity in fuel regulation system.",
+        "Check condition of attached pumps",
+        "Check condition of Camshaft/rollers/followers",
+        "Check camshaft damper if fitted",
+        "Check for water in fuel if engine is hunting",
+      ],
+    });
+  } else if (conditionValue === 1) {
+    returnArray.push({
+      instructionName: "Governing and Crank driven Access",
+      instructionType: "error",
+      instructions: [
+        "Initiate corrective action immediately to improve health of Governing and crank driven accessories",
+        "If engine has just been overhauled, check for faulty assembly",
+        "Check governor/control system functioning.",
+        "Check gear condition/Backlash",
+        "Check Irregularity in fuel regulation system.",
+        "Check condition of attached pumps",
+        "Check condition of Camshaft/rollers/followers",
+        "Check camshaft damper if fitted",
+        "Check for water in fuel if engine is hunting",
+      ],
+    });
+  }
+
+  conditionValue = checkForAlert(buildData.Unbalance, 30, 70);
+  if (conditionValue === 2) {
+    returnArray.push({
+      instructionName: "Performance of Mounts & Supports",
+      instructionType: "warning",
+      instructions: [
+        "Check the tightness of Support Structure assemblies",
+        "Check the tightness of Mounts",
+        "Check the condition of Anti Vibration Pads",
+      ],
+    });
+  } else if (conditionValue === 1) {
+    returnArray.push({
+      instructionName: "Performance of Mounts & Supports",
+      instructionType: "error",
+      instructions: [
+        "Take Immediate Action on Mounts",
+        "Check the tightness of Support Structure assemblies",
+        "Check the tightness of Mounts",
+        "Replace Anti Vibration pads if due for overhaul",
+      ],
+    });
+  }
+
+  conditionValue = checkForAlert(buildData.Damper, 30, 70);
+  if (conditionValue === 2) {
+    returnArray.push({
+      instructionName: "Performance of Vibration Damper",
+      instructionType: "warning",
+      instructions: [
+        "Check the activity of the torisonal vibration damper at specific frequencies-different speeds",
+      ],
+    });
+  } else if (conditionValue === 1) {
+    returnArray.push({
+      instructionName: "Performance of Vibration Damper",
+      instructionType: "error",
+      instructions: [
+        "Take Immediate action to improve the health of Damper by Checking the activity of the torisonal vibration damper ",
+      ],
+    });
+  }
+
+  conditionValue = checkForAlert(buildData.powerLoss, 1.9, 3);
+  if (conditionValue === 2) {
+    returnArray.push({
+      instructionName: "Increase in Fuel Consumption",
+      instructionType: "warning",
+      instructions: [
+        "Check engine running hours",
+        "Check individual cylinder indicators",
+        "Check fuel quality",
+      ],
+    });
+  }
+
+  conditionValue = checkForAlert(buildData.engineEfficiency, 30, 70);
+  if (conditionValue === 2) {
+    returnArray.push({
+      instructionName: "Combustion Condition",
+      instructionType: "warning",
+      instructions: [
+        "Check Compression and Injection indicators on specific cylinders and action accordingly. ",
+      ],
+    });
+  } else if (conditionValue === 1) {
+    returnArray.push({
+      instructionName: "Combustion Condition",
+      instructionType: "error",
+      instructions: [
+        "Initiate immediate action to improve operation condition by Checking Compression and Injection indicators on specific cylinders",
+      ],
+    });
+  }
+  conditionValue = checkForAlert(buildData.engineHealth, 30, 70);
+  if (conditionValue === 2) {
+    returnArray.push({
+      instructionName: "Engine Health",
+      instructionType: "warning",
+      instructions: [
+        "Check other mechanical global indicators and cylinder specific indicators and take action accordingly",
+      ],
+    });
+  } else if (conditionValue === 1) {
+    returnArray.push({
+      instructionName: "Engine Health",
+      instructionType: "error",
+      instructions: [
+        "Initiate action to improve mechanical health immediately after checking other global and cylinder specific mechanical indicators.",
+      ],
+    });
+  }
+
   const item = historical_data[0];
+
   const objectData = JSON.parse(item["jsondata"]);
+
   const firstKey = Object.keys(objectData)[0];
+
   const data = objectData[firstKey];
 
   const compression = data["Compression"];
+
   const bearing = data["Bearing"];
+
   const bearingBis = data["BearingBis"];
+
   const misfiring = data["Misfiring"];
-  const unbalance = data["Unbalance"]; //Performance of Vibration Damper
-  const campump = data["Campump"]; //"Governing and Crank driven Access"
 
-  const moduleData = data["Engine"];
-  const firingOrder = moduleData["FiringOrder"];
+  const InjectionCondition = data["InjectionCondition"]; //Performance of Vibration Damper
 
-  if (compression) {
-    const cylinderValue = compression["cylinderHealth"];
-    let instructions = [];
-
-    // Compression in Cylinders
-    let cylinders_waring = false;
-    let is_all_cylinders_error = true;
-    let is_all_cylinders_waring = true;
-    let cylinders_waring_names = [];
-
-    for (let i = 0; i < cylinderValue.length; i++) {
-      const cylinder = cylinderValue[i];
-      if (cylinder <= 30) {
-        is_all_cylinders_waring = false;
-      } else if (cylinder > 30 && cylinder <= 70) {
-        cylinders_waring_names.push(firingOrder[i]);
-        cylinders_waring = true;
-        is_all_cylinders_error = false;
-      } else {
-        is_all_cylinders_waring = false;
-        is_all_cylinders_error = false;
-      }
-    }
-
-    // Condition of Cyl Moving Parts
-    let is_all_condition_of_moving_part_error = true;
-
-    for (let i = 0; i < bearingBis.length; i++) {
-      const cylinder = bearingBis[i];
-      if (cylinder > 30) {
-        is_all_condition_of_moving_part_error = false;
-      }
-    }
-    if (!is_all_cylinders_waring && cylinders_waring) {
-      for (let cyl of cylinders_waring_names) {
-        instructions.push("Check Compression Pressure of Cyl_" + cyl);
-        instructions.push("Check Exhaust Temperatures Cyl_" + cyl);
-      }
-      instructions.push("Check Tappet Settings");
-      instructions.push("Use Borescope for further identification");
-
-      returnArray.push({
-        instructionName: "Compression in Cylinders",
-        instructionType: "warning",
-        instructions: instructions,
-      });
-    }
-    if (is_all_cylinders_waring) {
-      instructions.push("Check Compression Pressure");
-      instructions.push("Check Exhaust Temperatures");
-      instructions.push("Check Tappet Settings");
-      instructions.push("Use Borescope for further identification");
-
-      returnArray.push({
-        instructionName: "Compression in Cylinders",
-        instructionType: "warning",
-        instructions: instructions,
-      });
-    }
-    if (is_all_condition_of_moving_part_error && is_all_cylinders_error) {
-      instructions.push("Check Liner and Piston Rings");
-      instructions.push("Check crankcase pressure for Blowby");
-      instructions.push("Check Exhaust Temperatures");
-      instructions.push("Use Borescope for further identification");
-      instructions.push("Check Compression Pressure");
-      instructions.push(
-        "Carry Crank Case Inspection to Visually look for Seizure/Scoring Marks in Liner bore or Piston Skirt"
-      );
-
-      returnArray.push({
-        instructionName:
-          "Compression in Cylinders and Condition of Cyl Moving Parts ",
-        instructionType: "error",
-        instructions: instructions,
-      });
-    }
-  }
-  if (bearing) {
-    let instructions = [];
-    let bearing_waring = false;
-    let bearing_error = false;
-    let is_all_bearing_error = true;
-    let is_all_bearing_waring = true;
-    let bearing_waring_names = [];
-
-    for (let i = 0; i < bearing.length; i++) {
-      const cylinder = bearing[i];
-      if (cylinder <= 30) {
-        is_all_bearing_waring = false;
-        bearing_error = true;
-      } else if (cylinder > 30 && cylinder <= 70) {
-        bearing_waring_names.push(firingOrder[i]);
-        bearing_waring = true;
-        is_all_bearing_error = false;
-      } else {
-        is_all_bearing_waring = false;
-        is_all_bearing_error = false;
-      }
-    }
-
-    let is_all_campump_warning = false;
-    let is_all_campump_error = false;
-    if (campump) {
-      for (let i = 0; i < campump.length; i++) {
-        const cylinder = campump[i];
-        if (cylinder < 30 || cylinder > 70) {
-          is_all_campump_warning = true;
-        }
-        if (cylinder < 30) {
-          is_all_campump_error = true;
-        }
-      }
-    }
-
-    if (is_all_bearing_waring) {
-      instructions.push(
-        "Excessive Thrust from the driven Load. (If it is a main engine, Check propellor)"
-      );
-      instructions.push("Check Thrust Bearing failure");
-      instructions.push("Check Lube Oil Pressure Low");
-      instructions.push("Check Low/Contaminated oil");
-      instructions.push("Check Lube oil filter for debris");
-      instructions.push("Check Misalignment");
-
-      returnArray.push({
-        instructionName: "Bearing Condition",
-        instructionType: "warning",
-        instructions: instructions,
-      });
-    }
-    if (!is_all_bearing_waring && bearing_waring) {
-      for (let cyl of bearing_waring_names) {
-        instructions.push("Check for Peak Pressure of *Cyl_*" + cyl);
-      }
-      instructions.push("Check for Clogged Oil Passage of Individual Bearing");
-      instructions.push("Check for Damaged Bearing");
-
-      returnArray.push({
-        instructionName: "Bearing Condition",
-        instructionType: "warning",
-        instructions: instructions,
-      });
-    }
-
-    if (!is_all_bearing_waring && is_all_bearing_error) {
-      instructions.push("STOP THE ENGINE AND INVESTIGATE");
-      returnArray.push({
-        instructionName: "Bearing Condition",
-        instructionType: "error",
-        instructions: instructions,
-      });
-    }
-
-    if (bearing_waring && is_all_campump_warning) {
-      instructions.push("Lube oil filter");
-      instructions.push("Check lubrication");
-      instructions.push("Check gear Backlash");
-      instructions.push("Check Irregularity in Governor/control system.");
-      instructions.push("Check Irregularity in fuel regulation system.");
-      instructions.push(
-        "Check alignment of external/auxiliary equipment, incl.pumps, couplings, shaft line & screw. "
-      );
-
-      returnArray.push({
-        instructionName:
-          "Bearing Condition and Governing and Crank driven Access",
-        instructionType: "warning",
-        instructions: instructions,
-      });
-    }
-    if (bearing_error && is_all_campump_error) {
-      instructions.push("Lube oil filter");
-      instructions.push("Check lubrication");
-      instructions.push("Check gear Backlash");
-      instructions.push("Check Irregularity in Governor/control system.");
-      instructions.push("Check Irregularity in fuel regulation system.");
-      instructions.push(
-        "Check alignment of external/auxiliary equipment, incl.pumps, couplings, shaft line & screw. "
-      );
-
-      returnArray.push({
-        instructionName:
-          "Bearing Condition and Governing and Crank driven Access",
-        instructionType: "error",
-        instructions: instructions,
-      });
-    }
-  }
-  if (bearingBis) {
-    let instructions = [];
+  if (InjectionCondition) {
     let waring = false;
-    let is_all_error = true;
     let is_all_waring = true;
-    let waring_names = [];
-
-    for (let i = 0; i < bearingBis.length; i++) {
-      const cylinder = bearingBis[i];
+    let is_all_error = true;
+    for (let i = 0; i < InjectionCondition["cylinderValues"].length; i++) {
+      const cylinder = InjectionCondition["cylinderValues"][i];
       if (cylinder <= 30) {
         is_all_waring = false;
       } else if (cylinder > 30 && cylinder <= 70) {
-        waring_names.push(firingOrder[i]);
         waring = true;
         is_all_error = false;
       } else {
@@ -1100,133 +1206,279 @@ function buildEngineAlertData(historical_data) {
         is_all_error = false;
       }
     }
-
-    let is_all_campump_error = false;
-    if (campump) {
-      for (let i = 0; i < campump.length; i++) {
-        const cylinder = campump[i];
-        if (cylinder > 30) {
-          is_all_campump_error = true;
-          break;
-        }
-      }
+    if (is_all_error) {
+      returnArray.push({
+        instructionName: "Fuel Injection Performance",
+        instructionType: "error",
+        instructions: [
+          "Inititate immediate Corrective action to improve Fuel Injection Performance",
+          "If fuel system has just been overhauled, check for faulty assembly",
+          "Check running hours if injector/pump is due for overhaul",
+          "Check Fuel oil filter/filter pressure. Check for fuel quality",
+          "Check for injector timing.",
+          "Pressure test injector/Dismantle fuel pump/injector. Overhaul if neccessary.",
+          "Check fuel linkage in affected cylinders",
+        ],
+      });
     } else {
-      is_all_campump_error = false;
-    }
-
-    if (is_all_waring) {
-      instructions.push("Check Jacket water Quality");
-      instructions.push(
-        "Check Water Pump Pressure or Jacket water Temperature"
-      );
-      instructions.push("Check Jacket water coolant level");
-      instructions.push("Check Lube Oil Pressure Low");
-      instructions.push("Check Low/Contaminated oil");
-      instructions.push("Check Lube oil filter for debris");
-
-      returnArray.push({
-        instructionName: "Condition of Cyl Moving Parts",
-        instructionType: "warning",
-        instructions: instructions,
-      });
-    }
-    if (!is_all_waring && waring) {
-      for (let cyl of waring_names) {
-        instructions.push("Check Jacket water cooling issues of Cyl_" + cyl);
+      if (is_all_waring) {
+        returnArray.push({
+          instructionName: "Fuel Injection Performance",
+          instructionType: "warning",
+          instructions: [
+            "If fuel system has just been overhauled, check for faulty assembly",
+            "Check running hours if injector/pump is due for overhaul",
+            "Check Fuel oil filter/filter pressure. Check for fuel quality",
+            "Check for injector timing.",
+            "Pressure test injector/Dismantle fuel pump/injector. Overhaul if neccessary.",
+            "Check fuel linkage in affected cylinders",
+          ],
+        });
+      } else if (waring) {
+        returnArray.push({
+          instructionName: "Fuel Injection Performance",
+          instructionType: "warning",
+          instructions: [
+            "If fuel system has just been overhauled, check for faulty assembly",
+            "Check running hours if injector/pump is due for overhaul",
+            "Pressure test injector/Dismantle fuel pump/injector. Overhaul if neccessary.",
+            "In case of electronic injectors, check solenoid valves/timing",
+            "Check fuel linkage in affected cylinders",
+          ],
+        });
       }
-      instructions.push(
-        "Check for Piston cooling nozzle alignment or clogging"
-      );
-      instructions.push("Check Broken Ring");
-
-      returnArray.push({
-        instructionName: "Condition of Cyl Moving Parts",
-        instructionType: "warning",
-        instructions: instructions,
-      });
     }
-
-    if (!is_all_waring && is_all_error) {
-      instructions.push(
-        "Check Alignment of Piston Cooling Nozzle of Mentioned cylinder"
-      );
-      instructions.push(
-        "If engine is freshly overhauled, compability of piston and liner"
-      );
-
+  }
+  if (compression) {
+    let waring = false;
+    let is_all_waring = true;
+    let is_all_error = true;
+    for (let i = 0; i < compression["cylinderValues"].length; i++) {
+      const cylinder = compression["cylinderValues"][i];
+      if (cylinder <= 30) {
+        is_all_waring = false;
+      } else if (cylinder > 30 && cylinder <= 70) {
+        waring = true;
+        is_all_error = false;
+      } else {
+        is_all_waring = false;
+        is_all_error = false;
+      }
+    }
+    if (is_all_error) {
+      returnArray.push({
+        instructionName: "Compression in Cylinders",
+        instructionType: "error",
+        instructions: [
+          "If top overhaul has just been performed, check for faulty assembly",
+          "Check for engine running hours if due for overhaul",
+          "Check Crankcase pressure which may indicate liner/piston issues.",
+          "Check Compression Pressure of *Cyl_x*",
+          "Check Exhaust Temperatures *Cyl_x* which may indicate valve tighntess issues",
+          "Use Borescope for further identification",
+          "Check for deterioration in the Condition of Cyl Moving Parts",
+          "Check for blue exhaust smoke indicating broken piston ring and excessive lube being burnt",
+        ],
+      });
+    } else {
+      if (is_all_waring) {
+        returnArray.push({
+          instructionName: "Compression in Cylinders",
+          instructionType: "warning",
+          instructions: [
+            "If top overhaul has just been performed, check for faulty assembly",
+            "Check Tappet Settings",
+            "Check Crankcase pressure which may indicate liner/piston issues.",
+            "Check Compression Pressure of *Cyl_x*",
+            "Check Exhaust Temperatures *Cyl_x* which may indicate valve tighntess issues",
+            "Use Borescope for further identification",
+            "Check for deterioration in the Condition of Cyl Moving Parts",
+            "Check for blue exhaust smoke indicating broken piston ring and excessive lube being burnt",
+          ],
+        });
+      } else if (waring) {
+        returnArray.push({
+          instructionName: "Compression in Cylinders",
+          instructionType: "warning",
+          instructions: [
+            "If top overhaul has just been performed, check for faulty assembly",
+            "Check Tappet Settings",
+            "Check Crankcase pressure which may indicate liner/piston issues.",
+            "Check Compression Pressure of *Cyl_x*",
+            "Check Exhaust Temperatures *Cyl_x* which may indicate valve tighntess issues",
+            "Use Borescope for further identification",
+            "Check for deterioration in the Condition of Cyl Moving Parts",
+            "Check for engine running hours if due for overhaul",
+            "Check for blue exhaust smoke indicating broken piston ring and excessive lube being burnt",
+          ],
+        });
+      }
+    }
+  }
+  if (bearing) {
+    let waring = false;
+    let is_all_waring = true;
+    let is_all_error = true;
+    for (let i = 0; i < bearing["cylinderValues"].length; i++) {
+      const cylinder = bearing["cylinderValues"][i];
+      if (cylinder <= 30) {
+        is_all_waring = false;
+      } else if (cylinder > 30 && cylinder <= 70) {
+        waring = true;
+        is_all_error = false;
+      } else {
+        is_all_waring = false;
+        is_all_error = false;
+      }
+    }
+    if (is_all_error) {
+      returnArray.push({
+        instructionName: "Bearing Condition",
+        instructionType: "error",
+        instructions: [
+          "If engine has just been overhauled, check for faulty assembly",
+          "Check if the engine is due for overhaul",
+          "Take immediate corrective action on Bearings",
+          "Identify defect in the Main or Bottom end bearing",
+          "Check bearing clearances",
+          "Incase of bottom end bearing, check free movement of rod.",
+          "Check if bearing shelves have moved from their original position",
+          "Incase of excessive clearances of bearings, check for bearing damage.",
+          "Check for Peak Pressure of specific cylinders",
+          "Check for Clogged Oil Passage of Individual Bearing",
+          "Check tightness of bearing bolts",
+        ],
+      });
+    } else {
+      if (is_all_waring) {
+        returnArray.push({
+          instructionName: "Bearing Condition",
+          instructionType: "warning",
+          instructions: [
+            "If engine has just been overhauled, check for faulty assembly",
+            "Check if the bearings are due for overhaul",
+            "Check external influence on crankshaft from the driven load",
+            "Check bearing clearances/Damages",
+            "Check Damper indicator to detect malfunction",
+            "Check Lube Oil Pressure.",
+            "Check oil contamination for water/fuel",
+            "Check Lube oil filter for wear debris",
+            "Check crankshaft Misalignment",
+          ],
+        });
+      } else if (waring) {
+        returnArray.push({
+          instructionName: "Bearing Condition",
+          instructionType: "warning",
+          instructions: [
+            "If engine has just been overhauled, check for faulty assembly",
+            "Identify defect in the Main or Bottom end bearing",
+            "Check bearing clearances",
+            "In case of bottom end bearing, check free movement of rod.",
+            "Check if bearing shelves have moved from their original position",
+            "In case of excessive clearances of bearings, check for bearing damage.",
+            "Check for Peak Pressure of specific cylinders",
+            "Check for Clogged Oil Passage of Individual Bearing",
+            "Check tightness of bearing bolts",
+          ],
+        });
+      }
+    }
+  }
+  if (bearingBis) {
+    let waring = false;
+    let is_all_waring = true;
+    let is_all_error = true;
+    for (let i = 0; i < bearingBis["cylinderValues"].length; i++) {
+      const cylinder = bearingBis["cylinderValues"][i];
+      if (cylinder <= 30) {
+        is_all_waring = false;
+      } else if (cylinder > 30 && cylinder <= 70) {
+        waring = true;
+        is_all_error = false;
+      } else {
+        is_all_waring = false;
+        is_all_error = false;
+      }
+    }
+    if (is_all_error) {
       returnArray.push({
         instructionName: "Condition of Cyl Moving Parts",
         instructionType: "error",
-        instructions: instructions,
+        instructions: [
+          "If engine has just been overhauled, check for faulty assembly",
+          "Check if the engine is due for overhaul",
+          "Take immediate corrective action on Bearings",
+          "Identify defect in the Main or Bottom end bearing",
+          "Check bearing clearances",
+          "Incase of bottom end bearing, check free movement of rod.",
+          "Check if bearing shelves have moved from their original position",
+          "Incase of excessive clearances of bearings, check for bearing damage.",
+          "Check for Peak Pressure of *Cyl_x*",
+          "Check for Clogged Oil Passage of Individual Bearing",
+          "Check tightness of bearing bolts",
+        ],
       });
-    }
-
-    if (is_all_error || is_all_campump_error) {
-      instructions.push("Check Jacket water Quality");
-      instructions.push(
-        "Check Water Pump Pressure or Jacket water Temperature"
-      );
-      instructions.push("Check Jacket water coolant level");
-      instructions.push("Check Lube Oil Pressure Low");
-      instructions.push("Check Low/Contaminated oil");
-      instructions.push("Check Lube oil filter for debris");
-
-      returnArray.push({
-        instructionName:
-          "Condition of Cyl Moving Parts and Governing and Crank driven Access",
-        instructionType: "error",
-        instructions: instructions,
-      });
+    } else {
+      if (is_all_waring) {
+        returnArray.push({
+          instructionName: "Condition of Cyl Moving Parts",
+          instructionType: "warning",
+          instructions: [
+            "If engine has just been overhauled, check for faulty assembly",
+            "Check engine running hours to identify if the engine is due for overhaul.",
+            "Carry out borescope inspection through cylinder head of piston top for carbon deposits. Eliminate bad fuel injector",
+            "Check quality of fuel oil to eliminate possibility of scuffing of cylinder liners",
+            "Check Jacket cooling water temperature",
+            "Check Lube oil filter for debris",
+            "Check for colour of exhaust(blue smoke/black smoke)",
+            "Open crankcase, check liner surface of affected cylinders through borescope inspection if possible",
+          ],
+        });
+      } else if (waring) {
+        returnArray.push({
+          instructionName: "Condition of Cyl Moving Parts",
+          instructionType: "warning",
+          instructions: [
+            "If engine has just been overhauled, check for faulty assembly",
+            "Check if the engine is due for overhaul",
+            "Check Jacket water cooling temperature of affected cylinders",
+            "Check for Piston cooling nozzle alignment or clogging of affected cylinder",
+            "Check for Broken piston Ring of affected cylinder",
+            "Check for colour of exhaust. Blue Colour may indicate excessive lube burning, black may indicate incomplete combustion.",
+            "Check liner surface of affected cylinders from crankcase through borescope inspection if possible",
+          ],
+        });
+      }
     }
   }
   if (misfiring) {
-    let instructions = [];
     let is_all_error = true;
 
-    for (let i = 0; i < misfiring.length; i++) {
-      const cylinder = misfiring[i];
+    for (let i = 0; i < misfiring["cylinderValues"].length; i++) {
+      const cylinder = misfiring["cylinderValues"][i];
       if (cylinder > 30) {
         is_all_error = false;
+        break;
       }
     }
 
     if (is_all_error) {
-      instructions.push("CAUTION - *Cyl_x* Misfired");
-      instructions.push("Check Gas quality");
-      instructions.push("Check Spark Plug");
-      instructions.push("Reduce the Load");
-    }
-    if (instructions && instructions.length > 0) {
       returnArray.push({
         instructionName: "Misfiring",
         instructionType: "error",
-        instructions: instructions,
-      });
-    }
-  }
-  if (unbalance) {
-    const val = unbalance["valueInHealth"];
-    if (val <= 30) {
-      returnArray.push({
-        instructionName: "Performance of Mounts & Supports",
-        instructionType: "error",
-        instructions:
-          "Check Tie rod for 2 stroke  Foundation Blocks          Chockfast",
+        instructions: [
+          "CAUTION - *Cyl_x* Misfired",
+          "Check if knocking sensors are activated/Malfunctioning",
+          "Check Gas quality if multiple units are knocking. Reduce engine load.",
+          "Check Spark Plug condition/Malfunctioning",
+          "Check engine timing.",
+          "Check Spark plug Cable, Ignition coil.",
+          "Check Turbocharger' air filters",
+        ],
       });
     }
   }
 
   return returnArray;
-}
-
-function average(datapoints) {
-  let sum = 0;
-  for (let i = 0; i < datapoints.length; i++) {
-    sum += parseInt(datapoints[i], 10); //don't forget to add the base
-  }
-
-  return sum / datapoints.length;
-}
-function round(num) {
-  return Math.round(num * 100) / 100;
 }
