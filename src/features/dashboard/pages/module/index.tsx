@@ -113,14 +113,14 @@ const ModuleMonitoringPage = ({
           content={
             <AlertsAndInstructions
               moduleData={moduleData}
-              alertData={trendsData?.alert}
+              alertData={trendsData?.alert || []}
             />
           }
           initiallyCollapsed={false}
           fullScreenContent={
             <AlertsAndInstructions
               moduleData={moduleData}
-              alertData={trendsData?.alert}
+              alertData={trendsData?.alert || []}
               isModalOpen={true}
             />
           }
@@ -186,7 +186,7 @@ const ModuleMonitoringPage = ({
           headerIcon={<></>}
           content={
             activeModule === 0 ? (
-              <Trends trends={trendsData?.trends} />
+              <Trends trends={trendsData?.trends || []} />
             ) : (
               <CylinderIndicator
                 cylinderSpecificIndicators={
@@ -199,11 +199,11 @@ const ModuleMonitoringPage = ({
           initiallyCollapsed={false}
           fullScreenContent={
             activeModule === 0 ? (
-              <Trends trends={trendsData?.trends} fullScreen={true} />
+              <Trends trends={trendsData?.trends || []} fullScreen={true} />
             ) : (
               <CylinderIndicator
                 cylinderSpecificIndicators={
-                  trendsData?.cylinder_specific_indicators
+                  trendsData?.cylinder_specific_indicators || []
                 }
                 fullScreen={true}
               />
