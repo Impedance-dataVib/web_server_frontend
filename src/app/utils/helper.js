@@ -491,6 +491,7 @@ function buildChannelName(channel) {
 function buildLineGradientChart(data, key, title, isGradientOpposite) {
   let labels = [];
   let datapoints = [];
+  let zAxisDataPoints = [];
   let count = 0;
   if (data) {
     for (let item of data) {
@@ -498,6 +499,7 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
       const firstKey = Object.keys(objectData)[0];
       const moduleData = objectData[firstKey];
       labels.push(firstKey);
+      zAxisDataPoints.push(moduleData?.ChannelSpeed);
       const valueObject = moduleData[key];
       if (isGradientOpposite) {
         datapoints.push(round(valueObject["valueInHealth"]));
@@ -519,9 +521,10 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
     trendsName: title,
     min: round(Math.min(...datapoints)),
     max: round(Math.max(...datapoints)),
+    yMax: title === "Engine Health" ? 100: 5,
     avg: round(avg),
     datapoints: datapoints,
-    dataPointsY1: datapoints,
+    dataPointsY1: zAxisDataPoints,
     labels: labels,
     chartType: "LineGradient",
     xLabel: title,
@@ -559,7 +562,7 @@ function average(datapoints) {
 
   return sum / datapoints.length;
 }
-function round(num) {
+export function round(num) {
   return Math.round(num * 100) / 100;
 }
 function checkForAlert(datapoints, min, max) {
