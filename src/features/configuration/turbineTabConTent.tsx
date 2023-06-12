@@ -198,6 +198,7 @@ const TurbineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       Filter_lowDecim: "",
       Filter_low: "",
       highPass: "",
+      has_overwrite_parameters: false,
     };
   };
   const moduleFormContext = useFormik({

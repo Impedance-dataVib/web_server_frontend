@@ -15,7 +15,11 @@ const GlobalIndicatorChart = ({ globalIndicator, fullScreen }: any) => {
     <Grid
       container
       spacing={1}
-      sx={{ height: globalIndicator && !fullScreen ? "100%" : "", ...styling, maxHeight: globalIndicator && !fullScreen ? "240px" : "" }}
+      sx={{
+        height: globalIndicator && !fullScreen ? "100%" : "",
+        ...styling,
+        maxHeight: globalIndicator && !fullScreen ? "240px" : "",
+      }}
     >
       {globalIndicator &&
         globalIndicator.map((val: any, index: any) => (
@@ -23,8 +27,8 @@ const GlobalIndicatorChart = ({ globalIndicator, fullScreen }: any) => {
             key={`globalIndicator${index}`}
             item
             sx={{ display: "flex", flexDirection: "column" }}
-            lg={6}
-            md={12} 
+            lg={4}
+            md={12}
             sm={12}
           >
             <Typography
@@ -35,14 +39,14 @@ const GlobalIndicatorChart = ({ globalIndicator, fullScreen }: any) => {
             >
               {val?.indicatorName}
             </Typography>
-            <Box 
-              sx={{ 
+            <Box
+              sx={{
                 height: "65%",
-                display: 'flex',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                alignItems: 'center',
-                marginTop: '20px' 
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: "20px",
               }}
             >
               <SpeedoMeter

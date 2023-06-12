@@ -186,6 +186,7 @@ const TorqueTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       Filter_lowDecim: "",
       Filter_low: "",
       highPass: "",
+      has_overwrite_parameters:false,
     };
   };
 

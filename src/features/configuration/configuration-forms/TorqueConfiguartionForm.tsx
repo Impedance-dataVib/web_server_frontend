@@ -106,131 +106,169 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           <FieldArray name={fieldProps.label}>
             {(formHelper: FieldArrayRenderProps) => {
               return (
-                <Box>
-                  {formContext?.values?.[fieldProps.label].map(
-                    (item: any, index: number) => (
-                      <Box key={index}>
-                        <FormControl
-                          sx={{ minWidth: "182px", marginBottom: "20px" }}
-                          // error={Boolean(
-                          //   formContext?.errors?.[fieldProps.label]
-                          // )}
-                          disabled={
-                            fieldProps?.userName === "admin" ? false : true
+                <>
+                  <Box>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          name={"has_overwrite_parameters"}
+                          onChange={(e) => {
+                            formContext?.setFieldValue(
+                              e.target.name,
+                              e.target.checked
+                            );
+                          }}
+                          checked={
+                            formContext?.values?.has_overwrite_parameters
                           }
-                        >
-                          <InputLabel
-                            id={`${fieldProps.label}[${index}]-overwrite-label`}
-                          >
-                            {`overwrite`}
-                          </InputLabel>
-                          <Select
-                            labelId={`${fieldProps.label}[${index}]-overwrite-label`}
-                            name={`${fieldProps.label}[${index}].overwrite`}
-                            onChange={formContext?.handleChange}
-                            label={`overwrite`}
-                            value={item.overwrite}
-                          >
-                            <MenuItem value={""}>None</MenuItem>
-                            {OVER_WRITE_INDICATORS["Torque"].map(
-                              (option: string) => (
-                                <MenuItem key={option} value={option}>
-                                  {option}
-                                </MenuItem>
-                              )
-                            )}
-                          </Select>
-                          {/* {Boolean(formContext?.errors?.[fieldProps.label]) && (
+                          color="primary"
+                        />
+                      }
+                      label={"Has overwrite parameters"}
+                      labelPlacement="start"
+                      disabled={fieldProps?.userName === "admin" ? false : true}
+                    />
+                  </Box>
+                  {formContext?.values?.has_overwrite_parameters && (
+                    <Box>
+                      {formContext?.values?.[fieldProps.label].map(
+                        (item: any, index: number) => (
+                          <Box key={index}>
+                            <FormControl
+                              sx={{ minWidth: "182px", marginBottom: "20px" }}
+                              // error={Boolean(
+                              //   formContext?.errors?.[fieldProps.label]
+                              // )}
+                              disabled={
+                                fieldProps?.userName === "admin" ? false : true
+                              }
+                            >
+                              <InputLabel
+                                id={`${fieldProps.label}[${index}]-overwrite-label`}
+                              >
+                                {`overwrite`}
+                              </InputLabel>
+                              <Select
+                                labelId={`${fieldProps.label}[${index}]-overwrite-label`}
+                                name={`${fieldProps.label}[${index}].overwrite`}
+                                onChange={formContext?.handleChange}
+                                label={`overwrite`}
+                                value={item.overwrite}
+                              >
+                                <MenuItem value={""}>None</MenuItem>
+                                {OVER_WRITE_INDICATORS["Bearing"].map(
+                                  (option: string) => (
+                                    <MenuItem key={option} value={option}>
+                                      {option}
+                                    </MenuItem>
+                                  )
+                                )}
+                              </Select>
+                              {/* {Boolean(formContext?.errors?.[fieldProps.label]) && (
                             <FormHelperText>
                               {formContext?.errors?.[fieldProps.label]}
                             </FormHelperText>
                           )} */}
-                        </FormControl>
-                        <TextField
-                          name={`${fieldProps.label}[${index}].overwriteMin`}
-                          label={`overwriteMin`}
-                          onChange={formContext?.handleChange}
-                          value={item.overwriteMin}
-                          variant="outlined"
-                          sx={{
-                            fontSize: "16px",
-                            marginBottom: "20px",
-                            width: "182px",
-                            padding: "1px 1px",
-                          }}
-                          inputProps={{
-                            style: {
-                              padding: "11px 26px 18px 12px",
-                            },
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                        ></TextField>
-                        <TextField
-                          name={`${fieldProps.label}[${index}].overwriteMiddle`}
-                          label={`overwriteMiddle`}
-                          onChange={formContext?.handleChange}
-                          value={item.overwriteMiddle}
-                          variant="outlined"
-                          sx={{
-                            fontSize: "16px",
-                            marginBottom: "20px",
-                            width: "182px",
-                            padding: "1px 1px",
-                          }}
-                          inputProps={{
-                            style: {
-                              padding: "11px 26px 18px 12px",
-                            },
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                        ></TextField>
-                        <TextField
-                          name={`${fieldProps.label}[${index}].overwriteMax`}
-                          label={`overwriteMax`}
-                          onChange={formContext?.handleChange}
-                          value={item.overwriteMax}
-                          variant="outlined"
-                          sx={{
-                            fontSize: "16px",
-                            marginBottom: "20px",
-                            width: "182px",
-                            padding: "1px 1px",
-                          }}
-                          inputProps={{
-                            style: {
-                              padding: "11px 26px 18px 12px",
-                            },
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                        ></TextField>
-                        <Button
-                          color="secondary"
-                          disabled={
-                            fieldProps?.userName === "admin" ? false : true
-                          }
-                          onClick={() => formHelper.remove(index)}
-                        >
-                          Remove
-                        </Button>
-                      </Box>
-                    )
+                            </FormControl>
+
+                            <TextField
+                              name={`${fieldProps.label}[${index}].overwriteMin`}
+                              label={`overwriteMin`}
+                              onChange={formContext?.handleChange}
+                              value={item.overwriteMin}
+                              variant="outlined"
+                              disabled={
+                                fieldProps?.userName === "admin" ? false : true
+                              }
+                              sx={{
+                                fontSize: "16px",
+                                marginBottom: "20px",
+                                width: "182px",
+                                padding: "1px 1px",
+                              }}
+                              inputProps={{
+                                style: {
+                                  padding: "11px 26px 18px 12px",
+                                },
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                            ></TextField>
+                            <TextField
+                              name={`${fieldProps.label}[${index}].overwriteMiddle`}
+                              label={`overwriteMiddle`}
+                              onChange={formContext?.handleChange}
+                              value={item.overwriteMiddle}
+                              variant="outlined"
+                              disabled={
+                                fieldProps?.userName === "admin" ? false : true
+                              }
+                              sx={{
+                                fontSize: "16px",
+                                marginBottom: "20px",
+                                width: "182px",
+                                padding: "1px 1px",
+                              }}
+                              inputProps={{
+                                style: {
+                                  padding: "11px 26px 18px 12px",
+                                },
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                            ></TextField>
+                            <TextField
+                              name={`${fieldProps.label}[${index}].overwriteMax`}
+                              label={`overwriteMax`}
+                              onChange={formContext?.handleChange}
+                              value={item.overwriteMax}
+                              variant="outlined"
+                              disabled={
+                                fieldProps?.userName === "admin" ? false : true
+                              }
+                              sx={{
+                                fontSize: "16px",
+                                marginBottom: "20px",
+                                width: "182px",
+                                padding: "1px 1px",
+                              }}
+                              inputProps={{
+                                style: {
+                                  padding: "11px 26px 18px 12px",
+                                },
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                            ></TextField>
+                            <Button
+                              color="secondary"
+                              disabled={
+                                fieldProps?.userName === "admin" ? false : true
+                              }
+                              onClick={() => formHelper.remove(index)}
+                            >
+                              Remove
+                            </Button>
+                          </Box>
+                        )
+                      )}
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        disabled={
+                          fieldProps?.userName === "admin" ? false : true
+                        }
+                        onClick={() =>
+                          formHelper.push({
+                            overwrite: "",
+                            overwriteMin: "",
+                            overwriteMiddle: "",
+                            overwriteMax: "",
+                          })
+                        }
+                      >
+                        Add
+                      </Button>
+                    </Box>
                   )}
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={fieldProps?.userName === "admin" ? false : true}
-                    onClick={() =>
-                      formHelper.push({
-                        overwrite: "",
-                        overwriteMin: "",
-                        overwriteMiddle: "",
-                        overwriteMax: "",
-                      })
-                    }
-                  >
-                    Add
-                  </Button>
-                </Box>
+                </>
               );
             }}
           </FieldArray>
@@ -267,6 +305,20 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           {formContext?.values?.[fieldProps.name] && (
             <>
               <Grid item>
+                <Typography
+                  component={"label"}
+                  sx={{
+                    width: "143px",
+                    display: "inline-block",
+                    fontSize: "13px",
+                    marginRight: "41px",
+                    marginLeft:"15px",
+                    marginBottom: "5px",
+                    alignItems: "right",
+                  }}
+                >
+                  Filter Low Decim
+                </Typography>
                 <TextField
                   name={"Filter_lowDecim"}
                   label={"Filter Low Decim"}
@@ -292,6 +344,20 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                 ></TextField>
               </Grid>
               <Grid item>
+                <Typography
+                  component={"label"}
+                  sx={{
+                    width: "143px",
+                    display: "inline-block",
+                    fontSize: "13px",
+                    marginRight: "41px",
+                    marginLeft:"15px",
+                    marginBottom: "5px",
+                    alignItems: "right",
+                  }}
+                >
+                  Filter low
+                </Typography>
                 <TextField
                   name={"Filter Low"}
                   label={"Filter_low"}
@@ -317,6 +383,20 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                 ></TextField>
               </Grid>
               <Grid item>
+                <Typography
+                  component={"label"}
+                  sx={{
+                    width: "143px",
+                    display: "inline-block",
+                    fontSize: "13px",
+                    marginRight: "41px",
+                    marginLeft:"15px",
+                    marginBottom: "5px",
+                    alignItems: "right",
+                  }}
+                >
+                  High Pass
+                </Typography>
                 <TextField
                   name={"highPass"}
                   label={"HighPass"}
