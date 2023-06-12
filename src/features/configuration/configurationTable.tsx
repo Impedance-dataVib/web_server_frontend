@@ -12,9 +12,13 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-
+import api from "../../app/api";
 import { useNavigate } from "react-router-dom";
-import { deleteConfig, activeConfig, exportConfiguration } from "../../app/services";
+import {
+  deleteConfig,
+  activeConfig,
+  exportConfiguration,
+} from "../../app/services";
 import ConfirmDeleteConfigurationModal from "./modals/confirmDeleteConfig";
 import { useSnackbar } from "notistack";
 import { eventBus } from "src/EventBus";
@@ -87,16 +91,38 @@ const ConfigurationTable = ({
   const onExportConfiguartion = async (id: string) => {
     // TODO
     setIsLoading(true);
-    try {
-    const res:any = await exportConfiguration(id);
-    setIsLoading(false);
-  } catch (e) {
-    enqueueSnackbar({
-      message: "Error occurred while exporting configuration",
-      variant: "error",
-    });
-    setIsLoading(false);
-  }
+    api
+      .get("/configuration/export-configuration.php/" + id, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        const url = window.URL.createObjectURL(response.data);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "export-configuration.csv");
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch((error) => {
+        enqueueSnackbar({
+          message: "Error occurred while exporting configuration",
+          variant: "error",
+        });
+        setIsLoading(false);
+      });
+
+    //   setIsLoading(true);
+    //   try {
+    //   const res:any = await exportConfiguration(id);
+
+    //   setIsLoading(false);
+    // } catch (e) {
+    // enqueueSnackbar({
+    //   message: "Error occurred while exporting configuration",
+    //   variant: "error",
+    // });
+    //   setIsLoading(false);
+    // }
   };
 
   const onActiveConfig = async (row: any) => {
@@ -145,7 +171,7 @@ const ConfigurationTable = ({
                   {row.name}
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
-                  {row.status === "Active" ? row.active_date: null}
+                  {row.status === "Active" ? row.active_date : null}
                 </StyledTableCell>
                 <StyledTableCell align="left">
                   <IconButton

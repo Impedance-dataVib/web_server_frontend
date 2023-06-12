@@ -13,7 +13,7 @@ import { useGetConfiguration, useGetActiveConfig } from "./hooks";
 import ConfigurationEmptyState from "./emptyState";
 import AddConfigurationModal from "./modals/addConfiguration";
 import { addConfiguration, importConfiguration } from "../../app/services";
-import AttachFileIcon from '@mui/icons-material/AttachFile';
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 import { eventBus } from "src/EventBus";
 interface IAddConfigurationState {
@@ -59,37 +59,34 @@ const ConfigurationPageContent = () => {
   const onChangeHandler = async (e: any) => {
     setLoading(true);
     const formData = new FormData();
-    formData.append('file', e.target.files[0]);
+    formData.append("file", e.target.files[0]);
     try {
-    const res:any = await importConfiguration(formData);
-    getConfigData();
-    handleAddConfigDialog();
-    setLoading(false);
-    enqueueSnackbar({
-      message:  res?.data?.Message,
-      variant: "success",
-    });
-    e.target.value =null;
-  } catch(ex:any) {
+      const res: any = await importConfiguration(formData);
+      getConfigData();
+      // handleAddConfigDialog();
+      setLoading(false);
       enqueueSnackbar({
-        message:  ex?.response?.data?.Message,
+        message: res?.data?.Message,
+        variant: "success",
+      });
+      e.target.value = null;
+    } catch (ex: any) {
+      enqueueSnackbar({
+        message: ex?.response?.data?.Message,
         variant: "error",
       });
       setLoading(false);
 
       console.log(ex?.response, ex?.response?.data?.Message, ex, ex?.message);
-      e.target.value =null;
+      e.target.value = null;
     }
-   
-  }
+  };
 
   useEffect(() => {
     eventBus.on("ConfigDelete", async () => {
-      
       await getActiveConfig();
     });
     eventBus.on("ConfigActive", async () => {
-    
       await getActiveConfig();
     });
   }, []);
@@ -122,44 +119,44 @@ const ConfigurationPageContent = () => {
       )}
       <Grid container>
         <Grid item xs={12} lg={12}>
-          <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-          <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>
-            Manage Configuration
-          </Typography>
-          {data !== undefined && data?.length > 0 && (
-            <Stack
-              spacing={1}
-              direction="row"
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                paddingBottom: "10px",
-              }}
-            >
-              <Button
-                // onClick={handleAddConfigDialog}
-                variant="contained"
-                component="label"
-                startIcon={<AttachFileIcon/>}
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>
+              Manage Configuration
+            </Typography>
+            {data !== undefined && data?.length > 0 && (
+              <Stack
+                spacing={1}
+                direction="row"
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  paddingBottom: "10px",
+                }}
               >
-                Import
-                <input
-                  accept=".csv"
-                  type="file"
-                  hidden
-                  style={{ opacity: 0, width: "100%", height: "100%" }}
-                  onChange={onChangeHandler}
-                />
-              </Button>
-              <Button
-                onClick={handleAddConfigDialog}
-                variant="contained"
-                startIcon={<AddIcon></AddIcon>}
-              >
-                Add Configuration
-              </Button>
-            </Stack>
-          )}
+                <Button
+                  // onClick={handleAddConfigDialog}
+                  variant="contained"
+                  component="label"
+                  startIcon={<AttachFileIcon />}
+                >
+                  Import
+                  <input
+                    accept=".csv"
+                    type="file"
+                    hidden
+                    style={{ opacity: 0, width: "100%", height: "100%" }}
+                    onChange={onChangeHandler}
+                  />
+                </Button>
+                <Button
+                  onClick={handleAddConfigDialog}
+                  variant="contained"
+                  startIcon={<AddIcon></AddIcon>}
+                >
+                  Add Configuration
+                </Button>
+              </Stack>
+            )}
           </Box>
           <Box sx={{ marginTop: "21px", paddingBottom: "41px" }}>
             {!isLoading && (data === undefined || data?.length === 0) && (
@@ -175,7 +172,7 @@ const ConfigurationPageContent = () => {
               />
             )}
           </Box>
-          
+
           {openAddConfigDialog && (
             <AddConfigurationModal
               open={openAddConfigDialog}
