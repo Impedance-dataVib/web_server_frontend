@@ -1,4 +1,4 @@
-import { Box, LinearProgress } from "@mui/material";
+import { Box, LinearProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { buildSignalData, getCommaSepratedChannel } from "src/app/utils/helper";
@@ -89,6 +89,7 @@ const Signal = ({ signals, formData, moduleType }: any) => {
             />
           </Box>
         ))}
+        {graphData.length === 0 && !isLoading && <Typography textAlign={"center"} sx={{width: '100%'}}>No Data found</Typography>}
     </Box>
   );
 };

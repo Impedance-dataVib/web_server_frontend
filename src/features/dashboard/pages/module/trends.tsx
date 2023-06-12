@@ -69,6 +69,10 @@ export default function Trends({ trends, fullScreen }: any) {
             </Box>
           </Grid>
         ))}
+        {trends.length === 0 && 
+        <Grid item lg={fullScreen ? 12: 12} md={12} sm={12} sx={{display: 'flex', flexDirection: 'column'}}>
+          <Typography textAlign={"center"} sx={{width: '100%'}}>No Data found</Typography>
+          </Grid>}
     </Grid>
   );
 }
