@@ -32,7 +32,7 @@ const Signal = ({ signals, formData, moduleType }: any) => {
         if (parsedData?.Status === "Failed") {
         } else {
           parsedData = buildSignalData(parsedData, formData, moduleType);
-          setGraphData(parsedData);
+          setGraphData(parsedData || []);
         }
         setIsLoading(false);
       }
@@ -89,7 +89,7 @@ const Signal = ({ signals, formData, moduleType }: any) => {
             />
           </Box>
         ))}
-        {graphData.length === 0 && !isLoading && <Typography textAlign={"center"} sx={{width: '100%'}}>No Data found</Typography>}
+        {graphData && graphData.length === 0 && !isLoading && <Typography textAlign={"center"} sx={{width: '100%'}}>No Data found</Typography>}
     </Box>
   );
 };
