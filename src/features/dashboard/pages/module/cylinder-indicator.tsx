@@ -13,6 +13,7 @@ function CylinderIndicator({ cylinderSpecificIndicators, fullScreen }: any) {
         flexDirection: "row",
         marginTop: "15px",
         overflow: "auto",
+        height : cylinderSpecificIndicators.length <= 4 ? '30vh': 'unset'
       }}
     >
       {cylinderSpecificIndicators.map((val: any, index: any) => (

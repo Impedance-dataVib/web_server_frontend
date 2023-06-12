@@ -13,7 +13,7 @@ export default function Trends({ trends, fullScreen }: any) {
             <Typography variant="body1" component={"span"} textAlign={"center"}>
               {val?.trendsName}
             </Typography>
-            <Box sx={{ height: "100%", width: "100%" }}>
+            <Box sx={{ height: "30vh", width: "100%" }}>
               {val?.chartType === "LineGradient" ? (
                 <LineGradient
                   minValue={val?.min}

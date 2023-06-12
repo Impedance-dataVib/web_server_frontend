@@ -102,7 +102,7 @@ export function buildSoketData(response, modelType, formData) {
     globalIndicator.push(
       buildIndicatorData("Bearing", data["4KMixed"], "valueInHealth")
     );
-    globalIndicator.push(buildRpmData("RPM", data["ChannelSpeed"]));
+    globalIndicator.push(buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold));
     globalIndicator.push(
       buildIndicatorData("Friction", data["8KMixed"], "valueInHealth")
     );
@@ -147,11 +147,12 @@ function buildIndicatorData(indicator_title, data, key) {
 }
 
 function buildRpmData(indicator_title, data, maxValue) {
+  console.log(indicator_title, data, maxValue);
   return {
     indicatorName: indicator_title,
     indicatorMin: 0,
     indicatorMax: maxValue || parseInt(data) * 2,
-    indicatorValue: data ? Math.floor(data) : 0,
+    indicatorValue: data ? parseInt(data) : 0,
     isPercentage: false,
     isGradientColor: false,
     indicatorType: "error",
@@ -499,11 +500,38 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
       const firstKey = Object.keys(objectData)[0];
       const moduleData = objectData[firstKey];
       labels.push(firstKey);
+      labels.push(firstKey);
+      labels.push(firstKey);
+      labels.push(firstKey);
+      labels.push(firstKey);
+      labels.push(firstKey);
+      labels.push(firstKey);
+      labels.push(firstKey);
+      labels.push(firstKey);
+      labels.push(firstKey);
       zAxisDataPoints.push(moduleData?.ChannelSpeed);
       const valueObject = moduleData[key];
       if (isGradientOpposite) {
         datapoints.push(round(valueObject["valueInHealth"]));
+        datapoints.push(round(valueObject["valueInHealth"]));
+        datapoints.push(round(valueObject["valueInHealth"]));
+        datapoints.push(round(valueObject["valueInHealth"]));
+        datapoints.push(round(valueObject["valueInHealth"]));
+        datapoints.push(round(valueObject["valueInHealth"]));
+        datapoints.push(round(valueObject["valueInHealth"]));
+        datapoints.push(round(valueObject["valueInHealth"]));
+        datapoints.push(round(valueObject["valueInHealth"]));
+        datapoints.push(round(valueObject["valueInHealth"]));
       } else {
+        datapoints.push(round(valueObject["value"]));
+        datapoints.push(round(valueObject["value"]));
+        datapoints.push(round(valueObject["value"]));
+        datapoints.push(round(valueObject["value"]));
+        datapoints.push(round(valueObject["value"]));
+        datapoints.push(round(valueObject["value"]));
+        datapoints.push(round(valueObject["value"]));
+        datapoints.push(round(valueObject["value"]));
+        datapoints.push(round(valueObject["value"]));
         datapoints.push(round(valueObject["value"]));
       }
 
