@@ -136,7 +136,13 @@ const CardWidget = ({
                 {headerLabel}
               </Typography>
             </Box>
-            {headerLabel === "Alerts & Instructions" && (
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <Typography
                 sx={{
                   fontWeight: "500",
@@ -144,26 +150,9 @@ const CardWidget = ({
                   mr: "20px",
                 }}
               >
-                {showDate ? ` ${showDate}` : ""}
+                {showDate ? ` Updated on ${showDate} (UTC)` : ""}
               </Typography>
-            )}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              {headerLabel === "Global Indicators" && (
-                <Typography
-                  sx={{
-                    fontWeight: "500",
-                    fontSize: "9px",
-                    mr: "20px",
-                  }}
-                >
-                  {showDate ? ` Updated on ${showDate} (UTC)` : ""}
-                </Typography>
-              )}
+
               {isBelow1800Pixel && (
                 <Box>
                   {subHeadingRight && (

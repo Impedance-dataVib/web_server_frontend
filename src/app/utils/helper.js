@@ -204,7 +204,7 @@ export function buildData(response) {
       first,
       second,
       data["Bearing"],
-      "Baring Condition"
+      "Bearing Condition"
     );
     const condition_of_cyl_moving_parts = buildCompressionData(
       first,
@@ -212,7 +212,6 @@ export function buildData(response) {
       data["BearingBis"],
       "Condition of cyl moving parts"
     );
-    console.log("datacoming3", firstKey);
 
     cylinder_specific_indicators.push(compression);
     cylinder_specific_indicators.push(injection_Condition);
@@ -489,6 +488,8 @@ export function getCommaSepratedChannel(data, type) {
 function buildChannelName(channel) {
   return "CHANNEL" + channel.substr(channel.length - 1);
 }
+const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
 function buildLineGradientChart(data, key, title, isGradientOpposite) {
   let labels = [];
   let datapoints = [];
@@ -499,7 +500,17 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
       const objectData = JSON.parse(item["jsondata"]);
       const firstKey = Object.keys(objectData)[0];
       const moduleData = objectData[firstKey];
-      labels.push(firstKey);
+      // labels.push(firstKey);
+      const date = new Date(firstKey);
+      let day = days[date.getDay()];
+      let hour = date.getHours();
+      let mint = date.getMinutes();
+      // let year = date.getFullYear().toString();
+      let dateformat = day + "," + hour + ":" + mint;
+
+      labels.push(dateformat);
+
+      // toString("MMMM yyyy")
       zAxisDataPoints.push(moduleData?.ChannelSpeed);
       const valueObject = moduleData[key];
       if (isGradientOpposite) {
@@ -522,7 +533,7 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
     trendsName: title,
     min: round(Math.min(...datapoints)),
     max: round(Math.max(...datapoints)),
-    yMax: title === "Engine Health" ? 100: 5,
+    yMax: title === "Engine Health" ? 100 : 5,
     avg: round(avg),
     datapoints: datapoints,
     dataPointsY1: zAxisDataPoints,
