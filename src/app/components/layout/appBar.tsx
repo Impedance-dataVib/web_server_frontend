@@ -1,10 +1,9 @@
 /* eslint-disable */
-import React, { useContext, useEffect, useState } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar,
-  Avatar,
   Badge,
   Box,
   Divider,
@@ -14,22 +13,21 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Link as MatLink,
+  Menu,
   MenuItem,
+  Theme,
   Toolbar,
   Typography,
-  Link as MatLink,
-  Theme,
-  Menu,
-  fabClasses,
 } from "@mui/material";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import React, { useEffect, useState } from "react";
 
-import { Link, useLocation, matchPath } from "react-router-dom";
+import { NotificationsOutlined } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
-import { KeyboardArrowDown, NotificationsOutlined } from "@mui/icons-material";
-import { APP_NAV_MENU_ITEMS, INavMenuItem } from "../../../contants";
-import DownloadInfoApi from "src/features/downloads/api";
+import { Link, matchPath, useLocation } from "react-router-dom";
 import CommonApi from "src/commonApi";
+import DownloadInfoApi from "src/features/downloads/api";
+import { APP_NAV_MENU_ITEMS, INavMenuItem } from "../../../contants";
 const drawerWidth = 240;
 
 const DrawerAppBar = () => {
@@ -67,14 +65,14 @@ const DrawerAppBar = () => {
 
   const getFile = () => {
     DownloadInfoApi.getDownloadFile()
-      .then((res) => {
+      .then((res: any) => {
         const url = window.URL.createObjectURL(res.data);
         const link = document.createElement("a");
         link.href = url;
         if (notificationType === "json") {
           link.setAttribute("download", "data.json");
         } else if (notificationType === "raw") {
-          link.setAttribute("download", "raw-data.wav");
+          link.setAttribute("download", "raw-data.zip");
         } else if (notificationType === "spredsheet") {
           link.setAttribute("download", "spreadsheet.excel");
         } else if (notificationType === "graphical") {
@@ -83,7 +81,7 @@ const DrawerAppBar = () => {
         document.body.appendChild(link);
         link.click();
       })
-      .catch((err) => console.error(err));
+      .catch((err: any) => console.error(err));
   };
   const currentTime = () => {
     return CommonApi.getLicenseInfo()

@@ -203,7 +203,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
             />
           }
           label={fieldProps?.name}
-          labelPlacement="start"
+          labelPlacement="end"
           disabled={fieldProps?.userName === "admin" ? false : true}
         />
       );
@@ -231,8 +231,8 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           color="primary"
                         />
                       }
-                      label={"Has overwrite parameters"}
-                      labelPlacement="start"
+                      label={"Overwrite parameters"}
+                      labelPlacement="end"
                       disabled={fieldProps?.userName === "admin" ? false : true}
                     />
                   </Box>
@@ -396,8 +396,8 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   color="primary"
                 />
               }
-              label={fieldProps?.name}
-              labelPlacement="start"
+              label={fieldProps?.label}
+              labelPlacement="end"
               disabled={fieldProps?.userName === "admin" ? false : true}
             />
           </Grid>

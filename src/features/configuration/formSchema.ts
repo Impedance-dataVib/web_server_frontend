@@ -357,7 +357,7 @@ const formSchema = {
       },
       {
         name: "has_filter_options",
-        label: "Has Filter Options",
+        label: "Filter Options",
         type: "filter_parameters",
       },
       {
@@ -541,7 +541,7 @@ const formSchema = {
       },
       {
         name: "has_filter_options",
-        label: "Has Filter Options",
+        label: "Filter Options",
         type: "filter_parameters",
       },
     ],
@@ -666,7 +666,7 @@ const formSchema = {
       },
       {
         name: "has_filter_options",
-        label: "Has Filter Options",
+        label: "Filter Options",
         type: "filter_parameters",
       },
     ],
@@ -767,7 +767,7 @@ const formSchema = {
       },
       {
         name: "has_filter_options",
-        label: "Has Filter Options",
+        label: "Filter Options",
         type: "filter_parameters",
       },
     ],
@@ -897,7 +897,7 @@ const formSchema = {
       },
       {
         name: "has_filter_options",
-        label: "Has Filter Options",
+        label: "Filter Options",
         type: "filter_parameters",
       },
     ],

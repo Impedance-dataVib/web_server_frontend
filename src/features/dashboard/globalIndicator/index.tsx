@@ -1,5 +1,6 @@
 import { Box, Grid, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { slice } from "lodash";
+import { useEffect, useState, useMemo } from "react";
 import SpeedoMeter from "src/features/common/graph/speedo-meter";
 
 const GlobalIndicatorChart = ({ globalIndicator, fullScreen }: any) => {
@@ -11,6 +12,14 @@ const GlobalIndicatorChart = ({ globalIndicator, fullScreen }: any) => {
         : { overflow: "auto", display: "flex", flexDirection: "column" }
     );
   }, [fullScreen]);
+
+  const show = useMemo(() => {
+    if (fullScreen === false) {
+      return globalIndicator.slice(0, 3);
+    }
+    return globalIndicator;
+  }, [fullScreen, globalIndicator]);
+  
   return (
     <Grid
       container
@@ -22,7 +31,7 @@ const GlobalIndicatorChart = ({ globalIndicator, fullScreen }: any) => {
       }}
     >
       {globalIndicator &&
-        globalIndicator.map((val: any, index: any) => (
+        show.map((val: any, index: any) => (
           <Grid
             key={`globalIndicator${index}`}
             item
