@@ -76,8 +76,8 @@ const CardWidget = ({
             borderRadius: 3,
             boxShadow: "2px 4px 8px #00000029",
             transition: "all .2s linear",
-            minHeight: "32vh",
-            maxHeight: "32vh",
+            minHeight: { lg: "32vh", md: "40vh" },
+            maxHeight: { lg: "32vh", md: "40vh" },
             overflow: "auto",
             "&::-webkit-scrollbar": {
               width: "0.4em",
