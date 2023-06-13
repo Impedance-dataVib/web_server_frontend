@@ -57,11 +57,11 @@ const SystemConfiguration = () => {
   }, []);
 
   const handleClick = () => {
-    api.get("/app/start_dashboard_socket.php");
+    api.get(`${window.location.origin}/client-portal-api/app/start_dashboard_socket.php`);
 
-    api.get("/app/start_signal_socket.php");
+    api.get(`${window.location.origin}/client-portal-api/app/start_signal_socket.php`);
 
-    api.get("/app/start_status_socket.php");
+    api.get(`${window.location.origin}/client-portal-api/app/start_status_socket.php`);
   };
 
   return (
