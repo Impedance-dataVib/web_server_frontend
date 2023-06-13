@@ -123,6 +123,7 @@ const ModuleMonitoringPage = ({
               isModalOpen={true}
             />
           }
+          section="top"
         />
       </Grid>
       <Grid item xs={12} md={12} lg={12} xl={7}>
@@ -143,6 +144,7 @@ const ModuleMonitoringPage = ({
               fullScreen={true}
             />
           }
+          section="top"
         />
       </Grid>
       <Grid item xs={12}>

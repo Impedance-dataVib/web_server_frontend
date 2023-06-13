@@ -76,7 +76,22 @@ const CardWidget = ({
             borderRadius: 3,
             boxShadow: "2px 4px 8px #00000029",
             transition: "all .2s linear",
-            minHeight: "25vh",
+            minHeight: "32vh",
+            maxHeight: "32vh",
+            overflow: "auto",
+            "&::-webkit-scrollbar": {
+              width: "0.4em",
+            },
+            "&::-webkit-scrollbar-track": {
+              background: "#f1f1f1",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "rgba(0,0,0,.2)",
+              borderRadius: "0.2em",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "rgba(0,0,0,.3)",
+            },
           }
         : {
             p: 2,
