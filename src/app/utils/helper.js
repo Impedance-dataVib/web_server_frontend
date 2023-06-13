@@ -535,12 +535,12 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
       labels.push(dateformat);
 
       // toString("MMMM yyyy")
-      zAxisDataPoints.push(moduleData?.ChannelSpeed);
+      zAxisDataPoints.push(moduleData?.ChannelSpeed || 0);
       const valueObject = moduleData[key];
-      if (isGradientOpposite) {
-        datapoints.push(round(valueObject["valueInHealth"]));
+      if (isGradientOpposite && valueObject) {
+        datapoints.push(round(valueObject?.valueInHealth || 0));
       } else {
-        datapoints.push(round(valueObject["value"]));
+        datapoints.push(round(valueObject?.value || 0));
       }
       count++;
     }

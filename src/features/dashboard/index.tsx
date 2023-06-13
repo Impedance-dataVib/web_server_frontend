@@ -167,7 +167,8 @@ const DashboardPage = () => {
         const parsedData = buildData(val);
         setTrendsData(parsedData);
       })
-      .catch(() => {
+      .catch((e) => {
+        console.error(e);
         setTrendsData({});
       });
   }
