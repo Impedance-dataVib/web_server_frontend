@@ -251,7 +251,7 @@ const CardWidget = ({
           onClose={() => setOpenModal(false)}
           maxWidth="md"
         >
-          <DialogContent>
+          <DialogContent sx={{minWidth:'50vw'}}>
             <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
               <Box component="section">
                 <Box sx={{ display: "flex" }}>

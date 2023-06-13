@@ -93,7 +93,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
             />
           }
           label={fieldProps?.name}
-          labelPlacement="start"
+          labelPlacement="end"
           disabled={fieldProps?.userName === "admin" ? false : true}
         />
       );
@@ -121,8 +121,8 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           color="primary"
                         />
                       }
-                      label={"Has overwrite parameters"}
-                      labelPlacement="start"
+                      label={"Overwrite parameters"}
+                      labelPlacement="end"
                       disabled={fieldProps?.userName === "admin" ? false : true}
                     />
                   </Box>
@@ -286,8 +286,8 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   color="primary"
                 />
               }
-              label={fieldProps?.name}
-              labelPlacement="start"
+              label={fieldProps?.label}
+              labelPlacement="end"
               disabled={fieldProps?.userName === "admin" ? false : true}
             />
           </Grid>
@@ -295,14 +295,14 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           {formContext?.values?.[fieldProps.name] && (
             <>
               <Grid item>
-              <Typography
+                <Typography
                   component={"label"}
                   sx={{
                     width: "143px",
                     display: "inline-block",
                     fontSize: "13px",
                     marginRight: "41px",
-                    marginLeft:"15px",
+                    marginLeft: "15px",
                     marginBottom: "5px",
                     alignItems: "right",
                   }}
@@ -334,14 +334,14 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                 ></TextField>
               </Grid>
               <Grid item>
-              <Typography
+                <Typography
                   component={"label"}
                   sx={{
                     width: "143px",
                     display: "inline-block",
                     fontSize: "13px",
                     marginRight: "41px",
-                    marginLeft:"15px",
+                    marginLeft: "15px",
                     marginBottom: "5px",
                     alignItems: "right",
                   }}
@@ -373,14 +373,14 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                 ></TextField>
               </Grid>
               <Grid item>
-              <Typography
+                <Typography
                   component={"label"}
                   sx={{
                     width: "143px",
                     display: "inline-block",
                     fontSize: "13px",
                     marginRight: "41px",
-                    marginLeft:"15px",
+                    marginLeft: "15px",
                     marginBottom: "5px",
                     alignItems: "right",
                   }}
