@@ -20,7 +20,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 
 export interface CardWidgetProps {
   headerLabel: string;
@@ -67,27 +67,37 @@ const CardWidget = ({
     }
   }, [collapsed]);
 
+  const getSectionSx = useMemo(() => {
+    const topSection =
+      section === "top"
+        ? {
+            p: 2,
+            pt: headerContent ? 0 : 2,
+            borderRadius: 3,
+            boxShadow: "2px 4px 8px #00000029",
+            transition: "all .2s linear",
+            minHeight: "25vh",
+          }
+        : {
+            p: 2,
+            pt: headerContent ? 0 : 2,
+            borderRadius: 3,
+            boxShadow: "2px 4px 8px #00000029",
+            transition: "all .2s linear",
+          };
+    return section === "middle"
+      ? {
+          p: 2,
+          pt: headerContent ? 0 : 2,
+          borderRadius: 3,
+          boxShadow: "2px 4px 8px #00000029",
+          transition: "all .2s linear",
+          minHeight: "30vh",
+        }
+      : topSection;
+  }, [section]);
   return (
-    <Paper
-      sx={
-        section === "middle"
-          ? {
-              p: 2,
-              pt: headerContent ? 0 : 2,
-              borderRadius: 3,
-              boxShadow: "2px 4px 8px #00000029",
-              transition: "all .2s linear",
-              minHeight: "20vh",
-            }
-          : {
-              p: 2,
-              pt: headerContent ? 0 : 2,
-              borderRadius: 3,
-              boxShadow: "2px 4px 8px #00000029",
-              transition: "all .2s linear",
-            }
-      }
-    >
+    <Paper sx={getSectionSx}>
       <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
         {!headerContent && (
           <Box
@@ -249,7 +259,7 @@ const CardWidget = ({
         <Dialog
           open={openModal}
           onClose={() => setOpenModal(false)}
-          maxWidth="md"
+          maxWidth={"xl"}
         >
           <DialogContent sx={{ minWidth: "80vw" }}>
             <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
