@@ -382,7 +382,6 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
         </FormikProvider>
       );
     case "filter_parameters": {
-      console.log(formContext?.values);
       return (
         <Grid item container direction={"column"}>
           <Grid item>

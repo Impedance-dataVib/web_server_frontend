@@ -52,7 +52,7 @@ const DrawerAppBar = () => {
         setNotificationCount(res.data.count);
         setNotificationType(res.data.report_type);
       })
-      .catch((err: any) => console.log(err));
+      .catch((err: any) => console.error(err));
   };
 
   useEffect(() => {
@@ -64,12 +64,10 @@ const DrawerAppBar = () => {
     //Clearing the interval
     return () => clearInterval(interval);
   }, []);
-  console.log(notificationType);
 
   const getFile = () => {
     DownloadInfoApi.getDownloadFile()
       .then((res) => {
-        console.log(res);
         const url = window.URL.createObjectURL(res.data);
         const link = document.createElement("a");
         link.href = url;
@@ -77,7 +75,7 @@ const DrawerAppBar = () => {
           link.setAttribute("download", "data.json");
         } else if (notificationType === "raw") {
           link.setAttribute("download", "raw-data.wav");
-        } else if (notificationType === "spreadsheet") {
+        } else if (notificationType === "spredsheet") {
           link.setAttribute("download", "spreadsheet.excel");
         } else if (notificationType === "graphical") {
           link.setAttribute("download", "graphical-report.pdf");
@@ -85,12 +83,12 @@ const DrawerAppBar = () => {
         document.body.appendChild(link);
         link.click();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
   const currentTime = () => {
     return CommonApi.getLicenseInfo()
       .then((res) => setCurrTime(res.data.currant_time))
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {
@@ -240,7 +238,6 @@ const DrawerAppBar = () => {
 
   const container =
     window !== undefined ? () => window.document.body : undefined;
-  console.log(currtime);
 
   return (
     <Box sx={{ display: "flex" }}>

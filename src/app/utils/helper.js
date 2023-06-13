@@ -24,9 +24,29 @@ export function buildSoketData(response, modelType, formData) {
         "valueInHealth"
       )
     );
-
     globalIndicator.push(
       buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold)
+    );
+    globalIndicator.push(
+      buildIndicatorData(
+        "Performance of Mounts & Supports",
+        data["Unbalance"],
+        "valueInHealth"
+      )
+    );
+    globalIndicator.push(
+      buildIndicatorData(
+        "Governor, Crank driven Accessories Health",
+        data["CamPump"],
+        "valueInHealth"
+      )
+    );
+    globalIndicator.push(
+      buildIndicatorData(
+        "Performance of Vibration Damper",
+        data["Damper"],
+        "valueInHealth"
+      )
     );
   } else if (modelType === "Torque") {
     isAlert = false;
@@ -92,6 +112,9 @@ export function buildSoketData(response, modelType, formData) {
       buildIndicatorData("Bearing", data["MBearing"], "valueInHealth")
     );
     globalIndicator.push(
+      buildRpmData("Speed", data["ChannelSpeed"], maxRPMThrshhold)
+    );
+    globalIndicator.push(
       buildIndicatorData(
         "Electromagnetic Stress",
         data["MElectromag"],
@@ -102,7 +125,9 @@ export function buildSoketData(response, modelType, formData) {
     globalIndicator.push(
       buildIndicatorData("Bearing", data["4KMixed"], "valueInHealth")
     );
-    globalIndicator.push(buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold));
+    globalIndicator.push(
+      buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold)
+    );
     globalIndicator.push(
       buildIndicatorData("Friction", data["8KMixed"], "valueInHealth")
     );
@@ -147,7 +172,6 @@ function buildIndicatorData(indicator_title, data, key) {
 }
 
 function buildRpmData(indicator_title, data, maxValue) {
-  console.log(indicator_title, data, maxValue);
   return {
     indicatorName: indicator_title,
     indicatorMin: 0,

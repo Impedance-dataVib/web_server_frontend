@@ -15,12 +15,10 @@ const Signal = ({ signals, formData, moduleType }: any) => {
     process.env.REACT_APP_SIGNAL_WEBSOCKET_URL ||
       `ws:${window.location.hostname}:8083`,
     {
-      onOpen: () => console.log("Signal opened"),
       onMessage: () => {
         if (sendMessage) sendMessage(channelNames);
       },
       shouldReconnect: (closeEvent) => true,
-      onClose: () => console.log("Signal closed"),
     }
   );
 
@@ -89,7 +87,11 @@ const Signal = ({ signals, formData, moduleType }: any) => {
             />
           </Box>
         ))}
-        {graphData && graphData.length === 0 && !isLoading && <Typography textAlign={"center"} sx={{width: '100%'}}>No Data found</Typography>}
+      {graphData && graphData.length === 0 && !isLoading && (
+        <Typography textAlign={"center"} sx={{ width: "100%" }}>
+          No Data found
+        </Typography>
+      )}
     </Box>
   );
 };

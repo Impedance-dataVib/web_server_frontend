@@ -102,6 +102,7 @@ const ConfigurationTable = ({
         link.setAttribute("download", "export-configuration.csv");
         document.body.appendChild(link);
         link.click();
+        setIsLoading(false);
       })
       .catch((error) => {
         enqueueSnackbar({

@@ -17,7 +17,6 @@ export default function UploadFile() {
     data.append("file", file1);
     data.append("upload_type", "license_file");
 
-    console.log(data.get("file"));
     SystemInfoApi.updateSystemLicenseFile(data)
       .then((val) => {
         enqueueSnackbar({

@@ -46,7 +46,7 @@ axiosInstance.interceptors.response.use(
           );
           return axiosInstance(originalConfig);
         } catch (error) {
-          console.log("error", error, originalConfig);
+          console.error("error", error, originalConfig);
         }
         // Do something, call refreshToken() request for example;
         // return a request

@@ -44,7 +44,6 @@ const ModuleMonitoringPage = ({
     process.env.REACT_APP_LIVE_WEBSOCKET_URL ||
       `ws:${window.location.hostname}:8082`,
     {
-      onOpen: () => console.log("opened"),
       onMessage: () => {
         if (sendMessage) sendMessage(processName);
       },

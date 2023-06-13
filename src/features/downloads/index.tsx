@@ -39,7 +39,6 @@ const DownloadPage = () => {
     const response = await DownloadInfoApi.getModuleInfo();
     setAssetModule(response.data.data);
   };
-  console.log("dataselection", dataSelection);
 
   useEffect(() => {
     getAssetInfo();
@@ -103,7 +102,6 @@ const DownloadPage = () => {
         });
       })
       .catch((error) => {
-        console.log(error);
         setIsLoading(false);
         enqueueSnackbar({
           message: error.Message,

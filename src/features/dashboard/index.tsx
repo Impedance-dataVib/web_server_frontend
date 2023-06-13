@@ -125,7 +125,6 @@ const DashboardPage = () => {
     process.env.REACT_APP_WEBSOCKET_URL ||
       `ws:${window.location.hostname}:8081`,
     {
-      onOpen: () => console.log("opened"),
       onMessage: () => {
         if (sendMessage) sendMessage(moduleTabs[activeModule].process_name);
       },
@@ -194,7 +193,6 @@ const DashboardPage = () => {
           }
           setIsLoading(false);
         } catch (ex) {
-          console.log(ex);
           setIsLoading(false);
           setIsDataAvailable("Something went wrong");
         }

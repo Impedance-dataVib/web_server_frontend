@@ -77,7 +77,6 @@ const ConfigurationPageContent = () => {
       });
       setLoading(false);
 
-      console.log(ex?.response, ex?.response?.data?.Message, ex, ex?.message);
       e.target.value = null;
     }
   };

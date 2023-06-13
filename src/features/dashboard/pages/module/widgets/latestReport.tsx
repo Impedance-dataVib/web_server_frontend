@@ -6,15 +6,15 @@ import { useTranslation } from "react-i18next";
 
 const EngineLatestReport = () => {
   const { engineLatestReport } = useContext(DashboardContext);
-  
-  const {t, i18n, ready} = useTranslation('engine');
 
-  console.log('i18next = ', i18n, ready);
+  const { t, i18n, ready } = useTranslation("engine");
 
   return (
     <Paper sx={{ p: 2 }}>
       <Box>
-        <Box sx={{ fontWeight: "bold" }}>{t('latestReportHeading', { ns: 'engine' })}</Box>
+        <Box sx={{ fontWeight: "bold" }}>
+          {t("latestReportHeading", { ns: "engine" })}
+        </Box>
         <Box>
           <ReportComponent reportData={engineLatestReport} />
         </Box>

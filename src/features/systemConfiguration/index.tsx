@@ -57,19 +57,11 @@ const SystemConfiguration = () => {
   }, []);
 
   const handleClick = () => {
-    console.log("clicked");
-    api
-      .get("/app/start_dashboard_socket.php")
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-    api
-      .get("/app/start_signal_socket.php")
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-    api
-      .get("/app/start_status_socket.php")
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    api.get("/app/start_dashboard_socket.php");
+
+    api.get("/app/start_signal_socket.php");
+
+    api.get("/app/start_status_socket.php");
   };
 
   return (

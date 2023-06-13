@@ -42,8 +42,6 @@ const ReportsRow = ({
   downloadUrl,
   processName,
 }: IReportsRowProps) => {
-  // console.log(processName);
-
   const handleDownload = (reportName: any) => {
     let type: string = "";
     if (reportName === "Graphical Report") {
@@ -63,7 +61,6 @@ const ReportsRow = ({
         }
       )
       .then((res) => {
-        console.log(res);
         const url = window.URL.createObjectURL(res.data);
         const link = document.createElement("a");
         link.href = url;
@@ -79,7 +76,7 @@ const ReportsRow = ({
         document.body.appendChild(link);
         link.click();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
   return (
     <Box>
