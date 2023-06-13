@@ -46,10 +46,10 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
 
   return (
     <Box sx={{display: 'flex', flexDirection: 'column', textAlign: 'center'}}>
-      <div id={`${elementId}${fullScreen ? "full": ""}`}></div>
-      <Typography variant="body1" component={"span"}>
+      <Typography variant="body1" component={"span"} sx={{mb: 1}}>
         {data?.graphLabel}
       </Typography>
+      <div id={`${elementId}${fullScreen ? "full": ""}`}></div>
     </Box>
   );
 }

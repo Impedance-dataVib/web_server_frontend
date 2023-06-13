@@ -542,7 +542,6 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
       } else {
         datapoints.push(round(valueObject["value"]));
       }
-
       count++;
     }
   }
@@ -555,6 +554,7 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
 
   return {
     trendsName: title,
+    speedName: 'Speed',
     min: round(Math.min(...datapoints)),
     max: round(Math.max(...datapoints)),
     yMax: title === "Engine Health" ? 100 : 5,

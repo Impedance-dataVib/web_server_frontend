@@ -43,7 +43,7 @@ const zoomOptions = {
   }
 };
 
-export default function LineGradient( {minValue,trendsName, isGradientOpposite, maxValue, avgValue, datapoints, dataPointsY1, labels}: any) {
+export default function LineGradient( {minValue,trendsName, speedName, isGradientOpposite, maxValue, avgValue, datapoints, dataPointsY1, labels}: any) {
   const chartRef = useRef<any>(null);
   let width: any, height: any, gradient: any;
   function getGradient(ctx: any, chartArea: any, isGradientOpposite:boolean) {
@@ -72,11 +72,19 @@ export default function LineGradient( {minValue,trendsName, isGradientOpposite, 
     labels: labels,
     datasets: [
       {
+        label: speedName || trendsName,
+        data: dataPointsY1,
+        borderColor: "black",
+        cubicInterpolationMode: "monotone" as const,
+        tension: 1,
+        pointBackgroundColor: "black",
+        yAxisID: 'y1',
+        hidden: false,
+      },
+      {
         label: trendsName,
         data: datapoints,
         borderColor: "red",
-        // cubicInterpolationMode: "monotone" as const,
-        // tension: 1,
         pointBackgroundColor: "#1D4580",
         backgroundColor: function (context: any) {
           const chart = context.chart;
@@ -89,36 +97,20 @@ export default function LineGradient( {minValue,trendsName, isGradientOpposite, 
         fill: true,
         yAxisID: 'y',
       },
-      {
-        label: trendsName,
-        data: dataPointsY1,
-        borderColor: "red",
-        cubicInterpolationMode: "monotone" as const,
-        tension: 1,
-        pointBackgroundColor: "#1D4580",
-        backgroundColor: function (context: any) {
-          const chart = context.chart;
-          const { ctx, chartArea } = chart;
-
-          if (!chartArea) {
-            // This case happens on initial chart load
-            return;
-          }
-          return getGradient(ctx, chartArea, isGradientOpposite);
-        },
-        fill: true,
-        yAxisID: 'y1',
-        hidden: true,
-      },
     ],
   };
   
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    interaction: {
+      mode: 'index' as 'index',
+      intersect: false,
+    },
+    stacked: false,
     plugins: {
       legend: {
-        display: false,
+        display: true,
       },
       title: {
         display: false,

@@ -21,6 +21,7 @@ export default function Trends({ trends, fullScreen }: any) {
                   dataPointsY1={val?.dataPointsY1}
                   avgValue={val?.avg}
                   trendsName={val?.trendsName}
+                  speedName={val.speedName}
                   datapoints={val?.datapoints}
                   labels={val?.labels}
                   isGradientOpposite={val?.isGradientOpposite}
@@ -33,6 +34,7 @@ export default function Trends({ trends, fullScreen }: any) {
               )}
             </Box>
             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+              {console.log(val.min)}
             {val?.chartType === "LineGradient" && <Typography
                 component="span"
                 textAlign={"left"}
