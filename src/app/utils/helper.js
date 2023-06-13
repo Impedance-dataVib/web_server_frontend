@@ -52,15 +52,15 @@ export function buildSoketData(response, modelType, formData) {
     isAlert = false;
 
     globalIndicator.push(
-      buildIndicatorData("Torsion", data["StaticTorsion"], "value")
+      buildRpmData("Torsion", data["StaticTorsion"].value, 5)
     );
 
     globalIndicator.push(
-      buildIndicatorData("Torque", data["StaticTorque"], "value")
+      buildRpmData("Torque", data["StaticTorque"].value * 0.001, 1000)
     );
 
     globalIndicator.push(
-      buildIndicatorData("Power", data["StaticPower"], "value")
+      buildRpmData("Power", data["StaticPower"].value * 1.0e-6, 100)
     );
 
     globalIndicator.push(
@@ -130,6 +130,33 @@ export function buildSoketData(response, modelType, formData) {
     );
     globalIndicator.push(
       buildIndicatorData("Friction", data["8KMixed"], "valueInHealth")
+    );
+
+    //-----
+
+    globalIndicator.push(
+      buildIndicatorData(
+        "Mechanical Health",
+        data["BearingGlobal"],
+        "valueInHealth"
+      )
+    );
+
+    globalIndicator.push(
+      buildIndicatorData(
+        "Global(Umbalance/Alignment/Loosness)",
+        data["GlobalMixed"],
+        "valueInHealth"
+      )
+    );
+    globalIndicator.push(
+      buildIndicatorData("Shock Index", data["GlobalKurto"], "valueInHealth")
+    );
+    globalIndicator.push(
+      buildIndicatorData("Level(RMS)", data["GlobalLevel"], "valueInHealth")
+    );
+    globalIndicator.push(
+      buildIndicatorData("Shaft/Clearance", data["2KMixed"], "valueInHealth")
     );
   }
 
@@ -529,12 +556,10 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
       let day = days[date.getDay()];
       let hour = date.getHours();
       let mint = date.getMinutes();
-      // let year = date.getFullYear().toString();
       let dateformat = day + "," + hour + ":" + mint;
 
       labels.push(dateformat);
 
-      // toString("MMMM yyyy")
       zAxisDataPoints.push(moduleData?.ChannelSpeed);
       const valueObject = moduleData[key];
       if (isGradientOpposite) {
