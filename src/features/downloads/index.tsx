@@ -87,6 +87,13 @@ const DownloadPage = () => {
       setReportTypeError(true);
       return;
     }
+    console.log({
+      type: dataSelection,
+      module_id: asset,
+      period: period,
+      report_type: reportType,
+    });
+
     setIsLoading(true);
     DownloadInfoApi.postDownloadInfo({
       type: dataSelection,
@@ -102,6 +109,8 @@ const DownloadPage = () => {
         });
       })
       .catch((error) => {
+        console.log(error);
+
         setIsLoading(false);
         enqueueSnackbar({
           message: error.Message,
@@ -177,7 +186,7 @@ const DownloadPage = () => {
                     variant="body2"
                     sx={{ mr: 1, width: "120px", textAlign: "end" }}
                   >
-                    Select Asset :{" "}
+                    Select Asset & Equipment :{" "}
                   </Typography>
                   <FormControl sx={{ py: 0, width: "110px" }}>
                     <Select

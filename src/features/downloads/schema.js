@@ -53,7 +53,7 @@ export const selectReportType = [
     value: "raw",
   },
   {
-    label: "Jason Test Report",
+    label: "JSON",
     value: "json",
   },
 ];

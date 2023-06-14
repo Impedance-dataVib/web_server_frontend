@@ -51,18 +51,11 @@ const SystemConfiguration = () => {
       };
     });
   };
+  console.log("renderd");
 
   useEffect(() => {
     getSystemInfo();
   }, []);
-
-  const handleClick = () => {
-    api.get(`${window.location.origin}/client-portal-api/app/start_dashboard_socket.php`);
-
-    api.get(`${window.location.origin}/client-portal-api/app/start_signal_socket.php`);
-
-    api.get(`${window.location.origin}/client-portal-api/app/start_status_socket.php`);
-  };
 
   return (
     <Box>
@@ -74,9 +67,6 @@ const SystemConfiguration = () => {
         }}
       >
         <Typography variant="h5">System Configuration</Typography>
-        <Button sx={{ mr: "13px" }} variant="outlined" onClick={handleClick}>
-          Restart WebSocket
-        </Button>
       </Box>
       <Box
         sx={{
@@ -183,8 +173,9 @@ const SystemConfiguration = () => {
                     <Link
                       variant="body1"
                       color="#002BBC"
-                      href="#"
+                      href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
                       sx={{ mx: 1 }}
+                      download
                     >
                       Download Hardware User Manual
                     </Link>
@@ -248,8 +239,9 @@ const SystemConfiguration = () => {
                     <Link
                       variant="body1"
                       color="#002BBC"
-                      href="#"
+                      href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
                       sx={{ mx: 1 }}
+                      download
                     >
                       Download Software User Manual
                     </Link>
@@ -342,7 +334,7 @@ const SystemConfiguration = () => {
               // p: 2,
             }}
           >
-            <UploadFile />
+            <UploadFile setApiData={setApiData} />
           </Box>
           {/* <Box
             sx={{
