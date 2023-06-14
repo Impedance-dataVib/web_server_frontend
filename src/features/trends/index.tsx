@@ -128,7 +128,7 @@ const TrendsPage = () => {
               >
                 {val?.trendsName}
               </Typography>
-              <Box sx={{ height: "60vh", width: "100%" }}>
+              <Box sx={{ height: "50vh", width: "100%" }}>
                 {val?.chartType === "LineGradient" ? (
                   <LineGradient
                     minValue={val?.min}
