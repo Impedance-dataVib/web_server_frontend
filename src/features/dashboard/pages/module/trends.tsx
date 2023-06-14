@@ -39,7 +39,6 @@ export default function Trends({ trends, fullScreen }: any) {
               )}
             </Box>
             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-              {console.log(val.min)}
               {val?.chartType === "LineGradient" && (
                 <Typography
                   component="span"
