@@ -239,35 +239,43 @@ export function buildData(response) {
     const first = firingOrder.slice(0, firingOrderSplit);
     const second = firingOrder.slice(firingOrderSplit + 1);
     let cylinder_specific_indicators = [];
-    const compression = buildCompressionData(
-      first,
-      second,
-      data["Compression"],
-      "compression"
-    );
-    const injection_Condition = buildCompressionData(
-      first,
-      second,
-      data["Injection"],
-      "Injection Condition"
-    );
-    const bearing_Condition = buildCompressionData(
-      first,
-      second,
-      data["Bearing"],
-      "Bearing Condition"
-    );
-    const condition_of_cyl_moving_parts = buildCompressionData(
-      first,
-      second,
-      data["BearingBis"],
-      "Condition of cyl moving parts"
-    );
+    if (data?.Compression) {
+      const compression = buildCompressionData(
+        first,
+        second,
+        data["Compression"],
+        "compression"
+      );
+      cylinder_specific_indicators.push(compression);
+    }
+    if (data?.Injection) {
+      const injection_Condition = buildCompressionData(
+        first,
+        second,
+        data["Injection"],
+        "Injection Condition"
+      );
+      cylinder_specific_indicators.push(injection_Condition);
+    }
+    if (data?.Bearing) {
+      const bearing_Condition = buildCompressionData(
+        first,
+        second,
+        data["Bearing"],
+        "Bearing Condition"
+      );
+      cylinder_specific_indicators.push(bearing_Condition);
+    }
+    if (data?.BearingBis) {
+      const condition_of_cyl_moving_parts = buildCompressionData(
+        first,
+        second,
+        data["BearingBis"],
+        "Condition of cyl moving parts"
+      );
 
-    cylinder_specific_indicators.push(compression);
-    cylinder_specific_indicators.push(injection_Condition);
-    cylinder_specific_indicators.push(bearing_Condition);
-    cylinder_specific_indicators.push(condition_of_cyl_moving_parts);
+      cylinder_specific_indicators.push(condition_of_cyl_moving_parts);
+    }
     if (from_data["fuel"] === "Gas") {
       const miss_firing = buildCompressionData(
         first,
@@ -286,7 +294,7 @@ export function buildData(response) {
     trends.push(increase_fuel_consumption);
     const peakPressure = data["Pressure"];
 
-    if (parseInt(peakPressure["value"]) !== 0) {
+    if (peakPressure && parseInt(peakPressure["value"]) !== 0) {
       const peak_pressure = buildPeekPressureChart(peakPressure, firingOrder);
       trends.push(peak_pressure);
     }
@@ -579,7 +587,7 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
 
   return {
     trendsName: title,
-    speedName: 'Speed',
+    speedName: "Speed",
     min: round(Math.min(...datapoints)),
     max: round(Math.max(...datapoints)),
     yMax: title === "Engine Health" ? 100 : 5,

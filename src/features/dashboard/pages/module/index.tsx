@@ -123,6 +123,7 @@ const ModuleMonitoringPage = ({
               isModalOpen={true}
             />
           }
+          section="top"
         />
       </Grid>
       <Grid item xs={12} md={12} lg={9} xl={7}>
@@ -139,10 +140,12 @@ const ModuleMonitoringPage = ({
           initiallyCollapsed={false}
           fullScreenContent={
             <GlobalIndicatorChart
+              showDate={trendsData.alertUpdatedOn}
               globalIndicator={moduleData?.globalIndicator}
               fullScreen={true}
             />
           }
+          section="top"
         />
       </Grid>
       <Grid item xs={12}>

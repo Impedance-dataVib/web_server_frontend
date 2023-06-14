@@ -20,7 +20,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 
 export interface CardWidgetProps {
   headerLabel: string;
@@ -67,27 +67,52 @@ const CardWidget = ({
     }
   }, [collapsed]);
 
+  const getSectionSx = useMemo(() => {
+    const topSection =
+      section === "top"
+        ? {
+            p: { md: 2, lg: "0px", xl: 2 },
+            pt: headerContent ? 0 : 2,
+            borderRadius: 3,
+            boxShadow: "2px 4px 8px #00000029",
+            transition: "all .2s linear",
+            minHeight: { xl: "34vh", lg: "40vh", md: "40vh" },
+            maxHeight: { xl: "34vh", lg: "40vh", md: "40vh" },
+            overflow: "auto",
+            "&::-webkit-scrollbar": {
+              width: "0.4em",
+            },
+            "&::-webkit-scrollbar-track": {
+              background: "#f1f1f1",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "rgba(0,0,0,.2)",
+              borderRadius: "0.2em",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "rgba(0,0,0,.3)",
+            },
+          }
+        : {
+            p: 2,
+            pt: headerContent ? 0 : 2,
+            borderRadius: 3,
+            boxShadow: "2px 4px 8px #00000029",
+            transition: "all .2s linear",
+          };
+    return section === "middle"
+      ? {
+          p: 2,
+          pt: headerContent ? 0 : 2,
+          borderRadius: 3,
+          boxShadow: "2px 4px 8px #00000029",
+          transition: "all .2s linear",
+          minHeight: "30vh",
+        }
+      : topSection;
+  }, [section]);
   return (
-    <Paper
-      sx={
-        section === "middle"
-          ? {
-              p: 2,
-              pt: headerContent ? 0 : 2,
-              borderRadius: 3,
-              boxShadow: "2px 4px 8px #00000029",
-              transition: "all .2s linear",
-              minHeight: "20vh",
-            }
-          : {
-              p: 2,
-              pt: headerContent ? 0 : 2,
-              borderRadius: 3,
-              boxShadow: "2px 4px 8px #00000029",
-              transition: "all .2s linear",
-            }
-      }
-    >
+    <Paper sx={getSectionSx}>
       <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
         {!headerContent && (
           <Box
@@ -249,9 +274,9 @@ const CardWidget = ({
         <Dialog
           open={openModal}
           onClose={() => setOpenModal(false)}
-          maxWidth="md"
+          maxWidth={"xl"}
         >
-          <DialogContent sx={{minWidth:'50vw'}}>
+          <DialogContent sx={{ minWidth: "80vw" }}>
             <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
               <Box component="section">
                 <Box sx={{ display: "flex" }}>
@@ -281,6 +306,7 @@ const CardWidget = ({
                     {headerLabel}
                   </Typography>
                 </Box>
+
                 {isBelow1800Pixel && (
                   <Box>
                     {subHeadingRight && (
@@ -302,6 +328,15 @@ const CardWidget = ({
                   color: "#4D4E4E",
                 }}
               >
+                <Typography
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "12px",
+                    mr: "20px",
+                  }}
+                >
+                  {showDate ? ` Updated on ${showDate} (UTC)` : ""}
+                </Typography>
                 {!isBelow1800Pixel && subHeadingRight && (
                   <Box sx={{ mr: 1 }}>{subHeadingRight}</Box>
                 )}
