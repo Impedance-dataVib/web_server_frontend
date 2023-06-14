@@ -306,6 +306,7 @@ const CardWidget = ({
                     {headerLabel}
                   </Typography>
                 </Box>
+
                 {isBelow1800Pixel && (
                   <Box>
                     {subHeadingRight && (
@@ -327,6 +328,15 @@ const CardWidget = ({
                   color: "#4D4E4E",
                 }}
               >
+                <Typography
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "12px",
+                    mr: "20px",
+                  }}
+                >
+                  {showDate ? ` Updated on ${showDate} (UTC)` : ""}
+                </Typography>
                 {!isBelow1800Pixel && subHeadingRight && (
                   <Box sx={{ mr: 1 }}>{subHeadingRight}</Box>
                 )}

@@ -140,6 +140,7 @@ const ModuleMonitoringPage = ({
           initiallyCollapsed={false}
           fullScreenContent={
             <GlobalIndicatorChart
+              showDate={trendsData.alertUpdatedOn}
               globalIndicator={moduleData?.globalIndicator}
               fullScreen={true}
             />
