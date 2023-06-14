@@ -128,56 +128,64 @@ const TrendsPage = () => {
               >
                 {val?.trendsName}
               </Typography>
-              <Box sx={{ height: "90%", width: "100%" }}>
+              <Box sx={{ height: "60vh", width: "100%" }}>
                 {val?.chartType === "LineGradient" ? (
                   <LineGradient
-                  minValue={val?.min}
-                  maxValue={val?.yMax}
-                  dataPointsY1={val?.dataPointsY1}
-                  avgValue={val?.avg}
-                  trendsName={val?.trendsName}
-                  datapoints={val?.datapoints}
-                  labels={val?.labels}
-                  isGradientOpposite={val?.isGradientOpposite}
+                    minValue={val?.min}
+                    maxValue={val?.yMax}
+                    dataPointsY1={val?.dataPointsY1}
+                    avgValue={val?.avg}
+                    trendsName={val?.trendsName}
+                    datapoints={val?.datapoints}
+                    labels={val?.labels}
+                    isGradientOpposite={val?.isGradientOpposite}
                   />
                 ) : (
                   <BarChart datapoints={val?.datapoints} labels={val?.labels} />
                 )}
               </Box>
               <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-                {val?.chartType === "LineGradient" && (<Typography
-                  component="span"
-                  textAlign={"left"}
-                  alignItems="center"
-                  display={"flex"}
-                >
-                  <CircleIcon color="primary" />
-                  {val?.trendsName}
-                </Typography>)}
-                {val?.min && <Typography
-                  component="span"
-                  textAlign={"left"}
-                  alignItems="center"
-                  display={"flex"}
-                >
-                  Min. {val.min} 
-                </Typography>}
-                {val?.max && <Typography
-                  component="span"
-                  textAlign={"left"}
-                  alignItems="center"
-                  display={"flex"}
-                >
-                  Max. {val.max} 
-                </Typography>}
-                {val?.avg && <Typography
-                  component="span"
-                  textAlign={"left"}
-                  alignItems="center"
-                  display={"flex"}
-                >
-                  Avg. {val?.avg}
-                </Typography>}
+                {val?.chartType === "LineGradient" && (
+                  <Typography
+                    component="span"
+                    textAlign={"left"}
+                    alignItems="center"
+                    display={"flex"}
+                  >
+                    <CircleIcon color="primary" />
+                    {val?.trendsName}
+                  </Typography>
+                )}
+                {val?.min && (
+                  <Typography
+                    component="span"
+                    textAlign={"left"}
+                    alignItems="center"
+                    display={"flex"}
+                  >
+                    Min. {val.min}
+                  </Typography>
+                )}
+                {val?.max && (
+                  <Typography
+                    component="span"
+                    textAlign={"left"}
+                    alignItems="center"
+                    display={"flex"}
+                  >
+                    Max. {val.max}
+                  </Typography>
+                )}
+                {val?.avg && (
+                  <Typography
+                    component="span"
+                    textAlign={"left"}
+                    alignItems="center"
+                    display={"flex"}
+                  >
+                    Avg. {val?.avg}
+                  </Typography>
+                )}
               </Box>
             </Grid>
           ))}
