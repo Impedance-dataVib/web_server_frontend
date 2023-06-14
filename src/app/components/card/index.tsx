@@ -71,13 +71,13 @@ const CardWidget = ({
     const topSection =
       section === "top"
         ? {
-            p: 2,
+            p: { md: 2, lg: "0px", xl: 2 },
             pt: headerContent ? 0 : 2,
             borderRadius: 3,
             boxShadow: "2px 4px 8px #00000029",
             transition: "all .2s linear",
-            minHeight: { lg: "32vh", md: "40vh" },
-            maxHeight: { lg: "32vh", md: "40vh" },
+            minHeight: { xl: "34vh", lg: "40vh", md: "40vh" },
+            maxHeight: { xl: "34vh", lg: "40vh", md: "40vh" },
             overflow: "auto",
             "&::-webkit-scrollbar": {
               width: "0.4em",
