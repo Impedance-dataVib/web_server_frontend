@@ -56,6 +56,20 @@ const SystemConfiguration = () => {
   useEffect(() => {
     getSystemInfo();
   }, []);
+  const handleClick = () => {
+    api.get(
+      `${window.location.origin}/client-portal-api/app/start_dashboard_socket.php`
+    );
+
+    api.get(
+      `${window.location.origin}/client-portal-api/app/start_signal_socket.php`
+    );
+
+    api.get(
+      `${window.location.origin}/client-portal-api/app/start_status_socket.php`
+    );
+    window.location.reload();
+  };
 
   return (
     <Box>
@@ -67,6 +81,14 @@ const SystemConfiguration = () => {
         }}
       >
         <Typography variant="h5">System Configuration</Typography>
+        <Button
+          size="small"
+          sx={{ mr: "18px" }}
+          variant="outlined"
+          onClick={handleClick}
+        >
+          Restart WebSocket
+        </Button>
       </Box>
       <Box
         sx={{
@@ -176,6 +198,7 @@ const SystemConfiguration = () => {
                       href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
                       sx={{ mx: 1 }}
                       download
+                      target="_blank"
                     >
                       Download Hardware User Manual
                     </Link>
@@ -242,6 +265,7 @@ const SystemConfiguration = () => {
                       href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
                       sx={{ mx: 1 }}
                       download
+                      target="_blank"
                     >
                       Download Software User Manual
                     </Link>

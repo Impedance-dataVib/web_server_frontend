@@ -104,8 +104,8 @@ const DownloadPage = () => {
       .then((val) => {
         setIsLoading(false);
         enqueueSnackbar({
-          message: `Download data is posted`,
-          variant: "success",
+          message: `Download request is posted, once ready you will get notified`,
+          variant: "error",
         });
       })
       .catch((error) => {

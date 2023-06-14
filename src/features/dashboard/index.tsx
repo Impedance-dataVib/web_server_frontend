@@ -277,6 +277,7 @@ const DashboardPage = () => {
     api.get(
       `${window.location.origin}/client-portal-api/app/start_status_socket.php`
     );
+    window.location.reload();
   };
 
   return (
