@@ -32,6 +32,9 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
         .tooltipContent((a) => {
           return `Health Value: ${a.showValue}`;
         })
+        .tooltipTitle((a) => {
+          return a.name;
+        })
         .centerRadius(0)
         .radiusScaleExponent(1)
         .labelOrientation("auto")
