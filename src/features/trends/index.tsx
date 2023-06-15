@@ -131,14 +131,15 @@ const TrendsPage = () => {
               <Box sx={{ height: "90%", width: "100%" }}>
                 {val?.chartType === "LineGradient" ? (
                   <LineGradient
-                  minValue={val?.min}
-                  maxValue={val?.yMax}
-                  dataPointsY1={val?.dataPointsY1}
-                  avgValue={val?.avg}
-                  trendsName={val?.trendsName}
-                  datapoints={val?.datapoints}
-                  labels={val?.labels}
-                  isGradientOpposite={val?.isGradientOpposite}
+                    minValue={val?.min}
+                    maxValue={val?.yMax}
+                    dataPointsY1={val?.dataPointsY1}
+                    avgValue={val?.avg}
+                    speedName={val.speedName}
+                    trendsName={val?.trendsName}
+                    datapoints={val?.datapoints}
+                    labels={val?.labels}
+                    isGradientOpposite={val?.isGradientOpposite}
                   />
                 ) : (
                   <BarChart datapoints={val?.datapoints} labels={val?.labels} />
