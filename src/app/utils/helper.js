@@ -52,19 +52,19 @@ export function buildSoketData(response, modelType, formData) {
     isAlert = false;
 
     globalIndicator.push(
-      buildRpmData("Torsion", data["StaticTorsion"].value, 5)
+      buildRpmData("Torsion", data.StaticTorsion?.value || 0, 6)
     );
 
     globalIndicator.push(
-      buildRpmData("Torque", data["StaticTorque"].value * 0.001, 1000)
+      buildRpmData("Torque", (data.StaticTorque?.value || 0) * 0.001, 1000)
     );
 
     globalIndicator.push(
-      buildRpmData("Power", data["StaticPower"].value * 1.0e-6, 100)
+      buildRpmData("Power", (data.StaticPower?.value || 0) * 1.0e-6, 100)
     );
 
     globalIndicator.push(
-      buildRpmData("Speed", data["ChannelSpeed"], maxRPMThrshhold)
+      buildRpmData("Speed", data.ChannelSpeed || 0, maxRPMThrshhold)
     );
   } else if (modelType === "Turbine") {
     globalIndicator.push(
