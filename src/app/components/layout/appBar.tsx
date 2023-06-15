@@ -73,16 +73,22 @@ const DrawerAppBar = () => {
           link.setAttribute("download", "data.json");
         } else if (notificationType === "raw") {
           link.setAttribute("download", "raw-data.zip");
-        } else if (notificationType === "spredsheet") {
-          link.setAttribute("download", "spreadsheet.excel");
+        } else if (notificationType === "spreadsheet") {
+          link.setAttribute("download", "spreadsheet.xls");
         } else if (notificationType === "graphical") {
           link.setAttribute("download", "graphical-report.pdf");
+          link.setAttribute("target", "_blank");
         }
         document.body.appendChild(link);
         link.click();
       })
       .catch((err: any) => console.error(err));
+
+    //for rerender
+    setNotificationType("");
   };
+  console.log("appbar renderd");
+
   const currentTime = () => {
     return CommonApi.getLicenseInfo()
       .then((res) => setCurrTime(res.data.currant_time))

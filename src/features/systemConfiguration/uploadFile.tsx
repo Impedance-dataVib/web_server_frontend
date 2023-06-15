@@ -3,7 +3,7 @@ import FileUpload from "../../app/components/file-upload";
 import SystemInfoApi from "./api";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
-export default function UploadFile() {
+export default function UploadFile({ setApiData }: any) {
   const [fileName1, setFileName1] = useState<any>();
   const [fileName2, setFileName2] = useState<any>();
   const handleFile1 = (e: any) => {
@@ -30,6 +30,11 @@ export default function UploadFile() {
           variant: "error",
         });
       });
+    setApiData((val: any) => {
+      return {
+        ...val,
+      };
+    });
   };
   const handleFile2 = (e: any) => {
     const file2 = e.target.files[0];
@@ -56,6 +61,13 @@ export default function UploadFile() {
           variant: "error",
         });
       });
+
+    //for rerender the system page
+    setApiData((val: any) => {
+      return {
+        ...val,
+      };
+    });
   };
   return (
     <Box

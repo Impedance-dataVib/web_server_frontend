@@ -7,6 +7,7 @@ import {
   Tab,
   Tabs,
   Typography,
+  Button,
 } from "@mui/material";
 import useWebSocket from "react-use-websocket";
 
@@ -20,6 +21,7 @@ import * as dateFns from "date-fns";
 import { webSocketData } from "./schema";
 import { buildData, buildSoketData, isEmptyObject } from "src/app/utils/helper";
 // import { webSocketData } from "./schema";
+import api from "../../app/api";
 
 const useStyles = makeStyles()((theme) => {
   return {
@@ -129,7 +131,10 @@ const DashboardPage = () => {
         if (sendMessage) sendMessage(moduleTabs[activeModule].process_name);
       },
       onError: (e) => {
-        setIsDataAvailable("Something went wrong!. Please try again.");
+        setIsDataAvailable(
+          "Something went wrong!. Please try to start websocket by clicking this button."
+        );
+
         setIsLoading(false);
       },
     }
@@ -260,6 +265,20 @@ const DashboardPage = () => {
   const onActiveModuleChange = (event: any, params: any) => {
     setActiveModule(params);
   };
+  const handleClick = () => {
+    api.get(
+      `${window.location.origin}/client-portal-api/app/start_dashboard_socket.php`
+    );
+
+    api.get(
+      `${window.location.origin}/client-portal-api/app/start_signal_socket.php`
+    );
+
+    api.get(
+      `${window.location.origin}/client-portal-api/app/start_status_socket.php`
+    );
+    window.location.reload();
+  };
 
   return (
     <Box>
@@ -350,6 +369,7 @@ const DashboardPage = () => {
       {isDataAvailable && (
         <Box sx={{ my: 1 }}>
           <Alert
+            sx={{ display: "flex" }}
             severity="error"
             onClose={() => {
               clearInterval(intervalHandle.current);
@@ -360,6 +380,15 @@ const DashboardPage = () => {
             <Typography variant="caption" component={"span"}>
               {isDataAvailable}
             </Typography>
+
+            <Button
+              size="small"
+              sx={{ ml: "30px" }}
+              variant="outlined"
+              onClick={handleClick}
+            >
+              Restart WebSocket
+            </Button>
           </Alert>
         </Box>
       )}
