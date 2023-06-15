@@ -126,6 +126,14 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
         ticks: {
             maxRotation: 60,
             minRotation: 60
+        },
+        title: {
+          text: 'Time',
+          display: true,
+          font: {
+            size: 14,
+            weight: 'bold'
+          }
         }
     },
       y: {
@@ -134,6 +142,14 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
         display: true,
         position: 'left' as const,
         max: maxValue || 100,
+        title: {
+          text: trendsName,
+          display: true,
+          font: {
+            size: 14,
+            weight: 'bold'
+          }
+        },
       },
       y1: {
         beginAtZero: true,
@@ -141,6 +157,14 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
         display: true,
         max: round(Math.max(...dataPointsY1)),
         position: 'right' as const,
+        title: {
+          text: speedName || trendsName,
+          display: true,
+          font: {
+            size: 14,
+            weight: 'bold'
+          }
+        },
         grid: {
           drawOnChartArea: false,
         },
