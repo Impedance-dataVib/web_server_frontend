@@ -135,6 +135,7 @@ const TrendsPage = () => {
                     maxValue={val?.yMax}
                     dataPointsY1={val?.dataPointsY1}
                     avgValue={val?.avg}
+                    speedName={val.speedName}
                     trendsName={val?.trendsName}
                     datapoints={val?.datapoints}
                     labels={val?.labels}
