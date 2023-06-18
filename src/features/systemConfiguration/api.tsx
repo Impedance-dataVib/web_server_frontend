@@ -10,11 +10,14 @@ const updateSystemSoftwareFile = (payload: any) => {
 const updateSystemLicenseFile = (payload: any) => {
   return api.post("/license/import-license.php", payload);
 };
-
+const getFirmwareDetails = (payload: any) => {
+  return api.post("/update/firmware-details.php", payload);
+};
 const SystemInfoApi = {
   getSystemInfo,
   updateSystemSoftwareFile,
   updateSystemLicenseFile,
+  getFirmwareDetails,
 };
 
 export default SystemInfoApi;
