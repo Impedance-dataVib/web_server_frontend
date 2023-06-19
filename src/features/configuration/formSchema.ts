@@ -233,11 +233,11 @@ const formSchema = {
         helperNote: "Select the type of fuel used",
       },
       {
-        name: "Type",
+        name: "Layout",
         label: "type",
         type: "dropdown",
         options: ["Inline", "V"],
-        helperNote: "Select the type of engine(Inline or V)",
+        helperNote: "Select the Layout of engine(Inline or V)",
       },
       {
         name: "No of strokes",

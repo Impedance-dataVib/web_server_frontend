@@ -199,6 +199,7 @@ const DashboardPage = () => {
           }
           setIsLoading(false);
         } catch (ex) {
+          console.error(ex);
           setIsLoading(false);
           setIsDataAvailable("Something went wrong");
         }

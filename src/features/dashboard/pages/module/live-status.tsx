@@ -6,6 +6,7 @@ import {
   Typography,
   Slider,
   LinearProgress,
+  Button,
 } from "@mui/material";
 import CustomConnector from "src/app/components/custom-stepper";
 import Check from "@mui/icons-material/Check";
@@ -147,7 +148,14 @@ const LiveStatus = ({ liveStatus }: any) => {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="body1" component={"span"} sx={{ mb: 1 }}>
+                  <Typography
+                    fontWeight={
+                      liveStatus?.currentStep === index + 1 ? 500 : ""
+                    }
+                    variant="body1"
+                    component={"span"}
+                    sx={{ mb: 1 }}
+                  >
                     {label.topText}
                   </Typography>
                   <StepLabel
@@ -184,12 +192,16 @@ const LiveStatus = ({ liveStatus }: any) => {
                 px: 1,
                 display: "flex",
                 justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
               <Check sx={{ color: "white" }} />
-              <Typography variant="body1" component={"span"} color="white">
+              <Button sx={{ color: "white" }}>
                 {liveStatus?.currentMessage}
-              </Typography>
+              </Button>
+              {/* <Typography variant="body1" component={"span"} color="white">
+                {liveStatus?.currentMessage}
+              </Typography> */}
             </Box>
           </Box>
         </Box>

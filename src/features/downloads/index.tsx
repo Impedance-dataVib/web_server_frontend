@@ -22,6 +22,7 @@ import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import DownloadInfoApi from "./api";
 import { enqueueSnackbar } from "notistack";
+import DatePickerModal from "../trends/modals/DatePickerModal";
 
 const DownloadPage = () => {
   const initial = "";
@@ -34,6 +35,17 @@ const DownloadPage = () => {
   const [assetError, setAssetError] = useState(false);
   const [periodError, setPeriodError] = useState(false);
   const [reportTypeError, setReportTypeError] = useState(false);
+  const [toggleDatePicker, setToggleDatePicker] = useState(false);
+  const [dateRangeValues, setDateRangeValues] = useState<any>({
+    startDate: "",
+    endDate: "",
+    key: "selection",
+  });
+
+  // console.log(dateRangeValues);
+  useEffect(() => {
+    setPeriodError(false);
+  }, [dateRangeValues]);
 
   const getAssetInfo = async () => {
     const response = await DownloadInfoApi.getModuleInfo();
@@ -49,10 +61,10 @@ const DownloadPage = () => {
     setAssetError(false);
   };
 
-  const periodHandler = (e: SelectChangeEvent) => {
-    setPeriod(e.target.value);
-    setPeriodError(false);
-  };
+  // const periodHandler = (e: SelectChangeEvent) => {
+  //   setPeriod(e.target.value);
+  //   setPeriodError(false);
+  // };
 
   const reportTypeHandler = (e: SelectChangeEvent) => {
     setReportType(e.target.value);
@@ -62,7 +74,8 @@ const DownloadPage = () => {
   const downloadOptionHandler = (e: SelectChangeEvent) => {
     setDataSelection(e.target.value);
     setAsset(initial);
-    setPeriod(initial);
+    // setPeriod(initial);
+    setDateRangeValues({ startDate: "", endDate: "", key: "selection" });
     setReportType(initial);
     setAssetError(false);
     setPeriodError(false);
@@ -72,7 +85,9 @@ const DownloadPage = () => {
   const cancelHandler = () => {
     setDataSelection(initial);
     setAsset(initial);
-    setPeriod(initial);
+    // setPeriod(initial);
+    setDateRangeValues({ startDate: "", endDate: "", key: "selection" });
+
     setReportType(initial);
   };
   const postDownloadHandler = (e: React.FormEvent<HTMLFormElement>) => {
@@ -80,7 +95,10 @@ const DownloadPage = () => {
     if (asset == "") {
       setAssetError(true);
       return;
-    } else if (period == "") {
+    } else if (dateRangeValues.startDate === "") {
+      setPeriodError(true);
+      return;
+    } else if (dateRangeValues.endDate === "") {
       setPeriodError(true);
       return;
     } else if (reportType == "" && dataSelection == "data") {
@@ -90,7 +108,7 @@ const DownloadPage = () => {
     console.log({
       type: dataSelection,
       module_id: asset,
-      period: period,
+      period: dateRangeValues,
       report_type: reportType,
     });
 
@@ -98,14 +116,16 @@ const DownloadPage = () => {
     DownloadInfoApi.postDownloadInfo({
       type: dataSelection,
       module_id: asset,
-      period: period,
+      // period: dateRangeValues,
+      startDate: dateRangeValues.startDate,
+      endDate: dateRangeValues.endDate,
       report_type: reportType,
     })
       .then((val) => {
         setIsLoading(false);
         enqueueSnackbar({
           message: `Download request is posted, once ready you will get notified`,
-          variant: "error",
+          variant: "warning",
         });
       })
       .catch((error) => {
@@ -186,15 +206,15 @@ const DownloadPage = () => {
                     variant="body2"
                     sx={{ mr: 1, width: "120px", textAlign: "end" }}
                   >
-                    Select Asset & Equipment :{" "}
+                    Select Asset :{" "}
                   </Typography>
-                  <FormControl sx={{ py: 0, width: "110px" }}>
+                  <FormControl sx={{ py: 0, minWidth: "15rem" }}>
                     <Select
                       value={asset}
                       sx={{
                         height: "2.5rem",
                         color: "#1D4580",
-                        width: "8rem",
+                        // width: "25rem",
                         "& .MuiOutlinedInput-notchedOutline": {
                           borderColor: "#1D4580",
                         },
@@ -211,10 +231,11 @@ const DownloadPage = () => {
                       autoWidth
                       size="small"
                     >
-                      {assetModule.map(({ id, name }: any) => (
+                      {assetModule.map(({ id, name, from_data }: any) => (
                         <MenuItem value={id}>
                           <Typography variant="body2" color="#1D4580">
-                            {name}
+                            {JSON.parse(from_data).asset_name} -{"  "}
+                            {JSON.parse(from_data).equipment_name} ({name})
                           </Typography>
                         </MenuItem>
                       ))}
@@ -226,6 +247,7 @@ const DownloadPage = () => {
                 </Box>
                 <Box
                   sx={{
+                    mt: "5px",
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
@@ -238,7 +260,25 @@ const DownloadPage = () => {
                     Select Period :{" "}
                   </Typography>
                   <Box sx={{ mr: 1 }}>
-                    <FormControl>
+                    <Button
+                      sx={{ width: "15rem" }}
+                      variant="outlined"
+                      size="small"
+                      color="primary"
+                      onClick={() => setToggleDatePicker(true)}
+                    >
+                      Select Date Range
+                    </Button>
+                    <DatePickerModal
+                      open={toggleDatePicker}
+                      onClose={() => setToggleDatePicker(false)}
+                      dateRangeValues={dateRangeValues}
+                      setDateRangeValues={setDateRangeValues}
+                    ></DatePickerModal>
+                    {periodError && (
+                      <Box sx={{ color: "red" }}>This is required field</Box>
+                    )}
+                    {/* <FormControl>
                       <RadioGroup
                         aria-labelledby="demo-controlled-radio-buttons-group"
                         name="controlled-radio-buttons-group"
@@ -257,7 +297,7 @@ const DownloadPage = () => {
                       {periodError && (
                         <Box sx={{ color: "red" }}>This is required field</Box>
                       )}
-                    </FormControl>
+                    </FormControl> */}
                   </Box>
                 </Box>
                 {dataSelection === "data" && (
@@ -298,7 +338,7 @@ const DownloadPage = () => {
                     </Box>
                   </Box>
                 )}
-                <Divider />
+                <Divider sx={{ m: 1 }} />
                 <Box sx={{ m: 1 }}>
                   <Button
                     size="small"
