@@ -118,6 +118,10 @@ export const getAllTrendsService = (id: string) => {
   return axiosInstance.get(`/dashboard/trends.php/${id}`);
 };
 
+export const getAllTrendsData = (payload: any) => {
+  return axiosInstance.post(`/trend/get-all.php`, payload);
+};
+
 export const getModules = () => {
   return axiosInstance.get("/module/get-all.php");
 };

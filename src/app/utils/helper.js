@@ -1621,3 +1621,83 @@ function buildLineChart(data, key, title, isGradientOpposite) {
     isGradientOpposite: isGradientOpposite ?? false,
   };
 }
+
+
+export function buildTrendData(historical_data, type) {
+  let labels = [];
+
+  const dataSet = [];
+
+  const increase_fuel_data = [];
+  const engine_health_data = [];
+  const torsion = [];
+  const power = [];
+  const rpmData = [];
+  let maxRpm = 0;
+  for (let item of historical_data) {
+      const objectData = JSON.parse(item['jsondata']);
+      const firstKey = Object.keys(objectData)[0];
+      const moduleData = objectData[firstKey];
+
+      labels.push(firstKey);
+      rpmData.push(parseInt(moduleData?.ChannelSpeed || 0));
+
+      if (type === 'Engine') {
+          let itemData = moduleData['PowerLoss'];
+          increase_fuel_data.push(itemData?.value || 0);
+
+          itemData = moduleData['MechanicalHealth'];
+          engine_health_data.push(itemData?.valueInHealth || 0);
+      } else if (type === 'Torque') {
+          let itemData = moduleData['StaticTorsion'];
+          torsion.push(itemData?.value || 0);
+          itemData = moduleData['StaticPower'];
+          power.push(itemData?.value || 0);
+      }
+  }
+
+  if (increase_fuel_data && increase_fuel_data.length > 0) {
+      dataSet.push(buildDataSet('Increase fuel consumption', 'red', increase_fuel_data));
+  }
+
+  if (engine_health_data && engine_health_data.length > 0) {
+      dataSet.push(buildDataSet('Engine Health', 'green', engine_health_data));
+  }
+
+  if (torsion && torsion.length > 0) {
+      dataSet.push(buildDataSet('Torsion', 'red', torsion));
+  }
+  if (power && power.length > 0) {
+      dataSet.push(buildDataSet('Power', 'green', power));
+  }
+
+  if (rpmData && rpmData.length > 0) {
+      const rpmDataArr = buildDataSet('RPM', 'black', rpmData, 'y1');
+      dataSet.push(rpmDataArr);
+      maxRpm = rpmDataArr.maxValue;
+  }
+  return {dataSet, labels, maxRpm};
+}
+
+function buildDataSet(title, color, dataPoints, axisId) {
+  return {
+      title: title,
+      data: dataPoints,
+      label: title,
+      borderColor: color,
+      pointBackgroundColor: color,
+      backgroundColor: color,
+      fill: false,
+      yAxisID: axisId ?? "y",
+      hidden: false,
+      minVal: Math.min(...dataPoints),
+      maxValue: Math.max(...dataPoints),
+      avgValue: average(dataPoints)
+  };
+}
+
+export function convertDate (dateVal) {
+  let dateD = dateVal.toLocaleString().split(" ");
+  let Y = dateVal.toLocaleDateString().split('/').reverse().join('-');
+  return `${Y} ${dateD[1]}`;
+}

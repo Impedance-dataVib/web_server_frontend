@@ -8,26 +8,36 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import LineGradient from "src/features/common/graph/line-gradient";
-import CircleIcon from "@mui/icons-material/Circle";
-import { BarChart } from "src/features/common/graph/bar-chart";
+import LineGradientTrends from "src/features/common/graph/line-gradient-trends";
+import Autocomplete from "@mui/material/Autocomplete";
+import Chip from '@mui/material/Chip';
+import TextField from '@mui/material/TextField';
+
 import { useGetAllTrends, useGetAllModules } from "../hooks";
 import FullScreenLoader from "../../app/components/fullscreen-loader";
 import DatePickerModal from "./modals/DatePickerModal";
-const TrendsPage = () => {
-  const { data: allModules } = useGetAllModules();
 
-  const [moduleId, setModuleId] = useState<string>("");
-  const { data, isLoading, getAllTrends, isError } = useGetAllTrends(moduleId);
-  const [toggleDatePicker, setToggleDatePicker] = useState(false);
+const TrendsPage = () => {
+  const [options, setOption] = useState([]);
+  const [value, setValue] = React.useState<string[]>([]);
+  let startDate = new Date();
+  startDate.setDate(startDate.getDate() - 6)
+  const endDate= new Date();
+  const { data: allModules } = useGetAllModules();
   const [dateRangeValues, setDateRangeValues] = useState<Object>({
-    startDate: "",
-    endDate: "",
+    endDate: endDate,
+    startDate: startDate,
     key: "selection",
   });
+
+  const [moduleId, setModuleId] = useState<string>("");
+  const { data, isLoading, getAllTrends, isError } = useGetAllTrends(moduleId, dateRangeValues, allModules);
+  const [toggleDatePicker, setToggleDatePicker] = useState(false);
+
   const assetHandler = (e: any) => {
     setModuleId(e.target.value);
   };
+
   useEffect(() => {
     if (allModules.length > 0 && allModules) {
       setModuleId(allModules[0].id);
@@ -39,6 +49,14 @@ const TrendsPage = () => {
       getAllTrends(moduleId);
     }
   }, [moduleId]);
+
+  useEffect(() => {
+    if(data?.dataSet && data?.dataSet.length > 0) {
+      const titles = data?.dataSet.map((val: any )=> val?.title);
+      setOption(titles);
+      setValue([titles[0]]);
+    }
+  }, [data]);
 
   return (
     <Box>
@@ -60,6 +78,39 @@ const TrendsPage = () => {
             marginRight: 5,
           }}
         >
+          <Box>
+            <Autocomplete
+              multiple
+              disableClearable
+              value={value}
+              onChange={(event, newValue) => {
+                setValue((val:any) => {
+                  return [
+                    ...newValue,
+                  ]
+                });
+              }}
+              options={options}
+              getOptionLabel={(option: string) => option}
+              renderTags={(tagValue, getTagProps) =>
+                tagValue.map((option: string, index: number) => (
+                  <Chip
+                    label={option}
+                    {...getTagProps({ index })}
+                    disabled={index === 0}
+                  />
+                ))
+              }
+              style={{ width: 500 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Indicators"
+                  placeholder="Favorites"
+                />
+              )}
+            />
+          </Box>
           <Box>
             <Typography></Typography>
             <Button
@@ -107,89 +158,13 @@ const TrendsPage = () => {
 
       <Box m={2} sx={{ bgcolor: "white" }}>
         {isLoading && <FullScreenLoader></FullScreenLoader>}
-        <Grid container spacing={3}>
-          {data.map((val: any, index: number) => (
-            <Grid
-              item
-              lg={6}
-              md={6}
-              sm={12}
-              key={`trends${index}`}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                marginBottom: "5px",
-              }}
-            >
-              <Typography
-                variant="body1"
-                component={"span"}
-                textAlign={"center"}
-              >
-                {val?.trendsName}
-              </Typography>
-              <Box sx={{ height: "50vh", width: "100%" }}>
-                {val?.chartType === "LineGradient" ? (
-                  <LineGradient
-                    minValue={val?.min}
-                    maxValue={val?.yMax}
-                    dataPointsY1={val?.dataPointsY1}
-                    avgValue={val?.avg}
-                    speedName={val.speedName}
-                    trendsName={val?.trendsName}
-                    datapoints={val?.datapoints}
-                    labels={val?.labels}
-                    isGradientOpposite={val?.isGradientOpposite}
-                  />
-                ) : (
-                  <BarChart datapoints={val?.datapoints} labels={val?.labels} />
-                )}
-              </Box>
-              <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-                {val?.chartType === "LineGradient" && (
-                  <Typography
-                    component="span"
-                    textAlign={"left"}
-                    alignItems="center"
-                    display={"flex"}
-                  >
-                    <CircleIcon color="primary" />
-                    {val?.trendsName}
-                  </Typography>
-                )}
-                {val?.min && (
-                  <Typography
-                    component="span"
-                    textAlign={"left"}
-                    alignItems="center"
-                    display={"flex"}
-                  >
-                    Min. {val.min}
-                  </Typography>
-                )}
-                {val?.max && (
-                  <Typography
-                    component="span"
-                    textAlign={"left"}
-                    alignItems="center"
-                    display={"flex"}
-                  >
-                    Max. {val.max}
-                  </Typography>
-                )}
-                {val?.avg && (
-                  <Typography
-                    component="span"
-                    textAlign={"left"}
-                    alignItems="center"
-                    display={"flex"}
-                  >
-                    Avg. {val?.avg}
-                  </Typography>
-                )}
-              </Box>
-            </Grid>
-          ))}
+        <Grid container spacing={3} justifyContent="center">
+          {data?.dataSet && data?.dataSet.length > 0 && <LineGradientTrends 
+            dataPoints={data?.dataSet}
+            labels={data?.labels}
+            maxRpm={data?.maxRpm}
+            selectedValue={value}
+          />}
         </Grid>
       </Box>
       <DatePickerModal

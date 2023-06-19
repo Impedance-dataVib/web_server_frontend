@@ -27,23 +27,19 @@ export default function Trends({ trends, fullScreen }: any) {
             >
               {val?.chartType === "LineGradient" ? (
                 <LineGradient
-                  minValue={val?.min}
                   maxValue={val?.yMax}
                   dataPointsY1={val?.dataPointsY1}
-                  avgValue={val?.avg}
                   trendsName={val?.trendsName}
                   speedName={val.speedName}
                   datapoints={val?.datapoints}
                   labels={val?.labels}
                   isGradientOpposite={val?.isGradientOpposite}
                 />
-              ) : val?.chartType === "line" ? (
-                <></>
-              ) : fullScreen ? (
+              ) : (fullScreen ? (
                 <BarChart datapoints={val?.datapoints} labels={val?.labels} />
               ) : (
                 <></>
-              )}
+              ))}
             </Box>
             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
               {val?.chartType === "LineGradient" && (
