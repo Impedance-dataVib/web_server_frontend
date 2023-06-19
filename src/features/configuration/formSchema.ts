@@ -234,10 +234,10 @@ const formSchema = {
       },
       {
         name: "Type",
-        label: "type",
+        label: "Layout",
         type: "dropdown",
         options: ["Inline", "V"],
-        helperNote: "Select the type of engine(Inline or V)",
+        helperNote: "Select the Layout of engine(Inline or V)",
       },
       {
         name: "No of strokes",
