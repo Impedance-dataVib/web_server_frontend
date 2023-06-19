@@ -36,7 +36,7 @@ export const useGetAllTrends = (id: string, dateRangeValues: any, allModules: an
     if (id && id !== "") {
       getAllTrends(id);
     }
-  }, [id.length]);
+  }, [id.length, dateRangeValues.endDate ]);
   return { isLoading, data, isError, getAllTrends };
 };
 
