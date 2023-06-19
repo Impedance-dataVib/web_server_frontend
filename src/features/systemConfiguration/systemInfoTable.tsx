@@ -14,23 +14,13 @@ export default function SystemInfoTable({ systemInfo }: any) {
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
-          <TableRow>
+          <TableRow sx={{ "&:td, &:th": { border: "none" } }}>
             <TableCell align="center" sx={{ border: "none" }}>
               <Typography component="p" sx={{ fontSize: "medium" }}>
                 {" "}
                 Activated Modules
               </Typography>
             </TableCell>
-            <TableCell align="center" sx={{ border: "none" }}>
-              <Typography component="p" sx={{ fontSize: "medium" }}>
-                {" "}
-                Quantity
-              </Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow sx={{ "&:td, &:th": { border: "none" } }}>
             <TableCell
               align="center"
               sx={{
@@ -40,16 +30,7 @@ export default function SystemInfoTable({ systemInfo }: any) {
             >
               <Typography variant="subtitle1">{"Engine"}</Typography>
             </TableCell>
-            <TableCell
-              align="center"
-              sx={{ border: "none", opacity: false ? 0.5 : 1 }}
-            >
-              <Typography variant="subtitle1">
-                {systemInfo?.engine_quantity}
-              </Typography>
-            </TableCell>
-          </TableRow>
-          <TableRow sx={{ "&:td, &:th": { border: "none" } }}>
+
             <TableCell
               align="center"
               sx={{
@@ -59,16 +40,7 @@ export default function SystemInfoTable({ systemInfo }: any) {
             >
               <Typography variant="subtitle1">{"Bearing"}</Typography>
             </TableCell>
-            <TableCell
-              align="center"
-              sx={{ border: "none", opacity: false ? 0.5 : 1 }}
-            >
-              <Typography variant="subtitle1">
-                {systemInfo?.bearing_quantity}
-              </Typography>
-            </TableCell>
-          </TableRow>
-          <TableRow sx={{ "&:td, &:th": { border: "none" } }}>
+
             <TableCell
               align="center"
               sx={{
@@ -78,16 +50,7 @@ export default function SystemInfoTable({ systemInfo }: any) {
             >
               <Typography variant="subtitle1">{"Motor"}</Typography>
             </TableCell>
-            <TableCell
-              align="center"
-              sx={{ border: "none", opacity: false ? 0.5 : 1 }}
-            >
-              <Typography variant="subtitle1">
-                {systemInfo?.motor_quantity}
-              </Typography>
-            </TableCell>
-          </TableRow>
-          <TableRow sx={{ "&:td, &:th": { border: "none" } }}>
+
             <TableCell
               align="center"
               sx={{
@@ -97,16 +60,7 @@ export default function SystemInfoTable({ systemInfo }: any) {
             >
               <Typography variant="subtitle1">{"Turbine"}</Typography>
             </TableCell>
-            <TableCell
-              align="center"
-              sx={{ border: "none", opacity: false ? 0.5 : 1 }}
-            >
-              <Typography variant="subtitle1">
-                {systemInfo?.turbine_quantity}
-              </Typography>
-            </TableCell>
-          </TableRow>
-          <TableRow sx={{ "&:td, &:th": { border: "none" } }}>
+
             <TableCell
               align="center"
               sx={{
@@ -115,6 +69,48 @@ export default function SystemInfoTable({ systemInfo }: any) {
               }}
             >
               <Typography variant="subtitle1">{"Torque"}</Typography>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
+            <TableCell align="center" sx={{ border: "none" }}>
+              <Typography component="p" sx={{ fontSize: "medium" }}>
+                {" "}
+                Quantity
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{ border: "none", opacity: false ? 0.5 : 1 }}
+            >
+              <Typography variant="subtitle1">
+                {systemInfo?.engine_quantity}
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{ border: "none", opacity: false ? 0.5 : 1 }}
+            >
+              <Typography variant="subtitle1">
+                {systemInfo?.bearing_quantity}
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{ border: "none", opacity: false ? 0.5 : 1 }}
+            >
+              <Typography variant="subtitle1">
+                {systemInfo?.motor_quantity}
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{ border: "none", opacity: false ? 0.5 : 1 }}
+            >
+              <Typography variant="subtitle1">
+                {systemInfo?.turbine_quantity}
+              </Typography>
             </TableCell>
             <TableCell
               align="center"

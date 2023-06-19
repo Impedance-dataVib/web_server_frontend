@@ -36,7 +36,9 @@ const DateRangePickerModal = memo(
             <Box>
               <DateRange
                 ranges={[dateRangeValues]}
-                onChange={(e: any) => setDateRangeValues(e.selection)}
+                onChange={(e: any) => {
+                  setDateRangeValues(e.selection);
+                }}
               ></DateRange>
             </Box>
           </DialogContent>

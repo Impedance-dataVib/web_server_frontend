@@ -1,5 +1,6 @@
 import { Typography, Box, Link, Divider, Button } from "@mui/material";
 import SystemInfoTable from "./systemInfoTable";
+import NotActiveLicenseTable from "./notActiveLicenseTable";
 import UploadFile from "./uploadFile";
 import CachedIcon from "@mui/icons-material/Cached";
 // import { apiData } from "./schema";
@@ -14,6 +15,7 @@ import axios from "axios";
 const SystemConfiguration = () => {
   const [isShown, setIsShown] = useState(false);
   const [apiData, setApiData] = useState({
+    notActiveLicenseInfo: [],
     serianNo: "",
     macId: "",
     firmwareVersion: "",
@@ -51,7 +53,6 @@ const SystemConfiguration = () => {
       };
     });
   };
-  console.log("renderd");
 
   useEffect(() => {
     getSystemInfo();
@@ -352,6 +353,23 @@ const SystemConfiguration = () => {
             <SystemInfoTable systemInfo={apiData.licenseInfo} />
           </Box>
           <Divider sx={{ my: 5 }} />
+          <Box>
+            <Typography
+              sx={{
+                textAlign: "center",
+                fontSize: "14px",
+                fontWeight: 500,
+                mb: 5,
+              }}
+            >
+              Not Active License Info
+            </Typography>
+            <NotActiveLicenseTable
+              notActiveLicenseInfo={apiData.notActiveLicenseInfo}
+            />
+          </Box>
+          <Divider sx={{ my: 5 }} />
+
           <Box
             sx={{
               display: "flex",
@@ -360,21 +378,6 @@ const SystemConfiguration = () => {
           >
             <UploadFile setApiData={setApiData} />
           </Box>
-          {/* <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              pt: 2,
-            }}
-          >
-            <Button
-              variant="contained"
-              startIcon={<CachedIcon />}
-              onClick={handleUpdate}
-            >
-              Update
-            </Button>
-          </Box> */}
         </Box>
       </Box>
     </Box>

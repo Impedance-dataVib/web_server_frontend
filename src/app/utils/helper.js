@@ -52,19 +52,19 @@ export function buildSoketData(response, modelType, formData) {
     isAlert = false;
 
     globalIndicator.push(
-      buildRpmData("Torsion", data["StaticTorsion"].value, 5)
+      buildRpmData("Torsion(degree)", data.StaticTorsion?.value || 0, 6)
     );
 
     globalIndicator.push(
-      buildRpmData("Torque", data["StaticTorque"].value * 0.001, 1000)
+      buildRpmData("Torque(kNm)", (data.StaticTorque?.value || 0) * 0.001, 1000)
     );
 
     globalIndicator.push(
-      buildRpmData("Power", data["StaticPower"].value * 1.0e-6, 100)
+      buildRpmData("Power(MW)", (data.StaticPower?.value || 0) * 1.0e-6, 100)
     );
 
     globalIndicator.push(
-      buildRpmData("Speed", data["ChannelSpeed"], maxRPMThrshhold)
+      buildRpmData("Speed", data.ChannelSpeed || 0, maxRPMThrshhold)
     );
   } else if (modelType === "Turbine") {
     globalIndicator.push(
@@ -276,7 +276,7 @@ export function buildData(response) {
 
       cylinder_specific_indicators.push(condition_of_cyl_moving_parts);
     }
-    if (from_data["fuel"] === "Gas") {
+    if (from_data["fuel"].includes("Gas")) {
       const miss_firing = buildCompressionData(
         first,
         second,
@@ -315,9 +315,24 @@ export function buildData(response) {
   }
   // process Torque data
   if (response["type"] === "Torque") {
+    let trends = [];
+    const torsionWithRpm = buildLineChart(
+      historical_data,
+      "StaticTorsion",
+      "Torsion with RPM"
+    );
+    trends.push(torsionWithRpm);
+
+    const powerWithRpm = buildLineChart(
+      historical_data,
+      "StaticPower",
+      "Power with RPM"
+    );
+    trends.push(powerWithRpm);
+
     return {
       cylinder_specific_indicators: [],
-      trends: [],
+      trends,
       alert: buildTorqueAlertData(historical_data),
       alertUpdatedOn: firstKey,
     };
@@ -406,7 +421,7 @@ function buildCompressionData(first, second, compressionData, graphLabel) {
     const item = first[i];
     const compression = cylinderHealth[i];
     let firstChild = {
-      name: "CY" + item,
+      name: "Cyl " + item,
       fill: checkFillColor(compression),
 
       showValue: compression,
@@ -418,7 +433,7 @@ function buildCompressionData(first, second, compressionData, graphLabel) {
         const secondItem = second[j];
         const secondCompression = cylinderHealth[first.length + j];
         firstChild["children"].push({
-          name: "CY" + secondItem,
+          name: "Cyl " + secondItem,
           value: showSecondValue,
           fill: checkFillColor(secondCompression),
           showValue: secondCompression,
@@ -568,7 +583,7 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
 
       labels.push(dateformat);
 
-      zAxisDataPoints.push(moduleData?.ChannelSpeed || 0);
+      zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
       if (isGradientOpposite && valueObject) {
         datapoints.push(round(valueObject?.valueInHealth || 0));
@@ -1553,4 +1568,56 @@ function buildEngineAlertData(historical_data) {
   }
 
   return returnArray;
+}
+function buildLineChart(data, key, title, isGradientOpposite) {
+  let labels = [];
+  let datapoints = [];
+  let zAxisDataPoints = [];
+  let count = 0;
+  if (data) {
+    for (let item of data) {
+      const objectData = JSON.parse(item["jsondata"]);
+      const firstKey = Object.keys(objectData)[0];
+      const moduleData = objectData[firstKey];
+      // labels.push(firstKey);
+      const date = new Date(firstKey);
+      let day = days[date.getDay()];
+      let hour = date.getHours();
+      let mint = date.getMinutes();
+      let dateformat = day + "," + hour + ":" + mint;
+
+      labels.push(dateformat);
+
+      zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
+      const valueObject = moduleData[key];
+      if (isGradientOpposite && valueObject) {
+        datapoints.push(round(valueObject?.valueInHealth || 0));
+      } else {
+        datapoints.push(round(valueObject?.value || 0));
+      }
+      count++;
+    }
+  }
+  let sum = 0;
+  for (let i = 0; i < datapoints.length; i++) {
+    sum += parseInt(datapoints[i], 10); //don't forget to add the base
+  }
+
+  let avg = sum / datapoints.length;
+
+  return {
+    trendsName: title,
+    speedName: "Speed",
+    min: round(Math.min(...datapoints)),
+    max: round(Math.max(...datapoints)),
+    yMax: title === "Engine Health" ? 100 : 5,
+    avg: round(avg),
+    datapoints: datapoints,
+    dataPointsY1: zAxisDataPoints,
+    labels: labels,
+    chartType: "LineGradient",
+    xLabel: title,
+    yLabel: "Time",
+    isGradientOpposite: isGradientOpposite ?? false,
+  };
 }
