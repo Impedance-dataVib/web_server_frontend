@@ -152,6 +152,11 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
         },
       },
       y1: {
+        ticks: { 
+          callback: (value: any)=> {
+            return value;
+          }
+        },
         beginAtZero: true,
         type: 'linear' as const,
         display: true,
