@@ -421,7 +421,7 @@ function buildCompressionData(first, second, compressionData, graphLabel) {
     const item = first[i];
     const compression = cylinderHealth[i];
     let firstChild = {
-      name: "CY" + item,
+      name: "Cyl " + item,
       fill: checkFillColor(compression),
 
       showValue: compression,
@@ -433,7 +433,7 @@ function buildCompressionData(first, second, compressionData, graphLabel) {
         const secondItem = second[j];
         const secondCompression = cylinderHealth[first.length + j];
         firstChild["children"].push({
-          name: "CY" + secondItem,
+          name: "Cyl " + secondItem,
           value: showSecondValue,
           fill: checkFillColor(secondCompression),
           showValue: secondCompression,
