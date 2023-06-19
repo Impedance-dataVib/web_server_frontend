@@ -1,102 +1,290 @@
-import { Box, Typography } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import FileUpload from "../../app/components/file-upload";
 import SystemInfoApi from "./api";
 import { enqueueSnackbar } from "notistack";
-import { useState } from "react";
+
+import { useRef, useState } from "react";
+
+type FileType = "License File" | "Software Update File";
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#e8e8ed",
+    color: theme.palette.common.black,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 export default function UploadFile({ setApiData }: any) {
   const [fileName1, setFileName1] = useState<any>();
   const [fileName2, setFileName2] = useState<any>();
-  const handleFile1 = (e: any) => {
-    const file1 = e.target.files[0];
-    const filename = e.target.files[0]?.name;
-    setFileName1(filename);
-    if (!file1) {
-      return;
-    }
-    const data = new FormData();
-    data.append("file", file1);
-    data.append("upload_type", "license_file");
-
-    SystemInfoApi.updateSystemLicenseFile(data)
-      .then((val) => {
-        enqueueSnackbar({
-          message: `You have Successfully updated the License data`,
-          variant: "success",
-        });
-      })
-      .catch((error) => {
-        enqueueSnackbar({
-          message: error.Message,
-          variant: "error",
-        });
-      });
-    setApiData((val: any) => {
-      return {
-        ...val,
-      };
-    });
+  const [file, setFile] = useState<any>();
+  const inputRef = useRef<any>(null);
+  const [open, setOpen] = useState<boolean>(false);
+  const [fileInfo, setFileInfo] = useState<any>([]);
+  const handleClose = () => {
+    setTimeout(() => {
+      setFile(null);
+      setFileName1(null);
+      setFileName2(null);
+      inputRef.current.value = null;
+      setOpen(false);
+    }, 300);
   };
-  const handleFile2 = (e: any) => {
-    const file2 = e.target.files[0];
-    const filename = e.target.files[0]?.name;
-    setFileName2(filename);
-    if (!file2) {
+
+  const handleFileinfo = (type: FileType) => (e: any) => {
+    const file = e.target.files[0];
+    const fileName = file?.name;
+    const data = new FormData();
+    if (!file) {
       return;
+    } else if (type === "License File") {
+      setFileName1(fileName);
+      setFileName2(null);
+
+      data.append("file", file);
+      data.append("type", "license");
+      SystemInfoApi.getFirmwareDetails(data)
+        .then((res: any) => {
+          enqueueSnackbar({
+            message: `You have Successfully fetched the License data`,
+            variant: "success",
+          });
+          console.log(res.data);
+          setFileInfo([res.data.data]);
+          setOpen(true);
+        })
+        .catch((err: any) =>
+          enqueueSnackbar({
+            message: err.Message,
+            variant: "error",
+          })
+        );
+      setFile(file);
+    } else if (type === "Software Update File") {
+      setFileName2(fileName);
+      setFileName1(null);
+
+      data.append("file", file);
+      data.append("type", "vbox");
+      SystemInfoApi.getFirmwareDetails(data)
+        .then((res: any) => {
+          console.log(res.data);
+          setFileInfo([res.data.data]);
+          enqueueSnackbar({
+            message: `You have Successfully fetched the Software details`,
+            variant: "success",
+          });
+          setOpen(true);
+        })
+        .catch((err: any) =>
+          enqueueSnackbar({
+            message: err.Message,
+            variant: "error",
+          })
+        );
+      setFile(file);
     }
+  };
 
-    const formdata = new FormData();
-    formdata.append("file", file2);
-    formdata.append("upload_type", "software_file");
-
-    SystemInfoApi.updateSystemSoftwareFile(formdata)
-      .then((val) => {
-        enqueueSnackbar({
-          message: `You have Successfully updated the Software data`,
-          variant: "success",
+  const handleFileUpload = () => {
+    if (!file) {
+      return;
+    } else if (fileName1 && !fileName2) {
+      const data = new FormData();
+      data.append("file", file);
+      data.append("upload_type", "license_file");
+      SystemInfoApi.updateSystemLicenseFile(data)
+        .then((val) => {
+          enqueueSnackbar({
+            message: `You have Successfully updated the License data`,
+            variant: "success",
+          });
+        })
+        .catch((error) => {
+          enqueueSnackbar({
+            message: error.Message,
+            variant: "error",
+          });
         });
-      })
-      .catch((error) => {
-        enqueueSnackbar({
-          message: error.Message,
-          variant: "error",
-        });
+      setApiData((val: any) => {
+        return {
+          ...val,
+        };
       });
+    } else if (fileName2 && !fileName1) {
+      const formdata = new FormData();
+      formdata.append("file", file);
+      formdata.append("upload_type", "software_file");
 
-    //for rerender the system page
-    setApiData((val: any) => {
-      return {
-        ...val,
-      };
-    });
+      SystemInfoApi.updateSystemSoftwareFile(formdata)
+        .then((val) => {
+          enqueueSnackbar({
+            message: `You have Successfully updated the Software data`,
+            variant: "success",
+          });
+        })
+        .catch((error) => {
+          enqueueSnackbar({
+            message: error.Message,
+            variant: "error",
+          });
+        });
+
+      //for rerender the system page
+      setApiData((val: any) => {
+        return {
+          ...val,
+        };
+      });
+    }
   };
   return (
-    <Box
-      sx={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        mx: 0,
-      }}
-    >
-      <Box sx={{ width: "49%" }}>
-        <Typography component={"p"}>Update License file</Typography>
-        <FileUpload onChangeHandler={handleFile1} file=".dat" />
-        {fileName1 ? (
-          <Box sx={{ color: "green" }}>{fileName1}</Box>
-        ) : (
-          "No file Chosen"
-        )}
+    <>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          mx: 0,
+        }}
+      >
+        <Box sx={{ width: "49%" }}>
+          <Typography component={"p"}>Update License file</Typography>
+          <FileUpload
+            onChangeHandler={handleFileinfo("License File")}
+            file=".dat"
+            inputRef={inputRef}
+          />
+          {fileName1 ? (
+            <Box sx={{ color: "green" }}>{fileName1}</Box>
+          ) : (
+            "No file Chosen"
+          )}
+        </Box>
+        <Box sx={{ width: "49%" }}>
+          <Typography component={"p"}>Update Software Version file</Typography>
+          <FileUpload
+            onChangeHandler={handleFileinfo("Software Update File")}
+            file=".zip"
+            inputRef={inputRef}
+          />
+          {fileName2 ? (
+            <Box sx={{ color: "green" }}>{fileName2}</Box>
+          ) : (
+            "No file Chosen"
+          )}
+        </Box>
       </Box>
-      <Box sx={{ width: "49%" }}>
-        <Typography component={"p"}>Update Software Version file</Typography>
-        <FileUpload onChangeHandler={handleFile2} file=".zip" />
-        {fileName2 ? (
-          <Box sx={{ color: "green" }}>{fileName2}</Box>
-        ) : (
-          "No file Chosen"
-        )}
-      </Box>
-    </Box>
+      <Dialog open={open} onClose={handleClose} maxWidth="lg">
+        <DialogTitle>Upload File Details</DialogTitle>
+        <DialogContent>
+          {fileName1 && (
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>License Number</StyledTableCell>
+                    <StyledTableCell>License Tenure</StyledTableCell>
+                    <StyledTableCell>Engine Quantity</StyledTableCell>
+                    <StyledTableCell>Bearing Quantity</StyledTableCell>
+                    <StyledTableCell>Motor Quantity</StyledTableCell>
+                    <StyledTableCell>Turbine Quantity</StyledTableCell>
+                    <StyledTableCell>Torque Quantity</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {fileInfo.map((row: any) => (
+                    <StyledTableRow key={row.license_id}>
+                      <StyledTableCell component="th" scope="row">
+                        {row.license_number}
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {row.license_tenure}
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {row.engine_quantity}
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {row.bearing_quantity}
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {row.motor_quantity}
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {row.turbine_quantity}
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {row.torque_quantity}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+          {fileName2 && (
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>Version</StyledTableCell>
+                    <StyledTableCell>Readme</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {fileInfo.map((row: any) => (
+                    <StyledTableRow key={row.license_id}>
+                      <StyledTableCell component="th" scope="row">
+                        {row.version}
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {row.readme}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button color="secondary" onClick={handleClose} variant="contained">
+            Cancel
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={handleFileUpload}
+          >
+            Upload
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }

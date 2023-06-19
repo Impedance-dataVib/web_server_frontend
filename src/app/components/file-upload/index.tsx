@@ -4,11 +4,13 @@ import { ChangeEventHandler } from "react";
 interface FileUploadObject {
   onChangeHandler: ChangeEventHandler;
   file: string;
+  inputRef: any;
 }
 
 export default function fileUpload({
   onChangeHandler,
   file,
+  inputRef,
 }: FileUploadObject) {
   return (
     <Box
@@ -27,6 +29,7 @@ export default function fileUpload({
         type="file"
         style={{ opacity: 0, width: "100%", height: "100%" }}
         onChange={onChangeHandler}
+        ref={inputRef}
       />
     </Box>
   );
