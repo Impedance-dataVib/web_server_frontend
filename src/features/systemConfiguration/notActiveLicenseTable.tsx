@@ -12,16 +12,14 @@ import { Typography } from "@mui/material";
 export default function NotActiveLicenseTable({ notActiveLicenseInfo }: any) {
   console.log(notActiveLicenseInfo);
   return (
-    <TableContainer
-      component={Paper}
-      sx={{ maxHeight: 220, overflow: "scroll" }}
-    >
-      <Table stickyHeader sx={{ minWidth: 650 }} aria-label="simple table">
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell align="center">License No</TableCell>
             <TableCell align="center">Expiry Date</TableCell>
             <TableCell align="center">Status</TableCell>
+            <TableCell align="center">Activation Date</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -35,6 +33,7 @@ export default function NotActiveLicenseTable({ notActiveLicenseInfo }: any) {
               </TableCell>
               <TableCell align="center">{row.expiry_date}</TableCell>
               <TableCell align="center">{row.status}</TableCell>
+              <TableCell align="center">{row.activation_date}</TableCell>
             </TableRow>
           ))}
         </TableBody>
