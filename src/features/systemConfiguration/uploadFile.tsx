@@ -123,18 +123,28 @@ export default function UploadFile({ setApiData }: any) {
             message: `You have Successfully updated the License data`,
             variant: "success",
           });
+          setApiData((val: any) => {
+            console.log("update system Liscense ", val);
+
+            return {
+              ...val,
+            };
+          });
         })
         .catch((error) => {
+          setApiData((val: any) => {
+            console.log("update system Liscense error", val);
+
+            return {
+              ...val,
+            };
+          });
+
           enqueueSnackbar({
             message: error.Message,
             variant: "error",
           });
         });
-      setApiData((val: any) => {
-        return {
-          ...val,
-        };
-      });
     } else if (fileName2 && !fileName1) {
       const formdata = new FormData();
       formdata.append("file", file);
@@ -146,20 +156,26 @@ export default function UploadFile({ setApiData }: any) {
             message: `You have Successfully updated the Software data`,
             variant: "success",
           });
+          setApiData((val: any) => {
+            console.log("update system software ", val);
+            return {
+              ...val,
+            };
+          });
         })
         .catch((error) => {
+          setApiData((val: any) => {
+            console.log("update system software error ", val);
+
+            return {
+              ...val,
+            };
+          });
           enqueueSnackbar({
             message: error.Message,
             variant: "error",
           });
         });
-
-      //for rerender the system page
-      setApiData((val: any) => {
-        return {
-          ...val,
-        };
-      });
     }
   };
   return (
@@ -281,7 +297,7 @@ export default function UploadFile({ setApiData }: any) {
             variant="contained"
             onClick={handleFileUpload}
           >
-            Upload
+            Confirm & Upload
           </Button>
         </DialogActions>
       </Dialog>

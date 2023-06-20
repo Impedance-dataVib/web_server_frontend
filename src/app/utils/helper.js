@@ -455,20 +455,52 @@ function buildCompressionData(first, second, compressionData, graphLabel) {
   };
   return compression;
 }
-
 export function buildLiveStatusData(data) {
   let currentStep = 1;
-  if (data.includes("RECORDING")) {
-    currentStep = 2;
-  } else if (data.includes("Processing")) {
-    currentStep = 3;
-  } else if (data.includes("(400")) {
-    currentStep = 4;
+  let stepProgress = 0;
+  if (data) {
+    const arr = data.split("\n");
+    let totalTime = 0;
+
+    for (let i = 0; i < arr.length; i++) {
+      const item = arr[i];
+      if (i === 0) {
+        currentStep = 1;
+        stepProgress = 0;
+      } else {
+        if (i === 1) {
+          totalTime = item.split(" ")[4];
+        } else {
+          if (item.includes("RECORDING")) {
+            currentStep = 2;
+            const lineArray = item.split(" ");
+            const currantTime = lineArray[3];
+            if (currantTime !== "RECORDING") {
+              let per = percentage(currantTime, totalTime);
+              if (per === 100) {
+                per = 0;
+              }
+              stepProgress = 100 - per;
+            }
+          } else if (
+            item.includes("START PROCESSING") ||
+            item.includes("Processing Diagmot")
+          ) {
+            currentStep = 3;
+            stepProgress = 100;
+          } else if (item.includes("END PROCESSING")) {
+            currentStep = 4;
+            stepProgress = 100;
+          }
+        }
+      }
+    }
   }
+
   return {
     currentStep: currentStep,
     currentMode: "Auto",
-    stepProgress: 25,
+    stepProgress: parseInt(stepProgress),
     currentMessage: "Initiate Manual Measurement",
   };
 }
@@ -583,7 +615,7 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
 
       labels.push(dateformat);
 
-      zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
+      zAxisDataPoints.push("" + parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
       if (isGradientOpposite && valueObject) {
         datapoints.push(round(valueObject?.valueInHealth || 0));
@@ -1622,7 +1654,6 @@ function buildLineChart(data, key, title, isGradientOpposite) {
   };
 }
 
-
 export function buildTrendData(historical_data, type) {
   let labels = [];
 
@@ -1635,69 +1666,74 @@ export function buildTrendData(historical_data, type) {
   const rpmData = [];
   let maxRpm = 0;
   for (let item of historical_data) {
-      const objectData = JSON.parse(item['jsondata']);
-      const firstKey = Object.keys(objectData)[0];
-      const moduleData = objectData[firstKey];
+    const objectData = JSON.parse(item["jsondata"]);
+    const firstKey = Object.keys(objectData)[0];
+    const moduleData = objectData[firstKey];
 
-      labels.push(firstKey);
-      rpmData.push(parseInt(moduleData?.ChannelSpeed || 0));
+    labels.push(firstKey);
+    rpmData.push(parseInt(moduleData?.ChannelSpeed || 0));
 
-      if (type === 'Engine') {
-          let itemData = moduleData['PowerLoss'];
-          increase_fuel_data.push(itemData?.value || 0);
+    if (type === "Engine") {
+      let itemData = moduleData["PowerLoss"];
+      increase_fuel_data.push(itemData?.value || 0);
 
-          itemData = moduleData['MechanicalHealth'];
-          engine_health_data.push(itemData?.valueInHealth || 0);
-      } else if (type === 'Torque') {
-          let itemData = moduleData['StaticTorsion'];
-          torsion.push(itemData?.value || 0);
-          itemData = moduleData['StaticPower'];
-          power.push(itemData?.value || 0);
-      }
+      itemData = moduleData["MechanicalHealth"];
+      engine_health_data.push(itemData?.valueInHealth || 0);
+    } else if (type === "Torque") {
+      let itemData = moduleData["StaticTorsion"];
+      torsion.push(itemData?.value || 0);
+      itemData = moduleData["StaticPower"];
+      power.push(itemData?.value || 0);
+    }
   }
 
   if (increase_fuel_data && increase_fuel_data.length > 0) {
-      dataSet.push(buildDataSet('Increase fuel consumption', 'red', increase_fuel_data));
+    dataSet.push(
+      buildDataSet("Increase fuel consumption", "red", increase_fuel_data)
+    );
   }
 
   if (engine_health_data && engine_health_data.length > 0) {
-      dataSet.push(buildDataSet('Engine Health', 'green', engine_health_data));
+    dataSet.push(buildDataSet("Engine Health", "green", engine_health_data));
   }
 
   if (torsion && torsion.length > 0) {
-      dataSet.push(buildDataSet('Torsion', 'red', torsion));
+    dataSet.push(buildDataSet("Torsion", "red", torsion));
   }
   if (power && power.length > 0) {
-      dataSet.push(buildDataSet('Power', 'green', power));
+    dataSet.push(buildDataSet("Power", "green", power));
   }
 
   if (rpmData && rpmData.length > 0) {
-      const rpmDataArr = buildDataSet('RPM', 'black', rpmData, 'y1');
-      dataSet.push(rpmDataArr);
-      maxRpm = rpmDataArr.maxValue;
+    const rpmDataArr = buildDataSet("RPM", "black", rpmData, "y1");
+    dataSet.push(rpmDataArr);
+    maxRpm = rpmDataArr.maxValue;
   }
-  return {dataSet, labels, maxRpm};
+  return { dataSet, labels, maxRpm };
 }
 
 function buildDataSet(title, color, dataPoints, axisId) {
   return {
-      title: title,
-      data: dataPoints,
-      label: title,
-      borderColor: color,
-      pointBackgroundColor: color,
-      backgroundColor: color,
-      fill: false,
-      yAxisID: axisId ?? "y",
-      hidden: false,
-      minVal: Math.min(...dataPoints),
-      maxValue: Math.max(...dataPoints),
-      avgValue: average(dataPoints)
+    title: title,
+    data: dataPoints,
+    label: title,
+    borderColor: color,
+    pointBackgroundColor: color,
+    backgroundColor: color,
+    fill: false,
+    yAxisID: axisId ?? "y",
+    hidden: false,
+    minVal: Math.min(...dataPoints),
+    maxValue: Math.max(...dataPoints),
+    avgValue: average(dataPoints),
   };
 }
 
-export function convertDate (dateVal) {
+export function convertDate(dateVal) {
   let dateD = dateVal.toLocaleString().split(" ");
-  let Y = dateVal.toLocaleDateString().split('/').reverse().join('-');
+  let Y = dateVal.toLocaleDateString().split("/").reverse().join("-");
   return `${Y} ${dateD[1]}`;
+}
+function percentage(partialValue, totalValue) {
+  return (100 * partialValue) / totalValue;
 }

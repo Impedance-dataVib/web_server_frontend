@@ -1,4 +1,14 @@
-import { Typography, Box, Link, Divider, Button } from "@mui/material";
+import {
+  Typography,
+  Box,
+  Link,
+  Divider,
+  Button,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SystemInfoTable from "./systemInfoTable";
 import NotActiveLicenseTable from "./notActiveLicenseTable";
 import UploadFile from "./uploadFile";
@@ -11,6 +21,7 @@ import FileUploadComponent from "src/app/components/fileUpload";
 import { enqueueSnackbar } from "notistack";
 import api from "../../app/api";
 import axios from "axios";
+import AccordionBase from "src/app/components/accordion-base";
 
 const SystemConfiguration = () => {
   const [isShown, setIsShown] = useState(false);
@@ -56,7 +67,7 @@ const SystemConfiguration = () => {
 
   useEffect(() => {
     getSystemInfo();
-  }, []);
+  }, [apiData]);
   const handleClick = () => {
     api.get(
       `${window.location.origin}/client-portal-api/app/start_dashboard_socket.php`
@@ -354,19 +365,20 @@ const SystemConfiguration = () => {
           </Box>
           <Divider sx={{ my: 5 }} />
           <Box>
-            <Typography
-              sx={{
-                textAlign: "center",
-                fontSize: "14px",
-                fontWeight: 500,
-                mb: 5,
-              }}
-            >
-              Not Active License Info
-            </Typography>
-            <NotActiveLicenseTable
-              notActiveLicenseInfo={apiData.notActiveLicenseInfo}
-            />
+            <Accordion sx={{ bgcolor: "#EAEAEA" }}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography variant="subtitle2"> Liscense History</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <NotActiveLicenseTable
+                  notActiveLicenseInfo={apiData.notActiveLicenseInfo}
+                />
+              </AccordionDetails>
+            </Accordion>
           </Box>
           <Divider sx={{ my: 5 }} />
 

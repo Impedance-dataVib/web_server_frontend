@@ -15,6 +15,8 @@ import { styled } from "@mui/material/styles";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import { useEffect } from "react";
 import { isEmptyObject } from "src/app/utils/helper";
+import api from "../../../../app/api";
+import { enqueueSnackbar } from "notistack";
 const apiData = {
   steps: [
     {
@@ -119,6 +121,24 @@ const PrettoSlider = styled(Slider)({
 });
 
 const LiveStatus = ({ liveStatus }: any) => {
+  const restartVbox = () => {
+    console.log("clicked");
+    api
+      .get("/vbox/restart.php")
+      .then((res) => {
+        console.log(res);
+        enqueueSnackbar({
+          message: "success",
+          variant: "success",
+        });
+      })
+      .catch((error) => {
+        enqueueSnackbar({
+          message: "Something went wrong",
+          variant: "error",
+        });
+      });
+  };
   return (
     <>
       {isEmptyObject(liveStatus) ? (
@@ -150,7 +170,7 @@ const LiveStatus = ({ liveStatus }: any) => {
                 >
                   <Typography
                     fontWeight={
-                      liveStatus?.currentStep === index + 1 ? 500 : ""
+                      liveStatus?.currentStep === index + 1 ? 700 : ""
                     }
                     variant="body1"
                     component={"span"}
@@ -178,7 +198,7 @@ const LiveStatus = ({ liveStatus }: any) => {
               value={liveStatus?.stepProgress || 0}
               aria-label="Default"
               valueLabelDisplay="auto"
-              // disabled
+              //disabled
             />
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -196,7 +216,7 @@ const LiveStatus = ({ liveStatus }: any) => {
               }}
             >
               <Check sx={{ color: "white" }} />
-              <Button sx={{ color: "white" }}>
+              <Button onClick={restartVbox} sx={{ color: "white" }}>
                 {liveStatus?.currentMessage}
               </Button>
               {/* <Typography variant="body1" component={"span"} color="white">
