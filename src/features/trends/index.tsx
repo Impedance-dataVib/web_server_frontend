@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import LineGradientTrends from "src/features/common/graph/line-gradient-trends";
 import Autocomplete from "@mui/material/Autocomplete";
-import Chip from '@mui/material/Chip';
-import TextField from '@mui/material/TextField';
+import Chip from "@mui/material/Chip";
+import TextField from "@mui/material/TextField";
 
 import { useGetAllTrends, useGetAllModules } from "../hooks";
 import FullScreenLoader from "../../app/components/fullscreen-loader";
@@ -21,8 +21,8 @@ const TrendsPage = () => {
   const [options, setOption] = useState([]);
   const [value, setValue] = React.useState<string[]>([]);
   let startDate = new Date();
-  startDate.setDate(startDate.getDate() - 6)
-  const endDate= new Date();
+  startDate.setDate(startDate.getDate() - 6);
+  const endDate = new Date();
   const { data: allModules } = useGetAllModules();
   const [dateRangeValues, setDateRangeValues] = useState<Object>({
     endDate: endDate,
@@ -31,7 +31,11 @@ const TrendsPage = () => {
   });
 
   const [moduleId, setModuleId] = useState<string>("");
-  const { data, isLoading, getAllTrends, isError } = useGetAllTrends(moduleId, dateRangeValues, allModules);
+  const { data, isLoading, getAllTrends, isError } = useGetAllTrends(
+    moduleId,
+    dateRangeValues,
+    allModules
+  );
   const [toggleDatePicker, setToggleDatePicker] = useState(false);
 
   const assetHandler = (e: any) => {
@@ -51,8 +55,8 @@ const TrendsPage = () => {
   }, [moduleId]);
 
   useEffect(() => {
-    if(data?.dataSet && data?.dataSet.length > 0) {
-      const titles = data?.dataSet.map((val: any )=> val?.title);
+    if (data?.dataSet && data?.dataSet.length > 0) {
+      const titles = data?.dataSet.map((val: any) => val?.title);
       setOption(titles);
       setValue([titles[0]]);
     }
@@ -78,16 +82,14 @@ const TrendsPage = () => {
             marginRight: 5,
           }}
         >
-          <Box>
+          <Box sx={{ ml: 2 }}>
             <Autocomplete
               multiple
               disableClearable
               value={value}
               onChange={(event, newValue) => {
-                setValue((val:any) => {
-                  return [
-                    ...newValue,
-                  ]
+                setValue((val: any) => {
+                  return [...newValue];
                 });
               }}
               options={options}
@@ -111,21 +113,24 @@ const TrendsPage = () => {
               )}
             />
           </Box>
-          <Box>
+          <Box sx={{ ml: 2 }}>
             <Typography></Typography>
             <Button
-              variant="text"
+              variant="outlined"
               color="primary"
               onClick={() => setToggleDatePicker(true)}
+              sx={{
+                height: "3.0rem",
+              }}
             >
               Select Date Range
             </Button>
           </Box>
-          <FormControl sx={{ py: 0, width: "110px" }}>
+          <FormControl sx={{ py: 0, width: "110px", ml: 2 }}>
             <Select
               value={moduleId}
               sx={{
-                height: "2.5rem",
+                height: "3.0rem",
                 color: "#1D4580",
                 width: "8rem",
                 "& .MuiOutlinedInput-notchedOutline": {
@@ -142,7 +147,7 @@ const TrendsPage = () => {
               name="asset"
               onChange={assetHandler}
               autoWidth
-              size="small"
+              size="medium"
             >
               {allModules?.map(({ id, name }: any) => (
                 <MenuItem value={id}>
@@ -159,12 +164,14 @@ const TrendsPage = () => {
       <Box m={2} sx={{ bgcolor: "white" }}>
         {isLoading && <FullScreenLoader></FullScreenLoader>}
         <Grid container spacing={3} justifyContent="center">
-          {data?.dataSet && data?.dataSet.length > 0 && <LineGradientTrends 
-            dataPoints={data?.dataSet}
-            labels={data?.labels}
-            maxRpm={data?.maxRpm}
-            selectedValue={value}
-          />}
+          {data?.dataSet && data?.dataSet.length > 0 && (
+            <LineGradientTrends
+              dataPoints={data?.dataSet}
+              labels={data?.labels}
+              maxRpm={data?.maxRpm}
+              selectedValue={value}
+            />
+          )}
         </Grid>
       </Box>
       <DatePickerModal
