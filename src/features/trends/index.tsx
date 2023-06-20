@@ -24,11 +24,12 @@ const TrendsPage = () => {
   startDate.setDate(startDate.getDate() - 6);
   const endDate = new Date();
   const { data: allModules } = useGetAllModules();
-  const [dateRangeValues, setDateRangeValues] = useState<Object>({
-    endDate: endDate,
-    startDate: startDate,
+  const [dateRangeValues, setDateRangeValues] = useState<any>({
+    endDate: new Date(),
+    startDate: new Date(),
     key: "selection",
   });
+  console.log(dateRangeValues);
 
   const [moduleId, setModuleId] = useState<string>("");
   const { data, isLoading, getAllTrends, isError } = useGetAllTrends(
@@ -103,28 +104,15 @@ const TrendsPage = () => {
                   />
                 ))
               }
-              style={{ width: 500 }}
+              sx={{ width: 500 }}
               renderInput={(params) => (
                 <TextField
                   {...params}
                   label="Indicators"
-                  placeholder="Favorites"
+                  placeholder="Indicators"
                 />
               )}
             />
-          </Box>
-          <Box sx={{ ml: 2 }}>
-            <Typography></Typography>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => setToggleDatePicker(true)}
-              sx={{
-                height: "3.0rem",
-              }}
-            >
-              Select Date Range
-            </Button>
           </Box>
           <FormControl sx={{ py: 0, width: "110px", ml: 2 }}>
             <Select
@@ -158,6 +146,31 @@ const TrendsPage = () => {
               ))}
             </Select>
           </FormControl>
+        </Box>
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", marginRight: 3 }}>
+        <Box sx={{ ml: 2, display: "flex", flexDirection: "row" }}>
+          <Typography component={"div"} sx={{ p: 1, fontSize: "16px" }}>
+            <span>
+              Start Date:
+              {dateRangeValues?.startDate.toISOString().split("T")[0]}
+            </span>
+          </Typography>
+          <Typography component={"div"} sx={{ p: 1, fontSize: "16px" }}>
+            <span>
+              End Date: {dateRangeValues?.endDate.toISOString().split("T")[0]}
+            </span>
+          </Typography>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => setToggleDatePicker(true)}
+            sx={{
+              height: "3.0rem",
+            }}
+          >
+            Select Date Range
+          </Button>
         </Box>
       </Box>
 
