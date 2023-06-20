@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef, createContext } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import {
   Alert,
   AlertTitle,
@@ -10,7 +10,6 @@ import {
   Button,
 } from "@mui/material";
 import useWebSocket from "react-use-websocket";
-
 import { makeStyles } from "tss-react/mui";
 import { useTranslation } from "react-i18next";
 import DashboardApi from "./dashboardApi";
@@ -18,9 +17,7 @@ import ModuleMonitoringPage from "./pages/module";
 import TabPanel from "src/app/components/tab-panel";
 import appContext from "src/app/context";
 import * as dateFns from "date-fns";
-import { webSocketData } from "./schema";
-import { buildData, buildSoketData, isEmptyObject } from "src/app/utils/helper";
-// import { webSocketData } from "./schema";
+import { buildData, buildSoketData } from "src/app/utils/helper";
 import api from "../../app/api";
 
 const useStyles = makeStyles()((theme) => {
@@ -84,16 +81,14 @@ const TabModuleRender = ({
     case "Bearing":
       return (
         <Box>
-          {isEmptyObject(moduleData) && (
-            <ModuleMonitoringPage
-              moduleData={moduleData}
-              classes={classes}
-              trendsData={trendsData}
-              processName={processName}
-              formData={formData}
-              moduleType={moduleType}
-            />
-          )}
+          <ModuleMonitoringPage
+            moduleData={moduleData}
+            classes={classes}
+            trendsData={trendsData}
+            processName={processName}
+            formData={formData}
+            moduleType={moduleType}
+          />
         </Box>
       );
     default:
@@ -147,12 +142,7 @@ const DashboardPage = () => {
         setWebSocketsData({});
         setTrendsData({});
         sendMessage(moduleTabs[activeModule].process_name);
-        // DashboardApi.getTrendsData(moduleTabs[activeModule].id).then((data) => {
-        //   const parsedData = buildData(data);
-        //   setTrendsData(parsedData);
-        // }).catch(() => {
-        //   setTrendsData({});
-        // });
+
         dashBoardApiCall(moduleTabs[activeModule].id);
         const interval = setInterval(() => {
           dashBoardApiCall(moduleTabs[activeModule].id);

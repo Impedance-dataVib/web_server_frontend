@@ -150,8 +150,8 @@ export const SIGNAL_STATUS_QUALITY = [
     {
         id: '0',
         resultType: 'success',
-        turbineMessage: '',
-        description: ''
+        turbineMessage: 'No Signal',
+        description: 'No Signal'
     },
     {
         id: '1',

@@ -1,4 +1,5 @@
 import { Typography } from "@mui/material";
+import { useEffect } from "react";
 import ReactSpeedometer, { Transition } from "react-d3-speedometer";
 
 export default function SpeedoMeter({
@@ -9,7 +10,26 @@ export default function SpeedoMeter({
   isPercent,
   indicatorType,
   indicatorUnit,
+  isTorqueModule,
+  indicatorName
 }: any) {
+
+  const getMeterColor = () => {
+    const indicator= indicatorName.split("(");
+    if(isTorqueModule) {
+      switch (indicator[0]) {
+        case "Torque": 
+        case "Power": 
+          return "#ffd966";
+        case "Speed": 
+          return "#00000033"
+        default: 
+          return "#FFA326";
+      }
+    }
+    return "#FFA326";
+  } 
+
   return (
     <>
       <ReactSpeedometer
@@ -24,7 +44,7 @@ export default function SpeedoMeter({
         needleColor="#434343"
         customSegmentStops={!isGradientColor ? [minValue, maxValue] : []}
         startColor={"red"}
-        segmentColors={!isGradientColor ? ["#FFA326", "#7070703C"] : []}
+        segmentColors={!isGradientColor ? [getMeterColor(), getMeterColor()] : []}
         maxSegmentLabels={4}
         currentValueText={`${value} ${isPercent ? "%" : ""}`}
         segments={1000}

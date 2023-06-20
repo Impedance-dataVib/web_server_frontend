@@ -26,8 +26,8 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
         .data({
           children: data?.graphData || [],
         })
-        .width(200)
-        .height(200)
+        .width(250)
+        .height(250)
         .sort((a, b) => b.value - a.value)
         .tooltipContent((a) => {
           return `Health Value: ${a.showValue}`;
@@ -37,7 +37,7 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
         })
         .centerRadius(0)
         .radiusScaleExponent(1)
-        .labelOrientation("auto")
+        .labelOrientation("angular")
         .onClick(() => {
         })
         .color((d) => {

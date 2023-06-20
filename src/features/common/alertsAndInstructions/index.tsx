@@ -64,7 +64,7 @@ const AlertsAndInstructions = ({
     <Box sx={{ height: isModalOpen ? "" : "", overflowX: "auto" }}>
       <Grid
         container
-        spacing={moduleData.isAlert ? 2 : 0}
+        spacing={moduleData?.isAlert ? 2 : 0}
         // maxHeight="240px"
         overflow={"auto"}
       >

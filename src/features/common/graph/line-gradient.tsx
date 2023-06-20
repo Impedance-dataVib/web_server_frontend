@@ -86,20 +86,41 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
         data: datapoints,
         borderColor: "red",
         pointBackgroundColor: "#1D4580",
-        backgroundColor: function (context: any) {
-          const chart = context.chart;
-          const { ctx, chartArea } = chart;
-          if (!chartArea) {
-            return;
-          }
-          return getGradient(ctx, chartArea, isGradientOpposite);
-        },
-        fill: true,
         yAxisID: 'y',
       },
     ],
   };
   
+  const plugins = [{
+    id: 'custom_canvas_background_color',
+    type: 'line',
+    beforeDraw: function(chart:any, args: any, options:any) {
+      const ctx = chart.ctx;
+      const canvas = chart.canvas;
+      const chartArea = chart.chartArea;
+      const chartWidth = chartArea.right - chartArea.left;
+      const chartHeight = chartArea.bottom - chartArea.top;
+      var gradientBack = canvas.getContext("2d").createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+
+      if(!isGradientOpposite) {
+      gradientBack.addColorStop(1, "#ffffff");
+      gradientBack.addColorStop(0.41, "#ffffff");
+      gradientBack.addColorStop(0.40, "#02B271");
+      gradientBack.addColorStop(0, "#02B271");
+      }else {
+     
+         gradientBack.addColorStop(1, "#02B271");
+      gradientBack.addColorStop(0.61, "#02B271");
+      gradientBack.addColorStop(0.60, "#ffbf00");
+      gradientBack.addColorStop(0.31, "#ffbf00");
+        gradientBack.addColorStop(0.30, "#ff0000b3");
+        gradientBack.addColorStop(0, "#ff0000b3");
+      }
+      ctx.fillStyle = gradientBack;
+      ctx.fillRect(chartArea.left, chartArea.bottom,
+        chartArea.right - chartArea.left, chartArea.top - chartArea.bottom);
+    },
+  }];
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -111,6 +132,12 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
     plugins: {
       legend: {
         display: true,
+        labels: {
+          font: {
+            family: 'Poppins,Helvetica,"sans-serif',
+            size: 14,
+          }
+        }
       },
       title: {
         display: false,
@@ -125,13 +152,19 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
       x: {
         ticks: {
             maxRotation: 60,
-            minRotation: 60
+            minRotation: 60,
+            font: {
+              family: 'Poppins,Helvetica,"sans-serif',
+              size: 12,
+              whiteSpace: 'normal',
+            }
         },
         title: {
           text: 'Time',
           display: true,
           font: {
             size: 14,
+            family: 'Poppins,Helvetica,"sans-serif',
             weight: 'bold'
           }
         }
@@ -142,17 +175,28 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
         display: true,
         position: 'left' as const,
         max: maxValue || 100,
+        ticks: {
+          font: {
+            family: 'Poppins,Helvetica,"sans-serif',
+            size: 12,
+          }
+      },
         title: {
           text: trendsName,
           display: true,
           font: {
             size: 14,
+            family: 'Poppins,Helvetica,"sans-serif',
             weight: 'bold'
           }
         },
       },
       y1: {
         ticks: { 
+          font: {
+            family: 'Poppins,Helvetica,"sans-serif',
+            size: 12,
+          },
           callback: (value: any)=> {
             return value;
           }
@@ -167,6 +211,7 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
           display: true,
           font: {
             size: 14,
+            family: 'Poppins,Helvetica,"sans-serif',
             weight: 'bold'
           }
         },
@@ -176,5 +221,5 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
       },
     },
   };
-  return (<Line ref={chartRef} options={options} data={data} />);
+  return (<Line ref={chartRef} options={options} data={data} plugins={plugins}    />);
 }

@@ -133,16 +133,18 @@ const ModuleMonitoringPage = ({
           headerIcon={<SignpostOutlined />}
           content={
             <GlobalIndicatorChart
-              globalIndicator={moduleData?.globalIndicator}
+              globalIndicator={moduleData?.globalIndicator || []}
               fullScreen={false}
+              isTorqueModule={moduleType === "Torque"}
             />
           }
           initiallyCollapsed={false}
           fullScreenContent={
             <GlobalIndicatorChart
               showDate={trendsData.alertUpdatedOn}
-              globalIndicator={moduleData?.globalIndicator}
+              globalIndicator={moduleData?.globalIndicator|| []}
               fullScreen={true}
+              isTorqueModule={moduleType === "Torque"}
             />
           }
           section="top"

@@ -110,6 +110,8 @@ export default function LineGradientTrends({
         ticks: {
           maxRotation: 60,
           minRotation: 60,
+          family: 'Poppins,Helvetica,"sans-serif',
+          size: 12,
         },
         title: {
           text: "Time",
@@ -126,6 +128,10 @@ export default function LineGradientTrends({
         display: true,
         position: "left" as const,
         max: 100,
+        font: {
+          family: 'Poppins,Helvetica,"sans-serif',
+          size: 12,
+        },
         title: {
           // text: trendsName,
           display: true,
@@ -141,6 +147,10 @@ export default function LineGradientTrends({
         display: true,
         max: round(maxRpm),
         position: "right" as const,
+        font: {
+          family: 'Poppins,Helvetica,"sans-serif',
+          size: 12,
+        },
         title: {
           text: "Speed",
           display: true,
