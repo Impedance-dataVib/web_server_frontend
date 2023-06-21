@@ -209,7 +209,7 @@ function buildRpmData(indicator_title, data, maxValue) {
     indicatorType: "error",
   };
 }
-function buildPeekPressureChart(data, firingOrder) {
+function buildPeekPressureChart(data, firingOrder, maxPressure) {
   let labels = [];
   for (let item of firingOrder) {
     labels.push("C" + item);
@@ -221,6 +221,7 @@ function buildPeekPressureChart(data, firingOrder) {
     chartType: "bar",
     xLabel: "Peek Pressure",
     yLabel: "Cylinders",
+    yMax: round(maxPressure)
   };
   return increase_fuel_consumption;
 }
@@ -294,10 +295,8 @@ export function buildData(response) {
     trends.push(increase_fuel_consumption);
     const peakPressure = data["Pressure"];
 
-    if (peakPressure && parseInt(peakPressure["value"]) !== 0) {
-      const peak_pressure = buildPeekPressureChart(peakPressure, firingOrder);
-      trends.push(peak_pressure);
-    }
+    const peak_pressure = buildPeekPressureChart(peakPressure, firingOrder, from_data["max_pressure"]);
+    trends.push(peak_pressure);
     const mechanical_health = buildLineGradientChart(
       historical_data,
       "MechanicalHealth",

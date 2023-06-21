@@ -19,31 +19,32 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: false,
+
+
+
+export function BarChart({datapoints, labels, maxValue}: any) {
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
     },
-  },
-  scales: {
-    y: {
-      beginAtZero: true
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: maxValue,
+      },
+      x: {
+         
+          ticks: {
+              autoSkip: true,
+              maxTicksLimit: 20
+          }
+      }
     },
-    x: {
-       
-        ticks: {
-            autoSkip: true,
-            maxTicksLimit: 20
-        }
-    }
-  },
-};
-
-
-
-export function BarChart({datapoints, labels}: any) {
+  };
     const data = {
         labels,
         datasets: [

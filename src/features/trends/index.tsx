@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
+  AlertTitle,
   Box,
   Button,
   FormControl,
@@ -29,10 +31,9 @@ const TrendsPage = () => {
     startDate: new Date(),
     key: "selection",
   });
-  console.log(dateRangeValues);
 
   const [moduleId, setModuleId] = useState<string>("");
-  const { data, isLoading, getAllTrends, isError } = useGetAllTrends(
+  const { data, isLoading, getAllTrends, errorMessage, isError, setIsError } = useGetAllTrends(
     moduleId,
     dateRangeValues,
     allModules
@@ -173,7 +174,22 @@ const TrendsPage = () => {
           </Button>
         </Box>
       </Box>
-
+      {isError && errorMessage &&(
+        <Box sx={{ my: 1 }}>
+          <Alert
+            sx={{ display: "flex" }}
+            severity="error"
+            onClose={() => {
+              setIsError(false);
+            }}
+          >
+            <AlertTitle>{errorMessage}</AlertTitle>
+            <Typography variant="caption" component={"span"}>
+              {errorMessage}
+            </Typography>
+          </Alert>
+        </Box>
+      )}
       <Box m={2} sx={{ bgcolor: "white" }}>
         {isLoading && <FullScreenLoader></FullScreenLoader>}
         <Grid container spacing={3} justifyContent="center">

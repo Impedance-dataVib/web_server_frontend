@@ -2,12 +2,23 @@ import { Box, Grid, Typography } from "@mui/material";
 import LineGradient from "src/features/common/graph/line-gradient";
 import CircleIcon from "@mui/icons-material/Circle";
 import { BarChart } from "src/features/common/graph/bar-chart";
+import { useEffect, useState } from "react";
 
 export default function Trends({ trends, fullScreen }: any) {
+  const [trendsData, setTrendsData] = useState(trends);
+
+  useEffect(() => {
+    if(!fullScreen) {
+      setTrendsData(() => trends.filter((v:any) => v.chartType === "LineGradient"))
+    } else {
+      setTrendsData(trends);
+    }
+  }, [fullScreen, trends]);
+
   return (
     <Grid container spacing={2} sx={{ overflow: "auto" }}>
-      {trends &&
-        trends.map((val: any, index: any) => (
+      {trendsData &&
+        trendsData.map((val: any, index: any) => (
           <Grid
             item
             lg={fullScreen ? 6 : 6}
@@ -36,7 +47,7 @@ export default function Trends({ trends, fullScreen }: any) {
                   isGradientOpposite={val?.isGradientOpposite}
                 />
               ) : (fullScreen ? (
-                <BarChart datapoints={val?.datapoints} labels={val?.labels} />
+                <BarChart datapoints={val?.datapoints} labels={val?.labels} maxValue={val?.yMax}/>
               ) : (
                 <></>
               ))}
@@ -86,7 +97,7 @@ export default function Trends({ trends, fullScreen }: any) {
             </Box>
           </Grid>
         ))}
-      {trends.length === 0 && (
+      {trendsData.length === 0 && (
         <Grid
           item
           lg={fullScreen ? 12 : 12}

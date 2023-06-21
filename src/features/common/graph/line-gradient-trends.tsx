@@ -174,19 +174,29 @@ export default function LineGradientTrends({
       </div>
       <div
         style={{
-          maxHeight: "100px",
+          height: "100px",
           marginBottom: "10px",
           overflowY: "scroll",
         }}
       >
         {graphData.datasets.map((val: ObjectDataSet) => (
-          <Grid spacing={2} container sx={{ width: "80vw" }}>
+          <Grid spacing={2} container sx={{ width: "80vw", marginBottom: '10px' }}>
             <Grid item lg={4}>
               <Typography
                 component="span"
                 textAlign={"left"}
                 alignItems="center"
                 display={"flex"}
+                sx={{cursor: 'pointer', textDecoration: (val.hidden ? 'line-through': 'none')}}
+                onClick={() => {
+                  let data = graphData.datasets.map((v:any) => {
+                    if(val?.title === v.title) {
+                      v.hidden = !v.hidden
+                    }
+                    return v;
+                  });
+                  setGraphData({ labels: labels, datasets: data });
+                }}
               >
                 <CircleIcon sx={{ color: val.borderColor, mr: 1 }} />
                 {val?.title}
