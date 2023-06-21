@@ -11,6 +11,13 @@ import {
   Divider,
   Button,
   SelectChangeEvent,
+  TableContainer,
+  Table,
+  TableHead,
+  TableCell,
+  TableBody,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import {
   assetData,
@@ -23,6 +30,7 @@ import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import DownloadInfoApi from "./api";
 import { enqueueSnackbar } from "notistack";
 import DatePickerModal from "../trends/modals/DatePickerModal";
+import api from "../../app/api";
 
 const DownloadPage = () => {
   const initial = "";
@@ -41,6 +49,7 @@ const DownloadPage = () => {
     endDate: "",
     key: "selection",
   });
+  const [showData, setShowData] = useState([]);
 
   // console.log(dateRangeValues);
   useEffect(() => {
@@ -139,6 +148,13 @@ const DownloadPage = () => {
       });
   };
 
+  useEffect(() => {
+    api
+      .get("/download/get-all.php")
+      .then((res: any) => setShowData(res.data.data))
+      .catch((error) => console.error(error));
+  }, []);
+  console.log(showData);
   return (
     <Box>
       <Typography variant="h5">
@@ -377,6 +393,49 @@ const DownloadPage = () => {
           </Box>
         </Box>
       </form>
+      <Box>
+        <Typography fontWeight={"500"}>Download History</Typography>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">Request ID</TableCell>
+                <TableCell align="center">Request Time</TableCell>
+                <TableCell align="center">Process Complete Time</TableCell>
+                <TableCell align="center"> Status</TableCell>
+                <TableCell align="center"> Start Date</TableCell>
+                <TableCell align="center"> End Date</TableCell>
+                <TableCell align="center"> Report Type</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {showData.map((row: any) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row" align="center">
+                    {row.id}
+                  </TableCell>
+                  <TableCell align="center">{row.request_time}</TableCell>
+                  <TableCell align="center">
+                    {row.process_complete_time}
+                  </TableCell>
+                  <TableCell align="center">{row.status}</TableCell>
+                  <TableCell align="center">
+                    {JSON.parse(row.filter_data).startDate}
+                  </TableCell>
+                  <TableCell align="center">
+                    {" "}
+                    {JSON.parse(row.filter_data).endDate}
+                  </TableCell>
+                  <TableCell align="center">{row.report_type}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     </Box>
   );
 };

@@ -36,6 +36,8 @@ const DrawerAppBar = () => {
   const [notificationCount, setNotificationCount] = useState(0);
   const [notificationType, setNotificationType] = useState<any>("");
   const [currtime, setCurrTime] = useState<any>();
+  const [module, setModule] = useState<any>("");
+  const [filterData, setFilterData] = useState<any>("");
 
   const [navMenuItems, setNavMenuItems] =
     useState<INavMenuItem[]>(APP_NAV_MENU_ITEMS);
@@ -49,10 +51,13 @@ const DrawerAppBar = () => {
       .then((res: any) => {
         setNotificationCount(res.data.count);
         setNotificationType(res.data.report_type);
+        setModule(JSON.parse(res.data.module));
+        setFilterData(JSON.parse(res.data.filter_data));
       })
       .catch((err: any) => console.error(err));
   };
-
+  console.log(module);
+  console.log(filterData);
   useEffect(() => {
     getNotification();
     const interval = setInterval(() => {
@@ -70,13 +75,25 @@ const DrawerAppBar = () => {
         const link = document.createElement("a");
         link.href = url;
         if (notificationType === "json") {
-          link.setAttribute("download", "data.json");
+          link.setAttribute(
+            "download",
+            `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.json`
+          );
         } else if (notificationType === "raw") {
-          link.setAttribute("download", "raw-data.zip");
+          link.setAttribute(
+            "download",
+            `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.zip`
+          );
         } else if (notificationType === "spreadsheet") {
-          link.setAttribute("download", "spreadsheet.xls");
+          link.setAttribute(
+            "download",
+            `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.csv`
+          );
         } else if (notificationType === "graphical") {
-          link.setAttribute("download", "graphical-report.pdf");
+          link.setAttribute(
+            "download",
+            `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.zip`
+          );
           link.setAttribute("target", "_blank");
         }
         document.body.appendChild(link);

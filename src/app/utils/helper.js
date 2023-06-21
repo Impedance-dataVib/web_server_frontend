@@ -232,6 +232,7 @@ export function buildData(response) {
   const historical_data = response["historical_data"];
   const firstKey = Object.keys(fileData)[0];
   const data = fileData[firstKey];
+  console.log(historical_data);
   // process engine data
   if (response["type"] === "Engine") {
     const moduleData = data["Engine"];
@@ -338,27 +339,101 @@ export function buildData(response) {
   }
   // process Turbine data
   if (response["type"] === "Turbine") {
-    return {
-      cylinder_specific_indicators: [],
-      trends: [],
-      alert: buildTurbineAlertData(historical_data),
-      alertUpdatedOn: firstKey,
-    };
+    if (from_data.type === "Steam") {
+      let trends = [];
+      const steamTurbineChart1 = buildTurbineChart(
+        historical_data,
+        "RegularityDeviation",
+        "BladeStatus",
+        "Regularity Deviation, Shaft Health"
+      );
+      trends.push(steamTurbineChart1);
+
+      const steamTurbineChart2 = buildTurbineChart(
+        historical_data,
+        "BearingStatus",
+        null,
+        " Bearing status, Stability"
+      );
+      trends.push(steamTurbineChart2);
+      return {
+        cylinder_specific_indicators: [],
+        trends: trends,
+        alert: buildTurbineAlertData(historical_data),
+        alertUpdatedOn: firstKey,
+      };
+    } else {
+      let trends = [];
+      const gasTurbineChart1 = buildTurbineChart(
+        historical_data,
+        "RegularityDeviation",
+        "BladeStatus",
+        "Regularity Deviation, Shaft Health"
+      );
+      trends.push(gasTurbineChart1);
+
+      const gasTurbineChart2 = buildTurbineChart(
+        historical_data,
+        "BearingStatusGas",
+        null,
+        " Bearing status, Combustion Kit"
+      );
+      trends.push(gasTurbineChart2);
+      return {
+        cylinder_specific_indicators: [],
+        trends: trends,
+        alert: buildTurbineAlertData(historical_data),
+        alertUpdatedOn: firstKey,
+      };
+    }
   }
   // process Motor data
   if (response["type"] === "Motor") {
+    let trends = [];
+    const motorChart1 = buildMotorChart(
+      historical_data,
+      "MElectromag",
+      "BladeStatus",
+      "Electromagnetic Stress"
+    );
+    trends.push(motorChart1);
+
+    const motorChart2 = buildMotorChart(
+      historical_data,
+      "BearingStatus",
+      null,
+      "  Bearing status, Stability"
+    );
+    trends.push(motorChart2);
+
     return {
       cylinder_specific_indicators: [],
-      trends: [],
+      trends: trends,
       alert: buildMotorAlertData(historical_data),
       alertUpdatedOn: firstKey,
     };
   }
   // process Bearing data
   if (response["type"] === "Bearing") {
+    let trends = [];
+    const bearingChart1 = buildBearingChart(
+      historical_data,
+      "RegularityDeviation",
+      "BladeStatus",
+      "Regularity Deviation, Shaft Health"
+    );
+    trends.push(bearingChart1);
+
+    const bearingChart2 = buildBearingChart(
+      historical_data,
+      "BearingStatus",
+      null,
+      " Bearing status, Stability"
+    );
+    trends.push(bearingChart2);
     return {
       cylinder_specific_indicators: [],
-      trends: [],
+      trends: trends,
       alert: buildBearingAlertData(historical_data),
       alertUpdatedOn: firstKey,
     };
@@ -1600,6 +1675,7 @@ function buildEngineAlertData(historical_data) {
 
   return returnArray;
 }
+
 function buildLineChart(data, key, title, isGradientOpposite) {
   let labels = [];
   let datapoints = [];
@@ -1735,4 +1811,166 @@ export function convertDate(dateVal) {
 }
 function percentage(partialValue, totalValue) {
   return (100 * partialValue) / totalValue;
+}
+
+function buildTurbineChart(data, key, key2, title, isGradientOpposite) {
+  let labels = [];
+  let datapoints = [];
+  let datapoints2 = [];
+  let zAxisDataPoints = [];
+  let count = 0;
+  if (data) {
+    for (let item of data) {
+      const objectData = JSON.parse(item["jsondata"]);
+      const firstKey = Object.keys(objectData)[0];
+      const moduleData = objectData[firstKey];
+      // labels.push(firstKey);
+      const date = new Date(firstKey);
+      let day = days[date.getDay()];
+      let hour = date.getHours();
+      let mint = date.getMinutes();
+      let dateformat = day + "," + hour + ":" + mint;
+
+      labels.push(dateformat);
+
+      zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
+      const valueObject = moduleData[key];
+      const valueObject2 = moduleData[key2];
+      datapoints.push(round(valueObject?.valueInHealth || 0));
+      datapoints2.push(round(valueObject2?.valueInHealth || 0));
+
+      count++;
+    }
+  }
+  let sum = 0;
+  for (let i = 0; i < datapoints2.length; i++) {
+    sum += parseInt(datapoints2[i], 10); //don't forget to add the base
+  }
+
+  let avg = sum / datapoints2.length;
+
+  return {
+    trendsName: title,
+    speedName: "Speed",
+    min: round(Math.min(...datapoints2)),
+    max: round(Math.max(...datapoints2)),
+    yMax: 100,
+    avg: round(avg),
+    datapoints: datapoints,
+    dataPointsY1: zAxisDataPoints,
+    dataPointsY2: datapoints2,
+    labels: labels,
+    chartType: "LineGradient",
+    xLabel: title,
+    yLabel: "Time",
+    isGradientOpposite: isGradientOpposite ?? false,
+  };
+}
+
+function buildMotorChart(data, key, key2, title, isGradientOpposite) {
+  let labels = [];
+  let datapoints = [];
+  let datapoints2 = [];
+  let zAxisDataPoints = [];
+  let count = 0;
+  if (data) {
+    for (let item of data) {
+      const objectData = JSON.parse(item["jsondata"]);
+      const firstKey = Object.keys(objectData)[0];
+      const moduleData = objectData[firstKey];
+      // labels.push(firstKey);
+      const date = new Date(firstKey);
+      let day = days[date.getDay()];
+      let hour = date.getHours();
+      let mint = date.getMinutes();
+      let dateformat = day + "," + hour + ":" + mint;
+
+      labels.push(dateformat);
+
+      zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
+      const valueObject = moduleData[key];
+      const valueObject2 = moduleData[key2];
+      datapoints.push(round(valueObject?.valueInHealth || 0));
+      datapoints2.push(round(valueObject2?.valueInHealth || 0));
+
+      count++;
+    }
+  }
+  let sum = 0;
+  for (let i = 0; i < datapoints2.length; i++) {
+    sum += parseInt(datapoints2[i], 10); //don't forget to add the base
+  }
+
+  let avg = sum / datapoints2.length;
+
+  return {
+    trendsName: title,
+    speedName: "Speed",
+    min: round(Math.min(...datapoints2)),
+    max: round(Math.max(...datapoints2)),
+    yMax: 100,
+    avg: round(avg),
+    datapoints: datapoints,
+    dataPointsY1: zAxisDataPoints,
+    dataPointsY2: datapoints2,
+    labels: labels,
+    chartType: "LineGradient",
+    xLabel: title,
+    yLabel: "Time",
+    isGradientOpposite: isGradientOpposite ?? false,
+  };
+}
+
+function buildBearingChart(data, key, key2, title, isGradientOpposite) {
+  let labels = [];
+  let datapoints = [];
+  let datapoints2 = [];
+  let zAxisDataPoints = [];
+  let count = 0;
+  if (data) {
+    for (let item of data) {
+      const objectData = JSON.parse(item["jsondata"]);
+      const firstKey = Object.keys(objectData)[0];
+      const moduleData = objectData[firstKey];
+      // labels.push(firstKey);
+      const date = new Date(firstKey);
+      let day = days[date.getDay()];
+      let hour = date.getHours();
+      let mint = date.getMinutes();
+      let dateformat = day + "," + hour + ":" + mint;
+
+      labels.push(dateformat);
+
+      zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
+      const valueObject = moduleData[key];
+      const valueObject2 = moduleData[key2];
+      datapoints.push(round(valueObject?.valueInHealth || 0));
+      datapoints2.push(round(valueObject2?.valueInHealth || 0));
+
+      count++;
+    }
+  }
+  let sum = 0;
+  for (let i = 0; i < datapoints2.length; i++) {
+    sum += parseInt(datapoints2[i], 10); //don't forget to add the base
+  }
+
+  let avg = sum / datapoints2.length;
+
+  return {
+    trendsName: title,
+    speedName: "Speed",
+    min: round(Math.min(...datapoints2)),
+    max: round(Math.max(...datapoints2)),
+    yMax: 100,
+    avg: round(avg),
+    datapoints: datapoints,
+    dataPointsY1: zAxisDataPoints,
+    dataPointsY2: datapoints2,
+    labels: labels,
+    chartType: "LineGradient",
+    xLabel: title,
+    yLabel: "Time",
+    isGradientOpposite: isGradientOpposite ?? false,
+  };
 }

@@ -30,23 +30,34 @@ ChartJS.register(
 const zoomOptions = {
   pan: {
     enabled: true,
-    mode: "x" as "x"
+    mode: "x" as "x",
   },
   zoom: {
     wheel: {
-      enabled: true
+      enabled: true,
     },
     pinch: {
-      enabled: true
+      enabled: true,
     },
-    mode: "x" as "x"
-  }
+    mode: "x" as "x",
+  },
 };
 
-export default function LineGradient( {minValue,trendsName, speedName, isGradientOpposite, maxValue, avgValue, datapoints, dataPointsY1, labels}: any) {
+export default function LineGradient({
+  minValue,
+  trendsName,
+  speedName,
+  isGradientOpposite,
+  maxValue,
+  avgValue,
+  datapoints,
+  dataPointsY1,
+  dataPointsY2,
+  labels,
+}: any) {
   const chartRef = useRef<any>(null);
   let width: any, height: any, gradient: any;
-  function getGradient(ctx: any, chartArea: any, isGradientOpposite:boolean) {
+  function getGradient(ctx: any, chartArea: any, isGradientOpposite: boolean) {
     const chartWidth = chartArea.right - chartArea.left;
     const chartHeight = chartArea.bottom - chartArea.top;
     if (!gradient || width !== chartWidth || height !== chartHeight) {
@@ -61,7 +72,7 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
         chartArea.top
       );
       gradient.addColorStop(isGradientOpposite ? 1 : 0, "#02B271");
-      gradient.addColorStop( 0.6, "#FFA326");
+      gradient.addColorStop(0.6, "#FFA326");
       gradient.addColorStop(isGradientOpposite ? 0 : 1, "#FF0000");
     }
 
@@ -78,54 +89,70 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
         cubicInterpolationMode: "monotone" as const,
         tension: 1,
         pointBackgroundColor: "black",
-        yAxisID: 'y1',
+        yAxisID: "y1",
         hidden: false,
       },
+
       {
         label: trendsName,
         data: datapoints,
         borderColor: "red",
         pointBackgroundColor: "#1D4580",
-        yAxisID: 'y',
+        yAxisID: "y",
+      },
+      {
+        label: trendsName,
+        data: datapoints,
+        borderColor: "yellow",
+        pointBackgroundColor: "#1D4580",
+        yAxisID: "y",
+        hidden: datapoints.length,
       },
     ],
   };
-  
-  const plugins = [{
-    id: 'custom_canvas_background_color',
-    type: 'line',
-    beforeDraw: function(chart:any, args: any, options:any) {
-      const ctx = chart.ctx;
-      const canvas = chart.canvas;
-      const chartArea = chart.chartArea;
-      const chartWidth = chartArea.right - chartArea.left;
-      const chartHeight = chartArea.bottom - chartArea.top;
-      var gradientBack = canvas.getContext("2d").createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
 
-      if(!isGradientOpposite) {
-      gradientBack.addColorStop(1, "#ffffff");
-      gradientBack.addColorStop(0.41, "#ffffff");
-      gradientBack.addColorStop(0.40, "#02B271");
-      gradientBack.addColorStop(0, "#02B271");
-      }else {
-     
-         gradientBack.addColorStop(1, "#02B271");
-      gradientBack.addColorStop(0.61, "#02B271");
-      gradientBack.addColorStop(0.60, "#ffbf00");
-      gradientBack.addColorStop(0.31, "#ffbf00");
-        gradientBack.addColorStop(0.30, "#ff0000b3");
-        gradientBack.addColorStop(0, "#ff0000b3");
-      }
-      ctx.fillStyle = gradientBack;
-      ctx.fillRect(chartArea.left, chartArea.bottom,
-        chartArea.right - chartArea.left, chartArea.top - chartArea.bottom);
+  const plugins = [
+    {
+      id: "custom_canvas_background_color",
+      type: "line",
+      beforeDraw: function (chart: any, args: any, options: any) {
+        const ctx = chart.ctx;
+        const canvas = chart.canvas;
+        const chartArea = chart.chartArea;
+        const chartWidth = chartArea.right - chartArea.left;
+        const chartHeight = chartArea.bottom - chartArea.top;
+        var gradientBack = canvas
+          .getContext("2d")
+          .createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+
+        if (!isGradientOpposite) {
+          gradientBack.addColorStop(1, "#ffffff");
+          gradientBack.addColorStop(0.41, "#ffffff");
+          gradientBack.addColorStop(0.4, "#02B271");
+          gradientBack.addColorStop(0, "#02B271");
+        } else {
+          gradientBack.addColorStop(1, "#02B271");
+          gradientBack.addColorStop(0.61, "#02B271");
+          gradientBack.addColorStop(0.6, "#ffbf00");
+          gradientBack.addColorStop(0.31, "#ffbf00");
+          gradientBack.addColorStop(0.3, "#ff0000b3");
+          gradientBack.addColorStop(0, "#ff0000b3");
+        }
+        ctx.fillStyle = gradientBack;
+        ctx.fillRect(
+          chartArea.left,
+          chartArea.bottom,
+          chartArea.right - chartArea.left,
+          chartArea.top - chartArea.bottom
+        );
+      },
     },
-  }];
+  ];
   const options = {
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
-      mode: 'index' as 'index',
+      mode: "index" as "index",
       intersect: false,
     },
     stacked: false,
@@ -136,84 +163,83 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
           font: {
             family: 'Poppins,Helvetica,"sans-serif',
             size: 14,
-          }
-        }
+          },
+        },
       },
       title: {
         display: false,
       },
       zoom: zoomOptions,
-      
     },
     animation: {
-      duration: 0
+      duration: 0,
     },
     scales: {
       x: {
         ticks: {
-            maxRotation: 60,
-            minRotation: 60,
-            font: {
-              family: 'Poppins,Helvetica,"sans-serif',
-              size: 12,
-              whiteSpace: 'normal',
-            }
+          maxRotation: 60,
+          minRotation: 60,
+          font: {
+            family: 'Poppins,Helvetica,"sans-serif',
+            size: 12,
+            whiteSpace: "normal",
+          },
         },
         title: {
-          text: 'Time',
+          text: "Time",
           display: true,
           font: {
             size: 14,
             family: 'Poppins,Helvetica,"sans-serif',
-            weight: 'bold'
-          }
-        }
-    },
+            weight: "bold",
+          },
+        },
+      },
       y: {
         beginAtZero: true,
-        type: 'linear' as const,
+        type: "linear" as const,
         display: true,
-        position: 'left' as const,
+        position: "left" as const,
         max: maxValue || 100,
         ticks: {
           font: {
             family: 'Poppins,Helvetica,"sans-serif',
             size: 12,
-          }
-      },
+          },
+        },
         title: {
           text: trendsName,
           display: true,
           font: {
             size: 14,
             family: 'Poppins,Helvetica,"sans-serif',
-            weight: 'bold'
-          }
+            weight: "bold",
+          },
         },
       },
       y1: {
-        ticks: { 
+        ticks: {
           font: {
             family: 'Poppins,Helvetica,"sans-serif',
             size: 12,
           },
-          callback: (value: any)=> {
+          callback: (value: any) => {
             return value;
-          }
+          },
         },
         beginAtZero: true,
-        type: 'linear' as const,
+        type: "linear" as const,
         display: true,
         max: round(Math.max(...dataPointsY1)),
-        position: 'right' as const,
+        position: "right" as const,
         title: {
           text: speedName || trendsName,
           display: true,
           font: {
             size: 14,
             family: 'Poppins,Helvetica,"sans-serif',
-            weight: 'bold'
-          }
+            weight: "bold",
+          },
         },
         grid: {
           drawOnChartArea: false,
@@ -221,5 +247,7 @@ export default function LineGradient( {minValue,trendsName, speedName, isGradien
       },
     },
   };
-  return (<Line ref={chartRef} options={options} data={data} plugins={plugins}    />);
+  return (
+    <Line ref={chartRef} options={options} data={data} plugins={plugins} />
+  );
 }

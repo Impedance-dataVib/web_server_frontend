@@ -40,6 +40,7 @@ export default function Trends({ trends, fullScreen }: any) {
                 <LineGradient
                   maxValue={val?.yMax}
                   dataPointsY1={val?.dataPointsY1}
+                  dataPointsY2={val?.dataPointsY2}
                   trendsName={val?.trendsName}
                   speedName={val.speedName}
                   datapoints={val?.datapoints}
@@ -50,7 +51,7 @@ export default function Trends({ trends, fullScreen }: any) {
                 <BarChart datapoints={val?.datapoints} labels={val?.labels} maxValue={val?.yMax}/>
               ) : (
                 <></>
-              ))}
+              )}
             </Box>
             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
               {val?.chartType === "LineGradient" && (
