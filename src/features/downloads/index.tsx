@@ -155,6 +155,16 @@ const DownloadPage = () => {
       .catch((error) => console.error(error));
   }, []);
   console.log(showData);
+  const status = (data: any) => {
+    if (data === "Completed") {
+      return "green";
+    } else if (data === "download-completed") {
+      return "grey";
+    } else if (data === "Pending") {
+      return "orange";
+    }
+    return "#ff0000";
+  };
   return (
     <Box>
       <Typography variant="h5">
@@ -402,10 +412,10 @@ const DownloadPage = () => {
                 <TableCell align="center">Request ID</TableCell>
                 <TableCell align="center">Request Time</TableCell>
                 <TableCell align="center">Process Complete Time</TableCell>
-                <TableCell align="center"> Status</TableCell>
                 <TableCell align="center"> Start Date</TableCell>
                 <TableCell align="center"> End Date</TableCell>
                 <TableCell align="center"> Report Type</TableCell>
+                <TableCell align="center"> Status</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -421,7 +431,6 @@ const DownloadPage = () => {
                   <TableCell align="center">
                     {row.process_complete_time}
                   </TableCell>
-                  <TableCell align="center">{row.status}</TableCell>
                   <TableCell align="center">
                     {JSON.parse(row.filter_data).startDate}
                   </TableCell>
@@ -430,6 +439,12 @@ const DownloadPage = () => {
                     {JSON.parse(row.filter_data).endDate}
                   </TableCell>
                   <TableCell align="center">{row.report_type}</TableCell>
+                  <TableCell
+                    sx={{ bgcolor: status(row.status), color: "white" }}
+                    align="center"
+                  >
+                    {row.status}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
