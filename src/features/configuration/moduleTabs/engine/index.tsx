@@ -262,6 +262,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       engine_useInjectionDissymetryDeviation: "",
       highPass: "",
       has_overwrite_parameters:false,
+      max_pressure:""
     };
   };
 

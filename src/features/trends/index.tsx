@@ -153,12 +153,12 @@ const TrendsPage = () => {
           <Typography component={"div"} sx={{ p: 1, fontSize: "16px" }}>
             <span>
               Start Date:
-              {dateRangeValues?.startDate.toISOString().split("T")[0]}
+              {dateRangeValues?.startDate.toDateString()}
             </span>
           </Typography>
           <Typography component={"div"} sx={{ p: 1, fontSize: "16px" }}>
             <span>
-              End Date: {dateRangeValues?.endDate.toISOString().split("T")[0]}
+              End Date: {dateRangeValues?.endDate.toDateString()}
             </span>
           </Typography>
           <Button

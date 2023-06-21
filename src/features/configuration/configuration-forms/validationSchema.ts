@@ -112,8 +112,8 @@ export const torqueValidationSchema = yup.object({
     )
     .test(
       "less than 0.05",
-      "Min Volt must be less than 0.05",
-      (value) => value < 0.05
+      "Min Volt must be less than or equal to 0.05",
+      (value) => value <= 0.05
     ),
   recording_period: yup
     .number()
@@ -221,8 +221,8 @@ export const motorValidationSchema = yup.object({
     )
     .test(
       "less than 0.05",
-      "Min Volt must be less than 0.05",
-      (value) => value < 0.05
+      "Min Volt must be less than or equal to 0.05",
+      (value) => value <= 0.05
     ),
   recording_period: yup
     .number()
@@ -239,7 +239,8 @@ export const motorValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ).test(
+    )
+    .test(
       "Recording length should be between 1 & 200s",
       "Recording length should be between 1 & 200s",
       (value) => value > 1 && value < 200
@@ -310,8 +311,8 @@ export const turbineValidationSchema = yup.object({
     )
     .test(
       "less than 0.05",
-      "Min Volt must be less than 0.05",
-      (value) => value < 0.05
+      "Min Volt must be less than or equal to 0.05",
+      (value) => value <= 0.05
     ),
   recording_period: yup
     .number()
@@ -328,7 +329,8 @@ export const turbineValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ).test(
+    )
+    .test(
       "Recording length should be between 1 & 200s",
       "Recording length should be between 1 & 200s",
       (value) => value > 1 && value < 200
@@ -399,8 +401,8 @@ export const bearingValidationSchema = yup.object({
     )
     .test(
       "less than 0.05",
-      "Min Volt must be less than 0.05",
-      (value) => value < 0.05
+      "Min Volt must be less than or equal to 0.005",
+      (value) => value <= 0.005
     ),
   recording_period: yup
     .number()
@@ -417,7 +419,8 @@ export const bearingValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ).test(
+    )
+    .test(
       "Recording length should be between 1 & 200s",
       "Recording length should be between 1 & 200s",
       (value) => value > 1 && value < 200
@@ -704,6 +707,15 @@ export const engineValidationSchema = yup.object({
   fuel: yup.string().required("This is a required field"),
   type: yup.string().required("This is a required field"),
   no_of_strokes: yup.string().required("This is a required field"),
+  max_pressure: yup
+    .number()
+    .required("This is a required field")
+    .test(
+      "Is positive?",
+      "ERROR: The number must be in whole number and greater than 0!",
+
+      (value) => value > 0
+    ),
   no_of_cylinders: yup
     .number()
     .required("This is a required field")
@@ -793,8 +805,8 @@ export const engineValidationSchema = yup.object({
     )
     .test(
       "less than 0.05",
-      "Min Volt must be less than 0.05",
-      (value) => value < 0.05
+      "Min Volt must be less than or equal to 0.05",
+      (value) => value <= 0.05
     ),
   recording_period: yup
     .number()
@@ -811,7 +823,8 @@ export const engineValidationSchema = yup.object({
       "Is positive?",
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
-    ).test(
+    )
+    .test(
       "Recording length should be between 1 & 200s",
       "Recording length should be between 1 & 200s",
       (value) => value > 1 && value < 200

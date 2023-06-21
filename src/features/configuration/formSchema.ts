@@ -348,6 +348,12 @@ const formSchema = {
         type: "text",
         helperNote: "Length of Sample Collection (in seconds)",
       },
+      {
+        name: "Max Pressure",
+        label: "max_pressure",
+        type:'text',
+        helperNote: "define the max pressure",
+      }
     ],
     "Advanced Parameters": [
       {

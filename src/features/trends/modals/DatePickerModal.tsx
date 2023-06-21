@@ -36,7 +36,9 @@ const DateRangePickerModal = memo(
             <Box>
               <DateRange
                 ranges={[dateRangeValues]}
+                maxDate={new Date()}
                 onChange={(e: any) => {
+                  console.log(e.selection);
                   setDateRangeValues(e.selection);
                 }}
               ></DateRange>
