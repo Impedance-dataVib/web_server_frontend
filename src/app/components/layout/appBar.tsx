@@ -56,8 +56,6 @@ const DrawerAppBar = () => {
       })
       .catch((err: any) => console.error(err));
   };
-  console.log(module);
-  console.log(filterData);
   useEffect(() => {
     getNotification();
     const interval = setInterval(() => {
@@ -102,9 +100,7 @@ const DrawerAppBar = () => {
       .catch((err: any) => console.error(err));
 
     //for rerender
-    setNotificationType("");
   };
-  console.log("appbar renderd");
 
   const currentTime = () => {
     return CommonApi.getLicenseInfo()

@@ -36,7 +36,7 @@ const DownloadPage = () => {
   const initial = "";
   const [dataSelection, setDataSelection] = useState(initial);
   const [asset, setAsset] = useState(initial);
-  const [period, setPeriod] = useState(initial);
+  // const [period, setPeriod] = useState(initial);
   const [reportType, setReportType] = useState(initial);
   const [assetModule, setAssetModule] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +51,7 @@ const DownloadPage = () => {
   });
   const [showData, setShowData] = useState([]);
 
-  // console.log(dateRangeValues);
+  console.log(dateRangeValues.startDate, dateRangeValues.endDate);
   useEffect(() => {
     setPeriodError(false);
   }, [dateRangeValues]);
@@ -70,11 +70,6 @@ const DownloadPage = () => {
     setAssetError(false);
   };
 
-  // const periodHandler = (e: SelectChangeEvent) => {
-  //   setPeriod(e.target.value);
-  //   setPeriodError(false);
-  // };
-
   const reportTypeHandler = (e: SelectChangeEvent) => {
     setReportType(e.target.value);
     setReportTypeError(false);
@@ -83,7 +78,6 @@ const DownloadPage = () => {
   const downloadOptionHandler = (e: SelectChangeEvent) => {
     setDataSelection(e.target.value);
     setAsset(initial);
-    // setPeriod(initial);
     setDateRangeValues({ startDate: "", endDate: "", key: "selection" });
     setReportType(initial);
     setAssetError(false);
@@ -94,7 +88,6 @@ const DownloadPage = () => {
   const cancelHandler = () => {
     setDataSelection(initial);
     setAsset(initial);
-    // setPeriod(initial);
     setDateRangeValues({ startDate: "", endDate: "", key: "selection" });
 
     setReportType(initial);
@@ -114,18 +107,11 @@ const DownloadPage = () => {
       setReportTypeError(true);
       return;
     }
-    console.log({
-      type: dataSelection,
-      module_id: asset,
-      period: dateRangeValues,
-      report_type: reportType,
-    });
 
     setIsLoading(true);
     DownloadInfoApi.postDownloadInfo({
       type: dataSelection,
       module_id: asset,
-      // period: dateRangeValues,
       startDate: dateRangeValues.startDate,
       endDate: dateRangeValues.endDate,
       report_type: reportType,
@@ -136,10 +122,10 @@ const DownloadPage = () => {
           message: `Download request is posted, once ready you will get notified`,
           variant: "warning",
         });
+        show();
       })
       .catch((error) => {
         console.log(error);
-
         setIsLoading(false);
         enqueueSnackbar({
           message: error.Message,
@@ -147,14 +133,17 @@ const DownloadPage = () => {
         });
       });
   };
-
-  useEffect(() => {
+  //get all the data of table
+  const show = () => {
     api
       .get("/download/get-all.php")
       .then((res: any) => setShowData(res.data.data))
       .catch((error) => console.error(error));
+  };
+  useEffect(() => {
+    show();
   }, []);
-  console.log(showData);
+  //background color of status in the table
   const status = (data: any) => {
     if (data === "Completed") {
       return "green";

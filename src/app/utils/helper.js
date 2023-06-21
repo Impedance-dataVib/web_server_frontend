@@ -48,6 +48,13 @@ export function buildSoketData(response, modelType, formData) {
         "valueInHealth"
       )
     );
+    globalIndicator.push(
+      buildIndicatorData(
+        "Increase in Fuel Consumption",
+        data["PowerLoss"],
+        "value"
+      )
+    );
   } else if (modelType === "Torque") {
     isAlert = false;
 
@@ -221,7 +228,7 @@ function buildPeekPressureChart(data, firingOrder, maxPressure) {
     chartType: "bar",
     xLabel: "Peek Pressure",
     yLabel: "Cylinders",
-    yMax: round(maxPressure)
+    yMax: round(maxPressure),
   };
   return increase_fuel_consumption;
 }
@@ -296,7 +303,11 @@ export function buildData(response) {
     trends.push(increase_fuel_consumption);
     const peakPressure = data["Pressure"];
 
-    const peak_pressure = buildPeekPressureChart(peakPressure, firingOrder, from_data["max_pressure"]);
+    const peak_pressure = buildPeekPressureChart(
+      peakPressure,
+      firingOrder,
+      from_data["max_pressure"]
+    );
     trends.push(peak_pressure);
     const mechanical_health = buildLineGradientChart(
       historical_data,
@@ -352,8 +363,8 @@ export function buildData(response) {
       const steamTurbineChart2 = buildTurbineChart(
         historical_data,
         "BearingStatus",
-        null,
-        " Bearing status, Stability"
+        "TurbineCoupling",
+        "Bearing status, Coupling"
       );
       trends.push(steamTurbineChart2);
       return {
@@ -374,9 +385,9 @@ export function buildData(response) {
 
       const gasTurbineChart2 = buildTurbineChart(
         historical_data,
-        "BearingStatusGas",
-        null,
-        " Bearing status, Combustion Kit"
+        "BearingStatus",
+        "CombustionKit",
+        "Bearing status, Combustion Kit"
       );
       trends.push(gasTurbineChart2);
       return {
@@ -393,16 +404,16 @@ export function buildData(response) {
     const motorChart1 = buildMotorChart(
       historical_data,
       "MElectromag",
-      "BladeStatus",
+      null,
       "Electromagnetic Stress"
     );
     trends.push(motorChart1);
 
     const motorChart2 = buildMotorChart(
       historical_data,
-      "BearingStatus",
-      null,
-      "  Bearing status, Stability"
+      "MBearing",
+      "MStressStability",
+      "Bearing status, Stability"
     );
     trends.push(motorChart2);
 
@@ -418,17 +429,17 @@ export function buildData(response) {
     let trends = [];
     const bearingChart1 = buildBearingChart(
       historical_data,
-      "RegularityDeviation",
-      "BladeStatus",
-      "Regularity Deviation, Shaft Health"
+      "GlobalMixed",
+      null,
+      "Global(Unbalance/Alignment/Looseness)"
     );
     trends.push(bearingChart1);
 
     const bearingChart2 = buildBearingChart(
       historical_data,
-      "BearingStatus",
+      "BearingGlobal",
       null,
-      " Bearing status, Stability"
+      " Mechanical health, Stability"
     );
     trends.push(bearingChart2);
     return {
@@ -1835,25 +1846,26 @@ function buildTurbineChart(data, key, key2, title, isGradientOpposite) {
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
-      const valueObject2 = moduleData[key2];
       datapoints.push(round(valueObject?.valueInHealth || 0));
-      datapoints2.push(round(valueObject2?.valueInHealth || 0));
-
+      if (key2) {
+        const valueObject2 = moduleData[key2];
+        datapoints2.push(round(valueObject2?.valueInHealth || 0));
+      }
       count++;
     }
   }
   let sum = 0;
-  for (let i = 0; i < datapoints2.length; i++) {
-    sum += parseInt(datapoints2[i], 10); //don't forget to add the base
+  for (let i = 0; i < datapoints.length; i++) {
+    sum += parseInt(datapoints[i], 10); //don't forget to add the base
   }
 
-  let avg = sum / datapoints2.length;
+  let avg = sum / datapoints.length;
 
   return {
     trendsName: title,
     speedName: "Speed",
-    min: round(Math.min(...datapoints2)),
-    max: round(Math.max(...datapoints2)),
+    min: round(Math.min(...datapoints)),
+    max: round(Math.max(...datapoints)),
     yMax: 100,
     avg: round(avg),
     datapoints: datapoints,
@@ -1889,25 +1901,26 @@ function buildMotorChart(data, key, key2, title, isGradientOpposite) {
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
-      const valueObject2 = moduleData[key2];
       datapoints.push(round(valueObject?.valueInHealth || 0));
-      datapoints2.push(round(valueObject2?.valueInHealth || 0));
-
+      if (key2) {
+        const valueObject2 = moduleData[key2];
+        datapoints2.push(round(valueObject2?.valueInHealth || 0));
+      }
       count++;
     }
   }
   let sum = 0;
-  for (let i = 0; i < datapoints2.length; i++) {
-    sum += parseInt(datapoints2[i], 10); //don't forget to add the base
+  for (let i = 0; i < datapoints.length; i++) {
+    sum += parseInt(datapoints[i], 10); //don't forget to add the base
   }
 
-  let avg = sum / datapoints2.length;
+  let avg = sum / datapoints.length;
 
   return {
     trendsName: title,
     speedName: "Speed",
-    min: round(Math.min(...datapoints2)),
-    max: round(Math.max(...datapoints2)),
+    min: round(Math.min(...datapoints)),
+    max: round(Math.max(...datapoints)),
     yMax: 100,
     avg: round(avg),
     datapoints: datapoints,
@@ -1943,25 +1956,25 @@ function buildBearingChart(data, key, key2, title, isGradientOpposite) {
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
-      const valueObject2 = moduleData[key2];
       datapoints.push(round(valueObject?.valueInHealth || 0));
-      datapoints2.push(round(valueObject2?.valueInHealth || 0));
-
+      if (key2) {
+        const valueObject2 = moduleData[key2];
+        datapoints2.push(round(valueObject2?.valueInHealth || 0));
+      }
       count++;
     }
   }
   let sum = 0;
-  for (let i = 0; i < datapoints2.length; i++) {
-    sum += parseInt(datapoints2[i], 10); //don't forget to add the base
+  for (let i = 0; i < datapoints.length; i++) {
+    sum += parseInt(datapoints[i], 10); //don't forget to add the base
   }
 
-  let avg = sum / datapoints2.length;
-
+  let avg = sum / datapoints.length;
   return {
     trendsName: title,
     speedName: "Speed",
-    min: round(Math.min(...datapoints2)),
-    max: round(Math.max(...datapoints2)),
+    min: round(Math.min(...datapoints)),
+    max: round(Math.max(...datapoints)),
     yMax: 100,
     avg: round(avg),
     datapoints: datapoints,
