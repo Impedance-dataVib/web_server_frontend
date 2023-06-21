@@ -8,8 +8,10 @@ export default function Trends({ trends, fullScreen }: any) {
   const [trendsData, setTrendsData] = useState(trends);
 
   useEffect(() => {
-    if(!fullScreen) {
-      setTrendsData(() => trends.filter((v:any) => v.chartType === "LineGradient"))
+    if (!fullScreen) {
+      setTrendsData(() =>
+        trends.filter((v: any) => v.chartType === "LineGradient")
+      );
     } else {
       setTrendsData(trends);
     }
@@ -47,8 +49,12 @@ export default function Trends({ trends, fullScreen }: any) {
                   labels={val?.labels}
                   isGradientOpposite={val?.isGradientOpposite}
                 />
-              ) : (fullScreen ? (
-                <BarChart datapoints={val?.datapoints} labels={val?.labels} maxValue={val?.yMax}/>
+              ) : fullScreen ? (
+                <BarChart
+                  datapoints={val?.datapoints}
+                  labels={val?.labels}
+                  maxValue={val?.yMax}
+                />
               ) : (
                 <></>
               )}
