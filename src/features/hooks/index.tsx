@@ -21,6 +21,8 @@ export const useGetAllTrends = (
       };
       const moduleType = allModules.find((val: any) => val?.id === id);
       setIsLoading(true);
+      setIsError(false);
+      setErrorMessage('');
       const result = await getAllTrendsData(payload);
       setData(buildTrendData(result.data.data, moduleType?.module_type));
       setIsLoading(false);
