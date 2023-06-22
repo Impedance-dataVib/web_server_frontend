@@ -5,29 +5,35 @@ import { buildTrendData, convertDate } from "src/app/utils/helper";
 export const useGetAllTrends = (
   id: string,
   dateRangeValues: any,
+  rpmRange: any,
   allModules: any
 ) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<any>([]);
   const [isError, setIsError] = useState(false);
-  const [errorMessage,  setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const getAllTrends = async (id: string) => {
+  const getAllTrends = async (
+    id: string,
+    dateRangeValues: any,
+    rpmRange: any,
+    allModules: any
+  ) => {
     try {
       const payload = {
         start_date: convertDate(dateRangeValues?.startDate),
         end_date: convertDate(dateRangeValues?.endDate),
+        ...rpmRange,
         module_id: id,
       };
       const moduleType = allModules.find((val: any) => val?.id === id);
       setIsLoading(true);
       setIsError(false);
-      setErrorMessage('');
+      setErrorMessage("");
       const result = await getAllTrendsData(payload);
       setData(buildTrendData(result.data.data, moduleType?.module_type));
       setIsLoading(false);
-    } catch (e:any) {
-      
+    } catch (e: any) {
       setErrorMessage(e?.Message);
       setIsError(true);
       setData([]);
@@ -38,7 +44,7 @@ export const useGetAllTrends = (
 
   useEffect(() => {
     if (id && id !== "") {
-      getAllTrends(id);
+      getAllTrends(id, dateRangeValues, rpmRange, allModules);
     }
   }, [id.length, dateRangeValues.endDate]);
   return { isLoading, data, isError, getAllTrends, errorMessage, setIsError };

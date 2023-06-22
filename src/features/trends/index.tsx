@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Alert,
   AlertTitle,
@@ -18,13 +18,15 @@ import TextField from "@mui/material/TextField";
 import { useGetAllTrends, useGetAllModules } from "../hooks";
 import FullScreenLoader from "../../app/components/fullscreen-loader";
 import DatePickerModal from "./modals/DatePickerModal";
-
+import DateRangeIcon from "@mui/icons-material/DateRange";
+import SpeedIcon from "@mui/icons-material/Speed";
+import dateFormat from "../../app/utils/dateFormat";
+import RPMRangeModal from "./modals/RPMRangeModal";
 const TrendsPage = () => {
   const [options, setOption] = useState([]);
   const [value, setValue] = React.useState<string[]>([]);
   let startDate = new Date();
   startDate.setDate(startDate.getDate() - 6);
-  const endDate = new Date();
   const { data: allModules } = useGetAllModules();
   const [dateRangeValues, setDateRangeValues] = useState<any>({
     endDate: new Date(),
@@ -33,16 +35,27 @@ const TrendsPage = () => {
   });
 
   const [moduleId, setModuleId] = useState<string>("");
-  const { data, isLoading, getAllTrends, errorMessage, isError, setIsError } = useGetAllTrends(
-    moduleId,
-    dateRangeValues,
-    allModules
-  );
+  const [rpmRange, setRPMRange] = useState<any>({ rpm_min: 0, rpm_max: 0 });
+  const [openRpmModal, setOpenRpmModal] = useState(false);
   const [toggleDatePicker, setToggleDatePicker] = useState(false);
+  const { data, isLoading, getAllTrends, errorMessage, isError, setIsError } =
+    useGetAllTrends(moduleId, dateRangeValues, rpmRange, allModules);
 
   const assetHandler = (e: any) => {
     setModuleId(e.target.value);
   };
+
+  const calculatedButtonDate = useMemo(() => {
+    return `${dateFormat(dateRangeValues.startDate)}-${dateFormat(
+      dateRangeValues.endDate
+    )}`;
+  }, [dateRangeValues]);
+
+  const calculateButtonRPM = useMemo(() => {
+    const min = rpmRange.rpm_min > 0 ? `${rpmRange.rpm_min}RPM` : "Min RPM";
+    const max = rpmRange.rpm_max > 0 ? `${rpmRange.rpm_max}RPM` : "Max RPM";
+    return `${min}-${max}`;
+  }, [rpmRange]);
 
   useEffect(() => {
     if (allModules.length > 0 && allModules) {
@@ -52,9 +65,9 @@ const TrendsPage = () => {
 
   useEffect(() => {
     if (moduleId && moduleId !== "") {
-      getAllTrends(moduleId);
+      getAllTrends(moduleId, dateRangeValues, rpmRange, allModules);
     }
-  }, [moduleId]);
+  }, [moduleId, dateRangeValues, rpmRange, allModules]);
 
   useEffect(() => {
     if (data?.dataSet && data?.dataSet.length > 0) {
@@ -76,15 +89,17 @@ const TrendsPage = () => {
             Trends
           </Typography>
         </Box>
-        <Box
+        <Grid
           sx={{
             display: "flex",
             p: 1,
-            justifyContent: "flex-start",
+            justifyContent: "flex-end",
             marginRight: 5,
           }}
+          container
+          spacing={1}
         >
-          <Box sx={{ ml: 2 }}>
+          <Grid item>
             <Autocomplete
               multiple
               disableClearable
@@ -105,7 +120,7 @@ const TrendsPage = () => {
                   />
                 ))
               }
-              sx={{ width: 500 }}
+              sx={{ width: "12rem" }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -114,67 +129,73 @@ const TrendsPage = () => {
                 />
               )}
             />
-          </Box>
-          <FormControl sx={{ py: 0, width: "110px", ml: 2 }}>
-            <Select
-              value={moduleId}
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => setToggleDatePicker(true)}
               sx={{
                 height: "3.0rem",
-                color: "#1D4580",
-                width: "8rem",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#1D4580",
-                },
-                "& .MuiSvgIcon-root": {
-                  color: "#1D4580",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#1D4580",
-                  borderWidth: "0.15rem",
-                },
               }}
-              name="asset"
-              onChange={assetHandler}
-              autoWidth
-              size="medium"
+              startIcon={<DateRangeIcon />}
             >
-              {allModules?.map(({ id, name }: any) => (
-                <MenuItem value={id}>
-                  <Typography variant="body2" color="#1D4580">
-                    {name}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
+              {calculatedButtonDate}
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => setOpenRpmModal(true)}
+              sx={{
+                height: "3.0rem",
+              }}
+              startIcon={<SpeedIcon />}
+            >
+              {calculateButtonRPM}
+            </Button>
+          </Grid>
+          <Grid item>
+            <FormControl sx={{ py: 0 }}>
+              <Select
+                value={moduleId}
+                sx={{
+                  height: "3.0rem",
+                  color: "#1D4580",
+                  width: "10rem",
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#1D4580",
+                  },
+                  "& .MuiSvgIcon-root": {
+                    color: "#1D4580",
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#1D4580",
+                    borderWidth: "0.15rem",
+                  },
+                }}
+                name="asset"
+                onChange={assetHandler}
+                autoWidth
+                size="medium"
+              >
+                {allModules?.map(({ id, name }: any) => (
+                  <MenuItem value={id}>
+                    <Typography variant="body2" color="#1D4580">
+                      {name}
+                    </Typography>
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", marginRight: 3 }}>
-        <Box sx={{ ml: 2, display: "flex", flexDirection: "row" }}>
-          <Typography component={"div"} sx={{ p: 1, fontSize: "16px" }}>
-            <span>
-              Start Date:
-              {dateRangeValues?.startDate.toDateString()}
-            </span>
-          </Typography>
-          <Typography component={"div"} sx={{ p: 1, fontSize: "16px" }}>
-            <span>
-              End Date: {dateRangeValues?.endDate.toDateString()}
-            </span>
-          </Typography>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={() => setToggleDatePicker(true)}
-            sx={{
-              height: "3.0rem",
-            }}
-          >
-            Select Date Range
-          </Button>
-        </Box>
-      </Box>
-      {isError && errorMessage &&(
+      <Box
+        sx={{ display: "flex", justifyContent: "flex-end", marginRight: 3 }}
+      ></Box>
+      {isError && errorMessage && (
         <Box sx={{ my: 1 }}>
           <Alert
             sx={{ display: "flex" }}
@@ -209,6 +230,12 @@ const TrendsPage = () => {
         dateRangeValues={dateRangeValues}
         setDateRangeValues={setDateRangeValues}
       ></DatePickerModal>
+      <RPMRangeModal
+        open={openRpmModal}
+        onClose={() => setOpenRpmModal(false)}
+        rpmRange={rpmRange}
+        setRPMRange={setRPMRange}
+      ></RPMRangeModal>
     </Box>
   );
 };
