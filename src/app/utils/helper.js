@@ -447,7 +447,7 @@ export function buildData(response) {
     const bearingChart2 = buildBearingChart(
       historical_data,
       "BearingGlobal",
-      null,
+      "4KMixed",
       " Mechanical health, Stability"
     );
     trends.push(bearingChart2);
