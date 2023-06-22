@@ -56,15 +56,13 @@ export default function LineGradient({
   labels,
 }: any) {
   const chartRef = useRef<any>(null);
+  const datasetsName = trendsName.split(',');
 
-  useEffect(() => {
-    console.log(dataPointsY2);
-  }, [dataPointsY2]);
   const data = {
     labels: labels,
     datasets: [
       {
-        label: speedName || trendsName,
+        label: speedName,
         data: dataPointsY1,
         borderColor: "black",
         cubicInterpolationMode: "monotone" as const,
@@ -75,23 +73,26 @@ export default function LineGradient({
       },
 
       {
-        label: trendsName,
+        label: datasetsName[0],
         data: datapoints,
         borderColor: "red",
         pointBackgroundColor: "#1D4580",
         yAxisID: "y",
       },
+     
+    ],
+  };
+  if(dataPointsY2 && dataPointsY2.length) {
+    data.datasets.push(
       {
-        label: trendsName,
+        label: datasetsName[1] || datasetsName[0],
         data: dataPointsY2,
         borderColor: "yellow",
         pointBackgroundColor: "#1D4580",
         yAxisID: "y",
-        hidden: (dataPointsY2 || []).length,
-      },
-    ],
-  };
-
+      }
+    )
+  }
   const plugins = [
     {
       id: "custom_canvas_background_color",
