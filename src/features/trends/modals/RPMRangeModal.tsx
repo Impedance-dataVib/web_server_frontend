@@ -39,6 +39,7 @@ const RPMRangeModal = memo(({ open, onClose, rpmRange, setRPMRange }: any) => {
       <DialogContent>
         <Box sx={{ mt: 1 }}>
           <TextField
+            error={Boolean(formContext.errors.rpm_min)}
             id="rpm_min"
             name="rpm_min"
             label="RPM Minimum"
@@ -54,6 +55,7 @@ const RPMRangeModal = memo(({ open, onClose, rpmRange, setRPMRange }: any) => {
         </Box>
         <Box sx={{ mt: 1 }}>
           <TextField
+            error={Boolean(formContext.errors.rpm_min)}
             id="rpm_max"
             name="rpm_max"
             label="RPM Max"
