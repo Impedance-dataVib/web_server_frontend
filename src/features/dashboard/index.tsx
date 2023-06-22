@@ -142,7 +142,6 @@ const DashboardPage = () => {
         setWebSocketsData({});
         setTrendsData({});
         sendMessage(moduleTabs[activeModule].process_name);
-
         dashBoardApiCall(moduleTabs[activeModule].id);
         const interval = setInterval(() => {
           dashBoardApiCall(moduleTabs[activeModule].id);

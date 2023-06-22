@@ -255,7 +255,9 @@ export function buildData(response) {
         data["Compression"],
         "compression"
       );
-      cylinder_specific_indicators.push(compression);
+      if (compression) {
+        cylinder_specific_indicators.push(compression);
+      }
     }
     if (data?.Injection) {
       const injection_Condition = buildCompressionData(
@@ -264,7 +266,9 @@ export function buildData(response) {
         data["Injection"],
         "Injection Condition"
       );
-      cylinder_specific_indicators.push(injection_Condition);
+      if (injection_Condition) {
+        cylinder_specific_indicators.push(injection_Condition);
+      }
     }
     if (data?.Bearing) {
       const bearing_Condition = buildCompressionData(
@@ -273,7 +277,9 @@ export function buildData(response) {
         data["Bearing"],
         "Bearing Condition"
       );
-      cylinder_specific_indicators.push(bearing_Condition);
+      if (bearing_Condition) {
+        cylinder_specific_indicators.push(bearing_Condition);
+      }
     }
     if (data?.BearingBis) {
       const condition_of_cyl_moving_parts = buildCompressionData(
@@ -282,8 +288,9 @@ export function buildData(response) {
         data["BearingBis"],
         "Condition of cyl moving parts"
       );
-
-      cylinder_specific_indicators.push(condition_of_cyl_moving_parts);
+      if (condition_of_cyl_moving_parts) {
+        cylinder_specific_indicators.push(condition_of_cyl_moving_parts);
+      }
     }
     if (from_data["fuel"].includes("Gas")) {
       const miss_firing = buildCompressionData(
@@ -292,7 +299,9 @@ export function buildData(response) {
         data["Misfiring"],
         "Miss firing"
       );
-      cylinder_specific_indicators.push(miss_firing);
+      if (miss_firing) {
+        cylinder_specific_indicators.push(miss_firing);
+      }
     }
     let trends = [];
     const increase_fuel_consumption = buildLineGradientChart(
@@ -302,13 +311,14 @@ export function buildData(response) {
     );
     trends.push(increase_fuel_consumption);
     const peakPressure = data["Pressure"];
-
-    const peak_pressure = buildPeekPressureChart(
-      peakPressure,
-      firingOrder,
-      from_data["max_pressure"]
-    );
-    trends.push(peak_pressure);
+    if (peakPressure && parseInt(peakPressure["value"]) !== 0) {
+      const peak_pressure = buildPeekPressureChart(
+        peakPressure,
+        firingOrder,
+        from_data["max_pressure"]
+      );
+      trends.push(peak_pressure);
+    }
     const mechanical_health = buildLineGradientChart(
       historical_data,
       "MechanicalHealth",
@@ -501,7 +511,10 @@ function buildCompressionData(first, second, compressionData, graphLabel) {
   const showValue = 100 / first.length;
   const showSecondValue = 100 / second.length;
 
-  const cylinderHealth = compressionData["cylinderHealth"];
+  const cylinderHealth = compressionData?.cylinderHealth;
+  if (!cylinderHealth) {
+    return null;
+  }
   for (let i = 0; i < first.length; i++) {
     const item = first[i];
     const compression = cylinderHealth[i];
@@ -679,7 +692,6 @@ export function getCommaSepratedChannel(data, type) {
 function buildChannelName(channel) {
   return "CHANNEL" + channel.substr(channel.length - 1);
 }
-const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 function buildLineGradientChart(data, key, title, isGradientOpposite) {
   let labels = [];
@@ -691,14 +703,7 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
       const objectData = JSON.parse(item["jsondata"]);
       const firstKey = Object.keys(objectData)[0];
       const moduleData = objectData[firstKey];
-      // labels.push(firstKey);
-      const date = new Date(firstKey);
-      let day = days[date.getDay()];
-      let hour = date.getHours();
-      let mint = date.getMinutes();
-      let dateformat = day + "," + hour + ":" + mint;
-
-      labels.push(dateformat);
+      labels.push(getdate(firstKey));
 
       zAxisDataPoints.push("" + parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -1697,14 +1702,10 @@ function buildLineChart(data, key, title, isGradientOpposite) {
       const objectData = JSON.parse(item["jsondata"]);
       const firstKey = Object.keys(objectData)[0];
       const moduleData = objectData[firstKey];
-      // labels.push(firstKey);
-      const date = new Date(firstKey);
-      let day = days[date.getDay()];
-      let hour = date.getHours();
-      let mint = date.getMinutes();
-      let dateformat = day + "," + hour + ":" + mint;
-
-      labels.push(dateformat);
+      if (moduleData?.Status <= 0) {
+        continue;
+      }
+      labels.push(getdate(firstKey));
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -1835,14 +1836,7 @@ function buildTurbineChart(data, key, key2, title, isGradientOpposite) {
       const objectData = JSON.parse(item["jsondata"]);
       const firstKey = Object.keys(objectData)[0];
       const moduleData = objectData[firstKey];
-      // labels.push(firstKey);
-      const date = new Date(firstKey);
-      let day = days[date.getDay()];
-      let hour = date.getHours();
-      let mint = date.getMinutes();
-      let dateformat = day + "," + hour + ":" + mint;
-
-      labels.push(dateformat);
+      labels.push(getdate(firstKey));
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -1890,14 +1884,7 @@ function buildMotorChart(data, key, key2, title, isGradientOpposite) {
       const objectData = JSON.parse(item["jsondata"]);
       const firstKey = Object.keys(objectData)[0];
       const moduleData = objectData[firstKey];
-      // labels.push(firstKey);
-      const date = new Date(firstKey);
-      let day = days[date.getDay()];
-      let hour = date.getHours();
-      let mint = date.getMinutes();
-      let dateformat = day + "," + hour + ":" + mint;
-
-      labels.push(dateformat);
+      labels.push(getdate(firstKey));
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -1945,14 +1932,7 @@ function buildBearingChart(data, key, key2, title, isGradientOpposite) {
       const objectData = JSON.parse(item["jsondata"]);
       const firstKey = Object.keys(objectData)[0];
       const moduleData = objectData[firstKey];
-      // labels.push(firstKey);
-      const date = new Date(firstKey);
-      let day = days[date.getDay()];
-      let hour = date.getHours();
-      let mint = date.getMinutes();
-      let dateformat = day + "," + hour + ":" + mint;
-
-      labels.push(dateformat);
+      labels.push(getdate(firstKey));
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -1986,4 +1966,31 @@ function buildBearingChart(data, key, key2, title, isGradientOpposite) {
     yLabel: "Time",
     isGradientOpposite: isGradientOpposite ?? false,
   };
+}
+const month = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "June",
+  "July",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+function getdate(firstKey) {
+  const date = new Date(firstKey);
+  return (
+    month[date.getMonth()] +
+    " " +
+    date.getDate() +
+    ", " +
+    date.getHours() +
+    ":" +
+    date.getMinutes()
+  );
 }

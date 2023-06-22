@@ -142,7 +142,7 @@ const ModuleMonitoringPage = ({
           fullScreenContent={
             <GlobalIndicatorChart
               showDate={trendsData.alertUpdatedOn}
-              globalIndicator={moduleData?.globalIndicator|| []}
+              globalIndicator={moduleData?.globalIndicator || []}
               fullScreen={true}
               isTorqueModule={moduleType === "Torque"}
             />

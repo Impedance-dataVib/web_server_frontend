@@ -50,12 +50,15 @@ const DrawerAppBar = () => {
     DownloadInfoApi.getNotification()
       .then((res: any) => {
         setNotificationCount(res.data.count);
-        setNotificationType(res.data.report_type);
-        setModule(JSON.parse(res.data.module));
-        setFilterData(JSON.parse(res.data.filter_data));
+        setNotificationType(res.data.report_type ? res.data.report_type : null);
+        setModule(JSON.parse(res.data.module ? res.data.module : null));
+        setFilterData(
+          JSON.parse(res.data.filter_data ? res.data.filter_data : null)
+        );
       })
       .catch((err: any) => console.error(err));
   };
+
   useEffect(() => {
     getNotification();
     const interval = setInterval(() => {
@@ -96,6 +99,7 @@ const DrawerAppBar = () => {
         }
         document.body.appendChild(link);
         link.click();
+        getNotification();
       })
       .catch((err: any) => console.error(err));
 

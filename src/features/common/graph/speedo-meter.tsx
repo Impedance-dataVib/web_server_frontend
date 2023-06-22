@@ -11,24 +11,23 @@ export default function SpeedoMeter({
   indicatorType,
   indicatorUnit,
   isTorqueModule,
-  indicatorName
+  indicatorName,
 }: any) {
-
   const getMeterColor = () => {
-    const indicator= indicatorName.split("(");
-    if(isTorqueModule) {
+    const indicator = indicatorName?.split(" ");
+    if (isTorqueModule) {
       switch (indicator[0]) {
-        case "Torque": 
-        case "Power": 
+        case "Torque":
+        case "Power":
           return "#ffd966";
-        case "Speed": 
-          return "#00000033"
-        default: 
+        case "Speed":
+          return "#00000033";
+        default:
           return "#FFA326";
       }
     }
     return "#FFA326";
-  } 
+  };
 
   return (
     <>
@@ -41,10 +40,12 @@ export default function SpeedoMeter({
         value={parseInt(value)}
         needleTransition={"easeQuadIn" as Transition}
         needleTransitionDuration={1000}
-        needleColor="#434343"
+        needleColor={maxValue && "#434343"}
         customSegmentStops={!isGradientColor ? [minValue, maxValue] : []}
         startColor={"red"}
-        segmentColors={!isGradientColor ? [getMeterColor(), getMeterColor()] : []}
+        segmentColors={
+          !isGradientColor ? [getMeterColor(), getMeterColor()] : []
+        }
         maxSegmentLabels={4}
         currentValueText={`${value} ${isPercent ? "%" : ""}`}
         segments={1000}

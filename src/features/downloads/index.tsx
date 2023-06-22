@@ -18,6 +18,7 @@ import {
   TableBody,
   TableRow,
   Paper,
+  Tooltip,
 } from "@mui/material";
 import {
   assetData,
@@ -153,6 +154,26 @@ const DownloadPage = () => {
       return "orange";
     }
     return "#ff0000";
+  };
+
+  const deleteDownloadHistory = () => {
+    api
+      .delete("/download/delete.php")
+      .then((res) => {
+        console.log(res);
+
+        enqueueSnackbar({
+          message: "Download Queue is Cleared, You Can Request New ",
+          variant: "warning",
+        });
+        show();
+      })
+      .catch((error) => {
+        enqueueSnackbar({
+          message: "Something Went Wrong",
+          variant: "error",
+        });
+      });
   };
   return (
     <Box>
@@ -439,6 +460,23 @@ const DownloadPage = () => {
             </TableBody>
           </Table>
         </TableContainer>
+      </Box>
+      <Box
+        sx={{
+          mt: "10px",
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Tooltip title="Only Pending and Completed status will be affected">
+          <Button
+            sx={{ bgcolor: "warning.main" }}
+            onClick={deleteDownloadHistory}
+            variant="contained"
+          >
+            Clear Download Queue
+          </Button>
+        </Tooltip>
       </Box>
     </Box>
   );

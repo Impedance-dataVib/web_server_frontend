@@ -3,7 +3,11 @@ import { slice } from "lodash";
 import { useEffect, useState, useMemo } from "react";
 import SpeedoMeter from "src/features/common/graph/speedo-meter";
 
-const GlobalIndicatorChart = ({ globalIndicator, fullScreen, isTorqueModule }: any) => {
+const GlobalIndicatorChart = ({
+  globalIndicator,
+  fullScreen,
+  isTorqueModule,
+}: any) => {
   const [styling, setStyling] = useState({});
   useEffect(() => {
     setStyling(
@@ -19,7 +23,6 @@ const GlobalIndicatorChart = ({ globalIndicator, fullScreen, isTorqueModule }: a
     }
     return globalIndicator;
   }, [fullScreen, globalIndicator]);
-  
   return (
     <Grid
       container

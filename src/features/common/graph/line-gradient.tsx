@@ -1,5 +1,5 @@
 import { Line } from "react-chartjs-2";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -56,29 +56,10 @@ export default function LineGradient({
   labels,
 }: any) {
   const chartRef = useRef<any>(null);
-  let width: any, height: any, gradient: any;
-  function getGradient(ctx: any, chartArea: any, isGradientOpposite: boolean) {
-    const chartWidth = chartArea.right - chartArea.left;
-    const chartHeight = chartArea.bottom - chartArea.top;
-    if (!gradient || width !== chartWidth || height !== chartHeight) {
-      // Create the gradient because this is either the first render
-      // or the size of the chart has changed
-      width = chartWidth;
-      height = chartHeight;
-      gradient = ctx.createLinearGradient(
-        0,
-        chartArea.bottom,
-        0,
-        chartArea.top
-      );
-      gradient.addColorStop(isGradientOpposite ? 1 : 0, "#02B271");
-      gradient.addColorStop(0.6, "#FFA326");
-      gradient.addColorStop(isGradientOpposite ? 0 : 1, "#FF0000");
-    }
 
-    return gradient;
-  }
-
+  useEffect(() => {
+    console.log(dataPointsY2);
+  }, [dataPointsY2]);
   const data = {
     labels: labels,
     datasets: [
@@ -102,11 +83,11 @@ export default function LineGradient({
       },
       {
         label: trendsName,
-        data: datapoints,
+        data: dataPointsY2,
         borderColor: "yellow",
         pointBackgroundColor: "#1D4580",
         yAxisID: "y",
-        hidden: datapoints.length,
+        hidden: (dataPointsY2 || []).length,
       },
     ],
   };

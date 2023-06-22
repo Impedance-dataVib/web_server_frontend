@@ -3,10 +3,7 @@ import api from "../../app/api";
 const getModules = async () => {
   try {
     const configResponse = await api.get("module/get-all.php");
-    if (
-      configResponse !== undefined &&
-      configResponse.data !== undefined
-    ) {
+    if (configResponse !== undefined && configResponse.data !== undefined) {
       return configResponse.data?.data;
     }
     return Promise.reject("Cannot get the modules");
@@ -18,16 +15,14 @@ const getModules = async () => {
 const getTrendsData = async (moduleId: number) => {
   try {
     const configResponse = await api.get(`/dashboard/trends.php/${moduleId}`);
-    if (
-      configResponse !== undefined &&
-      configResponse.data
-    ) {
+    console.log(configResponse);
+    if (configResponse !== undefined && configResponse.data) {
       const configs: any[] = configResponse.data;
       return configResponse.data;
-
     }
     return Promise.reject("Cannot get the modules");
   } catch (e) {
+    console.error(e);
     return Promise.reject("Cannot get the modules");
   }
 };
