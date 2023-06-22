@@ -351,9 +351,15 @@ const formSchema = {
       {
         name: "Max Pressure",
         label: "max_pressure",
-        type:'text',
-        helperNote: "define the max pressure",
-      }
+        type: "text",
+        helperNote: "Pressure(Max)",
+      },
+      {
+        name: "Aux Device Id",
+        label: "aux_device_id",
+        type: "text",
+        helperNote: "aux device id is an optional field",
+      },
     ],
     "Advanced Parameters": [
       {
@@ -507,6 +513,12 @@ const formSchema = {
         type: "text",
         helperNote: "Enter the power in watts",
       },
+      {
+        name: "Aux Device Id",
+        label: "aux_device_id",
+        type: "text",
+        helperNote: "aux device id is an optional field",
+      }
     ],
     "Machine Details": [
       {
@@ -649,6 +661,12 @@ const formSchema = {
         type: "text",
         helperNote: "Length of Sample Collection (in seconds)",
       },
+      {
+        name: "Aux Device Id",
+        label: "aux_device_id",
+        type: "text",
+        helperNote: "aux device id is an optional field",
+      }
     ],
     "Machine Details": [
       {
@@ -743,6 +761,12 @@ const formSchema = {
         type: "text",
         helperNote: "Length of Sample Collection (in seconds)",
       },
+      {
+        name: "Aux Device Id",
+        label: "aux_device_id",
+        type: "text",
+        helperNote: "aux device id is an optional field",
+      }
     ],
     "Machine Details": [
       {
@@ -875,11 +899,12 @@ const formSchema = {
         type: "text",
         helperNote: "Length of Sample Collection (in seconds)",
       },
-      // {
-      //   name: "Rigidity(R)",
-      //   label: "rigidity",
-      //   type: "popup",
-      // }
+      {
+        name: "Aux Device Id",
+        label: "aux_device_id",
+        type: "text",
+        helperNote: "aux device id is an optional field",
+      }
     ],
     "Machine Details": [
       {

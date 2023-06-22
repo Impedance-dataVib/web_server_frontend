@@ -89,6 +89,13 @@ export const torqueValidationSchema = yup.object({
     .integer("The field should be an integer !"),
 
   nde_channel_wheel_type: yup.string().required("This is a required field"),
+  aux_device_id: yup
+    .number()
+    .test(
+      "Is positive?",
+      "ERROR: The number must be greater than 0!",
+      (value: any) => value > 0
+    ),
   min_speed: yup
     .number()
     .required("This is a required field")
@@ -224,6 +231,13 @@ export const motorValidationSchema = yup.object({
       "Min Volt must be less than or equal to 0.05",
       (value) => value <= 0.05
     ),
+  aux_device_id: yup
+    .number()
+    .test(
+      "Is positive?",
+      "ERROR: The number must be greater than 0!",
+      (value: any) => value > 0
+    ),
   recording_period: yup
     .number()
     .required("This is a required field")
@@ -300,6 +314,13 @@ export const turbineValidationSchema = yup.object({
       "greater than 10",
       "Min RPM should greater than 10",
       (value) => value > 10
+    ),
+  aux_device_id: yup
+    .number()
+    .test(
+      "Is positive?",
+      "ERROR: The number must be greater than 0!",
+      (value: any) => value > 0
     ),
   min_volt: yup
     .number()
@@ -390,6 +411,13 @@ export const bearingValidationSchema = yup.object({
       "greater than 10",
       "Min RPM should greater than 10",
       (value) => value > 10
+    ),
+  aux_device_id: yup
+    .number()
+    .test(
+      "Is positive?",
+      "ERROR: The number must be greater than 0!",
+      (value: any) => value > 0
     ),
   min_volt: yup
     .number()
@@ -706,6 +734,13 @@ export const engineValidationSchema = yup.object({
   application: yup.string().required("This is a required field"),
   fuel: yup.string().required("This is a required field"),
   type: yup.string().required("This is a required field"),
+  aux_device_id: yup
+    .number()
+    .test(
+      "Is positive?",
+      "ERROR: The number must be greater than 0!",
+      (value: any) => value > 0
+    ),
   no_of_strokes: yup.string().required("This is a required field"),
   max_pressure: yup
     .number()

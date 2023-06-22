@@ -199,6 +199,7 @@ const TurbineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       Filter_low: "",
       highPass: "",
       has_overwrite_parameters: false,
+      aux_device_id:""
     };
   };
   const moduleFormContext = useFormik({
