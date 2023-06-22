@@ -10,7 +10,7 @@ axiosInstance.interceptors.request.use((config: any) => {
 
   return {
     ...config,
-    timeout: 30000,
+    timeout: 40000,
     headers: {
       ...config.headers,
       Authorization: `Bearer ${authToken}`,

@@ -13,45 +13,45 @@ export function buildSoketData(response, modelType, formData) {
     globalIndicator.push(
       buildIndicatorData(
         "Engine Health",
-        data["MechanicalHealth"],
+        data?.MechanicalHealth,
         "valueInHealth"
       )
     );
     globalIndicator.push(
       buildIndicatorData(
         "Combustion Condition",
-        data["EngineEfficiency"],
+        data?.EngineEfficiency,
         "valueInHealth"
       )
     );
     globalIndicator.push(
-      buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold)
+      buildRpmData("RPM", data?.ChannelSpeed, maxRPMThrshhold)
     );
     globalIndicator.push(
       buildIndicatorData(
         "Performance of Mounts & Supports",
-        data["Unbalance"],
+        data?.Unbalance,
         "valueInHealth"
       )
     );
     globalIndicator.push(
       buildIndicatorData(
         "Governor, Crank driven Accessories Health",
-        data["CamPump"],
+        data?.CamPump,
         "valueInHealth"
       )
     );
     globalIndicator.push(
       buildIndicatorData(
         "Performance of Vibration Damper",
-        data["Damper"],
+        data?.Damper,
         "valueInHealth"
       )
     );
     globalIndicator.push(
       buildIndicatorData(
         "Increase in Fuel Consumption",
-        data["PowerLoss"],
+        data?.PowerLoss,
         "value"
       )
     );
@@ -75,56 +75,52 @@ export function buildSoketData(response, modelType, formData) {
     );
   } else if (modelType === "Turbine") {
     globalIndicator.push(
-      buildRpmData("Speed", data["ChannelSpeed"], maxRPMThrshhold)
+      buildRpmData("Speed", data?.ChannelSpeed, maxRPMThrshhold)
     );
     globalIndicator.push(
       buildIndicatorData(
         "Regularity/Deviation",
-        data["RegularityDeviation"],
+        data?.RegularityDeviation,
         "valueInPercent"
       )
     );
     globalIndicator.push(
       buildIndicatorData(
         "Bearing Status",
-        data["BearingStatus"],
+        data?.BearingStatus,
         "valueInPercent"
       )
     );
     globalIndicator.push(
-      buildIndicatorData("Shaft Health", data["BladeStatus"], "valueInPercent")
+      buildIndicatorData("Shaft Health", data?.BladeStatus, "valueInPercent")
     );
     if (JSON.parse(formData).type === "Steam") {
       globalIndicator.push(
-        buildIndicatorData(
-          "Coupling",
-          data["TurbineCoupling"],
-          "valueInPercent"
-        )
+        buildIndicatorData("Coupling", data?.TurbineCoupling, "valueInPercent")
       );
     } else {
       globalIndicator.push(
         buildIndicatorData(
           "Combustion Kit",
-          data["CombustionKit"],
+          data?.CombustionKit,
           "valueInPercent"
         )
       );
     }
   } else if (modelType === "Motor") {
     globalIndicator.push(
-      buildIndicatorData("Stability", data["MStressStability"], "valueInHealth")
+      buildIndicatorData("Stability", data?.MStressStability, "valueInHealth")
     );
     globalIndicator.push(
-      buildIndicatorData("Bearing", data["MBearing"], "valueInHealth")
+      buildIndicatorData("Bearing", data?.MBearing, "valueInHealth")
     );
     globalIndicator.push(
-      buildRpmData("Speed", data["ChannelSpeed"], maxRPMThrshhold)
+      buildRpmData("Speed", data?.ChannelSpeed, maxRPMThrshhold)
     );
     globalIndicator.push(
       buildIndicatorData(
         "Electromagnetic Stress",
-        data["MElectromag"],
+        data?.MElectromag,
         "valueInHealth"
       )
     );
@@ -133,7 +129,7 @@ export function buildSoketData(response, modelType, formData) {
       buildIndicatorData("Bearing", data["4KMixed"], "valueInHealth")
     );
     globalIndicator.push(
-      buildRpmData("RPM", data["ChannelSpeed"], maxRPMThrshhold)
+      buildRpmData("RPM", data?.ChannelSpeed, maxRPMThrshhold)
     );
     globalIndicator.push(
       buildIndicatorData("Friction", data["8KMixed"], "valueInHealth")
@@ -144,7 +140,7 @@ export function buildSoketData(response, modelType, formData) {
     globalIndicator.push(
       buildIndicatorData(
         "Mechanical Health",
-        data["BearingGlobal"],
+        data?.BearingGlobal,
         "valueInHealth"
       )
     );
@@ -152,15 +148,15 @@ export function buildSoketData(response, modelType, formData) {
     globalIndicator.push(
       buildIndicatorData(
         "Global(Umbalance/Alignment/Loosness)",
-        data["GlobalMixed"],
+        data?.GlobalMixed,
         "valueInHealth"
       )
     );
     globalIndicator.push(
-      buildIndicatorData("Shock Index", data["GlobalKurto"], "valueInHealth")
+      buildIndicatorData("Shock Index", data?.GlobalKurto, "valueInHealth")
     );
     globalIndicator.push(
-      buildIndicatorData("Level(RMS)", data["GlobalLevel"], "valueInHealth")
+      buildIndicatorData("Level(RMS)", data?.GlobalLevel, "valueInHealth")
     );
     globalIndicator.push(
       buildIndicatorData("Shaft/Clearance", data["2KMixed"], "valueInHealth")
@@ -181,8 +177,11 @@ export function buildSoketData(response, modelType, formData) {
 }
 
 function buildIndicatorData(indicator_title, data, key) {
+  let isOffline = false;
   const value = data ? data[key] : 0;
-
+  if (!data || !data[key]) {
+    isOffline = true;
+  }
   let indicatorUnit = "Stable";
   let indicatorType = "success";
   if (value <= 30) {
@@ -197,7 +196,7 @@ function buildIndicatorData(indicator_title, data, key) {
     indicatorName: indicator_title,
     indicatorMin: 0,
     indicatorMax: 100,
-    indicatorValue: value,
+    indicatorValue: isOffline ? "Offline" : value,
     isPercentage: true,
     indicatorUnit: indicatorUnit,
     isGradientColor: true,
