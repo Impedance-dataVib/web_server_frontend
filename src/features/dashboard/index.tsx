@@ -137,6 +137,7 @@ const DashboardPage = () => {
     },
     isWebsocketConnect,
   );
+  console.log(lastMessage);
 
   useEffect(() => {
     return(() => setIsWebSocketConnect(false))
