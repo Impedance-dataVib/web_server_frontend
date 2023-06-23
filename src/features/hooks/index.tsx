@@ -46,7 +46,7 @@ export const useGetAllTrends = (
     if (id && id !== "") {
       getAllTrends(id, dateRangeValues, rpmRange, allModules);
     }
-  }, [id.length, dateRangeValues.endDate]);
+  }, []);
   return { isLoading, data, isError, getAllTrends, errorMessage, setIsError };
 };
 
