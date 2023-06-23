@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Typography,
   Box,
@@ -32,6 +32,7 @@ import DownloadInfoApi from "./api";
 import { enqueueSnackbar } from "notistack";
 import DatePickerModal from "../trends/modals/DatePickerModal";
 import api from "../../app/api";
+import dateFormat from "../../app/utils/dateFormat";
 
 const DownloadPage = () => {
   const initial = "";
@@ -46,13 +47,21 @@ const DownloadPage = () => {
   const [reportTypeError, setReportTypeError] = useState(false);
   const [toggleDatePicker, setToggleDatePicker] = useState(false);
   const [dateRangeValues, setDateRangeValues] = useState<any>({
-    startDate: "",
-    endDate: "",
+    startDate: null,
+    endDate: null,
     key: "selection",
   });
   const [showData, setShowData] = useState([]);
 
-  console.log(dateRangeValues.startDate, dateRangeValues.endDate);
+  const datePickerText = useMemo(() => {
+    const startDate = dateRangeValues?.startDate
+      ? dateFormat(dateRangeValues?.startDate)
+      : "Start Date";
+    const endDate = dateRangeValues?.endDate
+      ? dateFormat(dateRangeValues?.endDate)
+      : "End Date";
+    return `${startDate}-${endDate}`;
+  }, [dateRangeValues]);
   useEffect(() => {
     setPeriodError(false);
   }, [dateRangeValues]);
@@ -93,6 +102,7 @@ const DownloadPage = () => {
 
     setReportType(initial);
   };
+
   const postDownloadHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (asset == "") {
@@ -303,7 +313,7 @@ const DownloadPage = () => {
                       color="primary"
                       onClick={() => setToggleDatePicker(true)}
                     >
-                      Select Date Range
+                      {datePickerText}
                     </Button>
                     <DatePickerModal
                       open={toggleDatePicker}
