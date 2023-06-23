@@ -1821,7 +1821,6 @@ export function convertDate(dateVal) {
   //yyyy-mm-dd
   let dateD = dateVal.toLocaleString().split(",");
   let dateArray = dateD[0].split("/");
-  console.log(`${dateArray[2]}-${dateArray[0]}-${dateArray[1]} ${dateD[1]}`);
   return `${dateArray[2]}-${dateArray[0]}-${dateArray[1]} ${dateD[1]}`;
 }
 function percentage(partialValue, totalValue) {
