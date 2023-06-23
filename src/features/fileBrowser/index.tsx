@@ -11,6 +11,7 @@ const FileBrowserPage = () => {
   const [isDataAvailable, setIsDataAvailable] = useState<any>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [globalIndicator, setGlobalIndicator] = useState<any>([]);
+  const [isWebsocketConnect, setIsWebSocketConnect] = useState(true);
 
   const { sendMessage, lastMessage } = useWebSocket(
     process.env.REACT_APP_WEBSOCKET_URL ||
@@ -26,8 +27,14 @@ const FileBrowserPage = () => {
         setIsDataAvailable("Something went wrong!. ");
         setIsLoading(false);
       },
-    }
+      shouldReconnect: (closeEvent) => true,
+    },
+    isWebsocketConnect,
   );
+
+  useEffect(() => {
+    return(() => setIsWebSocketConnect(false))
+  }, []); 
 
   useEffect(() => {
     sendMessage("PROCESS1");
