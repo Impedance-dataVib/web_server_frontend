@@ -1,6 +1,7 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import {
   Box,
+  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -11,8 +12,8 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 interface DateRangePickerModalProps {
   open: boolean;
-  onClose: React.Dispatch<React.SetStateAction<boolean>>;
-  dateRangeValues: Object;
+  onClose: any;
+  dateRangeValues: any;
   setDateRangeValues: React.Dispatch<React.SetStateAction<Object>>;
 }
 const propsAreEqual = (prev: any, next: any) => {
@@ -28,6 +29,11 @@ const DateRangePickerModal = memo(
     dateRangeValues,
     setDateRangeValues,
   }: DateRangePickerModalProps) => {
+    const [dateValuesLocal, setDateValuesLocal] = useState({
+      startDate: dateRangeValues.startDate,
+      endDate: dateRangeValues.endDate,
+      key: "selection",
+    });
     return (
       <>
         <Dialog open={open} onClose={onClose}>
@@ -35,14 +41,49 @@ const DateRangePickerModal = memo(
           <DialogContent>
             <Box>
               <DateRange
-                ranges={[dateRangeValues]}
+                ranges={[dateValuesLocal]}
                 maxDate={new Date()}
                 onChange={(e: any) => {
-                  setDateRangeValues(e.selection);
+                  setDateValuesLocal(e.selection);
                 }}
               ></DateRange>
             </Box>
           </DialogContent>
+          <DialogActions>
+            <Button
+              variant="contained"
+              color="success"
+              disabled={
+                dateValuesLocal.endDate && dateValuesLocal.startDate
+                  ? false
+                  : true
+              }
+              onClick={() => setDateRangeValues({ ...dateValuesLocal })}
+            >
+              Apply
+            </Button>
+            <Button
+              variant="contained"
+              color="info"
+              onClick={() => {
+                setDateValuesLocal({
+                  startDate: null,
+                  endDate: null,
+                  key: "selection",
+                });
+                setDateRangeValues({
+                  startDate: null,
+                  endDate: null,
+                  key: "selection",
+                });
+              }}
+            >
+              Reset
+            </Button>
+            <Button variant="contained" color="secondary" onClick={onClose}>
+              Cancel
+            </Button>
+          </DialogActions>
         </Dialog>
       </>
     );
