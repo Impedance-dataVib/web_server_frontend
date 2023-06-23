@@ -1816,9 +1816,9 @@ function buildDataSet(title, color, dataPoints, axisId) {
 }
 
 export function convertDate(dateVal) {
-  let dateD = dateVal.toLocaleString().split(" ");
-  let Y = dateVal.toLocaleDateString().split("/").reverse().join("-");
-  return `${Y} ${dateD[1]}`;
+  //yyyy-mm-dd
+  let dateD = dateVal.toLocaleString().split("/");
+  return `${dateD[2]}-${dateD[1]}-${dateD[0]}`;
 }
 function percentage(partialValue, totalValue) {
   return (100 * partialValue) / totalValue;
