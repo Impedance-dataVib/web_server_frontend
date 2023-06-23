@@ -70,6 +70,7 @@ export default function LineGradient({
         pointBackgroundColor: "black",
         yAxisID: "y1",
         hidden: false,
+        borderWidth: 1,
       },
 
       {
@@ -78,6 +79,7 @@ export default function LineGradient({
         borderColor: "red",
         pointBackgroundColor: "#1D4580",
         yAxisID: "y",
+        borderWidth: 1,
       },
      
     ],
@@ -90,6 +92,7 @@ export default function LineGradient({
         borderColor: "yellow",
         pointBackgroundColor: "#1D4580",
         yAxisID: "y",
+        borderWidth: 1,
       }
     )
   }
