@@ -32,6 +32,7 @@ export default function SpeedoMeter({
   return (
     <>
       <ReactSpeedometer
+        forceRender={true}
         maxValue={maxValue}
         minValue={minValue}
         height={150}
@@ -39,7 +40,7 @@ export default function SpeedoMeter({
         ringWidth={20}
         value={parseInt(value)}
         needleTransition={"easeQuadIn" as Transition}
-        needleTransitionDuration={1000}
+        needleTransitionDuration={0}
         needleColor={maxValue && "#434343"}
         customSegmentStops={!isGradientColor ? [minValue, maxValue] : []}
         startColor={"red"}

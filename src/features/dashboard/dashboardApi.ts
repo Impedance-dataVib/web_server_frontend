@@ -15,7 +15,6 @@ const getModules = async () => {
 const getTrendsData = async (moduleId: number) => {
   try {
     const configResponse = await api.get(`/dashboard/trends.php/${moduleId}`);
-    console.log(configResponse);
     if (configResponse !== undefined && configResponse.data) {
       const configs: any[] = configResponse.data;
       return configResponse.data;

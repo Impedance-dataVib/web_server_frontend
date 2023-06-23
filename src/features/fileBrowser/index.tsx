@@ -1,14 +1,64 @@
-import React from "react";
-import { Typography, Box, Divider, Grid } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Typography, Box, Divider, Grid, LinearProgress } from "@mui/material";
 import GlobalIndicatorChart from "../dashboard/globalIndicator";
 import SpeedoMeter from "../common/graph/speedo-meter";
 import { webSocketData } from "../dashboard/schema";
 import Auxiliarydata_speedometer from "./Auxiliarydata_speedometer";
+import { buildAuxData } from "src/app/utils/helper";
+import useWebSocket from "react-use-websocket";
+
 const FileBrowserPage = () => {
-  const globalIndicator = webSocketData.globalIndicator.slice(0, 3);
-  const engineHealth = webSocketData.globalIndicator.slice(0, 4);
+  const [isDataAvailable, setIsDataAvailable] = useState<any>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [globalIndicator, setGlobalIndicator] = useState<any>([]);
+
+  const { sendMessage, lastMessage } = useWebSocket(
+    process.env.REACT_APP_WEBSOCKET_URL ||
+      `ws:${window.location.hostname}:8081`,
+    {
+      onMessage: () => {
+        if (sendMessage) {
+          sendMessage("PROCESS1");
+        }
+        console.log(lastMessage);
+      },
+      onError: (e) => {
+        setIsDataAvailable("Something went wrong!. ");
+        setIsLoading(false);
+      },
+    }
+  );
+
+  useEffect(() => {
+    sendMessage("PROCESS1");
+  }, []);
+  useEffect(() => {
+    if (lastMessage !== undefined) {
+      setIsLoading(true);
+      const data = lastMessage?.data;
+      if (data) {
+        try {
+          const parsedData = buildAuxData(data);
+          setIsLoading(false);
+          setGlobalIndicator(parsedData);
+          console.log(parsedData);
+        } catch (ex) {
+          console.error(ex);
+          setIsLoading(false);
+        }
+      }
+    } else {
+      setIsLoading(false);
+      <Box sx={{ textAlign: "center" }}>No Data Available</Box>;
+    }
+  }, [lastMessage]);
   return (
     <Box>
+      {isLoading && (
+        <Box sx={{ my: 1 }}>
+          <LinearProgress />
+        </Box>
+      )}
       <Typography
         variant="h5"
         padding={2}
@@ -17,94 +67,12 @@ const FileBrowserPage = () => {
         Auxiliary Data
       </Typography>
       <Box sx={{ bgcolor: "white" }}>
-        <Typography
-          variant="h5"
-          padding={2}
-          sx={{
-            textAlign: "left",
-            letterSpacing: "0.08px",
-            color: "#434343",
-            opacity: "1px",
-            fontSize: "20px",
-            fontWeight: 500,
-          }}
-        >
-          Global Indicators
-        </Typography>
         <Divider sx={{ mb: "10px" }} />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-around",
-            my: "30px",
-          }}
-        >
+        <Grid container spacing={2}>
           {globalIndicator.map((val: any) => (
             <Auxiliarydata_speedometer val={val} />
           ))}
-        </Box>
-
-        <Typography
-          variant="h5"
-          padding={2}
-          sx={{
-            textAlign: "left",
-            letterSpacing: "0.08px",
-            color: "#434343",
-            opacity: "1px",
-            fontSize: "20px",
-            fontWeight: 500,
-            mt: "20px",
-          }}
-        >
-          Engine Health
-        </Typography>
-        <Divider sx={{ mb: "10px" }} />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-around",
-            my: "30px",
-          }}
-        >
-          {engineHealth.map((val: any) => (
-            <Auxiliarydata_speedometer val={val} />
-          ))}
-        </Box>
-
-        <Typography
-          variant="h5"
-          padding={2}
-          sx={{
-            textAlign: "left",
-            letterSpacing: "0.08px",
-            color: "#434343",
-            opacity: "1px",
-            fontSize: "20px",
-            fontWeight: 500,
-            mt: "20px",
-          }}
-        >
-          Combustion Engine
-        </Typography>
-        <Divider sx={{ mb: "10px" }} />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-around",
-            my: "30px",
-          }}
-        >
-          {engineHealth.map((val: any) => (
-            <Auxiliarydata_speedometer val={val} />
-          ))}
-        </Box>
+        </Grid>
       </Box>
     </Box>
   );
