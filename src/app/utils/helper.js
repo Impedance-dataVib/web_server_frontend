@@ -1,5 +1,5 @@
 import { integerPropType } from "@mui/utils";
-
+import { format } from "date-fns";
 export const isEmptyObject = (obj) => Object.keys(obj).length > 0;
 
 export function buildSoketData(response, modelType, formData) {
@@ -1837,10 +1837,9 @@ function buildDataSet(title, color, dataPoints, axisId) {
 }
 
 export function convertDate(dateVal) {
-  //yyyy-mm-dd
-  let dateD = dateVal.toLocaleString().split(",");
-  let dateArray = dateD[0].split("/");
-  return `${dateArray[2]}-${dateArray[0]}-${dateArray[1]} ${dateD[1]}`;
+
+  let dateExtract = format(dateVal, "yyyy-MM-dd HH:mm:ss");
+  return dateExtract;
 }
 function percentage(partialValue, totalValue) {
   return (100 * partialValue) / totalValue;

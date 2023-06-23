@@ -1,3 +1,4 @@
+
 export default function dateFormat(date) {
   if (date) {
     const dateStringArray = date.toDateString().split(" ");
