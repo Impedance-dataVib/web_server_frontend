@@ -120,7 +120,12 @@ const TrendsPage = () => {
                   />
                 ))
               }
-              sx={{ width: "12rem" }}
+              sx={{
+                width: "12rem",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "1px solid rgba(29, 69, 128, 0.5)",
+                },
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -136,7 +141,7 @@ const TrendsPage = () => {
               color="primary"
               onClick={() => setToggleDatePicker(true)}
               sx={{
-                height: "3.0rem",
+                height: "3.32rem",
               }}
               startIcon={<DateRangeIcon />}
             >
@@ -149,7 +154,7 @@ const TrendsPage = () => {
               color="primary"
               onClick={() => setOpenRpmModal(true)}
               sx={{
-                height: "3.0rem",
+                height: "3.32rem",
               }}
               startIcon={<SpeedIcon />}
             >
@@ -161,11 +166,11 @@ const TrendsPage = () => {
               <Select
                 value={moduleId}
                 sx={{
-                  height: "3.0rem",
+                  height: "3.32rem",
                   color: "#1D4580",
                   width: "10rem",
                   "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#1D4580",
+                    borderColor: "rgba(29, 69, 128, 0.5)",
                   },
                   "& .MuiSvgIcon-root": {
                     color: "#1D4580",

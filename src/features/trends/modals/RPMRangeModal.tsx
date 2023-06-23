@@ -35,7 +35,7 @@ const RPMRangeModal = memo(({ open, onClose, rpmRange, setRPMRange }: any) => {
   });
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md">
-      <DialogTitle>RPM Range Picker</DialogTitle>
+      <DialogTitle>Select RPM Range</DialogTitle>
       <DialogContent>
         <Box sx={{ mt: 1 }}>
           <TextField
