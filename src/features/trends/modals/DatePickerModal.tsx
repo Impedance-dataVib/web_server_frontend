@@ -58,7 +58,10 @@ const DateRangePickerModal = memo(
                   ? false
                   : true
               }
-              onClick={() => setDateRangeValues({ ...dateValuesLocal })}
+              onClick={() => {
+                setDateRangeValues({ ...dateValuesLocal });
+                onClose();
+              }}
             >
               Apply
             </Button>

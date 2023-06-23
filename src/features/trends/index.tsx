@@ -46,9 +46,12 @@ const TrendsPage = () => {
   };
 
   const calculatedButtonDate = useMemo(() => {
-    return `${dateFormat(dateRangeValues.startDate)}-${dateFormat(
-      dateRangeValues.endDate
-    )}`;
+    if (dateRangeValues?.startDate && dateRangeValues?.endDate) {
+      return `${dateFormat(dateRangeValues?.startDate)}-${dateFormat(
+        dateRangeValues?.endDate
+      )}`;
+    }
+    return "StartDate-EndDate";
   }, [dateRangeValues]);
 
   const calculateButtonRPM = useMemo(() => {

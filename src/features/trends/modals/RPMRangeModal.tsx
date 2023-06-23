@@ -86,7 +86,10 @@ const RPMRangeModal = memo(({ open, onClose, rpmRange, setRPMRange }: any) => {
         </Button>
         <Button
           color="primary"
-          onClick={() => setRPMRange({ ...formContext.values })}
+          onClick={() => {
+            setRPMRange({ ...formContext.values });
+            onClose();
+          }}
           variant="contained"
         >
           Add RPM Range
