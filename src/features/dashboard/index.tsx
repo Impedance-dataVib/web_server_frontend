@@ -107,6 +107,7 @@ const DashboardPage = () => {
   const [webSocketsData, setWebSocketsData] = useState({});
   const [isDataAvailable, setIsDataAvailable] = useState<any>(undefined);
   const [trendsData, setTrendsData] = useState({});
+  const [isWebsocketConnect, setIsWebSocketConnect] = useState(true);
   const [activeModule, setActiveModule] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showLicenseExpiryMsg, setShowLicenseExpiryMsg] =
@@ -132,9 +133,14 @@ const DashboardPage = () => {
 
         setIsLoading(false);
       },
-    }
+      shouldReconnect: (closeEvent) => true,
+    },
+    isWebsocketConnect,
   );
 
+  useEffect(() => {
+    return(() => setIsWebSocketConnect(false))
+  }, [])
   useEffect(() => {
     if (moduleTabs.length > 0) {
       if (moduleTabs[activeModule].process_name) {
