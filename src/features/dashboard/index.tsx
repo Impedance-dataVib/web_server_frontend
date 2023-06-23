@@ -158,6 +158,7 @@ const DashboardPage = () => {
   function dashBoardApiCall(datas: any) {
     DashboardApi.getTrendsData(datas)
       .then((val) => {
+        console.log(val);
         const parsedData = buildData(val);
         setTrendsData(parsedData);
       })

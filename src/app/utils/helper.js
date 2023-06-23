@@ -1,3 +1,5 @@
+import { integerPropType } from "@mui/utils";
+
 export const isEmptyObject = (obj) => Object.keys(obj).length > 0;
 
 export function buildSoketData(response, modelType, formData) {
@@ -1992,4 +1994,34 @@ function getdate(firstKey) {
     ":" +
     date.getMinutes()
   );
+}
+export function buildAuxData(data) {
+  data = JSON.parse(data);
+  const firstKey = Object.keys(data)[0];
+  const itemData = data[firstKey];
+
+  const auxData = itemData["Aux"];
+
+  const returnData = [];
+  for (let key of Object.keys(auxData)) {
+    if (
+      key !== "ID" &&
+      key !== "DateAndTime" &&
+      key !== "DeviceType" &&
+      key !== "DeviceName"
+    ) {
+      const val = auxData[key];
+      if (val && val?.Value) {
+        returnData.push({
+          indicatorMax: val?.Unit === "%" ? 100 : parseInt(val?.Value) + 100,
+          indicatorMin: 0,
+          indicatorName: val?.Desc + "(" + val?.Unit + ")",
+          indicatorValue: Math.round(val?.Value),
+          isGradientColor: true,
+          isPercentage: val?.Unit === "%",
+        });
+      }
+    }
+  }
+  return returnData;
 }
