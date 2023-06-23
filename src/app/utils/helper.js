@@ -240,7 +240,6 @@ export function buildData(response) {
   const historical_data = response["historical_data"];
   const firstKey = Object.keys(fileData)[0];
   const data = fileData[firstKey];
-  console.log(historical_data);
   // process engine data
   if (response["type"] === "Engine") {
     const moduleData = data["Engine"];
@@ -701,10 +700,9 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
   let count = 0;
   if (data) {
     for (let item of data) {
-      const objectData = JSON.parse(item["jsondata"]);
-      const firstKey = Object.keys(objectData)[0];
-      const moduleData = objectData[firstKey];
-      labels.push(getdate(firstKey));
+      const moduleData = JSON.parse(item["jsondata"]);
+
+      labels.push(getdate(moduleData?.DateAndTime));
 
       zAxisDataPoints.push("" + parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -1700,13 +1698,12 @@ function buildLineChart(data, key, title, isGradientOpposite) {
   let count = 0;
   if (data) {
     for (let item of data) {
-      const objectData = JSON.parse(item["jsondata"]);
-      const firstKey = Object.keys(objectData)[0];
-      const moduleData = objectData[firstKey];
+      const moduleData = JSON.parse(item["jsondata"]);
+
       if (moduleData?.Status <= 0) {
         continue;
       }
-      labels.push(getdate(firstKey));
+      labels.push(getdate(moduleData?.DateAndTime));
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -1744,21 +1741,22 @@ function buildLineChart(data, key, title, isGradientOpposite) {
 
 export function buildTrendData(historical_data, type) {
   let labels = [];
-
   const dataSet = [];
-
   const increase_fuel_data = [];
   const engine_health_data = [];
   const torsion = [];
   const power = [];
   const rpmData = [];
+  const global = [];
+  const mechanical = [];
+  const electromag = [];
+  const bearing = [];
+  const stable = [];
+  const stability = [];
   let maxRpm = 0;
   for (let item of historical_data) {
-    const objectData = JSON.parse(item["jsondata"]);
-    const firstKey = Object.keys(objectData)[0];
-    const moduleData = objectData[firstKey];
-
-    labels.push(firstKey);
+    const moduleData = JSON.parse(item["jsondata"]);
+    labels.push(moduleData?.DateAndTime);
     rpmData.push(parseInt(moduleData?.ChannelSpeed || 0));
 
     if (type === "Engine") {
@@ -1772,6 +1770,27 @@ export function buildTrendData(historical_data, type) {
       torsion.push(itemData?.value || 0);
       itemData = moduleData["StaticPower"];
       power.push(itemData?.value || 0);
+    } else if (type === "Bearing") {
+      let itemData = moduleData["GlobalMixed"];
+      global.push(itemData?.valueInHealth || 0);
+      itemData = moduleData["BearingGlobal"];
+      mechanical.push(itemData?.valueInHealth || 0);
+      itemData = moduleData["MStressStability"];
+      stable.push(itemData?.valueInHealth || 0);
+    } else if (type === "Motor") {
+      let itemData = moduleData["MElectromag"];
+      electromag.push(itemData?.valueInHealth || 0);
+      itemData = moduleData["MBearing"];
+      bearing.push(itemData?.valueInHealth || 0);
+      itemData = moduleData["BearingStatus"];
+      stability.push(itemData?.valueInHealth || 0);
+    } else if (type === "Turbine") {
+      let itemData = moduleData["MElectromag"];
+      electromag.push(itemData?.valueInHealth || 0);
+      itemData = moduleData["MBearing"];
+      bearing.push(itemData?.valueInHealth || 0);
+      itemData = moduleData["BearingStatus"];
+      stability.push(itemData?.valueInHealth || 0);
     }
   }
 
@@ -1835,10 +1854,8 @@ function buildTurbineChart(data, key, key2, title, isGradientOpposite) {
   let count = 0;
   if (data) {
     for (let item of data) {
-      const objectData = JSON.parse(item["jsondata"]);
-      const firstKey = Object.keys(objectData)[0];
-      const moduleData = objectData[firstKey];
-      labels.push(getdate(firstKey));
+      const moduleData = JSON.parse(item["jsondata"]);
+      labels.push(getdate(moduleData?.DateAndTime));
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -1883,10 +1900,8 @@ function buildMotorChart(data, key, key2, title, isGradientOpposite) {
   let count = 0;
   if (data) {
     for (let item of data) {
-      const objectData = JSON.parse(item["jsondata"]);
-      const firstKey = Object.keys(objectData)[0];
-      const moduleData = objectData[firstKey];
-      labels.push(getdate(firstKey));
+      const moduleData = JSON.parse(item["jsondata"]);
+      labels.push(getdate(moduleData?.DateAndTime));
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -1931,10 +1946,8 @@ function buildBearingChart(data, key, key2, title, isGradientOpposite) {
   let count = 0;
   if (data) {
     for (let item of data) {
-      const objectData = JSON.parse(item["jsondata"]);
-      const firstKey = Object.keys(objectData)[0];
-      const moduleData = objectData[firstKey];
-      labels.push(getdate(firstKey));
+      const moduleData = JSON.parse(item["jsondata"]);
+      labels.push(getdate(moduleData?.DateAndTime));
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -2014,11 +2027,11 @@ export function buildAuxData(data) {
       const val = auxData[key];
       if (val && val?.Value) {
         returnData.push({
-          indicatorMax: val?.Unit === "%" ? 100 : parseInt(val?.Value) + 100,
-          indicatorMin: 0,
+          indicatorMax: max_value[key].max,
+          indicatorMin: max_value[key].min,
           indicatorName: val?.Desc + "(" + val?.Unit + ")",
           indicatorValue: Math.round(val?.Value),
-          isGradientColor: true,
+          isGradientColor: false,
           isPercentage: val?.Unit === "%",
         });
       }
@@ -2026,3 +2039,17 @@ export function buildAuxData(data) {
   }
   return returnData;
 }
+const max_value = {
+  PowerPercent: { max: 250.99, min: -251 },
+  Power: { max: 2211081215, min: -2000000000 },
+  FuelLevel: { max: 250.99, min: -251 },
+  EngineOilTemp: { max: 1735, min: -273 },
+  EngineOilPressure: { max: 8031.87, min: 0 },
+  EngineCoulantTemp: { max: 1735, min: -273 },
+  BatteryVoltage: { max: 3212.75, min: 0 },
+  EngineRPM: { max: 8031.87, min: 0 },
+  OperatingHours: { max: 210554060.75, min: 0 },
+  FuelPressure: { max: 0.125, min: 0 },
+  CrankcasePressure: { max: 251.99, min: -250 },
+  BoostPressure: { max: 8031.87, min: 0 },
+};

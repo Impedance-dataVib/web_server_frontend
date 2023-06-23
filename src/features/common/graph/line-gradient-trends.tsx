@@ -180,18 +180,26 @@ export default function LineGradientTrends({
         }}
       >
         {graphData.datasets.map((val: ObjectDataSet) => (
-          <Grid spacing={2} container sx={{ width: "80vw", marginBottom: '10px' }}>
+          <Grid
+            key={val?.title}
+            spacing={2}
+            container
+            sx={{ width: "80vw", marginBottom: "10px" }}
+          >
             <Grid item lg={4}>
               <Typography
                 component="span"
                 textAlign={"left"}
                 alignItems="center"
                 display={"flex"}
-                sx={{cursor: 'pointer', textDecoration: (val.hidden ? 'line-through': 'none')}}
+                sx={{
+                  cursor: "pointer",
+                  textDecoration: val.hidden ? "line-through" : "none",
+                }}
                 onClick={() => {
-                  let data = graphData.datasets.map((v:any) => {
-                    if(val?.title === v.title) {
-                      v.hidden = !v.hidden
+                  let data = graphData.datasets.map((v: any) => {
+                    if (val?.title === v.title) {
+                      v.hidden = !v.hidden;
                     }
                     return v;
                   });
