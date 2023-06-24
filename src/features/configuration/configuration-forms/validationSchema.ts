@@ -744,12 +744,30 @@ export const engineValidationSchema = yup.object({
   no_of_strokes: yup.string().required("This is a required field"),
   max_pressure: yup
     .number()
-    .required("This is a required field")
     .test(
       "Is positive?",
-      "ERROR: The number must be in whole number and greater than 0!",
+      "ERROR: The number must be in whole number and greater than equal to 0!",
 
-      (value) => value > 0
+      (value: any) => value >= 0 || value === undefined || value?.length === 0
+    )
+    .test(
+      "Check pressure field is present!",
+      "Peak Pressure Channel is selected, this is a compulsory field",
+      (value: any, context) => {
+        if (
+          context.parent.Peak_Pressure_SENSORx === "No Channel" &&
+          (value == 0 || value === undefined || value?.length === 0)
+        ) {
+          return true;
+        } else if (
+          context.parent.Peak_Pressure_SENSORx !== "No Channel" &&
+          (value == 0 || value === undefined || value?.length === 0)
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      }
     ),
   no_of_cylinders: yup
     .number()

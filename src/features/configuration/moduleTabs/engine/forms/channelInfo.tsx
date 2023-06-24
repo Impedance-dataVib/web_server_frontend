@@ -15,6 +15,7 @@ import { useGetChannelByConfigIdName } from "src/features/configuration/hooks";
 import { useSnackbar } from "notistack";
 
 const SENSORx = [
+  "No Channel",
   "Ch1",
   "Ch2",
   "Ch3",
@@ -23,7 +24,6 @@ const SENSORx = [
   "CH6",
   "CH7",
   "CH8",
-  "No Channel",
 ];
 
 const ChannelType = ["Speed"];

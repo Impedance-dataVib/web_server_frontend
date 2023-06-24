@@ -428,6 +428,7 @@ export const TurbineChannelInformationForm = ({
 }: any) => {
   const [optionsChannelInformation, setOptionsChannelInformation] = useState({
     SENSORx: [
+      "No Channel",
       "Ch1",
       "Ch2",
       "Ch3",
@@ -436,7 +437,6 @@ export const TurbineChannelInformationForm = ({
       "CH6",
       "CH7",
       "CH8",
-      "No Channel",
     ],
     ChannelType: ["Speed", "Transducer"],
     WheelType: [
