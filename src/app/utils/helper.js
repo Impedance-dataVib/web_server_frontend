@@ -2,6 +2,7 @@ import { integerPropType } from "@mui/utils";
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
 
+import { format } from "date-fns";
 export const isEmptyObject = (obj) => Object.keys(obj).length > 0;
 
 export function buildSoketData(response, modelType, formData) {
@@ -239,19 +240,27 @@ function buildPeekPressureChart(data, firingOrder, maxPressure) {
 }
 
 export function buildData(response) {
-  const fileData = response["file_data"];
   const from_data = response["from_data"];
   const historical_data = response["historical_data"];
-  const firstKey = Object.keys(fileData)[0];
-  const data = fileData[firstKey];
+  let data = {};
+
+  if (!historical_data || historical_data.length == 0) {
+    return {
+      cylinder_specific_indicators: [],
+      trends: [],
+    };
+  }
   // process engine data
   if (response["type"] === "Engine") {
+    data = JSON.parse(historical_data.at(-1)?.jsondata);
+    console.log(data);
     const moduleData = data["Engine"];
     const firingOrder = moduleData["FiringOrder"];
     const firingOrderSplit = firingOrder.length / 2;
     const first = firingOrder.slice(0, firingOrderSplit);
     const second = firingOrder.slice(firingOrderSplit + 1);
     let cylinder_specific_indicators = [];
+
     if (data?.Compression) {
       const compression = buildCompressionData(
         first,
@@ -335,7 +344,7 @@ export function buildData(response) {
       cylinder_specific_indicators: cylinder_specific_indicators,
       trends: trends,
       alert: buildEngineAlertData(historical_data),
-      alertUpdatedOn: firstKey,
+      alertUpdatedOn: new Date(),
     };
   }
   // process Torque data
@@ -361,7 +370,7 @@ export function buildData(response) {
       cylinder_specific_indicators: [],
       trends,
       alert: buildTorqueAlertData(historical_data),
-      alertUpdatedOn: firstKey,
+      alertUpdatedOn: new Date(),
     };
   }
   // process Turbine data
@@ -387,7 +396,7 @@ export function buildData(response) {
         cylinder_specific_indicators: [],
         trends: trends,
         alert: buildTurbineAlertData(historical_data),
-        alertUpdatedOn: firstKey,
+        alertUpdatedOn: new Date(),
       };
     } else {
       let trends = [];
@@ -403,14 +412,14 @@ export function buildData(response) {
         historical_data,
         "BearingStatus",
         "CombustionKit",
-        "Bearing status, Combustion Kit"
+        "Bearing status, Combustion Kit Status"
       );
       trends.push(gasTurbineChart2);
       return {
         cylinder_specific_indicators: [],
         trends: trends,
         alert: buildTurbineAlertData(historical_data),
-        alertUpdatedOn: firstKey,
+        alertUpdatedOn: new Date(),
       };
     }
   }
@@ -429,7 +438,7 @@ export function buildData(response) {
       historical_data,
       "MBearing",
       "MStressStability",
-      "Bearing status, Stability"
+      "Bearing , Stability"
     );
     trends.push(motorChart2);
 
@@ -437,7 +446,7 @@ export function buildData(response) {
       cylinder_specific_indicators: [],
       trends: trends,
       alert: buildMotorAlertData(historical_data),
-      alertUpdatedOn: firstKey,
+      alertUpdatedOn: new Date(),
     };
   }
   // process Bearing data
@@ -462,7 +471,7 @@ export function buildData(response) {
       cylinder_specific_indicators: [],
       trends: trends,
       alert: buildBearingAlertData(historical_data),
-      alertUpdatedOn: firstKey,
+      alertUpdatedOn: new Date(),
     };
   }
 
@@ -706,10 +715,9 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
   let count = 0;
   if (data) {
     for (let item of data) {
-      const objectData = JSON.parse(item["jsondata"]);
-      const firstKey = Object.keys(objectData)[0];
-      const moduleData = objectData[firstKey];
-      labels.push(getdate(firstKey));
+      const moduleData = JSON.parse(item["jsondata"]);
+
+      labels.push(getdate(moduleData?.DateAndTime));
 
       zAxisDataPoints.push("" + parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -799,11 +807,7 @@ function buildTorqueAlertData(data) {
   if (data) {
     let tempCode = 999;
     for (let item of data) {
-      const objectData = JSON.parse(item["jsondata"]);
-
-      const firstKey = Object.keys(objectData)[0];
-
-      const moduleData = objectData[firstKey];
+      const moduleData = JSON.parse(item["jsondata"]);
 
       const code = moduleData["Status"];
 
@@ -814,7 +818,9 @@ function buildTorqueAlertData(data) {
           isTorque: true,
           instructionType:
             message["status"] === "Success" ? "success" : "error",
-          instructions: [{ message: message["message"], time: firstKey }],
+          instructions: [
+            { message: message["message"], time: moduleData?.DateAndTime },
+          ],
         });
       }
       tempCode = code;
@@ -1705,13 +1711,12 @@ function buildLineChart(data, key, title, isGradientOpposite, hideBackground) {
   let count = 0;
   if (data) {
     for (let item of data) {
-      const objectData = JSON.parse(item["jsondata"]);
-      const firstKey = Object.keys(objectData)[0];
-      const moduleData = objectData[firstKey];
+      const moduleData = JSON.parse(item["jsondata"]);
+
       if (moduleData?.Status <= 0) {
         continue;
       }
-      labels.push(getdate(firstKey));
+      labels.push(getdate(moduleData?.DateAndTime));
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -1748,23 +1753,38 @@ function buildLineChart(data, key, title, isGradientOpposite, hideBackground) {
   };
 }
 
-export function buildTrendData(historical_data, type) {
+export function buildTrendData(historical_data, type, from_data) {
   let labels = [];
-
   const dataSet = [];
-
   const increase_fuel_data = [];
   const engine_health_data = [];
   const torsion = [];
   const power = [];
   const rpmData = [];
-  let maxRpm = 0;
-  for (let item of historical_data) {
-    const objectData = JSON.parse(item["jsondata"]);
-    const firstKey = Object.keys(objectData)[0];
-    const moduleData = objectData[firstKey];
+  const global = [];
+  const mechanical = [];
+  const mixed = [];
+  const electromag = [];
+  const streeStability = [];
+  const bearing = [];
 
-    labels.push(firstKey);
+  const regularity_deviation = [];
+  const bladeStatus = [];
+  const coupling = [];
+  const turbine_coupling = [];
+
+  const regularity_dev = [];
+  const blade_status = [];
+  const bearing_status = [];
+  const CombustionKit = [];
+
+  let maxRpm = 0;
+
+  const parseData = JSON.parse(from_data);
+  for (let item of historical_data) {
+    const moduleData = JSON.parse(item["jsondata"]);
+
+    labels.push(getdate(moduleData?.DateAndTime));
     rpmData.push(parseInt(moduleData?.ChannelSpeed || 0));
 
     if (type === "Engine") {
@@ -1778,6 +1798,41 @@ export function buildTrendData(historical_data, type) {
       torsion.push(itemData?.value || 0);
       itemData = moduleData["StaticPower"];
       power.push(itemData?.value || 0);
+    } else if (type === "Bearing") {
+      let itemData = moduleData["GlobalMixed"];
+      global.push(itemData?.valueInHealth || 0);
+      itemData = moduleData["BearingGlobal"];
+      mechanical.push(itemData?.valueInHealth || 0);
+      itemData = moduleData["4KMixed"];
+      mixed.push(itemData?.valueInHealth || 0);
+    } else if (type === "Motor") {
+      let itemData = moduleData["MElectromag"];
+      electromag.push(itemData?.valueInHealth || 0);
+      itemData = moduleData["MBearing"];
+      bearing.push(itemData?.valueInHealth || 0);
+      itemData = moduleData["MStressStability"];
+      streeStability.push(itemData?.valueInHealth || 0);
+    } else if (type === "Turbine") {
+      if (parseData.type === "Steam") {
+        let itemData = moduleData["RegularityDeviation"];
+        regularity_deviation.push(itemData?.valueInHealth || 0);
+        itemData = moduleData["BladeStatus"];
+        bladeStatus.push(itemData?.valueInHealth || 0);
+        itemData = moduleData["BearingStatus"];
+        coupling.push(itemData?.valueInHealth || 0);
+        itemData = moduleData["TurbineCoupling"];
+        turbine_coupling.push(itemData?.valueInHealth || 0);
+      } else {
+        let itemData = moduleData["RegularityDeviation"];
+        regularity_dev.push(itemData?.valueInHealth || 0);
+        itemData = moduleData["BladeStatus"];
+        blade_status.push(itemData?.valueInHealth || 0);
+
+        itemData = moduleData["BearingStatus"];
+        bearing_status.push(itemData?.valueInHealth || 0);
+        itemData = moduleData["CombustionKit"];
+        CombustionKit.push(itemData?.valueInHealth || 0);
+      }
     }
   }
 
@@ -1803,6 +1858,53 @@ export function buildTrendData(historical_data, type) {
     dataSet.push(rpmDataArr);
     maxRpm = rpmDataArr.maxValue;
   }
+
+  if (global && global.length > 0) {
+    dataSet.push(
+      buildDataSet("Global(Unbalance/Alignment/Looseness)", "red", global)
+    );
+  }
+  if (mechanical && mechanical.length > 0) {
+    dataSet.push(buildDataSet("Mechanical health", "red", mechanical));
+  }
+  if (mixed && mixed.length > 0) {
+    dataSet.push(buildDataSet(" Stability", "red", mixed));
+  }
+  if (electromag && electromag.length > 0) {
+    dataSet.push(buildDataSet("Electromagnetic Stress", "red", electromag));
+  }
+  if (bearing && bearing.length > 0) {
+    dataSet.push(buildDataSet("Bearing", "red", bearing));
+  }
+  if (streeStability && streeStability.length > 0) {
+    dataSet.push(buildDataSet("Stability", "red", streeStability));
+  }
+  if (regularity_deviation && regularity_deviation.length > 0) {
+    dataSet.push(
+      buildDataSet("Regularity Deviation", "red", regularity_deviation)
+    );
+  }
+  if (bladeStatus && bladeStatus.length > 0) {
+    dataSet.push(buildDataSet("Shaft Health", "red", bladeStatus));
+  }
+  if (coupling && coupling.length > 0) {
+    dataSet.push(buildDataSet("Bearing status", "red", coupling));
+  }
+  if (turbine_coupling && turbine_coupling.length > 0) {
+    dataSet.push(buildDataSet(" Coupling", "red", turbine_coupling));
+  }
+  if (regularity_dev && regularity_dev.length > 0) {
+    dataSet.push(buildDataSet("Regularity Deviation", "red", regularity_dev));
+  }
+  if (blade_status && blade_status.length > 0) {
+    dataSet.push(buildDataSet("Shaft Health", "red", blade_status));
+  }
+  if (bearing_status && bearing_status.length > 0) {
+    dataSet.push(buildDataSet("Bearing status", "red", bearing_status));
+  }
+  if (CombustionKit && CombustionKit.length > 0) {
+    dataSet.push(buildDataSet(" Combustion Kit", "red", CombustionKit));
+  }
   return { dataSet, labels, maxRpm };
 }
 
@@ -1824,9 +1926,8 @@ function buildDataSet(title, color, dataPoints, axisId) {
 }
 
 export function convertDate(dateVal) {
-  let dateD = dateVal.toLocaleString().split(" ");
-  let Y = dateVal.toLocaleDateString().split("/").reverse().join("-");
-  return `${Y} ${dateD[1]}`;
+  let dateExtract = format(dateVal, "yyyy-MM-dd HH:mm:ss");
+  return dateExtract;
 }
 function percentage(partialValue, totalValue) {
   return (100 * partialValue) / totalValue;
@@ -1840,10 +1941,8 @@ function buildTurbineChart(data, key, key2, title, isGradientOpposite) {
   let count = 0;
   if (data) {
     for (let item of data) {
-      const objectData = JSON.parse(item["jsondata"]);
-      const firstKey = Object.keys(objectData)[0];
-      const moduleData = objectData[firstKey];
-      labels.push(getdate(firstKey));
+      const moduleData = JSON.parse(item["jsondata"]);
+      labels.push(getdate(moduleData?.DateAndTime));
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -1888,10 +1987,8 @@ function buildMotorChart(data, key, key2, title, isGradientOpposite) {
   let count = 0;
   if (data) {
     for (let item of data) {
-      const objectData = JSON.parse(item["jsondata"]);
-      const firstKey = Object.keys(objectData)[0];
-      const moduleData = objectData[firstKey];
-      labels.push(getdate(firstKey));
+      const moduleData = JSON.parse(item["jsondata"]);
+      labels.push(getdate(moduleData?.DateAndTime));
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -1936,10 +2033,8 @@ function buildBearingChart(data, key, key2, title, isGradientOpposite) {
   let count = 0;
   if (data) {
     for (let item of data) {
-      const objectData = JSON.parse(item["jsondata"]);
-      const firstKey = Object.keys(objectData)[0];
-      const moduleData = objectData[firstKey];
-      labels.push(getdate(firstKey));
+      const moduleData = JSON.parse(item["jsondata"]);
+      labels.push(getdate(moduleData?.DateAndTime));
 
       zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
       const valueObject = moduleData[key];
@@ -2019,11 +2114,11 @@ export function buildAuxData(data) {
       const val = auxData[key];
       if (val && val?.Value) {
         returnData.push({
-          indicatorMax: val?.Unit === "%" ? 100 : parseInt(val?.Value) + 100,
-          indicatorMin: 0,
+          indicatorMax: max_value[key].max,
+          indicatorMin: max_value[key].min,
           indicatorName: val?.Desc + "(" + val?.Unit + ")",
           indicatorValue: Math.round(val?.Value),
-          isGradientColor: true,
+          isGradientColor: false,
           isPercentage: val?.Unit === "%",
         });
       }
@@ -2038,3 +2133,18 @@ export function useQuery() {
 
   return useMemo(() => new URLSearchParams(search), [search]);
 }
+
+const max_value = {
+  PowerPercent: { max: 250.99, min: -251 },
+  Power: { max: 2211081215, min: -2000000000 },
+  FuelLevel: { max: 250.99, min: -251 },
+  EngineOilTemp: { max: 1735, min: -273 },
+  EngineOilPressure: { max: 8031.87, min: 0 },
+  EngineCoulantTemp: { max: 1735, min: -273 },
+  BatteryVoltage: { max: 3212.75, min: 0 },
+  EngineRPM: { max: 8031.87, min: 0 },
+  OperatingHours: { max: 210554060.75, min: 0 },
+  FuelPressure: { max: 0.125, min: 0 },
+  CrankcasePressure: { max: 251.99, min: -250 },
+  BoostPressure: { max: 8031.87, min: 0 },
+};

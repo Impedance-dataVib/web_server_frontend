@@ -228,7 +228,7 @@ const ModuleMonitoringPage = ({
       <Grid item lg={4} md={12} sm={12}>
         <CardWidget
           headerLabel={
-            moduleType !== "Turbine"
+            moduleType === "Engine"
               ? signalData?.description || ""
               : signalData?.turbineMessage || signalData?.description || ""
           }

@@ -156,8 +156,8 @@ const DrawerAppBar = () => {
         <img
           src="logo_vib_360.png"
           style={{
-            width: "107px",
-            height: "36px",
+            width: "90px",
+            height: "45px",
           }}
         />
       </Box>
@@ -309,8 +309,8 @@ const DrawerAppBar = () => {
               <img
                 src="logo_vib_360.png"
                 style={{
-                  width: "107px",
-                  height: "36px",
+                  width: "90px",
+                  height: "45px",
                 }}
               />
             </Box>

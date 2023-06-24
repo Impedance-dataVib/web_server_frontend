@@ -27,11 +27,18 @@ export const useGetAllTrends = (
         module_id: id,
       };
       const moduleType = allModules.find((val: any) => val?.id === id);
+      console.log(moduleType);
       setIsLoading(true);
       setIsError(false);
       setErrorMessage("");
       const result = await getAllTrendsData(payload);
-      setData(buildTrendData(result.data.data, moduleType?.module_type));
+      setData(
+        buildTrendData(
+          result.data.data,
+          moduleType?.module_type,
+          moduleType?.from_data
+        )
+      );
       setIsLoading(false);
     } catch (e: any) {
       setErrorMessage(e?.Message);
@@ -46,7 +53,7 @@ export const useGetAllTrends = (
     if (id && id !== "") {
       getAllTrends(id, dateRangeValues, rpmRange, allModules);
     }
-  }, [id.length, dateRangeValues.endDate]);
+  }, []);
   return { isLoading, data, isError, getAllTrends, errorMessage, setIsError };
 };
 

@@ -346,7 +346,8 @@ const formSchema = {
         name: "Recording Length ",
         label: "recording_length",
         type: "text",
-        helperNote: "Length of Sample Collection (in seconds)",
+        helperNote: `Recording length should be between 1 & 200s.
+        Recommended Recording length in secs = 2400/minRPM`,
       },
       {
         name: "Max Pressure",
@@ -358,7 +359,7 @@ const formSchema = {
         name: "Aux Device Id",
         label: "aux_device_id",
         type: "text",
-        helperNote: "aux device id is an optional field",
+        helperNote: "Auxiliary Data Device ID",
       },
     ],
     "Advanced Parameters": [
@@ -493,7 +494,8 @@ const formSchema = {
         name: "Recording Length ",
         label: "recording_length",
         type: "text",
-        helperNote: "Length of Sample Collection (in seconds)",
+        helperNote: `Recording length should be between 1 & 200s.
+        Recommended Recording length in secs = 2400/minRPM`,
       },
       {
         name: "ZeroDegree ",
@@ -517,8 +519,8 @@ const formSchema = {
         name: "Aux Device Id",
         label: "aux_device_id",
         type: "text",
-        helperNote: "aux device id is an optional field",
-      }
+        helperNote: "Auxiliary Data Device ID",
+      },
     ],
     "Machine Details": [
       {
@@ -659,14 +661,15 @@ const formSchema = {
         name: "Recording Length ",
         label: "recording_length",
         type: "text",
-        helperNote: "Length of Sample Collection (in seconds)",
+        helperNote: `Recording length should be between 1 & 200s.
+        Recommended Recording length in secs = 2400/minRPM`,
       },
       {
         name: "Aux Device Id",
         label: "aux_device_id",
         type: "text",
-        helperNote: "aux device id is an optional field",
-      }
+        helperNote: "Auxiliary Data Device ID",
+      },
     ],
     "Machine Details": [
       {
@@ -759,14 +762,15 @@ const formSchema = {
         name: "Recording Length ",
         label: "recording_length",
         type: "text",
-        helperNote: "Length of Sample Collection (in seconds)",
+        helperNote: `Recording length should be between 1 & 200s.
+        Recommended Recording length in secs = 2400/minRPM`,
       },
       {
         name: "Aux Device Id",
         label: "aux_device_id",
         type: "text",
-        helperNote: "aux device id is an optional field",
-      }
+        helperNote: "Auxiliary Data Device ID",
+      },
     ],
     "Machine Details": [
       {
@@ -897,14 +901,15 @@ const formSchema = {
         name: "Recording Length ",
         label: "recording_length",
         type: "text",
-        helperNote: "Length of Sample Collection (in seconds)",
+        helperNote: `Recording length should be between 1 & 200s.
+        Recommended Recording length in secs = 2400/minRPM`,
       },
       {
         name: "Aux Device Id",
         label: "aux_device_id",
         type: "text",
-        helperNote: "aux device id is an optional field",
-      }
+        helperNote: "Auxiliary Data Device ID",
+      },
     ],
     "Machine Details": [
       {

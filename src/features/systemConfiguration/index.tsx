@@ -25,47 +25,25 @@ import AccordionBase from "src/app/components/accordion-base";
 
 const SystemConfiguration = () => {
   const [isShown, setIsShown] = useState(false);
-  const [apiData, setApiData] = useState({
-    notActiveLicenseInfo: [],
-    serianNo: "",
-    macId: "",
-    firmwareVersion: "",
-    softwareVersion: "",
-    softwareNote: "",
-    library: "",
-    systemInfo: [],
-    licenseInfo: {
-      license_id: "",
-      license_number: "",
-      license_tenure: 1,
-      vbox_name: "",
-      vbox_serial_number: "",
-      vbox_software_version: "",
-      vbox_firmware_version: "",
-      client_name: "",
-      client_email: "",
-      expiry_date: null,
-      activation_date: null,
-      distributor_contact: null,
-      engine_quantity: null,
-      bearing_quantity: null,
-      motor_quantity: null,
-      turbine_quantity: null,
-      torque_quantity: null,
-    },
-  });
-
+  const [apiData, setApiData] = useState<any>();
   const getSystemInfo = async () => {
+    if (apiData) {
+      console.log("debug 1");
+      return;
+    }
     const response = await SystemInfoApi.getSystemInfo();
-    setApiData((val) => {
+    setApiData((val: any) => {
       return {
         ...val,
         ...response?.data,
       };
     });
   };
-
   useEffect(() => {
+    if (!apiData) {
+      console.log("useeffect");
+      getSystemInfo();
+    }
     getSystemInfo();
   }, [apiData]);
   const handleClick = () => {
@@ -157,7 +135,7 @@ const SystemConfiguration = () => {
                       Hardware Serial Number :{" "}
                     </Typography>
                     <Typography variant="body1" sx={{ mx: 1 }}>
-                      {apiData.serianNo}
+                      {apiData?.serianNo}
                     </Typography>
                   </Box>
                   <Box
@@ -170,7 +148,7 @@ const SystemConfiguration = () => {
                   >
                     <Typography variant="subtitle1">Mac ID : </Typography>
                     <Typography variant="body1" sx={{ ml: 1 }}>
-                      {apiData.macId}
+                      {apiData?.macId}
                     </Typography>
                   </Box>
                 </Box>
@@ -193,7 +171,7 @@ const SystemConfiguration = () => {
                       Firmware Number :{" "}
                     </Typography>
                     <Typography variant="body1" sx={{ mx: 1 }}>
-                      {apiData.firmwareVersion}
+                      {apiData?.firmwareVersion}
                     </Typography>
                   </Box>
                   <Box
@@ -237,7 +215,7 @@ const SystemConfiguration = () => {
                       borderRadius: "10px",
                     }}
                   >
-                    {apiData.softwareNote}
+                    {apiData?.softwareNote}
                   </Box>
                 )}
                 <Box
@@ -257,7 +235,7 @@ const SystemConfiguration = () => {
                     <Typography variant="subtitle1">SW Version: </Typography>
                     <Typography variant="body1" sx={{ mx: 1 }}>
                       {/* {process.env.REACT_APP_VERSION} */}
-                      {apiData.softwareVersion}
+                      {apiData?.softwareVersion}
                     </Typography>
                   </Box>
                   <Box
@@ -307,7 +285,7 @@ const SystemConfiguration = () => {
                       License Number:{" "}
                     </Typography>
                     <Typography variant="body1" sx={{ mx: 1 }}>
-                      {apiData.licenseInfo?.license_number}
+                      {apiData?.licenseInfo?.license_number}
                     </Typography>
                   </Box>
                   <Box
@@ -322,7 +300,7 @@ const SystemConfiguration = () => {
                       License Tenure (Months) :{" "}
                     </Typography>
                     <Typography variant="body1" sx={{ mx: 1 }}>
-                      {apiData.licenseInfo?.license_tenure}
+                      {apiData?.licenseInfo?.license_tenure}
                     </Typography>
                   </Box>
                 </Box>
@@ -339,7 +317,7 @@ const SystemConfiguration = () => {
                       Activation date:{" "}
                     </Typography>
                     <Typography variant="body1" sx={{ mx: 1 }}>
-                      {apiData.licenseInfo?.activation_date}
+                      {apiData?.licenseInfo?.activation_date}
                     </Typography>
                   </Box>
                   <Box
@@ -352,7 +330,7 @@ const SystemConfiguration = () => {
                   >
                     <Typography variant="subtitle1">Expiry date: </Typography>
                     <Typography variant="body1" sx={{ mx: 1 }}>
-                      {apiData.licenseInfo?.expiry_date}
+                      {apiData?.licenseInfo?.expiry_date}
                     </Typography>
                   </Box>
                 </Box>
@@ -361,7 +339,7 @@ const SystemConfiguration = () => {
           </Box>
           <Divider sx={{ my: 5 }} />
           <Box>
-            <SystemInfoTable systemInfo={apiData.licenseInfo} />
+            <SystemInfoTable systemInfo={apiData?.licenseInfo} />
           </Box>
           <Divider sx={{ my: 5 }} />
           <Box>
@@ -375,13 +353,12 @@ const SystemConfiguration = () => {
               </AccordionSummary>
               <AccordionDetails>
                 <NotActiveLicenseTable
-                  notActiveLicenseInfo={apiData.notActiveLicenseInfo}
+                  notActiveLicenseInfo={apiData?.notActiveLicenseInfo || []}
                 />
               </AccordionDetails>
             </Accordion>
           </Box>
           <Divider sx={{ my: 5 }} />
-
           <Box
             sx={{
               display: "flex",

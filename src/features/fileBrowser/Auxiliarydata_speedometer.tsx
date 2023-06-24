@@ -4,7 +4,7 @@ import SpeedoMeter from "../common/graph/speedo-meter";
 
 const Auxiliarydata_speedometer = ({ val }: any) => {
   return (
-    <Grid item lg={3} sx={{ mb: "10px" }}>
+    <Grid item lg={3} sx={{ my: "10px" }}>
       <Grid
         sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
       >

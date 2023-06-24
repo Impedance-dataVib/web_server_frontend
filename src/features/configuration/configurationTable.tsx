@@ -89,6 +89,9 @@ const ConfigurationTable = ({
   };
 
   const onExportConfiguartion = async (id: string) => {
+    let filename: "";
+    const listFile = data.filter((item: any) => item.id === id);
+    filename = listFile[0].name;
     // TODO
     setIsLoading(true);
     api
@@ -99,7 +102,7 @@ const ConfigurationTable = ({
         const url = window.URL.createObjectURL(response.data);
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "export-configuration.csv");
+        link.setAttribute("download", `${filename}.csv`);
         document.body.appendChild(link);
         link.click();
         setIsLoading(false);

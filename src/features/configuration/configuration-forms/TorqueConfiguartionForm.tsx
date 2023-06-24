@@ -312,7 +312,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                     display: "inline-block",
                     fontSize: "13px",
                     marginRight: "41px",
-                    marginLeft:"15px",
+                    marginLeft: "15px",
                     marginBottom: "5px",
                     alignItems: "right",
                   }}
@@ -351,7 +351,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                     display: "inline-block",
                     fontSize: "13px",
                     marginRight: "41px",
-                    marginLeft:"15px",
+                    marginLeft: "15px",
                     marginBottom: "5px",
                     alignItems: "right",
                   }}
@@ -390,7 +390,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                     display: "inline-block",
                     fontSize: "13px",
                     marginRight: "41px",
-                    marginLeft:"15px",
+                    marginLeft: "15px",
                     marginBottom: "5px",
                     alignItems: "right",
                   }}
@@ -438,6 +438,7 @@ export const TorqueChannelInformationForm = ({
 }: any) => {
   const [optionsChannelInformation, setOptionsChannelInformation] = useState({
     SENSORx: [
+      "No Channel",
       "Ch1",
       "Ch2",
       "Ch3",
@@ -446,7 +447,6 @@ export const TorqueChannelInformationForm = ({
       "CH6",
       "CH7",
       "CH8",
-      "No Channel",
     ],
     ChannelType: ["Speed"],
     WheelType: [

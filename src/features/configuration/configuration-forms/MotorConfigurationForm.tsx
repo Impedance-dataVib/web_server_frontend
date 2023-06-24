@@ -306,14 +306,14 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           {formContext?.values?.[fieldProps.name] && (
             <>
               <Grid item>
-              <Typography
+                <Typography
                   component={"label"}
                   sx={{
                     width: "143px",
                     display: "inline-block",
                     fontSize: "13px",
                     marginRight: "41px",
-                    marginLeft:"15px",
+                    marginLeft: "15px",
                     marginBottom: "5px",
                     alignItems: "right",
                   }}
@@ -345,14 +345,14 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                 ></TextField>
               </Grid>
               <Grid item>
-              <Typography
+                <Typography
                   component={"label"}
                   sx={{
                     width: "143px",
                     display: "inline-block",
                     fontSize: "13px",
                     marginRight: "41px",
-                    marginLeft:"15px",
+                    marginLeft: "15px",
                     marginBottom: "5px",
                     alignItems: "right",
                   }}
@@ -384,19 +384,19 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                 ></TextField>
               </Grid>
               <Grid item>
-              <Typography
+                <Typography
                   component={"label"}
                   sx={{
                     width: "143px",
                     display: "inline-block",
                     fontSize: "13px",
                     marginRight: "41px",
-                    marginLeft:"15px",
+                    marginLeft: "15px",
                     marginBottom: "5px",
                     alignItems: "right",
                   }}
                 >
-                 High Pass
+                  High Pass
                 </Typography>
                 <TextField
                   name={"highPass"}
@@ -439,6 +439,7 @@ export const MotorChannelInformationForm = ({
 }: any) => {
   const [optionsChannelInformation, setOptionsChannelInformation] = useState({
     SENSORx: [
+      "No Channel",
       "Ch1",
       "Ch2",
       "Ch3",
@@ -447,7 +448,6 @@ export const MotorChannelInformationForm = ({
       "CH6",
       "CH7",
       "CH8",
-      "No Channel",
     ],
     ChannelType: ["Speed", "Transducer"],
     WheelType: [
