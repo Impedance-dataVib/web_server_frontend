@@ -1742,7 +1742,7 @@ function buildLineChart(data, key, title, isGradientOpposite, hideBackground) {
     speedName: "Speed",
     min: round(Math.min(...datapoints)),
     max: round(Math.max(...datapoints)),
-    yMax: title === "Engine Health" ? 100 : 5,
+    yMax: title === "Engine Health" ? 100 : 6,
     avg: round(avg),
     datapoints: datapoints,
     dataPointsY1: zAxisDataPoints,
