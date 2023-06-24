@@ -357,6 +357,8 @@ const DashboardPage = () => {
                 root: classes.tabsRoot,
                 indicator: classes.tabIndicator,
               }}
+              variant="scrollable"
+              scrollButtons="auto"
             >
               {moduleTabs?.map((tabElement: any, index: number) => (
                 <Tooltip title={tabElement.name}>

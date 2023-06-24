@@ -216,6 +216,7 @@ const ConfigurationContent = ({
             onChange={(e, value) => handleChange(e, value, isUnsaved)}
             aria-label="basic tabs example"
             variant="scrollable"
+            scrollButtons="auto"
           >
             {data?.map((tabElement: any, index: number) => (
               <Tab

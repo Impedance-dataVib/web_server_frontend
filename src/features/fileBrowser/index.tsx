@@ -158,6 +158,8 @@ const FileBrowserPage = () => {
                 root: classes.tabsRoot,
                 indicator: classes.tabIndicator,
               }}
+              variant="scrollable"
+              scrollButtons="auto"
             >
               {moduleTabs?.map((tabElement: any, index: number) => {
                 if (tabElement.module_type.includes("Engine")) {
