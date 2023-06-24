@@ -64,7 +64,6 @@ const FileBrowserPage = () => {
         if (sendMessage) {
           if (sendMessage) sendMessage(moduleTabs[activeModule].process_name);
         }
-        console.log(lastMessage);
       },
       onError: (e) => {
         setIsDataAvailable("Something went wrong!. ");

@@ -135,13 +135,12 @@ const DashboardPage = () => {
       },
       shouldReconnect: (closeEvent) => true,
     },
-    isWebsocketConnect,
+    isWebsocketConnect
   );
-  console.log(lastMessage);
 
   useEffect(() => {
-    return(() => setIsWebSocketConnect(false))
-  }, [])
+    return () => setIsWebSocketConnect(false);
+  }, []);
   useEffect(() => {
     if (moduleTabs.length > 0) {
       if (moduleTabs[activeModule].process_name) {

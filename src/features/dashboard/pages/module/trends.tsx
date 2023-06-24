@@ -68,7 +68,7 @@ export default function Trends({ trends, fullScreen }: any) {
                   display={"flex"}
                 >
                   <CircleIcon color="primary" sx={{ mr: 1 }} />
-                  {val?.trendsName.split(',')[0]}
+                  {val?.trendsName.split(",")[0]}
                 </Typography>
               )}
               {val.min && (
