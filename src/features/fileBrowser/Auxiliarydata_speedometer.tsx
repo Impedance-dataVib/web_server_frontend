@@ -19,6 +19,7 @@ const Auxiliarydata_speedometer = ({ val }: any) => {
         <Box sx={{ height: "65%" }}>
           <SpeedoMeter
             maxValue={val.indicatorMax}
+            isGradientOpposite={val?.isGradientOpposite}
             minValue={val?.indicatorMin}
             value={val?.indicatorValue}
             isPercent={val?.isPercentage}

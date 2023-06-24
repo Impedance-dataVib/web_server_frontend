@@ -164,7 +164,6 @@ const DashboardPage = () => {
   function dashBoardApiCall(datas: any) {
     DashboardApi.getTrendsData(datas)
       .then((val) => {
-        console.log(val);
         const parsedData = buildData(val);
         setTrendsData(parsedData);
       })
@@ -303,7 +302,31 @@ const DashboardPage = () => {
           <LinearProgress />
         </Box>
       )}
-
+      {isDataAvailable && (
+        <Box sx={{ my: 1 }}>
+          <Alert
+            sx={{ display: "flex" }}
+            severity="error"
+            onClose={() => {
+              clearInterval(intervalHandle.current);
+              setShowLicenseExpiryMsg(false);
+            }}
+          >
+            <AlertTitle>{isDataAvailable}</AlertTitle>
+            <Typography variant="caption" component={"span"}>
+              {isDataAvailable}
+            </Typography>
+            <Button
+              size="small"
+              sx={{ ml: "30px" }}
+              variant="outlined"
+              onClick={handleClick}
+            >
+              Restart WebSocket
+            </Button>
+          </Alert>
+        </Box>
+      )}
       <Box sx={{ display: "flex", mb: 2 }}>
         <Typography variant="h5">
           {t("dashboard.heading.text", { ns: "dashboard" })}
@@ -363,32 +386,7 @@ const DashboardPage = () => {
           />
         </TabPanel>
       ))}
-      {isDataAvailable && (
-        <Box sx={{ my: 1 }}>
-          <Alert
-            sx={{ display: "flex" }}
-            severity="error"
-            onClose={() => {
-              clearInterval(intervalHandle.current);
-              setShowLicenseExpiryMsg(false);
-            }}
-          >
-            <AlertTitle>{isDataAvailable}</AlertTitle>
-            <Typography variant="caption" component={"span"}>
-              {isDataAvailable}
-            </Typography>
-
-            <Button
-              size="small"
-              sx={{ ml: "30px" }}
-              variant="outlined"
-              onClick={handleClick}
-            >
-              Restart WebSocket
-            </Button>
-          </Alert>
-        </Box>
-      )}
+      
     </Box>
   );
 };

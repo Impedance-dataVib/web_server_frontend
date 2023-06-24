@@ -7,6 +7,7 @@ export default function SpeedoMeter({
   minValue,
   value,
   isGradientColor,
+  isGradientOpposite,
   isPercent,
   indicatorType,
   indicatorUnit,
@@ -43,14 +44,14 @@ export default function SpeedoMeter({
         needleTransitionDuration={0}
         needleColor={maxValue && "#434343"}
         customSegmentStops={!isGradientColor ? [minValue, maxValue] : []}
-        startColor={"red"}
+        startColor={isGradientOpposite ? "green": "red"}
         segmentColors={
           !isGradientColor ? [getMeterColor(), getMeterColor()] : []
         }
         maxSegmentLabels={4}
         currentValueText={`${value} ${isPercent ? "%" : ""}`}
         segments={1000}
-        endColor={"green"}
+        endColor={isGradientOpposite ? "red": "green"}
       />
       <Typography
         variant="body1"

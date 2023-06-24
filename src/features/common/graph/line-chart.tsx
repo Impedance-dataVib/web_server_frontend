@@ -26,7 +26,9 @@ export function LineChart({ data, max }: any) {
     responsive: true,
     indexAxis: "x" as const,
     maintainAspectRatio: false,
-
+    animation: {
+      duration: 0,
+    },
     scales: {
       y: {
         beginAtZero: true,
@@ -34,6 +36,9 @@ export function LineChart({ data, max }: any) {
         min: 0,
         ticks: {
           stepSize: max / 4,
+          callback: (value: any) => {
+            return parseInt(value);
+          },
         },
         gridLines: {
           display: false,

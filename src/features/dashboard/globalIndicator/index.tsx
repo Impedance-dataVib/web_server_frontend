@@ -63,6 +63,7 @@ const GlobalIndicatorChart = ({
             >
               <SpeedoMeter
                 maxValue={val.indicatorMax}
+                isGradientOpposite={val?.isGradientOpposite}
                 minValue={val?.indicatorMin}
                 value={val?.indicatorValue}
                 isPercent={val?.isPercentage}

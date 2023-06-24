@@ -24,6 +24,7 @@ import appContext from "./app/context";
 import ProtectedRoute from "./app/components/protectedRoute";
 import { SnackbarProvider } from "notistack";
 import UnsavedPrompt from "./app/components/unsavedPrompt";
+import { useQuery } from "./app/utils/helper";
 
 const AppRoutes = ({isUnsaved, setNavigatePath, setIsUnsaved, openConfirmBox, navigatePath, setOpenconfirmmBox }: any) => (
   <Routes>
@@ -129,7 +130,7 @@ function App() {
   const [isUnsaved, setIsUnsaved] = useState(false);
   const [openConfirmBox, setOpenconfirmmBox] = useState(false);
   const [navigatePath, setNavigatePath] = useState(null);
-
+  const queryParams = useQuery()
   const [activeTheme, setActiveTheme] = useState<any>(lightTheme);
 
   const [licenseInfo, setLicenseInfo] = useState<any>();
@@ -162,7 +163,8 @@ function App() {
           }
           if (lic.configCount >= 1) {
             // redirect to dashboard
-            navigate("/dashboard");
+            const redirectTo = queryParams.get('redirectTo')
+            navigate(redirectTo || "/dashboard");
             return;
           } else {
             // redirect to configuration screen

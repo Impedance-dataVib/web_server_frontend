@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Typography, Box, Divider, Grid, LinearProgress } from "@mui/material";
-import GlobalIndicatorChart from "../dashboard/globalIndicator";
-import SpeedoMeter from "../common/graph/speedo-meter";
-import { webSocketData } from "../dashboard/schema";
 import Auxiliarydata_speedometer from "./Auxiliarydata_speedometer";
 import { buildAuxData } from "src/app/utils/helper";
 import useWebSocket from "react-use-websocket";

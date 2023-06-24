@@ -44,12 +44,10 @@ const zoomOptions = {
 };
 
 export default function LineGradient({
-  minValue,
   trendsName,
   speedName,
   isGradientOpposite,
   maxValue,
-  avgValue,
   datapoints,
   dataPointsY1,
   dataPointsY2,
@@ -104,8 +102,6 @@ export default function LineGradient({
         const ctx = chart.ctx;
         const canvas = chart.canvas;
         const chartArea = chart.chartArea;
-        const chartWidth = chartArea.right - chartArea.left;
-        const chartHeight = chartArea.bottom - chartArea.top;
         var gradientBack = canvas
           .getContext("2d")
           .createLinearGradient(0, chartArea.bottom, 0, chartArea.top);

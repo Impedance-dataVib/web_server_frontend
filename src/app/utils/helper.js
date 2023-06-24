@@ -1,4 +1,6 @@
 import { integerPropType } from "@mui/utils";
+import { useMemo } from "react";
+import { useLocation } from "react-router-dom";
 
 export const isEmptyObject = (obj) => Object.keys(obj).length > 0;
 
@@ -54,7 +56,8 @@ export function buildSoketData(response, modelType, formData) {
       buildIndicatorData(
         "Increase in Fuel Consumption",
         data?.PowerLoss,
-        "value"
+        "value",
+        true
       )
     );
   } else if (modelType === "Torque") {
@@ -178,7 +181,7 @@ export function buildSoketData(response, modelType, formData) {
   };
 }
 
-function buildIndicatorData(indicator_title, data, key) {
+function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
   let isOffline = false;
   const value = data ? data[key] : 0;
   if (!data || !data[key]) {
@@ -203,6 +206,7 @@ function buildIndicatorData(indicator_title, data, key) {
     indicatorUnit: indicatorUnit,
     isGradientColor: true,
     indicatorType: indicatorType,
+    isGradientOpposite: isGradientOpposite ?? false,
   };
 }
 
@@ -240,7 +244,6 @@ export function buildData(response) {
   const historical_data = response["historical_data"];
   const firstKey = Object.keys(fileData)[0];
   const data = fileData[firstKey];
-  console.log(historical_data);
   // process engine data
   if (response["type"] === "Engine") {
     const moduleData = data["Engine"];
@@ -341,14 +344,16 @@ export function buildData(response) {
     const torsionWithRpm = buildLineChart(
       historical_data,
       "StaticTorsion",
-      "Torsion with RPM"
+      "Torsion with RPM",
+      true,
     );
     trends.push(torsionWithRpm);
 
     const powerWithRpm = buildLineChart(
       historical_data,
       "StaticPower",
-      "Power with RPM"
+      "Power with RPM",
+      true,
     );
     trends.push(powerWithRpm);
 
@@ -728,7 +733,7 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
     speedName: "Speed",
     min: round(Math.min(...datapoints)),
     max: round(Math.max(...datapoints)),
-    yMax: title === "Engine Health" ? 100 : 5,
+    yMax: title === "Engine Health" ? 100 : 6,
     avg: round(avg),
     datapoints: datapoints,
     dataPointsY1: zAxisDataPoints,
@@ -1693,7 +1698,7 @@ function buildEngineAlertData(historical_data) {
   return returnArray;
 }
 
-function buildLineChart(data, key, title, isGradientOpposite) {
+function buildLineChart(data, key, title, isGradientOpposite, hideBackground) {
   let labels = [];
   let datapoints = [];
   let zAxisDataPoints = [];
@@ -1738,6 +1743,7 @@ function buildLineChart(data, key, title, isGradientOpposite) {
     chartType: "LineGradient",
     xLabel: title,
     yLabel: "Time",
+    hideBackground: hideBackground ?? false,
     isGradientOpposite: isGradientOpposite ?? false,
   };
 }
@@ -2024,4 +2030,11 @@ export function buildAuxData(data) {
     }
   }
   return returnData;
+}
+
+
+export function useQuery() {
+  const { search } = useLocation();
+
+  return useMemo(() => new URLSearchParams(search), [search]);
 }

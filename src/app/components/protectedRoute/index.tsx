@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { AUTH_STATUS, useAuth } from "../../auth";
 
 export interface IProtectedRoute {
@@ -8,7 +8,7 @@ export interface IProtectedRoute {
 
 const ProtectedRoute = ({ children }: IProtectedRoute) => {
   const [canProceed, setCanProceed] = useState(true);
-
+  const prevLocation = useLocation();
   const { authStatus, readyState } = useAuth();
 
   useEffect(() => {
@@ -22,6 +22,6 @@ const ProtectedRoute = ({ children }: IProtectedRoute) => {
     }
   }, [authStatus, readyState]);
 
-  return <>{canProceed ? children : <Navigate to="/login" />}</>;
+  return <>{canProceed ? children : <Navigate to={`/login?redirectTo=${prevLocation?.pathname}`} />}</>;
 };
 export default ProtectedRoute;
