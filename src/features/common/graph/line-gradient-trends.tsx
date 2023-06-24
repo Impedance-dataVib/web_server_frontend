@@ -65,6 +65,7 @@ export default function LineGradientTrends({
   dataPoints,
   maxRpm,
   selectedValue,
+  yLabel,
 }: any) {
   const chartRef = useRef<any>(null);
   const [graphData, setGraphData] = useState<any>({ labels: [], datasets: [] });
@@ -108,10 +109,14 @@ export default function LineGradientTrends({
     scales: {
       x: {
         ticks: {
-          maxRotation: 60,
-          minRotation: 60,
-          family: 'Poppins,Helvetica,"sans-serif',
-          size: 12,
+          font: {
+            weight: "bold",
+            size: 14,
+            whiteSpace: "normal",
+          },
+          maxRotation: 0,
+          minRotation: 0,
+          maxTicksLimit: 7,
         },
         title: {
           text: "Time",
@@ -132,8 +137,15 @@ export default function LineGradientTrends({
           family: 'Poppins,Helvetica,"sans-serif',
           size: 12,
         },
+        ticks: {
+          font: {
+            weight: "bold",
+            size: 14,
+            whiteSpace: "normal",
+          },
+        },
         title: {
-          // text: trendsName,
+          text: yLabel,
           display: true,
           font: {
             size: 14,
@@ -147,9 +159,12 @@ export default function LineGradientTrends({
         display: true,
         max: round(maxRpm),
         position: "right" as const,
-        font: {
-          family: 'Poppins,Helvetica,"sans-serif',
-          size: 12,
+        ticks: {
+          font: {
+            weight: "bold",
+            size: 14,
+            whiteSpace: "normal",
+          },
         },
         title: {
           text: "Speed",
@@ -174,9 +189,7 @@ export default function LineGradientTrends({
       </div>
       <div
         style={{
-          height: "100px",
           marginBottom: "10px",
-          overflowY: "scroll",
         }}
       >
         {graphData.datasets.map((val: ObjectDataSet) => (

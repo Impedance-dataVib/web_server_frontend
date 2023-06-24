@@ -160,13 +160,14 @@ export default function LineGradient({
     scales: {
       x: {
         ticks: {
-          maxRotation: 60,
-          minRotation: 60,
+          maxRotation: 0,
+          minRotation: 0,
           font: {
-            family: 'Poppins,Helvetica,"sans-serif',
             size: 12,
+            weight: "bold",
             whiteSpace: "normal",
           },
+          maxTicksLimit: 7,
         },
         title: {
           text: "Time",
@@ -186,8 +187,8 @@ export default function LineGradient({
         max: maxValue || 100,
         ticks: {
           font: {
-            family: 'Poppins,Helvetica,"sans-serif',
             size: 12,
+            weight: "bold",
           },
           callback: (value: any) => {
             return parseInt(value);
@@ -206,8 +207,8 @@ export default function LineGradient({
       y1: {
         ticks: {
           font: {
-            family: 'Poppins,Helvetica,"sans-serif',
             size: 12,
+            weight: "bold",
           },
           callback: (value: any) => {
             return parseInt(value);

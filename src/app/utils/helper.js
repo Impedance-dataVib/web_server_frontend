@@ -201,8 +201,8 @@ function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
   return {
     indicatorName: indicator_title,
     indicatorMin: 0,
-    indicatorMax: 100,
-    indicatorValue: isOffline ? "Offline" : value,
+    indicatorMax: isGradientOpposite ? 5: 100,
+    indicatorValue: isOffline ? "Offline" : parseFloat(value).toFixed(2),
     isPercentage: true,
     indicatorUnit: indicatorUnit,
     isGradientColor: true,

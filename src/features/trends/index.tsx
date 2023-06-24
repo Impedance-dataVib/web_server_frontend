@@ -38,6 +38,7 @@ const TrendsPage = () => {
   const [rpmRange, setRPMRange] = useState<any>({ rpm_min: 0, rpm_max: 0 });
   const [openRpmModal, setOpenRpmModal] = useState(false);
   const [toggleDatePicker, setToggleDatePicker] = useState(false);
+  const [moduleType, setModuleType]= useState('');
   const { data, isLoading, getAllTrends, errorMessage, isError, setIsError } =
     useGetAllTrends(moduleId, dateRangeValues, rpmRange, allModules);
 
@@ -71,6 +72,11 @@ const TrendsPage = () => {
       getAllTrends(moduleId, dateRangeValues, rpmRange, allModules);
     }
   }, [moduleId, dateRangeValues, rpmRange, allModules]);
+
+  useEffect(() => {
+    const moduleType = allModules.find((val:any) => val?.id === moduleId)
+    setModuleType(moduleType?.module_type || '');
+  }, [moduleId]);
 
   useEffect(() => {
     if (data?.dataSet && data?.dataSet.length > 0) {
@@ -227,6 +233,7 @@ const TrendsPage = () => {
               dataPoints={data?.dataSet}
               labels={data?.labels}
               maxRpm={data?.maxRpm}
+              yLabel={moduleType !== "Torque" ? "Percentage (%)": "Power"}
               selectedValue={value}
             />
           )}
