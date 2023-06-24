@@ -203,7 +203,7 @@ function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
     indicatorMin: 0,
     indicatorMax: isGradientOpposite ? 5: 100,
     indicatorValue: isOffline ? "Offline" : parseFloat(value).toFixed(2),
-    isPercentage: true,
+    isPercentage: isOffline ? false : true,
     indicatorUnit: indicatorUnit,
     isGradientColor: true,
     indicatorType: indicatorType,
@@ -320,7 +320,7 @@ export function buildData(response) {
     const increase_fuel_consumption = buildLineGradientChart(
       historical_data,
       "PowerLoss",
-      "Increase fuel consumption"
+      "Increase in fuel consumption"
     );
     trends.push(increase_fuel_consumption);
     const peakPressure = data["Pressure"];
@@ -1840,7 +1840,7 @@ export function buildTrendData(historical_data, type, from_data) {
 
   if (increase_fuel_data && increase_fuel_data.length > 0) {
     dataSet.push(
-      buildDataSet("Increase fuel consumption", "red", increase_fuel_data)
+      buildDataSet("Increase in fuel consumption", "red", increase_fuel_data)
     );
   }
 
