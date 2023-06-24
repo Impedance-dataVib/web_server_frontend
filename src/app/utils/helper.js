@@ -354,6 +354,7 @@ export function buildData(response) {
       historical_data,
       "StaticTorsion",
       "Torsion with RPM",
+      false,
       true,
     );
     trends.push(torsionWithRpm);
@@ -362,6 +363,7 @@ export function buildData(response) {
       historical_data,
       "StaticPower",
       "Power with RPM",
+      false,
       true,
     );
     trends.push(powerWithRpm);

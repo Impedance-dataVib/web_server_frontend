@@ -309,7 +309,7 @@ const DashboardPage = () => {
             severity="error"
             onClose={() => {
               clearInterval(intervalHandle.current);
-              setShowLicenseExpiryMsg(false);
+              setIsDataAvailable(false);
             }}
           >
             <AlertTitle>{isDataAvailable}</AlertTitle>

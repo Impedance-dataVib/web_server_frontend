@@ -52,6 +52,7 @@ export default function LineGradient({
   dataPointsY1,
   dataPointsY2,
   labels,
+  hideBackground,
 }: any) {
   const chartRef = useRef<any>(null);
   const datasetsName = trendsName.split(',');
@@ -105,27 +106,28 @@ export default function LineGradient({
         var gradientBack = canvas
           .getContext("2d")
           .createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-
-        if (!isGradientOpposite) {
-          gradientBack.addColorStop(1, "#ffffff");
-          gradientBack.addColorStop(0.41, "#ffffff");
-          gradientBack.addColorStop(0.4, "#02B271");
-          gradientBack.addColorStop(0, "#02B271");
-        } else {
-          gradientBack.addColorStop(1, "#02B271");
-          gradientBack.addColorStop(0.61, "#02B271");
-          gradientBack.addColorStop(0.6, "#ffbf00");
-          gradientBack.addColorStop(0.31, "#ffbf00");
-          gradientBack.addColorStop(0.3, "#ff0000b3");
-          gradientBack.addColorStop(0, "#ff0000b3");
+        if(!hideBackground){
+          if (!isGradientOpposite) {
+            gradientBack.addColorStop(1, "#ffffff");
+            gradientBack.addColorStop(0.41, "#ffffff");
+            gradientBack.addColorStop(0.4, "#02B271");
+            gradientBack.addColorStop(0, "#02B271");
+          } else {
+            gradientBack.addColorStop(1, "#02B271");
+            gradientBack.addColorStop(0.61, "#02B271");
+            gradientBack.addColorStop(0.6, "#ffbf00");
+            gradientBack.addColorStop(0.31, "#ffbf00");
+            gradientBack.addColorStop(0.3, "#ff0000b3");
+            gradientBack.addColorStop(0, "#ff0000b3");
+          }
+          ctx.fillStyle = gradientBack;
+          ctx.fillRect(
+            chartArea.left,
+            chartArea.bottom,
+            chartArea.right - chartArea.left,
+            chartArea.top - chartArea.bottom
+          );
         }
-        ctx.fillStyle = gradientBack;
-        ctx.fillRect(
-          chartArea.left,
-          chartArea.bottom,
-          chartArea.right - chartArea.left,
-          chartArea.top - chartArea.bottom
-        );
       },
     },
   ];
@@ -187,6 +189,9 @@ export default function LineGradient({
             family: 'Poppins,Helvetica,"sans-serif',
             size: 12,
           },
+          callback: (value: any) => {
+            return parseInt(value);
+          },
         },
         title: {
           text: trendsName,
@@ -205,7 +210,7 @@ export default function LineGradient({
             size: 12,
           },
           callback: (value: any) => {
-            return value;
+            return parseInt(value);
           },
         },
         beginAtZero: true,
