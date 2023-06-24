@@ -7,6 +7,7 @@ import {
   LinearProgress,
   Tabs,
   Tab,
+  Tooltip,
 } from "@mui/material";
 
 import Auxiliarydata_speedometer from "./Auxiliarydata_speedometer";
@@ -161,15 +162,19 @@ const FileBrowserPage = () => {
               {moduleTabs?.map((tabElement: any, index: number) => {
                 if (tabElement.module_type.includes("Engine")) {
                   return (
-                    <Tab
-                      key={index}
-                      label={tabElement.name}
-                      // {...tabProps(index)}
-                      classes={{
-                        root: classes.tabRoot,
-                        selected: classes.activeTab,
-                      }}
-                    />
+                    <Tooltip title={tabElement.name}>
+                      <Tab
+                        key={index}
+                        label={`${
+                          JSON.parse(tabElement.from_data).asset_name
+                        } - ${JSON.parse(tabElement.from_data).equipment_name}`}
+                        // {...tabProps(index)}
+                        classes={{
+                          root: classes.tabRoot,
+                          selected: classes.activeTab,
+                        }}
+                      />
+                    </Tooltip>
                   );
                 }
               })}

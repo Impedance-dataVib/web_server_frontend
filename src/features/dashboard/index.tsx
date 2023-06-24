@@ -8,6 +8,7 @@ import {
   Tabs,
   Typography,
   Button,
+  Tooltip,
 } from "@mui/material";
 import useWebSocket from "react-use-websocket";
 import { makeStyles } from "tss-react/mui";
@@ -276,6 +277,8 @@ const DashboardPage = () => {
     window.location.reload();
   };
 
+  console.log(moduleTabs);
+
   return (
     <Box>
       {showLicenseExpiryMsg && (
@@ -345,7 +348,6 @@ const DashboardPage = () => {
               ? t("dashboard.loading.module.text", { ns: "dashboard" })
               : t("dashboard.module.text", { ns: "dashboard" })}
           </Typography>
-
           <Box sx={{ ml: 1 }}>
             <Tabs
               value={activeModule}
@@ -357,15 +359,22 @@ const DashboardPage = () => {
               }}
             >
               {moduleTabs?.map((tabElement: any, index: number) => (
-                <Tab
-                  key={index}
-                  label={tabElement.name}
-                  {...tabProps(index)}
-                  classes={{
-                    root: classes.tabRoot,
-                    selected: classes.activeTab,
-                  }}
-                />
+                <Tooltip title={tabElement.name}>
+                  <Tab
+                    key={index}
+                    label={
+                      <Box>
+                        {JSON.parse(tabElement.from_data).asset_name} -
+                        {JSON.parse(tabElement.from_data).equipment_name}
+                      </Box>
+                    }
+                    {...tabProps(index)}
+                    classes={{
+                      root: classes.tabRoot,
+                      selected: classes.activeTab,
+                    }}
+                  />
+                </Tooltip>
               ))}
             </Tabs>
           </Box>
@@ -386,7 +395,6 @@ const DashboardPage = () => {
           />
         </TabPanel>
       ))}
-      
     </Box>
   );
 };

@@ -386,14 +386,14 @@ const DownloadPage = () => {
                 )}
                 <Divider sx={{ m: 1 }} />
                 <Box sx={{ m: 1 }}>
-                  <Button
+                  {/* <Button
                     size="small"
                     variant="contained"
                     startIcon={<VisibilityTwoToneIcon />}
                     sx={{ backgroundColor: "#1D4580", m: 1, my: 3, ml: 11 }}
                   >
                     View
-                  </Button>
+                  </Button> */}
                   <Button
                     size="small"
                     variant="contained"
