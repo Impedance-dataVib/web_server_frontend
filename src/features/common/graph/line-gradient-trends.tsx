@@ -143,6 +143,9 @@ export default function LineGradientTrends({
             size: 14,
             whiteSpace: "normal",
           },
+          callback: (value: any) => {
+            return parseInt(value);
+          },
         },
         title: {
           text: yLabel,
@@ -164,6 +167,9 @@ export default function LineGradientTrends({
             weight: "bold",
             size: 14,
             whiteSpace: "normal",
+          },
+          callback: (value: any) => {
+            return parseInt(value);
           },
         },
         title: {

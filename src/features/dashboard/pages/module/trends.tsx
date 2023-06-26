@@ -72,7 +72,7 @@ export default function Trends({ trends, fullScreen }: any) {
                   {val?.trendsName.split(",")[0]}
                 </Typography>
               )}
-              {val.min && (
+            
                 <Typography
                   component="span"
                   textAlign={"left"}
@@ -81,8 +81,7 @@ export default function Trends({ trends, fullScreen }: any) {
                 >
                   Min. {val?.min}
                 </Typography>
-              )}
-              {val.max && (
+              
                 <Typography
                   component="span"
                   textAlign={"left"}
@@ -91,8 +90,6 @@ export default function Trends({ trends, fullScreen }: any) {
                 >
                   Max. {val?.max}
                 </Typography>
-              )}
-              {val?.avg && (
                 <Typography
                   component="span"
                   textAlign={"left"}
@@ -101,7 +98,6 @@ export default function Trends({ trends, fullScreen }: any) {
                 >
                   Avg. {val?.avg}
                 </Typography>
-              )}
             </Box>
           </Grid>
         ))}
