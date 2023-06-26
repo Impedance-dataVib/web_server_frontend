@@ -104,7 +104,6 @@ const FileBrowserPage = () => {
       }
     } else {
       setIsLoading(false);
-      <Box sx={{ textAlign: "center" }}>No Data Available</Box>;
     }
   }, [lastMessage]);
 

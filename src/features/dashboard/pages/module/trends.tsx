@@ -74,39 +74,39 @@ export default function Trends({ trends, fullScreen }: any) {
                   {val?.trendsName.split(",")[0]}
                 </Typography>
               )}
-            
-                <Typography
-                  component="span"
-                  textAlign={"left"}
-                  alignItems="center"
-                  display={"flex"}
-                >
-                  Min. {val?.min}
-                </Typography>
-              
-                <Typography
-                  component="span"
-                  textAlign={"left"}
-                  alignItems="center"
-                  display={"flex"}
-                >
-                  Max. {val?.max}
-                </Typography>
-                <Typography
-                  component="span"
-                  textAlign={"left"}
-                  alignItems="center"
-                  display={"flex"}
-                >
-                  Avg. {val?.avg}
-                </Typography>
+
+              <Typography
+                component="span"
+                textAlign={"left"}
+                alignItems="center"
+                display={"flex"}
+              >
+                Min. {val?.min}
+              </Typography>
+
+              <Typography
+                component="span"
+                textAlign={"left"}
+                alignItems="center"
+                display={"flex"}
+              >
+                Max. {val?.max}
+              </Typography>
+              <Typography
+                component="span"
+                textAlign={"left"}
+                alignItems="center"
+                display={"flex"}
+              >
+                Avg. {val?.avg}
+              </Typography>
             </Box>
           </Grid>
         ))}
       {trendsData.length === 0 && (
         <Grid
           item
-          lg={fullScreen ? 12 : 12}
+          lg={12}
           md={12}
           sm={12}
           sx={{ display: "flex", flexDirection: "column" }}
