@@ -170,7 +170,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
       return (
         <TextField
           name={fieldProps.label}
-          label={fieldProps.name}
+          label={fieldProps.label}
           onChange={formContext?.handleChange}
           value={formContext?.values?.[fieldProps.label]}
           error={Boolean(formContext?.errors?.[fieldProps.label])}
