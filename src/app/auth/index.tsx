@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 
 export interface IAuth {
   userName: string | undefined;
@@ -69,17 +69,31 @@ const AuthProvider = ({ children }: any) => {
     setRefreshToken(undefined);
   };
 
+  const authContextValueProps = useMemo(() => {
+    return {
+      userName,
+      authToken,
+      refreshToken,
+      setAuthToken,
+      setRefreshToken,
+      signOut,
+      readyState,
+      setUserName,
+    };
+  }, [
+    userName,
+    authToken,
+    refreshToken,
+    setAuthToken,
+    setRefreshToken,
+    signOut,
+    readyState,
+    setUserName,
+  ]);
   return (
     <authContext.Provider
       value={{
-        userName,
-        authToken,
-        refreshToken,
-        setAuthToken,
-        setRefreshToken,
-        signOut,
-        readyState,
-        setUserName,
+        ...authContextValueProps,
       }}
     >
       {children}

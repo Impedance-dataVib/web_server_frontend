@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import DashboardPage from "./features/dashboard";
@@ -17,7 +17,6 @@ import HelpPage from "./features/help";
 import SettingsPage from "./features/settings";
 import SystemConfiguration from "./features/systemConfiguration";
 import DownloadPage from "./features/downloads";
-// import { AUTH_STATUS, useAuth } from "./app/auth";
 import FullScreenLoader from "./app/components/fullscreen-loader";
 import CommonApi from "./commonApi";
 import appContext from "./app/context";
@@ -26,7 +25,14 @@ import { SnackbarProvider } from "notistack";
 import UnsavedPrompt from "./app/components/unsavedPrompt";
 import { useQuery } from "./app/utils/helper";
 
-const AppRoutes = ({isUnsaved, setNavigatePath, setIsUnsaved, openConfirmBox, navigatePath, setOpenconfirmmBox }: any) => (
+const AppRoutes = ({
+  isUnsaved,
+  setNavigatePath,
+  setIsUnsaved,
+  openConfirmBox,
+  navigatePath,
+  setOpenconfirmmBox,
+}: any) => (
   <Routes>
     <Route path="/" element={<DashboardPage />} />
     {/* <Route path="login" element={<LoginPage />} /> */}
@@ -52,7 +58,7 @@ const AppRoutes = ({isUnsaved, setNavigatePath, setIsUnsaved, openConfirmBox, na
       path="/configuration/:configId"
       element={
         <ProtectedRoute>
-          <ConfigurationPage 
+          <ConfigurationPage
             setNavigatePath={setNavigatePath}
             navigatePath={navigatePath}
             isUnsaved={isUnsaved}
@@ -130,14 +136,13 @@ function App() {
   const [isUnsaved, setIsUnsaved] = useState(false);
   const [openConfirmBox, setOpenconfirmmBox] = useState(false);
   const [navigatePath, setNavigatePath] = useState(null);
-  const queryParams = useQuery()
-  const [activeTheme, setActiveTheme] = useState<any>(lightTheme);
+  const queryParams = useQuery();
+  const [activeTheme] = useState<any>(lightTheme);
 
   const [licenseInfo, setLicenseInfo] = useState<any>();
   const [licenseStatus, setLicenseStatus] = useState<string>();
   const [licenseLoading, setLicenseLoading] = useState<boolean>(false);
 
-  // const authenticator = useAuth();
   const navigate = useNavigate();
   const path = useLocation();
 
@@ -147,11 +152,11 @@ function App() {
       .then((res) => {
         setLicenseLoading(false);
         const lic = res.data;
-          // {
-          //   configCount: 1,
-          //   expiryDate: "2023-01-03 06:42:35",
-          //   isActive: false,
-          // };
+        // {
+        //   configCount: 1,
+        //   expiryDate: "2023-01-03 06:42:35",
+        //   isActive: false,
+        // };
         setLicenseInfo(lic);
         if (lic !== undefined && String(lic.isActive) === "true") {
           // set license active
@@ -163,7 +168,7 @@ function App() {
           }
           if (lic.configCount >= 1) {
             // redirect to dashboard
-            const redirectTo = queryParams.get('redirectTo')
+            const redirectTo = queryParams.get("redirectTo");
             navigate(redirectTo || "/dashboard");
             return;
           } else {
@@ -174,7 +179,6 @@ function App() {
         } else {
           // redirect to activate license screen
           setLicenseStatus(LICENSE_STATUS.INACTIVE);
-          return;
         }
       })
       .catch((e) => {
@@ -192,7 +196,9 @@ function App() {
   if (licenseStatus === LICENSE_STATUS.INACTIVE) {
     navigate("/login?inactive=true");
   }
-
+  const appContextProviderValues = useMemo(() => {
+    return { licenseInfo, licenseStatus, onLoadCheckLicense };
+  }, [licenseStatus, licenseInfo, onLoadCheckLicense]);
   return (
     <div className="App">
       <Suspense fallback={<FullScreenLoader />}>
@@ -201,7 +207,7 @@ function App() {
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           autoHideDuration={2500}
         >
-          <appContext.Provider value={{ licenseInfo, licenseStatus, onLoadCheckLicense }}>
+          <appContext.Provider value={{ ...appContextProviderValues }}>
             <ThemeProvider theme={activeTheme}>
               <CssBaseline />
               {licenseLoading ? (
@@ -211,9 +217,14 @@ function App() {
                   {path && ["/login"].includes(path.pathname) ? (
                     <>{LoginRoutes}</>
                   ) : (
-                    <Layout isUnsaved={isUnsaved} openConfirmBox={openConfirmBox} setOpenconfirmmBox={setOpenconfirmmBox} setNavigatePath={setNavigatePath}>
+                    <Layout
+                      isUnsaved={isUnsaved}
+                      openConfirmBox={openConfirmBox}
+                      setOpenconfirmmBox={setOpenconfirmmBox}
+                      setNavigatePath={setNavigatePath}
+                    >
                       <UnsavedPrompt isUnsaved={isUnsaved} />
-                      <AppRoutes 
+                      <AppRoutes
                         navigatePath={navigatePath}
                         setNavigatePath={setNavigatePath}
                         isUnsaved={isUnsaved}
