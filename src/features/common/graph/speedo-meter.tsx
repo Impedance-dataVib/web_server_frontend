@@ -1,5 +1,4 @@
 import { Typography } from "@mui/material";
-import { useEffect } from "react";
 import ReactSpeedometer, { Transition } from "react-d3-speedometer";
 
 export default function SpeedoMeter({

@@ -1,5 +1,5 @@
 import { Line } from "react-chartjs-2";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -103,7 +103,7 @@ export default function LineGradient({
         const ctx = chart.ctx;
         const canvas = chart.canvas;
         const chartArea = chart.chartArea;
-        var gradientBack = canvas
+        let gradientBack = canvas
           .getContext("2d")
           .createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
         if(!hideBackground){

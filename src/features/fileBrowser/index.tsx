@@ -47,7 +47,6 @@ const useStyles = makeStyles()((theme) => {
 });
 
 const FileBrowserPage = () => {
-  const [isDataAvailable, setIsDataAvailable] = useState<any>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [globalIndicator, setGlobalIndicator] = useState<any>([]);
   const [isWebsocketConnect, setIsWebSocketConnect] = useState(true);
@@ -65,7 +64,6 @@ const FileBrowserPage = () => {
         }
       },
       onError: (e) => {
-        setIsDataAvailable("Something went wrong!. ");
         setIsLoading(false);
       },
       shouldReconnect: (closeEvent) => true,
