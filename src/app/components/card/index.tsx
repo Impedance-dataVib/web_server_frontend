@@ -1,10 +1,6 @@
 import {
   Cancel,
-  CropFree,
   CropFreeOutlined,
-  Fullscreen,
-  Maximize,
-  Minimize,
   OpenInFull,
   Remove,
   Search,
@@ -13,7 +9,6 @@ import {
   Box,
   Dialog,
   DialogContent,
-  DialogTitle,
   Divider,
   Paper,
   Theme,

@@ -49,12 +49,6 @@ const AccordionBase = ({
   title,
   children,
 }: any) => {
-  const onChange = () => {
-    if (handleChange) {
-      handleChange(value);
-    }
-  };
-
   return (
     <Accordion expanded={expanded === value} onChange={handleChange(value)}>
       <AccordionSummary

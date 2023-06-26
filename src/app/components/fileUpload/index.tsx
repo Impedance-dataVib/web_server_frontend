@@ -43,12 +43,6 @@ const FileUploadComponent = ({
     }
   };
 
-  const onDragEnd = () => {
-    if (dragOverFlag) {
-      setDragOverFlag(false);
-    }
-  };
-
   const onFileChangeHandler = (e: any) => {
     const files = e.target.files;
     if (files && files.length > 0) {
@@ -68,7 +62,7 @@ const FileUploadComponent = ({
         backgroundColor: dragOverFlag ? "#f7f7f7" : "white",
       }}
       onDragOver={onDragOver}
-      onDragLeave={onDragEnd}
+      onDragLeave={onDropCapture}
       onDropCapture={onDropCapture}
       onDrop={onDropHandler}
     >
