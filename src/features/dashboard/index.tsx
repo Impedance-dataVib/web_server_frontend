@@ -277,8 +277,6 @@ const DashboardPage = () => {
     window.location.reload();
   };
 
-  console.log(moduleTabs);
-
   return (
     <Box>
       {showLicenseExpiryMsg && (
