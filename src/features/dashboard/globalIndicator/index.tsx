@@ -1,5 +1,4 @@
 import { Box, Grid, Typography } from "@mui/material";
-import { slice } from "lodash";
 import { useEffect, useState, useMemo } from "react";
 import SpeedoMeter from "src/features/common/graph/speedo-meter";
 

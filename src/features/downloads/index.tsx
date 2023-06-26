@@ -21,12 +21,9 @@ import {
   Tooltip,
 } from "@mui/material";
 import {
-  assetData,
   selectOption,
-  selectPeriod,
   selectReportType,
 } from "./schema";
-import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import DownloadInfoApi from "./api";
 import { enqueueSnackbar } from "notistack";
@@ -38,7 +35,6 @@ const DownloadPage = () => {
   const initial = "";
   const [dataSelection, setDataSelection] = useState(initial);
   const [asset, setAsset] = useState(initial);
-  // const [period, setPeriod] = useState(initial);
   const [reportType, setReportType] = useState(initial);
   const [assetModule, setAssetModule] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -386,14 +382,6 @@ const DownloadPage = () => {
                 )}
                 <Divider sx={{ m: 1 }} />
                 <Box sx={{ m: 1 }}>
-                  {/* <Button
-                    size="small"
-                    variant="contained"
-                    startIcon={<VisibilityTwoToneIcon />}
-                    sx={{ backgroundColor: "#1D4580", m: 1, my: 3, ml: 11 }}
-                  >
-                    View
-                  </Button> */}
                   <Button
                     size="small"
                     variant="contained"
