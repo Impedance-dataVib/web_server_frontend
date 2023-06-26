@@ -43,15 +43,16 @@ export default function SpeedoMeter({
         needleTransition={"easeQuadIn" as Transition}
         needleTransitionDuration={0}
         needleColor={maxValue && "#434343"}
+        needleHeightRatio={value === "Offline" ? 0 : 0.9}
         customSegmentStops={!isGradientColor ? [minValue, maxValue] : []}
-        startColor={isGradientOpposite ? "green": "red"}
+        startColor={isGradientOpposite ? "green" : "red"}
         segmentColors={
           !isGradientColor ? [getMeterColor(), getMeterColor()] : []
         }
         maxSegmentLabels={4}
         currentValueText={`${value} ${isPercent ? "%" : ""}`}
         segments={1000}
-        endColor={isGradientOpposite ? "red": "green"}
+        endColor={isGradientOpposite ? "red" : "green"}
       />
       <Typography
         variant="body1"

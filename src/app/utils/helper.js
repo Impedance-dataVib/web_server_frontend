@@ -6,6 +6,7 @@ import { format } from "date-fns";
 export const isEmptyObject = (obj) => Object.keys(obj).length > 0;
 
 export function buildSoketData(response, modelType, formData) {
+  console.log(response);
   const firstKey = Object.keys(response)[0];
   const parserFormData = JSON.parse(formData);
   const maxRPMThrshhold = parseInt(parserFormData.rated_rpm);
@@ -185,6 +186,7 @@ export function buildSoketData(response, modelType, formData) {
 function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
   let isOffline = false;
   const value = data ? data[key] : 0;
+  console.log(data, key);
   if (!data || !data[key]) {
     isOffline = true;
   }
@@ -201,12 +203,12 @@ function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
   return {
     indicatorName: indicator_title,
     indicatorMin: 0,
-    indicatorMax: isGradientOpposite ? 5: 100,
+    indicatorMax: isGradientOpposite ? 5 : 100,
     indicatorValue: isOffline ? "Offline" : parseFloat(value).toFixed(2),
     isPercentage: isOffline ? false : true,
-    indicatorUnit: indicatorUnit,
+    indicatorUnit: isOffline ? " " : indicatorUnit,
     isGradientColor: true,
-    indicatorType: indicatorType,
+    indicatorType: isOffline ? " " : indicatorType,
     isGradientOpposite: isGradientOpposite ?? false,
   };
 }
@@ -355,7 +357,7 @@ export function buildData(response) {
       "StaticTorsion",
       "Torsion with RPM",
       false,
-      true,
+      true
     );
     trends.push(torsionWithRpm);
 
@@ -364,7 +366,7 @@ export function buildData(response) {
       "StaticPower",
       "Power with RPM",
       false,
-      true,
+      true
     );
     trends.push(powerWithRpm);
 
@@ -2128,7 +2130,6 @@ export function buildAuxData(data) {
   }
   return returnData;
 }
-
 
 export function useQuery() {
   const { search } = useLocation();

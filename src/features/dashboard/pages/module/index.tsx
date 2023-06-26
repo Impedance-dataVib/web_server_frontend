@@ -159,6 +159,8 @@ const ModuleMonitoringPage = ({
                 onChange={onActiveModuleChange}
                 aria-label="select modules"
                 sx={{ marginTop: "10px" }}
+                variant="scrollable"
+                scrollButtons="auto"
               >
                 {trendsCylinder?.map((tabElement: any, index: number) => (
                   <Tab

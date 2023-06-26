@@ -1,10 +1,12 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import LineGradient from "src/features/common/graph/line-gradient";
 import CircleIcon from "@mui/icons-material/Circle";
 import { BarChart } from "src/features/common/graph/bar-chart";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Trends({ trends, fullScreen }: any) {
+  const navigate = useNavigate();
   const [trendsData, setTrendsData] = useState(trends);
 
   useEffect(() => {
@@ -50,7 +52,7 @@ export default function Trends({ trends, fullScreen }: any) {
                   labels={val?.labels}
                   isGradientOpposite={val?.isGradientOpposite}
                 />
-              ) : fullScreen ? (
+              ) : { fullScreen } ? (
                 <BarChart
                   datapoints={val?.datapoints}
                   labels={val?.labels}
@@ -113,6 +115,21 @@ export default function Trends({ trends, fullScreen }: any) {
             No Data found
           </Typography>
         </Grid>
+      )}
+      {fullScreen && (
+        <Box sx={{ display: "flex" }}>
+          <Typography p={"10px 20px"} color={"red"}>
+            Note :- To know more about other indicators, go to Trends Page
+          </Typography>
+          <Button
+            onClick={() => navigate("/trends")}
+            size="small"
+            variant="contained"
+            sx={{ mt: "10px" }}
+          >
+            Click here
+          </Button>
+        </Box>
       )}
     </Grid>
   );
