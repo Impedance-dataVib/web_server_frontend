@@ -106,7 +106,7 @@ export default function Trends({ trends, fullScreen }: any) {
       {trendsData.length === 0 && (
         <Grid
           item
-          lg={fullScreen ? 12 : 12}
+          lg={12}
           md={12}
           sm={12}
           sx={{ display: "flex", flexDirection: "column" }}

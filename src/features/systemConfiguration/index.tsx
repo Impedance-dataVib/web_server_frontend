@@ -12,16 +12,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SystemInfoTable from "./systemInfoTable";
 import NotActiveLicenseTable from "./notActiveLicenseTable";
 import UploadFile from "./uploadFile";
-import CachedIcon from "@mui/icons-material/Cached";
-// import { apiData } from "./schema";
 import { useEffect, useState } from "react";
 import SystemInfoApi from "./api";
 import InfoIcon from "@mui/icons-material/Info";
-import FileUploadComponent from "src/app/components/fileUpload";
-import { enqueueSnackbar } from "notistack";
 import api from "../../app/api";
-import axios from "axios";
-import AccordionBase from "src/app/components/accordion-base";
 
 const SystemConfiguration = () => {
   const [isShown, setIsShown] = useState(false);

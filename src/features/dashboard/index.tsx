@@ -359,9 +359,8 @@ const DashboardPage = () => {
               scrollButtons="auto"
             >
               {moduleTabs?.map((tabElement: any, index: number) => (
-                <Tooltip title={tabElement.name}>
+                <Tooltip title={tabElement.name} key={`toolTip${index}`}>
                   <Tab
-                    key={index}
                     label={
                       <Box>
                         {JSON.parse(tabElement.from_data).asset_name} -
