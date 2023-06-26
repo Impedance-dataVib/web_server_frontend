@@ -187,8 +187,8 @@ const FileBrowserPage = () => {
       <Box sx={{ bgcolor: "white", mt: "15px" }}>
         <Divider sx={{ mb: "10px" }} />
         <Grid container spacing={3}>
-          {globalIndicator.map((val: any) => (
-            <Auxiliarydata_speedometer val={val} />
+          {globalIndicator.map((val: any, index: number) => (
+            <Auxiliarydata_speedometer val={val} key={`aux${index}`}/>
           ))}
         </Grid>
       </Box>
