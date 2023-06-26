@@ -6,7 +6,6 @@ import { format } from "date-fns";
 export const isEmptyObject = (obj) => Object.keys(obj).length > 0;
 
 export function buildSoketData(response, modelType, formData) {
-  console.log(response);
   const firstKey = Object.keys(response)[0];
   const parserFormData = JSON.parse(formData);
   const maxRPMThrshhold = parseInt(parserFormData.rated_rpm);
@@ -186,7 +185,6 @@ export function buildSoketData(response, modelType, formData) {
 function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
   let isOffline = false;
   const value = data ? data[key] : 0;
-  console.log(data, key);
   if (!data || !data[key]) {
     isOffline = true;
   }
@@ -231,7 +229,7 @@ function buildPeekPressureChart(data, firingOrder, maxPressure) {
   }
   const increase_fuel_consumption = {
     trendsName: "Peek Pressure",
-    datapoints: data["cylinderValues"],
+    datapoints: data?.cylinderValues || [],
     labels: labels,
     chartType: "bar",
     xLabel: "Peek Pressure",
@@ -255,7 +253,6 @@ export function buildData(response) {
   // process engine data
   if (response["type"] === "Engine") {
     data = JSON.parse(historical_data.at(-1)?.jsondata);
-    console.log(data);
     const moduleData = data["Engine"];
     const firingOrder = moduleData["FiringOrder"];
     const firingOrderSplit = firingOrder.length / 2;
@@ -326,14 +323,15 @@ export function buildData(response) {
     );
     trends.push(increase_fuel_consumption);
     const peakPressure = data["Pressure"];
-    if (peakPressure && parseInt(peakPressure["value"]) !== 0) {
-      const peak_pressure = buildPeekPressureChart(
-        peakPressure,
-        firingOrder,
-        from_data["max_pressure"]
-      );
-      trends.push(peak_pressure);
-    }
+    // TODO: if (peakPressure && parseInt(peakPressure["value"]) !== 0) {
+
+    const peak_pressure = buildPeekPressureChart(
+      peakPressure,
+      firingOrder,
+      from_data["max_pressure"]
+    );
+    trends.push(peak_pressure);
+    // }
     const mechanical_health = buildLineGradientChart(
       historical_data,
       "MechanicalHealth",
@@ -2116,7 +2114,7 @@ export function buildAuxData(data) {
       key !== "DeviceName"
     ) {
       const val = auxData[key];
-      if (val && val?.Value) {
+      if (val && val?.Value && val?.Value !== "NA") {
         returnData.push({
           indicatorMax: max_value[key].max,
           indicatorMin: max_value[key].min,

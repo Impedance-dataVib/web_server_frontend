@@ -126,6 +126,7 @@ const FileBrowserPage = () => {
   const onActiveModuleChange = (event: any, params: any) => {
     setActiveModule(params);
   };
+
   return (
     <Box>
       {isLoading && (

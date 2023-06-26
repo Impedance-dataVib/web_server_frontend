@@ -13,7 +13,7 @@ import Check from "@mui/icons-material/Check";
 import { StepIconProps } from "@mui/material/StepIcon";
 import { styled } from "@mui/material/styles";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { isEmptyObject } from "src/app/utils/helper";
 import api from "../../../../app/api";
 import { enqueueSnackbar } from "notistack";
@@ -120,17 +120,17 @@ const PrettoSlider = styled(Slider)({
   },
 });
 
-const LiveStatus = ({ liveStatus }: any) => {
+const LiveStatus = ({ liveStatus, processName }: any) => {
+  const [currentMode, setCurrentMode] = useState<any>("");
   const restartVbox = () => {
-    console.log("clicked");
     api
-      .get("/vbox/restart.php")
+      .get(`/vbox/reset.php/${processName}`)
       .then((res) => {
-        console.log(res);
         enqueueSnackbar({
           message: "success",
           variant: "success",
         });
+        setCurrentMode("Manual");
       })
       .catch((error) => {
         enqueueSnackbar({
@@ -203,7 +203,8 @@ const LiveStatus = ({ liveStatus }: any) => {
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography variant="body1" component={"span"}>
-              Current Mode : {liveStatus?.currentMode}
+              Current Mode :{" "}
+              {currentMode ? currentMode : liveStatus?.currentMode}
             </Typography>
             <Box
               sx={{

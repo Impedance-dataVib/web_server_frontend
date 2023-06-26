@@ -221,7 +221,9 @@ const ModuleMonitoringPage = ({
         <CardWidget
           headerLabel="Live Status"
           headerIcon={<VisibilityOutlined />}
-          content={<LiveStatus liveStatus={liveStatus} />}
+          content={
+            <LiveStatus liveStatus={liveStatus} processName={processName} />
+          }
           initiallyCollapsed={true}
           setIsLiveStatusOpen={setIsLiveStatusOpen}
           fullScreenContent={<LiveStatus liveStatus={liveStatus} />}
