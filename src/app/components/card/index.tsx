@@ -64,7 +64,7 @@ const CardWidget = ({
 
   const getSectionSx = useMemo(() => {
     const topSection =
-      section === "top"
+      section === "top" && !collapsed
         ? {
             p: { md: 2, lg: "0px", xl: 2 },
             pt: headerContent ? 0 : 2,
@@ -95,7 +95,7 @@ const CardWidget = ({
             boxShadow: "2px 4px 8px #00000029",
             transition: "all .2s linear",
           };
-    return section === "middle"
+    return section === "middle" && !collapsed
       ? {
           p: 2,
           pt: headerContent ? 0 : 2,
@@ -105,7 +105,7 @@ const CardWidget = ({
           minHeight: "30vh",
         }
       : topSection;
-  }, [section]);
+  }, [section, collapsed]);
   return (
     <Paper sx={getSectionSx}>
       <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
