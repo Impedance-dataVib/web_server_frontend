@@ -22,7 +22,6 @@ const SystemConfiguration = () => {
   const [apiData, setApiData] = useState<any>();
   const getSystemInfo = async () => {
     if (apiData) {
-      console.log("debug 1");
       return;
     }
     const response = await SystemInfoApi.getSystemInfo();
@@ -35,10 +34,8 @@ const SystemConfiguration = () => {
   };
   useEffect(() => {
     if (!apiData) {
-      console.log("useeffect");
       getSystemInfo();
     }
-    getSystemInfo();
   }, [apiData]);
   const handleClick = () => {
     api.get(
