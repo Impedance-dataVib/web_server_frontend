@@ -74,32 +74,32 @@ export default function Trends({ trends, fullScreen }: any) {
                   {val?.trendsName.split(",")[0]}
                 </Typography>
               )}
-            
-                <Typography
-                  component="span"
-                  textAlign={"left"}
-                  alignItems="center"
-                  display={"flex"}
-                >
-                  Min. {val?.min}
-                </Typography>
-              
-                <Typography
-                  component="span"
-                  textAlign={"left"}
-                  alignItems="center"
-                  display={"flex"}
-                >
-                  Max. {val?.max}
-                </Typography>
-                <Typography
-                  component="span"
-                  textAlign={"left"}
-                  alignItems="center"
-                  display={"flex"}
-                >
-                  Avg. {val?.avg}
-                </Typography>
+
+              <Typography
+                component="span"
+                textAlign={"left"}
+                alignItems="center"
+                display={"flex"}
+              >
+                Min. {val?.min}
+              </Typography>
+
+              <Typography
+                component="span"
+                textAlign={"left"}
+                alignItems="center"
+                display={"flex"}
+              >
+                Max. {val?.max}
+              </Typography>
+              <Typography
+                component="span"
+                textAlign={"left"}
+                alignItems="center"
+                display={"flex"}
+              >
+                Avg. {val?.avg}
+              </Typography>
             </Box>
           </Grid>
         ))}
