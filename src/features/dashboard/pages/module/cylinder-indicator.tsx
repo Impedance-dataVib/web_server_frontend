@@ -20,8 +20,8 @@ function CylinderIndicator({ cylinderSpecificIndicators, fullScreen }: any) {
         <Grid
           key={`globalIndicator${index}`}
           item
-          md={fullScreen ? 6 : 6}
-          sm={fullScreen ? 6 : 6}
+          md={6}
+          sm={6}
           lg={fullScreen ? 6 : 3}
           xs={fullScreen ? 6 : 12}
         >

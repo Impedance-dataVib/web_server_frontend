@@ -190,7 +190,7 @@ const CardWidget = ({
             </Box>
           </Box>
         )}
-        {headerContent && headerContent}
+        {headerContent != undefined && headerContent}
         <Box
           component="section"
           sx={{

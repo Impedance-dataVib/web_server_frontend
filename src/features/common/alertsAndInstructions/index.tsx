@@ -124,7 +124,7 @@ const AlertsAndInstructions = ({
             </Grid>
           ))}
           {alertData.length === 0 && 
-        <Grid item lg={isModalOpen ? 12: 12} md={12} sm={12} sx={{display: 'flex', flexDirection: 'column'}}>
+        <Grid item lg={12} md={12} sm={12} sx={{display: 'flex', flexDirection: 'column'}}>
           <Typography textAlign={"center"} sx={{width: '100%'}}>No Data found</Typography>
           </Grid>}
       </Grid>

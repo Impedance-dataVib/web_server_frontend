@@ -53,7 +53,6 @@ const StepToComponentEngineModule = ({
           formContext={formContext}
         ></EngineDetailsForm>
       );
-      break;
     case "Diagnostic Details":
       return (
         <DiagnosticDetailsForm

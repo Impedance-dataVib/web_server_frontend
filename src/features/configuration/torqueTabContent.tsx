@@ -58,7 +58,6 @@ const StepToComponentEngineModule = ({
           formContext={formContext}
         ></TorqueMachineDetailsForm>
       );
-      break;
     case "Diagnostic Details":
       return (
         <TorqueDiagnosticDetails

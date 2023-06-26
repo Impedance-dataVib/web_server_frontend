@@ -25,7 +25,7 @@ export default function Trends({ trends, fullScreen }: any) {
         trendsData.map((val: any, index: any) => (
           <Grid
             item
-            lg={fullScreen ? 6 : 6}
+            lg={6}
             md={6}
             sm={12}
             key={`trends${index}`}

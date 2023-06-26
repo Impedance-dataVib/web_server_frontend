@@ -152,7 +152,7 @@ const LiveStatus = ({ liveStatus }: any) => {
             height: "200px",
           }}
         >
-          {apiData.steps.length && (
+          {apiData.steps && apiData.steps.length > 0 && (
             <Stepper
               activeStep={liveStatus?.currentStep}
               alternativeLabel
