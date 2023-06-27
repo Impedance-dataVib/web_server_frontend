@@ -143,16 +143,15 @@ const DownloadPage = () => {
     api
       .get("/download/get-all.php")
       .then((res: any) => {
-        if(res.data && res.data.data && res.data.data.length > 0 ){
+        if (res.data && res.data.data && res.data.data.length > 0) {
           const result = res.data.data.map((val: any) => {
             return {
               ...val,
               filter_data: JSON.parse(val.filter_data),
-            }
-          })
+            };
+          });
           setShowData(result);
         }
-        
       })
       .catch((error) => console.error(error));
   };
@@ -448,10 +447,18 @@ const DownloadPage = () => {
                     {row.process_complete_time}
                   </TableCell>
                   <TableCell align="center">
-                    {row.filter_data.startDate ? convertUTCDateToLocalTime(new Date(row.filter_data.startDate)): ''}
+                    {row.filter_data.startDate
+                      ? convertUTCDateToLocalTime(
+                          new Date(row.filter_data.startDate)
+                        )
+                      : ""}
                   </TableCell>
                   <TableCell align="center">
-                    {row.filter_data.endDate ? convertUTCDateToLocalTime(new Date(row.filter_data.endDate)): ''}
+                    {row.filter_data.endDate
+                      ? convertUTCDateToLocalTime(
+                          new Date(row.filter_data.endDate)
+                        )
+                      : ""}
                   </TableCell>
                   <TableCell align="center">
                     {row.filter_data.type === "historicReports"

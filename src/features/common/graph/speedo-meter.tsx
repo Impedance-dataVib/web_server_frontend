@@ -28,7 +28,6 @@ export default function SpeedoMeter({
     }
     return "#FFA326";
   };
-
   return (
     <>
       <ReactSpeedometer
