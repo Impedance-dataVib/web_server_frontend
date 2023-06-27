@@ -303,12 +303,16 @@ export function buildData(response) {
         cylinder_specific_indicators.push(condition_of_cyl_moving_parts);
       }
     }
-    if (from_data["fuel"].includes("Gas")) {
+    if (
+      from_data["fuel"] === "Hydrogen" ||
+      from_data["fuel"] === "Ammonia" ||
+      from_data["fuel"] === "Natural Gas"
+    ) {
       const miss_firing = buildCompressionData(
         first,
         second,
         data["Misfiring"],
-        "Miss firing"
+        "Misfiring"
       );
       if (miss_firing) {
         cylinder_specific_indicators.push(miss_firing);

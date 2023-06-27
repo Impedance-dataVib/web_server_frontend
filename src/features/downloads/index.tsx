@@ -20,10 +20,7 @@ import {
   Paper,
   Tooltip,
 } from "@mui/material";
-import {
-  selectOption,
-  selectReportType,
-} from "./schema";
+import { selectOption, selectReportType } from "./schema";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import DownloadInfoApi from "./api";
 import { enqueueSnackbar } from "notistack";
@@ -48,6 +45,7 @@ const DownloadPage = () => {
     key: "selection",
   });
   const [showData, setShowData] = useState([]);
+  console.log(showData);
 
   const datePickerText = useMemo(() => {
     const startDate = dateRangeValues?.startDate
@@ -446,7 +444,11 @@ const DownloadPage = () => {
                     {" "}
                     {JSON.parse(row.filter_data).endDate}
                   </TableCell>
-                  <TableCell align="center">{row.report_type}</TableCell>
+                  <TableCell align="center">
+                    {JSON.parse(row.filter_data).type === "historicReports"
+                      ? "Health Report(Pdf)"
+                      : JSON.parse(row.filter_data).report_type}
+                  </TableCell>
                   <TableCell
                     sx={{ bgcolor: status(row.status), color: "white" }}
                     align="center"

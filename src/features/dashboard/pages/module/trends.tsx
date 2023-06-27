@@ -20,102 +20,108 @@ export default function Trends({ trends, fullScreen }: any) {
   }, [fullScreen, trends]);
 
   return (
-    <Grid container spacing={2} sx={{ overflow: "auto" }}>
-      {trendsData &&
-        trendsData.map((val: any, index: any) => (
-          <Grid
-            item
-            lg={6}
-            md={6}
-            sm={12}
-            key={`trends${index}`}
-            sx={{ display: "flex", flexDirection: "column" }}
-          >
-            <Typography variant="body1" component={"span"} textAlign={"center"}>
-              {val?.trendsName}
-            </Typography>
-            <Box
-              sx={{
-                height: fullScreen ? "50vh" : "30vh",
-                width: "100%",
-              }}
+    <>
+      <Grid container spacing={2} sx={{ overflow: "auto" }}>
+        {trendsData &&
+          trendsData.map((val: any, index: any) => (
+            <Grid
+              item
+              lg={6}
+              md={6}
+              sm={12}
+              key={`trends${index}`}
+              sx={{ display: "flex", flexDirection: "column" }}
             >
-              {val?.chartType === "LineGradient" ? (
-                <LineGradient
-                  maxValue={val?.yMax}
-                  dataPointsY1={val?.dataPointsY1}
-                  dataPointsY2={val?.dataPointsY2}
-                  trendsName={val?.trendsName}
-                  hideBackground={val?.hideBackground}
-                  speedName={val.speedName}
-                  datapoints={val?.datapoints}
-                  labels={val?.labels}
-                  isGradientOpposite={val?.isGradientOpposite}
-                />
-              ) : { fullScreen } ? (
-                <BarChart
-                  datapoints={val?.datapoints}
-                  labels={val?.labels}
-                  maxValue={val?.yMax}
-                />
-              ) : (
-                <></>
-              )}
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-              {val?.chartType === "LineGradient" && (
+              <Typography
+                variant="body1"
+                component={"span"}
+                textAlign={"center"}
+              >
+                {val?.trendsName}
+              </Typography>
+              <Box
+                sx={{
+                  height: fullScreen ? "50vh" : "30vh",
+                  width: "100%",
+                }}
+              >
+                {val?.chartType === "LineGradient" ? (
+                  <LineGradient
+                    maxValue={val?.yMax}
+                    dataPointsY1={val?.dataPointsY1}
+                    dataPointsY2={val?.dataPointsY2}
+                    trendsName={val?.trendsName}
+                    hideBackground={val?.hideBackground}
+                    speedName={val.speedName}
+                    datapoints={val?.datapoints}
+                    labels={val?.labels}
+                    isGradientOpposite={val?.isGradientOpposite}
+                  />
+                ) : { fullScreen } ? (
+                  <BarChart
+                    datapoints={val?.datapoints}
+                    labels={val?.labels}
+                    maxValue={val?.yMax}
+                  />
+                ) : (
+                  <></>
+                )}
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+                {val?.chartType === "LineGradient" && (
+                  <Typography
+                    component="span"
+                    textAlign={"left"}
+                    alignItems="center"
+                    display={"flex"}
+                  >
+                    <CircleIcon color="primary" sx={{ mr: 1 }} />
+                    {val?.trendsName.split(",")[0]}
+                  </Typography>
+                )}
+
                 <Typography
                   component="span"
                   textAlign={"left"}
                   alignItems="center"
                   display={"flex"}
                 >
-                  <CircleIcon color="primary" sx={{ mr: 1 }} />
-                  {val?.trendsName.split(",")[0]}
+                  Min. {val?.min}
                 </Typography>
-              )}
 
-              <Typography
-                component="span"
-                textAlign={"left"}
-                alignItems="center"
-                display={"flex"}
-              >
-                Min. {val?.min}
-              </Typography>
-
-              <Typography
-                component="span"
-                textAlign={"left"}
-                alignItems="center"
-                display={"flex"}
-              >
-                Max. {val?.max}
-              </Typography>
-              <Typography
-                component="span"
-                textAlign={"left"}
-                alignItems="center"
-                display={"flex"}
-              >
-                Avg. {val?.avg}
-              </Typography>
-            </Box>
+                <Typography
+                  component="span"
+                  textAlign={"left"}
+                  alignItems="center"
+                  display={"flex"}
+                >
+                  Max. {val?.max}
+                </Typography>
+                <Typography
+                  component="span"
+                  textAlign={"left"}
+                  alignItems="center"
+                  display={"flex"}
+                >
+                  Avg. {val?.avg}
+                </Typography>
+              </Box>
+            </Grid>
+          ))}
+        {trendsData.length === 0 && (
+          <Grid
+            item
+            lg={12}
+            md={12}
+            sm={12}
+            sx={{ display: "flex", flexDirection: "column" }}
+          >
+            <Typography textAlign={"center"} sx={{ width: "100%" }}>
+              No Trend's Data found
+            </Typography>
           </Grid>
-        ))}
-      {trendsData.length === 0 && (
-        <Grid
-          item
-          lg={12}
-          md={12}
-          sm={12}
-          sx={{ display: "flex", flexDirection: "column" }}
-        >
-          <Typography textAlign={"center"} sx={{ width: "100%" }}>
-            No Data found
-          </Typography>
-        </Grid>
-      )}
+        )}
+      </Grid>
       {fullScreen && (
         <Box sx={{ display: "flex" }}>
           <Typography p={"10px 20px"} color={"red"}>
@@ -131,6 +137,6 @@ export default function Trends({ trends, fullScreen }: any) {
           </Button>
         </Box>
       )}
-    </Grid>
+    </>
   );
 }

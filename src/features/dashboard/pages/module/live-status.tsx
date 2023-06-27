@@ -120,8 +120,13 @@ const PrettoSlider = styled(Slider)({
   },
 });
 
-const LiveStatus = ({ liveStatus, processName }: any) => {
-  const [currentMode, setCurrentMode] = useState<any>("");
+const LiveStatus = ({
+  liveStatus,
+  processName,
+  currentMode,
+  setCurrentMode,
+}: any) => {
+  // const [currentMode, setCurrentMode] = useState<any>("");
   const restartVbox = () => {
     api
       .get(`/vbox/reset.php/${processName}`)
@@ -207,6 +212,7 @@ const LiveStatus = ({ liveStatus, processName }: any) => {
               {currentMode ? currentMode : liveStatus?.currentMode}
             </Typography>
             <Box
+              onClick={restartVbox}
               sx={{
                 backgroundColor: "#1D4580",
                 width: "60%",
@@ -214,10 +220,14 @@ const LiveStatus = ({ liveStatus, processName }: any) => {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
+
+                "&:hover": {
+                  cursor: "pointer",
+                },
               }}
             >
               <Check sx={{ color: "white" }} />
-              <Button onClick={restartVbox} sx={{ color: "white" }}>
+              <Button sx={{ color: "white" }}>
                 {liveStatus?.currentMessage}
               </Button>
               {/* <Typography variant="body1" component={"span"} color="white">

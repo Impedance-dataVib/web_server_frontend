@@ -89,7 +89,7 @@ const Signal = ({ signals, formData, moduleType }: any) => {
         ))}
       {graphData && graphData.length === 0 && !isLoading && (
         <Typography textAlign={"center"} sx={{ width: "100%" }}>
-          No Data found
+          No Signal Data found
         </Typography>
       )}
     </Box>

@@ -10,7 +10,6 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { Typography } from "@mui/material";
 
 export default function NotActiveLicenseTable({ notActiveLicenseInfo }: any) {
-  console.log(notActiveLicenseInfo);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

@@ -36,6 +36,8 @@ const ModuleMonitoringPage = ({
   const [isLiveStatusOpen, setIsLiveStatusOpen] = useState<boolean>(false);
   const [trendsCylinder, setTrendsCylinder] = useState<string[]>([]);
   const [liveStatus, setLiveStatus] = useState<any>({});
+  const [currentMode, setCurrentMode] = useState<any>("");
+
   const onActiveModuleChange = (event: any, params: any) => {
     setActiveModule(params);
   };
@@ -222,11 +224,23 @@ const ModuleMonitoringPage = ({
           headerLabel="Live Status"
           headerIcon={<VisibilityOutlined />}
           content={
-            <LiveStatus liveStatus={liveStatus} processName={processName} />
+            <LiveStatus
+              liveStatus={liveStatus}
+              processName={processName}
+              currentMode={currentMode}
+              setCurrentMode={setCurrentMode}
+            />
           }
           initiallyCollapsed={true}
           setIsLiveStatusOpen={setIsLiveStatusOpen}
-          fullScreenContent={<LiveStatus liveStatus={liveStatus} />}
+          fullScreenContent={
+            <LiveStatus
+              liveStatus={liveStatus}
+              processName={processName}
+              currentMode={currentMode}
+              setCurrentMode={setCurrentMode}
+            />
+          }
         />
       </Grid>
       <Grid item lg={4} md={12} sm={12}>
