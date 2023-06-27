@@ -837,6 +837,7 @@ function buildTorqueAlertData(data) {
 
 function buildBearingAlertData(data) {
   const mechanicalHealth = [];
+  const bearing = [];
 
   const global_ = [];
 
@@ -844,16 +845,18 @@ function buildBearingAlertData(data) {
     for (let i = 0; i < data.length; i++) {
       const item = data[i];
 
-      const objectData = JSON.parse(item["jsondata"]);
+      const moduleData = JSON.parse(item["jsondata"]);
 
-      const firstKey = Object.keys(objectData)[0];
-
-      const moduleData = objectData[firstKey];
-
-      const bearingGlobal = moduleData["BearingGlobal"];
+      const bearingGlobal = moduleData["2KMixed"];
 
       if (bearingGlobal) {
         mechanicalHealth.push(bearingGlobal["valueInHealth"]);
+      }
+
+      const bearingData = moduleData["BearingGlobal"];
+
+      if (bearingData) {
+        bearing.push(bearingData["valueInHealth"]);
       }
 
       const globalMixed = moduleData["GlobalMixed"];
@@ -870,19 +873,92 @@ function buildBearingAlertData(data) {
     const val = average(mechanicalHealth);
     if (val <= 30) {
       returnArray.push({
-        instructionName: "Mechanical Health",
+        instructionName: "Shaft/Clearance",
         instructionType: "error",
         instructions: [
-          "The continuation of the operation presents an aggravation of the damages evolving towards the loss of function. An intervention is to be expected",
+          "Roller Bearing Case:",
+          "- Excessive Clearance in all type of bearings",
+          "- Excessive excentricity(static/dynamic) in the case of electric motors",
+          "- Excessive Tipping Displacement in case of vertical installations",
+          "- Excessive stresses causing the shaft to move with high displacement",
+          "- Excessive teeth mesh stresses in the case of a gearbox",
+
+          "Plain Bearing Case",
+          "- Clearance between bearing pad/bearing cap",
+          "- Excessive Excentricity (Static/dynamic) in the case of electric motors",
+          "- Excessive tipping displacement in the case of vertical installations",
+          "- Excessive teeth mesh stresses in the case of gearbox",
         ],
       });
     }
     if (val > 30 && val <= 70) {
       returnArray.push({
-        instructionName: "Mechanical Health",
+        instructionName: "Shaft/Clearance",
         instructionType: "warning",
         instructions: [
-          "OK for operation under supervision,due to the presence of damages or significant dysfunctions.\n",
+          " Roller Bearing Case:",
+          "- Excessive Clearance in all type of bearings",
+          "- Excessive excentricity(static/dynamic) in the case of electric motors",
+          "- Excessive Tipping Displacement in case of vertical installations",
+          "- Excessive stresses causing the shaft to move with high displacement",
+          "- Excessive teeth mesh stresses in the case of a gearbox",
+
+          "Plain Bearing Case",
+          "- Clearance between bearing pad/bearing cap",
+          "- Excessive Excentricity (Static/dynamic) in the case of electric motors",
+          "- Excessive tipping displacement in the case of vertical installations",
+          "- Excessive teeth mesh stresses in the case of gearbox,",
+        ],
+      });
+    }
+  }
+  if (bearing) {
+    const val = average(bearing);
+    if (val <= 30) {
+      returnArray.push({
+        instructionName: "Bearings",
+        instructionType: "error",
+        instructions: [
+          "Roller Bearing Case",
+          "- Incorrect alignment of the inner ring with the outer ring",
+          "- Race spill, axial sliding irregularities",
+          "- Insufficient axial preload in the case of preloaded bearing",
+          "- Irregularities of the rolling of bearing elements on the races due to excessive clearance related to underload in radial direction",
+          "- Damage of bearing element (Cage/elements/races)",
+          "- Wear of Pulleys/belts",
+          "- Defective Bearing between the bearing outer ring and bore",
+          "- Wear of Housing",
+
+          "Plain Bearing Case",
+          "- Instability due to axial excessive clearance in the case of thrust bearing radial in the case of guide bearing",
+
+          "Pads Bearing Case",
+          "- Pivot wear",
+          "- Difficulties of Pivoting pads(jamming)",
+        ],
+      });
+    }
+    if (val > 30 && val <= 70) {
+      returnArray.push({
+        instructionName: "Bearings",
+        instructionType: "warning",
+        instructions: [
+          "Roller Bearing Case",
+          "- Incorrect alignment of the inner ring with the outer ring",
+          "- Race spill, axial sliding irregularities",
+          "- Insufficient axial preload in the case of preloaded bearing",
+          "- Irregularities of the rolling of bearing elements on the races due to excessive clearance related to underload in radial direction",
+          "- Damage of bearing element (Cage/elements/races)",
+          "- Wear of Pulleys/belts",
+          "- Defective Bearing between the bearing outer ring and bore",
+          "- Wear of Housing",
+
+          "Plain Bearing Case",
+          "- Instability due to axial excessive clearance in the case of thrust bearing radial in the case of guide bearing",
+
+          "Pads Bearing Case",
+          "- Pivot wear",
+          "- Difficulties of Pivoting pads(jamming)",
         ],
       });
     }
@@ -896,7 +972,22 @@ function buildBearingAlertData(data) {
         instructionName: "Global(Imbalance/Alignment/Loosness)",
         instructionType: "error",
         instructions: [
-          "Check for Bending/cracking of bearings, Unbalances & Looseing of support structures",
+          "Roller Bearing without High Shock index",
+          "- Unbalance, Misalignment",
+          "- Cantilever Rotor Imbalance",
+          "- Mode (bending, Fitting) Excitation",
+
+          "Roller Bearing with High Shock Index",
+          "- Loosening/Clearance at the support structure",
+          "- Coupling Clearance, clamping wear(toothed Coupling), axial distance not repsected(coupling with flexible blades), cracking(flector)",
+
+          "Plain Bearings Case without high shock index",
+          "- Imbalance, Misalignment ",
+          "- Cantilever rotor imbalance",
+
+          "Plain Bearings with High Shock Index Value",
+          "- Coupling: Clearance, clamping wear(toothing Coupling), axial distance not respected (coupling with flexible blades), cracking(flector)",
+          "- Loosening of Caps and supports",
         ],
       });
     }
@@ -906,7 +997,21 @@ function buildBearingAlertData(data) {
         instructionName: "Global(Imbalance/Alignment/Loosness)",
         instructionType: "warning",
         instructions: [
-          "Check for unbalance, Loosening of Support structure & Coupling clearances",
+          "Roller Bearing without High Shock index",
+          "- Unbalance, Misalignment",
+          "- Cantilever Rotor Imbalance",
+          "- Mode (bending, Fitting) Excitation",
+          "Roller Bearing with High Shock Index",
+          "- Loosening/Clearance at the support structure",
+          "- Coupling Clearance, clamping wear(toothed Coupling), axial distance not repsected(coupling with flexible blades), cracking(flector)",
+
+          "Plain Bearings Case without high shock index",
+          "- Imbalance, Misalignment",
+          "- Cantilever rotor imbalance",
+
+          "Plain Bearings with High Shock Index Value",
+          "- Coupling: Clearance, clamping wear(toothing Coupling), axial distance not respected (coupling with flexible blades), cracking(flector)",
+          "- Loosening of Caps and supports",
         ],
       });
     }
@@ -927,11 +1032,7 @@ function buildMotorAlertData(data) {
     for (let i = 0; i < data.length; i++) {
       const item = data[i];
 
-      const objectData = JSON.parse(item["jsondata"]);
-
-      const firstKey = Object.keys(objectData)[0];
-
-      const moduleData = objectData[firstKey];
+      const moduleData = JSON.parse(item["jsondata"]);
 
       const mElectromag = moduleData["MElectromag"];
 
@@ -960,7 +1061,7 @@ function buildMotorAlertData(data) {
         instructionType: "error",
 
         instructions: [
-          "Breakage or cracking of a short-circuit ring (also results in abnormal heating of the rotor at the point of cracking or rupture and an increase in current.)",
+          "- Breakage or cracking of a short-circuit ring (also results in abnormal heating of the rotor at the point of cracking or rupture and an increase in current.)",
         ],
       });
     } else if (val > 30 && val <= 70) {
@@ -970,9 +1071,8 @@ function buildMotorAlertData(data) {
         instructionType: "warning",
 
         instructions: [
-          "Damage to the winding insulation",
-
-          "Deterioration of the mechanical strength of the windings in the slots (can also result in defective or even detached slot shims)",
+          "- Check Insulation of winding",
+          "- Check mechanical strength of the windings in the slots (can also result in defective or even detached slot shims)",
         ],
       });
     }
@@ -988,13 +1088,13 @@ function buildMotorAlertData(data) {
         instructionType: "error",
 
         instructions: [
-          "Check for Air Gap in the case of an electric motor",
+          "=- Check for Air Gap in the B5 of an electric motor",
 
           "Check for tilting in the case of vertical axis installations",
 
           "Check for the degradation of bearings",
 
-          "Check if Loosening at the level of the support structure (assembly at the level of the supports)",
+          "D4",
         ],
       });
     }
@@ -1012,7 +1112,7 @@ function buildMotorAlertData(data) {
 
           "Check for the degradation of bearings",
 
-          "Check if Loosening at the level of the support structure (assembly at the level of the supports)",
+          "D7",
         ],
       });
     }
@@ -1028,11 +1128,11 @@ function buildMotorAlertData(data) {
         instructionType: "error",
 
         instructions: [
-          "Check for Instability of the power supply (network / transformer / drive) which will also result in a significant variation in power",
+          "Check for Instability of the power supply (network / transformer / drive also) ",
 
-          "Check for Phase imbalance (which will result in uneven intensity across all three phases)",
+          "Check for Phase imbalance",
 
-          "Check for Mechanical overload which will also result in a rise in intensity and abnormal heating",
+          "Check for Mechanical overload ",
 
           "Check for Uneven air gap (or off-center rotor in the stator), possibly also caused by a wobbly foot (or lame foot)",
 
@@ -1050,9 +1150,9 @@ function buildMotorAlertData(data) {
         instructionType: "warning",
 
         instructions: [
-          "Check for Instability of the power supply (network / transformer / drive) which will also result in a significant variation in power",
+          "Check for Instability of the power supply (network / transformer / drive also) ",
 
-          "Check for Phase imbalance (which will result in uneven intensity across all three phases)",
+          "Check for Phase imbalance ",
 
           "Check for Stator deformation (thermal or mechanical deformation)",
 
@@ -1075,17 +1175,14 @@ function buildTurbineAlertData(data) {
   const bladeStatus = []; //data['BladeStatus'];
 
   const turbineCoupling = []; //data['TurbineCoupling'];
+  const combustionCondition = [];
 
   if (data) {
     for (let i = 0; i < data.length; i++) {
       const item = data[i];
 
-      const objectData = JSON.parse(item["jsondata"]);
-
-      const firstKey = Object.keys(objectData)[0];
-
-      const moduleData = objectData[firstKey];
-
+      const moduleData = JSON.parse(item["jsondata"]);
+      console.log(moduleData);
       const RegularityDeviation = moduleData["RegularityDeviation"];
 
       if (RegularityDeviation) {
@@ -1096,6 +1193,12 @@ function buildTurbineAlertData(data) {
 
       if (BearingStatus) {
         bearingStatus.push(BearingStatus["valueInPercent"]);
+      }
+
+      const combustion = moduleData["CombustionKit"];
+
+      if (combustion) {
+        combustionCondition.push(combustion["valueInPercent"]);
       }
 
       const BladeStatus = moduleData["BladeStatus"];
@@ -1116,19 +1219,32 @@ function buildTurbineAlertData(data) {
 
     if (val <= 30) {
       returnArray.push({
-        instructionName: "Shaft/Blades Health",
+        instructionName: "Coupling/Alignment",
         instructionType: "error",
         instructions: [
-          "Inspection of coupling condition Checking the settings on the evaluation of the alignment factors between the turbine and the coupled element",
+          "Inspection of coupling condition for Fatigue",
+          "Checking alignment factors between the turbine and the coupled element",
         ],
       });
     } else if (val > 30 && val <= 70) {
       returnArray.push({
-        instructionName: "Shaft/Blades Health",
+        instructionName: "Coupling/Alignment",
         instructionType: "warning",
         instructions: [
-          "Inspection of coupling condition Checking the settings on the evaluation of the alignment factors between the turbine and the coupled element",
+          "Inspection of coupling condition for Fatigue",
+          "Checking alignment factors between the turbine and the coupled element",
         ],
+      });
+    }
+  }
+  if (combustionCondition) {
+    const val = average(combustionCondition);
+
+    if (val <= 30) {
+      returnArray.push({
+        instructionName: "Combustion Kit",
+        instructionType: "error",
+        instructions: ["Defective injection system"],
       });
     }
   }
@@ -1143,7 +1259,8 @@ function buildTurbineAlertData(data) {
         instructionType: "error",
 
         instructions: [
-          "Check for clamping, dynamic instabilities, damage to rotating blades",
+          "Check for clamping or dynamic instabilities or damage to rotating/fixed blades",
+          "Check for Non-linearities in the assembly of the connecting structure to the base/ground",
         ],
       });
     }
@@ -1156,6 +1273,7 @@ function buildTurbineAlertData(data) {
 
         instructions: [
           "Check for clamping, dynamic instabilities, damage to rotating blades",
+          "Check for Non-linearities in the assembly of the connecting structure to the base/ground",
         ],
       });
     }
@@ -1178,6 +1296,9 @@ function buildTurbineAlertData(data) {
           "Check for the excessive dynamic gearmesh force  ",
 
           "Check for misalignment see Coupling indicator",
+          "Check axial stability between the thrust Bearings",
+          "Check dynamic seal defects",
+          "Check Stator geometry defect",
         ],
       });
     }
@@ -1196,6 +1317,9 @@ function buildTurbineAlertData(data) {
           "Check for the excessive dynamic gearmesh force  ",
 
           "Check for misalignment see Coupling indicator",
+          "Check axial stability between the thrust Bearings",
+          "Check dynamic seal defects",
+          "Check Stator geometry defect",
         ],
       });
     }
@@ -1243,11 +1367,7 @@ function buildEngineAlertData(historical_data) {
     CamPump: [],
   };
   for (let item of historical_data) {
-    const objectData = JSON.parse(item["jsondata"]);
-
-    const firstKey = Object.keys(objectData)[0];
-
-    const data = objectData[firstKey];
+    const data = JSON.parse(item["jsondata"]);
 
     if (data["MechanicalHealth"]) {
       buildData.engineHealth.push(data["MechanicalHealth"]["valueInHealth"]);
@@ -1456,7 +1576,7 @@ function buildEngineAlertData(historical_data) {
             "Check running hours if injector/pump is due for overhaul",
             "Check Fuel oil filter/filter pressure. Check for fuel quality",
             "Check for injector timing.",
-            "Pressure test injector/Dismantle fuel pump/injector. Overhaul if neccessary.",
+            "Pressure test injector/Dismantle fuel pump/injector. Overhaul if neccessary. ",
             "Check fuel linkage in affected cylinders",
           ],
         });
@@ -1632,17 +1752,15 @@ function buildEngineAlertData(historical_data) {
         instructionName: "Condition of Cyl Moving Parts",
         instructionType: "error",
         instructions: [
-          "If engine has just been overhauled, check for faulty assembly",
-          "Check if the engine is due for overhaul",
           "Take immediate corrective action on Bearings",
-          "Identify defect in the Main or Bottom end bearing",
-          "Check bearing clearances",
-          "Incase of bottom end bearing, check free movement of rod.",
-          "Check if bearing shelves have moved from their original position",
-          "Incase of excessive clearances of bearings, check for bearing damage.",
-          "Check for Peak Pressure of *Cyl_x*",
-          "Check for Clogged Oil Passage of Individual Bearing",
-          "Check tightness of bearing bolts",
+          "If engine has just been overhauled, check for faulty assembly",
+          "Check engine running hours to identify if the engine is due for overhaul.",
+          "Carry out borescope inspection through cylinder head of piston top for carbon deposits. Eliminate bad fuel injector",
+          "Check quality of fuel oil to eliminate possibility of scuffing of cylinder liners",
+          " Check Jacket cooling water temperature",
+          "Check Lube oil filter for debris",
+          "Check for colour of exhaust(blue smoke/black smoke)",
+          "Open crankcase, check liner surface of affected cylinders through borescope inspection if possible",
         ],
       });
     } else {
