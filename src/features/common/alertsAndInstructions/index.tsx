@@ -8,6 +8,12 @@ const AlertsAndInstructions = ({
   isModalOpen = false,
   alertData,
 }: any) => {
+  const getGridSize = (val: any) => {
+    if (isModalOpen) {
+      return 4;
+    }
+    return !val?.isTorque ? 6 : 12;
+  };
   const renderInstruction = (
     instructionIndex: any,
     instruction: any,
@@ -75,7 +81,7 @@ const AlertsAndInstructions = ({
               item
               xs={12}
               md={12}
-              lg={isModalOpen ? 4 : !val?.isTorque ? 6 : 12}
+              lg={getGridSize(val)}
             >
               <Box
                 sx={

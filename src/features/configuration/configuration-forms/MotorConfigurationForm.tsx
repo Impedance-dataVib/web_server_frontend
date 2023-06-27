@@ -171,11 +171,6 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                                   )
                                 )}
                               </Select>
-                              {/* {Boolean(formContext?.errors?.[fieldProps.label]) && (
-                            <FormHelperText>
-                              {formContext?.errors?.[fieldProps.label]}
-                            </FormHelperText>
-                          )} */}
                             </FormControl>
 
                             <TextField
@@ -436,7 +431,7 @@ export const MotorChannelInformationForm = ({
   handleFormData,
   formContext,
 }: any) => {
-  const [optionsChannelInformation, setOptionsChannelInformation] = useState({
+  const [optionsChannelInformation] = useState({
     SENSORx: [
       "No Channel",
       "Ch1",

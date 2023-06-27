@@ -161,11 +161,6 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                                   )
                                 )}
                               </Select>
-                              {/* {Boolean(formContext?.errors?.[fieldProps.label]) && (
-                            <FormHelperText>
-                              {formContext?.errors?.[fieldProps.label]}
-                            </FormHelperText>
-                          )} */}
                             </FormControl>
 
                             <TextField
@@ -425,7 +420,7 @@ export const TurbineChannelInformationForm = ({
   handleFormData,
   formContext,
 }: any) => {
-  const [optionsChannelInformation, setOptionsChannelInformation] = useState({
+  const [optionsChannelInformation] = useState({
     SENSORx: [
       "No Channel",
       "Ch1",
@@ -454,12 +449,11 @@ export const TurbineChannelInformationForm = ({
   });
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
-  const { data, getChannelByConfigIdName, isPending } =
-    useGetChannelByConfigIdName(
-      configId || "",
-      formContext?.values["turbine_crankshaft_sensorx"],
-      formContext.dirty
-    );
+  const { data, isPending } = useGetChannelByConfigIdName(
+    configId || "",
+    formContext?.values["turbine_crankshaft_sensorx"],
+    formContext.dirty
+  );
   useEffect(() => {
     if (data && formContext.dirty && !isPending) {
       enqueueSnackbar({

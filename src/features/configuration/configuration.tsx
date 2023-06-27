@@ -63,7 +63,6 @@ const ConfigurationPageContent = () => {
     try {
       const res: any = await importConfiguration(formData);
       getConfigData();
-      // handleAddConfigDialog();
       setLoading(false);
       enqueueSnackbar({
         message: res?.data?.Message,

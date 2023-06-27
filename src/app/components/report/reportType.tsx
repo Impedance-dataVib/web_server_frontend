@@ -4,8 +4,8 @@ import { Box, IconButton, Typography } from "@mui/material";
 
 export interface ReportTypeProps {
   label: string;
-  downloadUrl?: string | undefined;
-  viewUrl?: string | undefined;
+  downloadUrl?: string;
+  viewUrl?: string;
 }
 
 const ReportType = ({ label, downloadUrl, viewUrl }: ReportTypeProps) => {
