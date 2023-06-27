@@ -87,7 +87,9 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           control={
             <Switch
               name={fieldProps.label}
-              onChange={formContext?.handleChange}
+              onChange={(e) => {
+                formContext?.setFieldValue(e.target.name, e.target.checked);
+              }}
               checked={formContext?.values?.[fieldProps.label]}
               color="primary"
             />
@@ -535,11 +537,13 @@ export const TurbineChannelInformationForm = ({
                 value={formContext?.values?.["turbine_crankshaft_sensorx"]}
                 label={"Sensorx"}
               >
-                {optionsChannelInformation["SENSORx"].map((option: string) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
+                {optionsChannelInformation["SENSORx"]
+                  .filter((item) => item !== "No Channel")
+                  .map((option: string) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
               </Select>
               {Boolean(formContext?.errors?.["turbine_crankshaft_sensorx"]) && (
                 <FormHelperText>
@@ -971,7 +975,7 @@ export const TurbineAdvancedParameters = ({
   return (
     <Grid container spacing={1}>
       <Container sx={{ color: "grey" }}>
-        *Advance Parameter Can Be Change By Admin Only
+        *Advanced parameters can be changed by Impedance only
       </Container>
       {formSchema["Turbine"]["Advanced Parameters"].map((item: any) => (
         <Grid key={item.label} container item>

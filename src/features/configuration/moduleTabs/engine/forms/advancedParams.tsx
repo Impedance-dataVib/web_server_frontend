@@ -9,7 +9,7 @@ const AdvancedParameters = ({ handleFormData, formContext }: any) => {
   return (
     <Grid container spacing={1}>
       <Container sx={{ color: "grey" }}>
-        *Advance Parameter Can Be Change By Admin Only
+        *Advanced parameters can be changed by Impedance only
       </Container>
       {formSchema["Engine"]["Advanced Parameters"].map((item: any) => (
         <Grid key={item.label} container item>

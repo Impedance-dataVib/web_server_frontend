@@ -266,11 +266,13 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
                 value={formContext?.values?.["Crankshaft_SENSORx"]}
                 label={"Sensorx"}
               >
-                {optionsChannelInformation["SENSORx"].map((option: string) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
+                {optionsChannelInformation["SENSORx"]
+                  .filter((item) => item !== "No Channel")
+                  .map((option: string) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
               </Select>
               {Boolean(formContext?.errors?.["Crankshaft_SENSORx"]) && (
                 <FormHelperText>
