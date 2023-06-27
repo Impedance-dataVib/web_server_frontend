@@ -186,6 +186,7 @@ export default function LineGradient({
         position: "left" as const,
         max: maxValue || 100,
         ticks: {
+          padding: 7,
           font: {
             size: 12,
             weight: "bold",
@@ -195,6 +196,7 @@ export default function LineGradient({
           },
         },
         title: {
+          padding: 7,
           text: trendsName,
           display: true,
           font: {

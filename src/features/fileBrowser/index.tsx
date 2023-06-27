@@ -59,9 +59,10 @@ const FileBrowserPage = () => {
       `ws:${window.location.hostname}:8081`,
     {
       onMessage: () => {
-        if (sendMessage) {
-          if (sendMessage) sendMessage(moduleTabs[activeModule].process_name);
-        }
+        // if (sendMessage) {
+          console.log('ddd')
+          // if (sendMessage) sendMessage(moduleTabs[activeModule].process_name);
+        // }
       },
       onError: (e) => {
         setIsLoading(false);
@@ -162,7 +163,7 @@ const FileBrowserPage = () => {
               {moduleTabs?.map((tabElement: any, index: number) => {
                 if (tabElement.module_type.includes("Engine")) {
                   return (
-                    <Tooltip title={tabElement.name}>
+                    <Tooltip title={tabElement.name} key={`tabElement${tabElement?.id}`}>
                       <Tab
                         key={index}
                         label={`${
@@ -185,8 +186,8 @@ const FileBrowserPage = () => {
       <Box sx={{ bgcolor: "white", mt: "15px" }}>
         <Divider sx={{ mb: "10px" }} />
         <Grid container spacing={3}>
-          {globalIndicator.map((val: any, index: number) => (
-            <Auxiliarydata_speedometer val={val} key={`aux${index}`}/>
+          {globalIndicator.map((val: any) => (
+            <Auxiliarydata_speedometer val={val} key={`aux${val?.id}`}/>
           ))}
         </Grid>
       </Box>

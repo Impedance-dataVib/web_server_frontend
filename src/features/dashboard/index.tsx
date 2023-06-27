@@ -359,7 +359,7 @@ const DashboardPage = () => {
               scrollButtons="auto"
             >
               {moduleTabs?.map((tabElement: any, index: number) => (
-                <Tooltip title={tabElement.name} key={`toolTip${index}`}>
+                <Tooltip title={tabElement.name} key={`toolTip${tabElement?.id}`}>
                   <Tab
                     label={
                       <Box>

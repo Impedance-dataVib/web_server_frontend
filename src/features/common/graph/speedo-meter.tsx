@@ -35,7 +35,7 @@ export default function SpeedoMeter({
         forceRender={true}
         maxValue={maxValue}
         minValue={minValue}
-        height={150}
+        height={200}
         width={250}
         ringWidth={20}
         value={parseInt(value)}

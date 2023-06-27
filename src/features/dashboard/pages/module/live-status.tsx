@@ -13,7 +13,6 @@ import Check from "@mui/icons-material/Check";
 import { StepIconProps } from "@mui/material/StepIcon";
 import { styled } from "@mui/material/styles";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
-import { useState } from "react";
 import { isEmptyObject } from "src/app/utils/helper";
 import api from "../../../../app/api";
 import { enqueueSnackbar } from "notistack";
@@ -126,7 +125,6 @@ const LiveStatus = ({
   currentMode,
   setCurrentMode,
 }: any) => {
-  // const [currentMode, setCurrentMode] = useState<any>("");
   const restartVbox = () => {
     api
       .get(`/vbox/reset.php/${processName}`)

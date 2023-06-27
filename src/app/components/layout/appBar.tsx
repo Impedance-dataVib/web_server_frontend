@@ -19,8 +19,11 @@ import {
   Theme,
   Toolbar,
   Typography,
-  LinearProgress,
 } from "@mui/material";
+
+import CircularProgress, {
+  CircularProgressProps,
+} from '@mui/material/CircularProgress';
 import React, { useEffect, useState } from "react";
 
 import { NotificationsOutlined } from "@mui/icons-material";
@@ -30,6 +33,34 @@ import CommonApi from "src/commonApi";
 import DownloadInfoApi from "src/features/downloads/api";
 import { APP_NAV_MENU_ITEMS, INavMenuItem } from "../../../contants";
 const drawerWidth = 240;
+
+export function CircularProgressWithLabel(
+  props: CircularProgressProps & { value: number },
+) {
+  return (
+    <Box sx={{ position: 'relative', display: 'inline-flex', marginLeft: '5px' }}>
+      <CircularProgress variant="determinate" {...props} sx={{color: 'green'}}/>
+      <Box
+        sx={{
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          position: 'absolute',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography
+          variant="caption"
+          component="div"
+          color="text.secondary"
+        >{`${Math.round(props.value)}%`}</Typography>
+      </Box>
+    </Box>
+  );
+}
 
 const DrawerAppBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -338,9 +369,12 @@ const DrawerAppBar = () => {
             />
             <Typography>{currtime}</Typography>
           </Box>
-          {progressBar > 0 && <Typography color={'green'} sx={{marginRight: '10px'}}>
-          {` Downloading: ${progressBar}% `}
-          </Typography>}
+          {progressBar > 0 && (
+          <Typography color={'green'} sx={{mr: 3, display: 'flex', alignItems: 'center'}}>
+            {` Downloading:`}
+            <CircularProgressWithLabel value={progressBar} />
+          </Typography>
+          )}
           <Box>
             <IconButton
               color="inherit"
