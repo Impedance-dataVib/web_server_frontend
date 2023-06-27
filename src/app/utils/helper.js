@@ -1934,6 +1934,12 @@ export function convertDate(dateVal) {
   let dateExtract = format(dateVal, "yyyy-MM-dd HH:mm:ss");
   return dateExtract;
 }
+
+export function convertUTCDateToLocalTime(dateVal) {
+  let dateExtract = format(dateVal, "dd-MMM-yyyy HH:mm:ss");
+  return dateExtract;
+}
+
 function percentage(partialValue, totalValue) {
   return (100 * partialValue) / totalValue;
 }

@@ -73,7 +73,6 @@ export default function UploadFile({ setApiData }: any) {
             message: `You have Successfully fetched the License data`,
             variant: "success",
           });
-          console.log(res.data);
           setFileInfo([res.data.data]);
           setOpen(true);
         })
@@ -92,7 +91,6 @@ export default function UploadFile({ setApiData }: any) {
       data.append("type", "vbox");
       SystemInfoApi.getFirmwareDetails(data)
         .then((res: any) => {
-          console.log(res.data);
           setFileInfo([res.data.data]);
           enqueueSnackbar({
             message: `You have Successfully fetched the Software details`,
@@ -124,17 +122,14 @@ export default function UploadFile({ setApiData }: any) {
             variant: "success",
           });
           setApiData((val: any) => {
-            console.log("update system Liscense ", val);
-
             return {
               ...val,
             };
           });
         })
         .catch((error) => {
+          console.error("update system Liscense error", error);
           setApiData((val: any) => {
-            console.log("update system Liscense error", val);
-
             return {
               ...val,
             };
@@ -157,16 +152,14 @@ export default function UploadFile({ setApiData }: any) {
             variant: "success",
           });
           setApiData((val: any) => {
-            console.log("update system software ", val);
             return {
               ...val,
             };
           });
         })
         .catch((error) => {
+          console.error("update system software error ", error);
           setApiData((val: any) => {
-            console.log("update system software error ", val);
-
             return {
               ...val,
             };

@@ -19,6 +19,7 @@ import {
   Theme,
   Toolbar,
   Typography,
+  LinearProgress,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
@@ -32,6 +33,7 @@ const drawerWidth = 240;
 
 const DrawerAppBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [progressBar, setProgressBar] = useState(0);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
   const [notificationType, setNotificationType] = useState<any>("");
@@ -70,7 +72,8 @@ const DrawerAppBar = () => {
   }, []);
 
   const getFile = () => {
-    DownloadInfoApi.getDownloadFile()
+    setNotificationOpen(false)
+    DownloadInfoApi.getDownloadFile(setProgressBar)
       .then((res: any) => {
         const url = window.URL.createObjectURL(res.data);
         const link = document.createElement("a");
@@ -260,6 +263,11 @@ const DrawerAppBar = () => {
   const container =
     window !== undefined ? () => window.document.body : undefined;
 
+  useEffect(() => {
+    if(progressBar === 100) {
+      setProgressBar(0);
+    }
+  }, [progressBar])
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar
@@ -330,6 +338,9 @@ const DrawerAppBar = () => {
             />
             <Typography>{currtime}</Typography>
           </Box>
+          {progressBar > 0 && <Typography color={'green'} sx={{marginRight: '10px'}}>
+          {` Downloading: ${progressBar}% `}
+          </Typography>}
           <Box>
             <IconButton
               color="inherit"

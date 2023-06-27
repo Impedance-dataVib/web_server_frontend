@@ -22,6 +22,7 @@ import {
 import ConfirmDeleteConfigurationModal from "./modals/confirmDeleteConfig";
 import { useSnackbar } from "notistack";
 import { eventBus } from "src/EventBus";
+import { convertUTCDateToLocalTime } from "src/app/utils/helper";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -175,7 +176,7 @@ const ConfigurationTable = ({
                   {row.name}
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
-                  {row.status === "Active" ? row.active_date : null}
+                  {row.status === "Active" ? convertUTCDateToLocalTime(new Date(row.active_date)) : null}
                 </StyledTableCell>
                 <StyledTableCell align="left">
                   <IconButton

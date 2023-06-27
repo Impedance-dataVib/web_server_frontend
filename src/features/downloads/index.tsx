@@ -27,6 +27,7 @@ import { enqueueSnackbar } from "notistack";
 import DatePickerModal from "../trends/modals/DatePickerModal";
 import api from "../../app/api";
 import dateFormat from "../../app/utils/dateFormat";
+import { convertUTCDateToLocalTime } from "src/app/utils/helper";
 
 const DownloadPage = () => {
   const initial = "";
@@ -45,7 +46,6 @@ const DownloadPage = () => {
     key: "selection",
   });
   const [showData, setShowData] = useState([]);
-  console.log(showData);
 
   const datePickerText = useMemo(() => {
     const startDate = dateRangeValues?.startDate
@@ -130,7 +130,7 @@ const DownloadPage = () => {
         show();
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         setIsLoading(false);
         enqueueSnackbar({
           message: error.Message,
@@ -142,7 +142,18 @@ const DownloadPage = () => {
   const show = () => {
     api
       .get("/download/get-all.php")
-      .then((res: any) => setShowData(res.data.data))
+      .then((res: any) => {
+        if(res.data && res.data.data && res.data.data.length > 0 ){
+          const result = res.data.data.map((val: any) => {
+            return {
+              ...val,
+              filter_data: JSON.parse(val.filter_data),
+            }
+          })
+          setShowData(result);
+        }
+        
+      })
       .catch((error) => console.error(error));
   };
   useEffect(() => {
@@ -164,8 +175,6 @@ const DownloadPage = () => {
     api
       .delete("/download/delete.php")
       .then((res) => {
-        console.log(res);
-
         enqueueSnackbar({
           message: "Download Queue is Cleared, You Can Request New ",
           variant: "warning",
@@ -221,11 +230,12 @@ const DownloadPage = () => {
                       onChange={downloadOptionHandler}
                       row
                     >
-                      {selectOption.map((val) => (
+                      {selectOption.map((val, index) => (
                         <FormControlLabel
                           value={val.value}
                           control={<Radio size="small" />}
                           label={val.label}
+                          key={`radio${index}`}
                         ></FormControlLabel>
                       ))}
                     </RadioGroup>
@@ -438,16 +448,15 @@ const DownloadPage = () => {
                     {row.process_complete_time}
                   </TableCell>
                   <TableCell align="center">
-                    {JSON.parse(row.filter_data).startDate}
+                    {row.filter_data.startDate ? convertUTCDateToLocalTime(new Date(row.filter_data.startDate)): ''}
                   </TableCell>
                   <TableCell align="center">
-                    {" "}
-                    {JSON.parse(row.filter_data).endDate}
+                    {row.filter_data.endDate ? convertUTCDateToLocalTime(new Date(row.filter_data.endDate)): ''}
                   </TableCell>
                   <TableCell align="center">
-                    {JSON.parse(row.filter_data).type === "historicReports"
+                    {row.filter_data.type === "historicReports"
                       ? "Health Report(Pdf)"
-                      : JSON.parse(row.filter_data).report_type}
+                      : row.filter_data.report_type}
                   </TableCell>
                   <TableCell
                     sx={{ bgcolor: status(row.status), color: "white" }}

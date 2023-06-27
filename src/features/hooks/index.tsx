@@ -27,7 +27,6 @@ export const useGetAllTrends = (
         module_id: id,
       };
       const moduleType = allModules.find((val: any) => val?.id === id);
-      console.log(moduleType);
       setIsLoading(true);
       setIsError(false);
       setErrorMessage("");

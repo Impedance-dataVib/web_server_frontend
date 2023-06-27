@@ -16,6 +16,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState, useMemo } from "react";
+import { convertUTCDateToLocalTime } from "src/app/utils/helper";
 
 export interface CardWidgetProps {
   headerLabel: string;
@@ -170,7 +171,7 @@ const CardWidget = ({
                   mr: "20px",
                 }}
               >
-                {showDate ? ` Updated on ${showDate} (UTC)` : ""}
+                {showDate ? ` Updated on ${convertUTCDateToLocalTime(showDate)}` : ""}
               </Typography>
 
               {isBelow1800Pixel && (

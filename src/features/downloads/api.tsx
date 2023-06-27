@@ -1,3 +1,4 @@
+import axios from "axios";
 import api from "../../app/api";
 
 const getModuleInfo = () => {
@@ -8,9 +9,12 @@ const postDownloadInfo = (payload: object) => {
   return api.post("/download/download-request.php", payload);
 };
 
-const getDownloadFile = () => {
+const getDownloadFile = (setProgressBar: any) => {
   return api.get("/download/file_download.php", {
     responseType: "blob",
+    onDownloadProgress: (progressEvent) => {
+      setProgressBar(parseInt(((progressEvent.progress || 0)  * 100).toString()))
+    }
   });
 };
 
