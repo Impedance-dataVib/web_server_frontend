@@ -319,7 +319,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                 </Typography>
                 <TextField
                   name={"Filter_lowDecim"}
-                  label={"Filter Low Decim"}
+                  label={"Filter_lowDecim"}
                   onChange={formContext?.handleChange}
                   value={formContext?.values?.["Filter_lowDecim"]}
                   variant="outlined"
