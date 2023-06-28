@@ -119,23 +119,25 @@ const DrawerAppBar = () => {
             "download",
             `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.json`
           );
-          link.setAttribute("target", "_blank");
         } else if (notificationType === "raw") {
           link.setAttribute(
             "download",
             `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.zip`
           );
-          link.setAttribute("target", "_blank");
         } else if (notificationType === "spreadsheet") {
           link.setAttribute(
             "download",
             `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.csv`
           );
-          link.setAttribute("target", "_blank");
         } else if (notificationType === "graphical") {
           link.setAttribute(
             "download",
             `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.zip`
+          );
+        } else if (notificationType === "PDF") {
+          link.setAttribute(
+            "download",
+            `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.pdf`
           );
           link.setAttribute("target", "_blank");
         }
