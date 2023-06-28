@@ -68,6 +68,7 @@ export const useGetModuleById = (
       const { data } = await getModuleById(id);
       setData(data.data);
       setIsLoading(false);
+      setIsError(false);
     } catch (e) {
       setIsError(true);
       setData([]);

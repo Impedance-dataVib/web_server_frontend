@@ -138,7 +138,7 @@ const AlertsAndInstructions = ({
             sx={{ display: "flex", flexDirection: "column" }}
           >
             <Typography textAlign={"center"} sx={{ width: "100%" }}>
-              No Alert's Data found
+              No Alert's
             </Typography>
           </Grid>
         )}

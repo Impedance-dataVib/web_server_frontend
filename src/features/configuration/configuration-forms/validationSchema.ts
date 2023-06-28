@@ -117,11 +117,12 @@ export const torqueValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .test(
-      "less than 0.05",
-      "Min Volt must be less than or equal to 0.05",
-      (value) => value <= 0.05
-    ),
+    // .test(
+    //   "less than 0.05",
+    //   "Min Volt must be less than or equal to 0.05",
+    //   (value) => value <= 0.05
+    // ),
+    .integer("The field should be an integer !"),
   recording_period: yup
     .number()
     .required("This is a required field")
@@ -226,11 +227,12 @@ export const motorValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .test(
-      "less than 0.05",
-      "Min Volt must be less than or equal to 0.05",
-      (value) => value <= 0.05
-    ),
+    // .test(
+    //   "less than 0.05",
+    //   "Min Volt must be less than or equal to 0.05",
+    //   (value) => value <= 0.05
+    // ),
+    .integer("The field should be an integer !"),
   aux_device_id: yup
     .number()
     .test(
@@ -292,16 +294,73 @@ export const turbineValidationSchema = yup.object({
     .required("This is a required field"),
   turbine_crankshaft_teeth: yup
     .number()
-    .required("This is a required field")
+    .test("Is Required", "This is a required field", (value, context) => {
+      if (
+        context.parent.turbine_crankshaft_channel_type === "Speed" &&
+        value != undefined
+      ) {
+        return true;
+      } else if (
+        context.parent.turbine_crankshaft_channel_type === "Speed" &&
+        value == undefined
+      ) {
+        return false;
+      } else if (
+        context.parent.turbine_crankshaft_channel_type === "Transducer" &&
+        value == undefined
+      ) {
+        return true;
+      } else {
+        return true;
+      }
+    })
     .test(
       "Is positive?",
       "ERROR: The number must be greater than 0!",
-      (value) => value > 0
+      (value: any, context) => {
+        if (
+          value > 0 &&
+          context.parent.turbine_crankshaft_channel_type === "Speed"
+        ) {
+          return true;
+        } else if (
+          (value > 0 || value == undefined) &&
+          context.parent.turbine_crankshaft_channel_type === "Transducer"
+        ) {
+          return true;
+        } else if (
+          value < 0 &&
+          context.parent.turbine_crankshaft_channel_type === "Speed"
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      }
     )
     .integer("The field should be an integer !"),
   turbine_crankshaft_wheel_type: yup
     .string()
-    .required("This is a required field"),
+    .test("Is Required", "This is a required field", (value, context) => {
+      if (
+        context.parent.turbine_crankshaft_channel_type === "Speed" &&
+        value != undefined
+      ) {
+        return true;
+      } else if (
+        context.parent.turbine_crankshaft_channel_type === "Speed" &&
+        value == undefined
+      ) {
+        return false;
+      } else if (
+        context.parent.turbine_crankshaft_channel_type === "Transducer" &&
+        value == undefined
+      ) {
+        return true;
+      } else {
+        return true;
+      }
+    }),
   min_speed: yup
     .number()
     .required("This is a required field")
@@ -330,11 +389,12 @@ export const turbineValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .test(
-      "less than 0.05",
-      "Min Volt must be less than or equal to 0.05",
-      (value) => value <= 0.05
-    ),
+    // .test(
+    //   "less than 0.05",
+    //   "Min Volt must be less than or equal to 0.05",
+    //   (value) => value <= 0.05
+    // ),
+    .integer("The field should be an integer !"),
   recording_period: yup
     .number()
     .required("This is a required field")
@@ -427,11 +487,12 @@ export const bearingValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .test(
-      "less than 0.05",
-      "Min Volt must be less than or equal to 0.005",
-      (value) => value <= 0.005
-    ),
+    // .test(
+    //   "less than 0.05",
+    //   "Min Volt must be less than or equal to 0.005",
+    //   (value) => value <= 0.005
+    // ),
+    .integer("The field should be an integer !"),
   recording_period: yup
     .number()
     .required("This is a required field")
@@ -856,11 +917,12 @@ export const engineValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .test(
-      "less than 0.05",
-      "Min Volt must be less than or equal to 0.05",
-      (value) => value <= 0.05
-    ),
+    // .test(
+    //   "less than 0.05",
+    //   "Min Volt must be less than or equal to 0.05",
+    //   (value) => value <= 0.05
+    // ),
+    .integer("The field should be an integer !"),
   recording_period: yup
     .number()
     .required("This is a required field")

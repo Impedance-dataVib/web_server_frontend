@@ -2229,27 +2229,29 @@ export function buildAuxData(data) {
   const firstKey = Object.keys(data)[0];
   const itemData = data[firstKey];
 
-  const auxData = itemData["Aux"];
-  let id =0;
+  const auxData = itemData?.Aux;
+  let id = 0;
   const returnData = [];
-  for (let key of Object.keys(auxData)) {
-    if (
-      key !== "ID" &&
-      key !== "DateAndTime" &&
-      key !== "DeviceType" &&
-      key !== "DeviceName"
-    ) {
-      const val = auxData[key];
-      if (val && val?.Value && val?.Value !== "NA") {
-        returnData.push({
-          id: id++,
-          indicatorMax: max_value[key].max,
-          indicatorMin: max_value[key].min,
-          indicatorName: val?.Desc + "(" + val?.Unit + ")",
-          indicatorValue: Math.round(val?.Value),
-          isGradientColor: false,
-          isPercentage: val?.Unit === "%",
-        });
+  if (auxData) {
+    for (let key of Object.keys(auxData)) {
+      if (
+        key !== "ID" &&
+        key !== "DateAndTime" &&
+        key !== "DeviceType" &&
+        key !== "DeviceName"
+      ) {
+        const val = auxData[key];
+        if (val && val?.Value && val?.Value !== "NA") {
+          returnData.push({
+            id: id++,
+            indicatorMax: max_value[key].max,
+            indicatorMin: max_value[key].min,
+            indicatorName: val?.Desc + "(" + val?.Unit + ")",
+            indicatorValue: Math.round(val?.Value),
+            isGradientColor: false,
+            isPercentage: val?.Unit === "%",
+          });
+        }
       }
     }
   }
