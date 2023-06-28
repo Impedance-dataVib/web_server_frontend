@@ -108,7 +108,7 @@ const ModuleMonitoringPage = ({
         <CardWidget
           showDate={trendsData?.alertUpdatedOn}
           headerLabel={
-            moduleData?.isAlert ? "Alerts & Instructions" : "Status Messages"
+            moduleType !== "Torque" ? "Alerts & Instructions" : "Status Messages"
           }
           headerIcon={<WarningAmber />}
           content={
