@@ -3,12 +3,13 @@ import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import { Grid } from "@mui/material";
+import { Alert, AlertTitle, Grid, Typography } from "@mui/material";
 import CustomConnector from "../../app/components/custom-stepper";
 import AccordionBase from "../../app/components/accordion-base";
 import formSchema from "./formSchema";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import LinearProgress from "@mui/material/LinearProgress";
 import {
   BearingChannelInformationForm,
   BearingMachineDetailsForm,
@@ -87,7 +88,7 @@ const BearingTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-  const { data } = useGetModuleById(moduleId);
+  const { isLoading, data, isError } = useGetModuleById(moduleId);
   const { data: customerName } = useGetSystemCustomerNameInfo();
   const getInitialFormData = () => {
     if (data?.from_data && customerName) {
@@ -244,61 +245,88 @@ const BearingTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
 
   return (
     <Box sx={{ width: "auto" }}>
-      <Stepper
-        activeStep={activeStep}
-        alternativeLabel
-        connector={<CustomConnector></CustomConnector>}
-        sx={{ width: "auto", mb: 3, mt: 2 }}
-      >
-        {stepperSteps?.map((label: string) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-      <Grid container sx={{ width: "auto" }}>
-        {stepperSteps?.map((item: string, index: number) => (
-          <Grid key={item} item sx={{ width: "100%" }}>
-            <AccordionBase
-              expanded={expanded}
-              handleChange={handleAccordionChange(index)}
-              value={item}
-              title={item}
-            >
-              <StepToComponentEngineModule
-                step={item}
-                formContext={moduleFormContext}
-                handleFormData={(e: any) => {}}
-              ></StepToComponentEngineModule>
-            </AccordionBase>
+      {isLoading && (
+        <>
+          <LinearProgress />
+          <Box sx={{ my: 1 }}>
+            <Alert severity="info" onClose={() => {}}>
+              <AlertTitle>
+                Please wait! Data is taking some time to load.
+              </AlertTitle>
+            </Alert>
+          </Box>
+        </>
+      )}
+      {isError && (
+        <Box sx={{ my: 1 }}>
+          <Alert severity="error" onClose={() => {}}>
+            <AlertTitle>Something went wrong !</AlertTitle>
+            <Typography variant="caption">
+              Please refresh the page! If this behaviour remains the same
+              contact admin team.
+            </Typography>
+          </Alert>
+        </Box>
+      )}
+      {!isLoading && !isError && (
+        <>
+          <Stepper
+            activeStep={activeStep}
+            alternativeLabel
+            connector={<CustomConnector></CustomConnector>}
+            sx={{ width: "auto", mb: 3, mt: 2 }}
+          >
+            {stepperSteps?.map((label: string) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          <Grid container sx={{ width: "auto" }}>
+            {stepperSteps?.map((item: string, index: number) => (
+              <Grid key={item} item sx={{ width: "100%" }}>
+                <AccordionBase
+                  expanded={expanded}
+                  handleChange={handleAccordionChange(index)}
+                  value={item}
+                  title={item}
+                >
+                  <StepToComponentEngineModule
+                    step={item}
+                    formContext={moduleFormContext}
+                    handleFormData={(e: any) => {}}
+                  ></StepToComponentEngineModule>
+                </AccordionBase>
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
-      <Box sx={{ mt: 2 }}>
-        <Stack
-          spacing={1}
-          direction="row"
-          sx={{ display: "flex", justifyContent: "flex-end" }}
-        >
-          <Button variant="contained" onClick={handleSubmit}>
-            Save
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => navigate("/configuration")}
-          >
-            Cancel
-          </Button>
-          <Button
-            startIcon={<Delete />}
-            color="primary"
-            variant="contained"
-            onClick={handleDeleteModule}
-          >
-            Delete Module
-          </Button>
-        </Stack>
-      </Box>
+          <Box sx={{ mt: 2 }}>
+            <Stack
+              spacing={1}
+              direction="row"
+              sx={{ display: "flex", justifyContent: "flex-end" }}
+            >
+              <Button variant="contained" onClick={handleSubmit}>
+                Save
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => navigate("/configuration")}
+              >
+                Cancel
+              </Button>
+              <Button
+                startIcon={<Delete />}
+                color="primary"
+                variant="contained"
+                onClick={handleDeleteModule}
+              >
+                Delete Module
+              </Button>
+            </Stack>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };
