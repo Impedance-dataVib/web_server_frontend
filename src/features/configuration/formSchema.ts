@@ -272,7 +272,7 @@ const formSchema = {
         helperNote: "Phase shift of firing orders in degrees",
       },
       {
-        name: "Power",
+        name: "Power (W)",
         label: "power",
         type: "text",
         helperNote: "Power Value in Watts",
@@ -331,19 +331,19 @@ const formSchema = {
         helperNote: "Enter the min rpm required to perform the analysis",
       },
       {
-        name: "MinVolt",
+        name: "Max Speed Variation",
         label: "min_volt",
         type: "text",
-        helperNote: "Enter the min volts required to perform the analysis",
+        helperNote: "Maximum Speed Variation",
       },
       {
-        name: "Gap between acquisitions",
+        name: "Gap between acquisitions (secs)",
         label: "recording_period",
         type: "text",
         helperNote: "time between two recordings (in seconds)",
       },
       {
-        name: "Recording Length ",
+        name: "Recording Length (secs)",
         label: "recording_length",
         type: "text",
         helperNote: `Recording length should be between 1 & 200s.
@@ -479,10 +479,10 @@ const formSchema = {
         helperNote: "Enter the min rpm required to perform analysis",
       },
       {
-        name: "MinVolt ",
+        name: "Max Speed Variation",
         label: "min_volt",
         type: "text",
-        helperNote: "Enter the min volts required to perform the analysis",
+        helperNote: "Maximum Speed Variation",
       },
       {
         name: "Gap between acquisitions",
@@ -498,19 +498,19 @@ const formSchema = {
         Recommended Recording length in secs = 2400/minRPM`,
       },
       {
-        name: "ZeroDegree ",
+        name: "ZeroDegree (in degree) ",
         label: "zero_degree",
         type: "text",
         helperNote: "Enter zero degree",
       },
       {
-        name: "Rigidity",
+        name: "Rigidity (R)",
         label: "rigidity",
         type: "popup",
         helperNote: "Calculate the rigidity",
       },
       {
-        name: "Power ",
+        name: "Power (W) ",
         label: "power",
         type: "text",
         helperNote: "Enter the power in watts",
@@ -646,10 +646,10 @@ const formSchema = {
         helperNote: "Enter the min rpm required to perform analysis",
       },
       {
-        name: "Min Volt ",
+        name: "Max Speed Variation ",
         label: "min_volt",
         type: "text",
-        helperNote: "Enter the min volts required to perform the analysis",
+        helperNote: "Maximum Speed Variation",
       },
       {
         name: "Gap between acquisitions ",
@@ -747,10 +747,10 @@ const formSchema = {
         helperNote: "Enter the min rpm required to perform analysis",
       },
       {
-        name: "Min Volt ",
+        name: "Max Speed Variation ",
         label: "min_volt",
         type: "text",
-        helperNote: "Enter the min volts required to perform the analysis ",
+        helperNote: "Maximum Speed Variation ",
       },
       {
         name: "Gap between acquisitions ",
@@ -886,10 +886,10 @@ const formSchema = {
         helperNote: "Enter the min rpm required to perform analysis",
       },
       {
-        name: "Min Volt ",
+        name: "Max Speed Variation ",
         label: "min_volt",
         type: "text",
-        helperNote: "Enter the min volts required to perform the analysis",
+        helperNote: "Maximum Speed Variation",
       },
       {
         name: "Gap between acquisitions ",

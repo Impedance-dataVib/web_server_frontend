@@ -25,6 +25,7 @@ const SystemConfiguration = () => {
       return;
     }
     const response = await SystemInfoApi.getSystemInfo();
+    console.log(response);
     setApiData((val: any) => {
       return {
         ...val,
@@ -340,7 +341,7 @@ const SystemConfiguration = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography variant="subtitle2"> Liscense History</Typography>
+                <Typography variant="subtitle2"> License History</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <NotActiveLicenseTable

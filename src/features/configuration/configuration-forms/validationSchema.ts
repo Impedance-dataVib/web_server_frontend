@@ -117,11 +117,12 @@ export const torqueValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .test(
-      "less than 0.05",
-      "Min Volt must be less than or equal to 0.05",
-      (value) => value <= 0.05
-    ),
+    // .test(
+    //   "less than 0.05",
+    //   "Min Volt must be less than or equal to 0.05",
+    //   (value) => value <= 0.05
+    // ),
+    .integer("The field should be an integer !"),
   recording_period: yup
     .number()
     .required("This is a required field")
@@ -226,11 +227,12 @@ export const motorValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .test(
-      "less than 0.05",
-      "Min Volt must be less than or equal to 0.05",
-      (value) => value <= 0.05
-    ),
+    // .test(
+    //   "less than 0.05",
+    //   "Min Volt must be less than or equal to 0.05",
+    //   (value) => value <= 0.05
+    // ),
+    .integer("The field should be an integer !"),
   aux_device_id: yup
     .number()
     .test(
@@ -330,11 +332,12 @@ export const turbineValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .test(
-      "less than 0.05",
-      "Min Volt must be less than or equal to 0.05",
-      (value) => value <= 0.05
-    ),
+    // .test(
+    //   "less than 0.05",
+    //   "Min Volt must be less than or equal to 0.05",
+    //   (value) => value <= 0.05
+    // ),
+    .integer("The field should be an integer !"),
   recording_period: yup
     .number()
     .required("This is a required field")
@@ -427,11 +430,12 @@ export const bearingValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .test(
-      "less than 0.05",
-      "Min Volt must be less than or equal to 0.005",
-      (value) => value <= 0.005
-    ),
+    // .test(
+    //   "less than 0.05",
+    //   "Min Volt must be less than or equal to 0.005",
+    //   (value) => value <= 0.005
+    // ),
+    .integer("The field should be an integer !"),
   recording_period: yup
     .number()
     .required("This is a required field")
@@ -856,11 +860,12 @@ export const engineValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     )
-    .test(
-      "less than 0.05",
-      "Min Volt must be less than or equal to 0.05",
-      (value) => value <= 0.05
-    ),
+    // .test(
+    //   "less than 0.05",
+    //   "Min Volt must be less than or equal to 0.05",
+    //   (value) => value <= 0.05
+    // ),
+    .integer("The field should be an integer !"),
   recording_period: yup
     .number()
     .required("This is a required field")
