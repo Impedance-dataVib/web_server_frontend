@@ -1896,155 +1896,95 @@ function buildLineChart(data, key, title, isGradientOpposite, hideBackground) {
 
 export function buildTrendData(historical_data, type, from_data) {
   let labels = [];
-  const dataSet = [];
-  const increase_fuel_data = [];
-  const engine_health_data = [];
-  const torsion = [];
-  const power = [];
   const rpmData = [];
-  const global = [];
-  const mechanical = [];
-  const mixed = [];
-  const electromag = [];
-  const streeStability = [];
-  const bearing = [];
+  const resultSet = [];
 
-  const regularity_deviation = [];
-  const bladeStatus = [];
-  const coupling = [];
-  const turbine_coupling = [];
+  for (const itemData of historical_data) {
+    const item = JSON.parse(itemData["jsondata"]);
 
-  const regularity_dev = [];
-  const blade_status = [];
-  const bearing_status = [];
-  const CombustionKit = [];
-
-  let maxRpm = 0;
-
-  const parseData = JSON.parse(from_data);
-  for (let item of historical_data) {
-    const moduleData = JSON.parse(item["jsondata"]);
-
-    labels.push(getdate(moduleData?.DateAndTime));
-    rpmData.push(parseInt(moduleData?.ChannelSpeed || 0));
-
+    console.log(item);
+    let toPush = false;
     if (type === "Engine") {
-      let itemData = moduleData["PowerLoss"];
-      increase_fuel_data.push(itemData?.value || 0);
+      const firingOrder = item?.Engine.FiringOrder;
 
-      itemData = moduleData["MechanicalHealth"];
-      engine_health_data.push(itemData?.valueInHealth || 0);
-    } else if (type === "Torque") {
-      let itemData = moduleData["StaticTorsion"];
-      torsion.push(itemData?.value || 0);
-      itemData = moduleData["StaticPower"];
-      power.push(itemData?.value || 0);
-    } else if (type === "Bearing") {
-      let itemData = moduleData["GlobalMixed"];
-      global.push(itemData?.valueInHealth || 0);
-      itemData = moduleData["BearingGlobal"];
-      mechanical.push(itemData?.valueInHealth || 0);
-      itemData = moduleData["4KMixed"];
-      mixed.push(itemData?.valueInHealth || 0);
-    } else if (type === "Motor") {
-      let itemData = moduleData["MElectromag"];
-      electromag.push(itemData?.valueInHealth || 0);
-      itemData = moduleData["MBearing"];
-      bearing.push(itemData?.valueInHealth || 0);
-      itemData = moduleData["MStressStability"];
-      streeStability.push(itemData?.valueInHealth || 0);
-    } else if (type === "Turbine") {
-      if (parseData.type === "Steam") {
-        let itemData = moduleData["RegularityDeviation"];
-        regularity_deviation.push(itemData?.valueInHealth || 0);
-        itemData = moduleData["BladeStatus"];
-        bladeStatus.push(itemData?.valueInHealth || 0);
-        itemData = moduleData["BearingStatus"];
-        coupling.push(itemData?.valueInHealth || 0);
-        itemData = moduleData["TurbineCoupling"];
-        turbine_coupling.push(itemData?.valueInHealth || 0);
-      } else {
-        let itemData = moduleData["RegularityDeviation"];
-        regularity_dev.push(itemData?.valueInHealth || 0);
-        itemData = moduleData["BladeStatus"];
-        blade_status.push(itemData?.valueInHealth || 0);
+      for (const key in item) {
+        if (!keysToIgnore.includes(key)) {
+          const objData = item[key];
 
-        itemData = moduleData["BearingStatus"];
-        bearing_status.push(itemData?.valueInHealth || 0);
-        itemData = moduleData["CombustionKit"];
-        CombustionKit.push(itemData?.valueInHealth || 0);
+          if (
+            objData.hasOwnProperty("cylinderHealth") &&
+            objData?.cylinderHealth
+          ) {
+            const cylArray = objData?.cylinderHealth;
+            let i = 0;
+            for (let order of firingOrder) {
+              const foundIndex = resultSet.findIndex(
+                (x) => x.key === key + "Cyl" + (i + 1)
+              );
+              if (foundIndex !== -1) {
+                resultSet[foundIndex].data.push(cylArray[i]);
+              } else {
+                resultSet.push({
+                  key: key + "Cyl" + (i + 1),
+                  data: [cylArray[i]],
+                });
+              }
+              i++;
+            }
+          }
+
+          const foundIndex = resultSet.findIndex((x) => x.key === key);
+          if (foundIndex !== -1) {
+            if (key === "PowerLoss") {
+              resultSet[foundIndex].data.push(objData?.value);
+            } else {
+              resultSet[foundIndex].data.push(objData?.valueInHealth);
+            }
+          } else {
+            if (key === "PowerLoss") {
+              resultSet.push({ key, data: [objData?.value] });
+            } else {
+              resultSet.push({ key, data: [objData?.valueInHealth] });
+            }
+          }
+          toPush = true;
+        }
+      }
+    } else {
+      for (const key in item) {
+        if (!keysToIgnore.includes(key)) {
+          const objData = item[key];
+          const foundIndex = resultSet.findIndex((x) => x.key === key);
+          if (foundIndex !== -1) {
+            resultSet[foundIndex].data.push(objData?.valueInHealth);
+          } else {
+            resultSet.push({ key, data: [objData?.valueInHealth] });
+          }
+          toPush = true;
+        }
       }
     }
+    if (toPush) {
+      labels.push(getdate(item?.DateAndTime));
+      rpmData.push(parseInt(item?.ChannelSpeed || 0));
+    }
   }
-
-  if (increase_fuel_data && increase_fuel_data.length > 0) {
-    dataSet.push(
-      buildDataSet("Increase in fuel consumption", "red", increase_fuel_data)
-    );
-  }
-
-  if (engine_health_data && engine_health_data.length > 0) {
-    dataSet.push(buildDataSet("Engine Health", "green", engine_health_data));
-  }
-
-  if (torsion && torsion.length > 0) {
-    dataSet.push(buildDataSet("Torsion", "red", torsion));
-  }
-  if (power && power.length > 0) {
-    dataSet.push(buildDataSet("Power", "green", power));
-  }
-
+  const dataSet = [];
+  let maxRpm = 0;
   if (rpmData && rpmData.length > 0) {
     const rpmDataArr = buildDataSet("RPM", "black", rpmData, "y1");
     dataSet.push(rpmDataArr);
     maxRpm = rpmDataArr.maxValue;
   }
 
-  if (global && global.length > 0) {
+  for (let item of resultSet) {
     dataSet.push(
-      buildDataSet("Global(Unbalance/Alignment/Looseness)", "red", global)
+      buildDataSet(
+        trendTitle[item.key] ? trendTitle[item.key] : toTitleCase(item.key),
+        getRandomColor(),
+        item.data
+      )
     );
-  }
-  if (mechanical && mechanical.length > 0) {
-    dataSet.push(buildDataSet("Mechanical health", "red", mechanical));
-  }
-  if (mixed && mixed.length > 0) {
-    dataSet.push(buildDataSet(" Stability", "red", mixed));
-  }
-  if (electromag && electromag.length > 0) {
-    dataSet.push(buildDataSet("Electromagnetic Stress", "red", electromag));
-  }
-  if (bearing && bearing.length > 0) {
-    dataSet.push(buildDataSet("Bearing", "red", bearing));
-  }
-  if (streeStability && streeStability.length > 0) {
-    dataSet.push(buildDataSet("Stability", "red", streeStability));
-  }
-  if (regularity_deviation && regularity_deviation.length > 0) {
-    dataSet.push(
-      buildDataSet("Regularity Deviation", "red", regularity_deviation)
-    );
-  }
-  if (bladeStatus && bladeStatus.length > 0) {
-    dataSet.push(buildDataSet("Shaft Health", "red", bladeStatus));
-  }
-  if (coupling && coupling.length > 0) {
-    dataSet.push(buildDataSet("Bearing status", "red", coupling));
-  }
-  if (turbine_coupling && turbine_coupling.length > 0) {
-    dataSet.push(buildDataSet(" Coupling", "red", turbine_coupling));
-  }
-  if (regularity_dev && regularity_dev.length > 0) {
-    dataSet.push(buildDataSet("Regularity Deviation", "red", regularity_dev));
-  }
-  if (blade_status && blade_status.length > 0) {
-    dataSet.push(buildDataSet("Shaft Health", "red", blade_status));
-  }
-  if (bearing_status && bearing_status.length > 0) {
-    dataSet.push(buildDataSet("Bearing status", "red", bearing_status));
-  }
-  if (CombustionKit && CombustionKit.length > 0) {
-    dataSet.push(buildDataSet(" Combustion Kit", "red", CombustionKit));
   }
   return { dataSet, labels, maxRpm };
 }
@@ -2301,3 +2241,63 @@ const max_value = {
 function roundToNearest10(number) {
   return Math.round(number / 10) * 10;
 }
+function toTitleCase(text) {
+  const result = text.replace(/([A-Z])/g, " $1");
+  return (result.charAt(0).toUpperCase() + result.slice(1)).trim();
+}
+
+function getRandomColor() {
+  var letters = "0123456789ABCDEF";
+  var color = "#";
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+const keysToIgnore = ["DateAndTime", "Engine", "Status", "ChannelSpeed", "Aux"];
+const trendTitle = {
+  //engine
+  PowerLoss: "Increase in Fuel Consumption",
+  Unbalance: "Performance of Mounts & Supports",
+  GlobalLevel: "Engine Health",
+  EngineEfficiency: "Combustion Condition",
+  CamPump: "Governor, Crank driven Accessories Health",
+  Damper: "Performance of Vibration Damper",
+  //steam turbine
+
+  RegularityDeviation: "Regularity/Deviation",
+  MBearing: "Bearing Status",
+  BladeStatus: "Shaft Health",
+  combustionCondition: "Combustion Kit",
+
+  //gas turbine
+  RegularityDeviation: "Regularity/Deviation",
+  MBearing: "Bearing Status",
+  BladeStatus: "Shaft Health",
+  combustionCondition: "Combustion Kit",
+
+  //Alternator1
+  MStressStability: "Stability",
+  MBearing: "Bearing",
+  MElectromag: "Electromagnetic Stress",
+
+  //Bearing
+  MBearing: "Bearing",
+  "8KMixed": "Friction",
+  GlobalKurto: "Shock Index",
+  GlobalMixed: "Global(Umbalance/Alignment/Loosness)",
+  BearingGlobal: "Mechanical Health",
+  "2KMixed": "Shaft/Clearance",
+  GlobalLevel: "Level(RMS)",
+
+  //aws12
+  StaticTorsion: "Torsion",
+  StaticTorque: "Torque",
+  StaticPower: "Power",
+
+  //turbine1 -test
+  RegularityDeviation: "Regularity/Deviation",
+  Bearing: "Bearing Status",
+  BladeStatus: "Shaft Health",
+  CombustionKit: "Combustion Kit",
+};
