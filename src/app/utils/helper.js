@@ -1021,11 +1021,11 @@ function buildBearingAlertData(data) {
 function buildMotorAlertData(data) {
   let returnArray = [];
 
-  const electroMag = []; // data['MElectromag'];
+  const electroMag = [];
 
-  const bearing = []; //data['MBearing'];
+  const bearing = [];
 
-  const stressStability = []; // data['MStressStability'];
+  const stressStability = [];
 
   if (data) {
     for (let i = 0; i < data.length; i++) {

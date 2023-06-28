@@ -59,10 +59,9 @@ const FileBrowserPage = () => {
       `ws:${window.location.hostname}:8081`,
     {
       onMessage: () => {
-        // if (sendMessage) {
-          console.log('ddd')
-          // if (sendMessage) sendMessage(moduleTabs[activeModule].process_name);
-        // }
+        if (sendMessage) {
+          if (sendMessage) sendMessage(moduleTabs[activeModule].process_name);
+        }
       },
       onError: (e) => {
         setIsLoading(false);
@@ -165,7 +164,6 @@ const FileBrowserPage = () => {
                   return (
                     <Tooltip title={tabElement.name} key={`tabElement${tabElement?.id}`}>
                       <Tab
-                        key={index}
                         label={`${
                           JSON.parse(tabElement.from_data).asset_name
                         } - ${JSON.parse(tabElement.from_data).equipment_name}`}

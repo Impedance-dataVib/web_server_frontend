@@ -35,7 +35,6 @@ const DownloadPage = () => {
   const [asset, setAsset] = useState(initial);
   const [reportType, setReportType] = useState(initial);
   const [assetModule, setAssetModule] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [assetError, setAssetError] = useState(false);
   const [periodError, setPeriodError] = useState(false);
   const [reportTypeError, setReportTypeError] = useState(false);
@@ -102,10 +101,7 @@ const DownloadPage = () => {
     if (asset == "") {
       setAssetError(true);
       return;
-    } else if (dateRangeValues.startDate === "") {
-      setPeriodError(true);
-      return;
-    } else if (dateRangeValues.endDate === "") {
+    } else if (dateRangeValues.startDate === "" || dateRangeValues.endDate === "") {
       setPeriodError(true);
       return;
     } else if (reportType == "" && dataSelection == "data") {
@@ -113,7 +109,6 @@ const DownloadPage = () => {
       return;
     }
 
-    setIsLoading(true);
     DownloadInfoApi.postDownloadInfo({
       type: dataSelection,
       module_id: asset,
@@ -122,7 +117,6 @@ const DownloadPage = () => {
       report_type: reportType,
     })
       .then((val) => {
-        setIsLoading(false);
         enqueueSnackbar({
           message: `Download request is posted, once ready you will get notified`,
           variant: "warning",
@@ -131,7 +125,6 @@ const DownloadPage = () => {
       })
       .catch((error) => {
         console.error(error);
-        setIsLoading(false);
         enqueueSnackbar({
           message: error.Message,
           variant: "error",
@@ -229,12 +222,12 @@ const DownloadPage = () => {
                       onChange={downloadOptionHandler}
                       row
                     >
-                      {selectOption.map((val, index) => (
+                      {selectOption.map((val) => (
                         <FormControlLabel
                           value={val.value}
                           control={<Radio size="small" />}
                           label={val.label}
-                          key={`radio${index}`}
+                          key={`radio${val.label}`}
                         ></FormControlLabel>
                       ))}
                     </RadioGroup>
@@ -281,7 +274,7 @@ const DownloadPage = () => {
                       size="small"
                     >
                       {assetModule.map(({ id, name, from_data }: any) => (
-                        <MenuItem value={id}>
+                        <MenuItem value={id} key={`assetModule_${id}`}>
                           <Typography variant="body2" color="#1D4580">
                             {JSON.parse(from_data).asset_name} -{"  "}
                             {JSON.parse(from_data).equipment_name} ({name})
@@ -372,6 +365,7 @@ const DownloadPage = () => {
                         >
                           {selectReportType.map((val) => (
                             <FormControlLabel
+                              key={`selectReportType_${val?.value}`}
                               value={val?.value}
                               control={<Radio size="small" />}
                               label={val.label}

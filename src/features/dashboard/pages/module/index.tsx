@@ -59,14 +59,10 @@ const ModuleMonitoringPage = ({
       const data = lastMessage?.data;
       if (data) {
         let parsedData = data;
-        if (parsedData?.Status === "Failed") {
-          // setLiveStatus(parsedData?.Message)
-        } else {
+        if (parsedData?.Status !== "Failed") {
           parsedData = buildLiveStatusData(parsedData);
           setLiveStatus(parsedData);
-          // setWebSocketsData(parsedData);
         }
-        // setIsLoading(false);
       }
     }
   }, [lastMessage]);
@@ -90,10 +86,6 @@ const ModuleMonitoringPage = ({
 
   useEffect(() => {
     const trendsCylinderArr = ["Trends"];
-    // if(trendsData.trends.length > 0) {
-    //   trendsCylinderArr.push('Trends')
-    // }
-
     if (
       trendsData.cylinder_specific_indicators &&
       trendsData.cylinder_specific_indicators.length > 0

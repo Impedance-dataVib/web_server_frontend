@@ -160,7 +160,7 @@ const TrendsPage = () => {
                 size="medium"
               >
                 {allModules?.map(({ id, name }: any) => (
-                  <MenuItem value={id}>
+                  <MenuItem value={id} key={`allModules_${id}`}>
                     <Typography variant="body2" color="#1D4580">
                       {name}
                     </Typography>

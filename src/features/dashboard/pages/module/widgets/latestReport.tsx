@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 const EngineLatestReport = () => {
   const { engineLatestReport } = useContext(DashboardContext);
 
-  const { t, i18n, ready } = useTranslation("engine");
+  const { t } = useTranslation("engine");
 
   return (
     <Paper sx={{ p: 2 }}>

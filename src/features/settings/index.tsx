@@ -69,9 +69,6 @@ const SettingsPage = () => {
     changeEventHandler(key, updatedVal);
   };
 
-  const handleChange = (setVal: any) => {
-    setVal((val: boolean) => !val);
-  };
   const handleAccordionChange =
     (value: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? value : false);
@@ -287,8 +284,8 @@ const SettingsPage = () => {
                         autoWidth
                         size="small"
                       >
-                        {Language.map((val, index) => (
-                          <MenuItem value={val.value} key={`language${index}`}>
+                        {Language.map((val) => (
+                          <MenuItem value={val.value} key={`language${val?.value}`}>
                             <Typography variant="body2" color="#1D4580">
                               {val.label}
                             </Typography>
@@ -546,9 +543,9 @@ const SettingsPage = () => {
                         }}
                         row
                       >
-                        {radioData.map((val, index) => (
+                        {radioData.map((val) => (
                           <FormControlLabel
-                            key={`network${index}`}
+                            key={`network${val.value}`}
                             value={val.value}
                             control={<Radio size="small" />}
                             label={val.label}

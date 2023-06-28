@@ -45,7 +45,7 @@ export default function Trends({ trends, fullScreen }: any) {
                   width: "100%",
                 }}
               >
-                {val?.chartType === "LineGradient" ? (
+                {val?.chartType === "LineGradient" && (
                   <LineGradient
                     maxValue={val?.yMax}
                     dataPointsY1={val?.dataPointsY1}
@@ -57,14 +57,13 @@ export default function Trends({ trends, fullScreen }: any) {
                     labels={val?.labels}
                     isGradientOpposite={val?.isGradientOpposite}
                   />
-                ) : { fullScreen } ? (
-                  <BarChart
+                )} 
+                {val?.chartType === "bar" && 
+                  (<BarChart
                     datapoints={val?.datapoints}
                     labels={val?.labels}
                     maxValue={val?.yMax}
                   />
-                ) : (
-                  <></>
                 )}
               </Box>
               <Box sx={{ display: "flex", justifyContent: "space-around" }}>

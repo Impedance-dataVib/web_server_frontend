@@ -226,7 +226,6 @@ const SystemConfiguration = () => {
                   >
                     <Typography variant="subtitle1">SW Version: </Typography>
                     <Typography variant="body1" sx={{ mx: 1 }}>
-                      {/* {process.env.REACT_APP_VERSION} */}
                       {apiData?.softwareVersion}
                     </Typography>
                   </Box>

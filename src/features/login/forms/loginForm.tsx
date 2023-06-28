@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../app/auth";
 import AuthenticationError from "../errors/authError";
 import LoginApi from "../loginApi";
@@ -49,7 +48,6 @@ const LoginForm = () => {
 
   const { setAuthToken, setRefreshToken, setUserName } = useAuth();
 
-  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const { classes } = useStyles();
@@ -94,7 +92,6 @@ const LoginForm = () => {
             setAuthToken(res.data?.token);
             setRefreshToken(res.data?.refresh_token);
             setUserName(username);
-            // navigate("/dashboard");
             onLoadCheckLicense?.();
           }
         } else {
