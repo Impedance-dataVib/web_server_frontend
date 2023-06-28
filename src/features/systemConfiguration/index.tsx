@@ -127,7 +127,7 @@ const SystemConfiguration = () => {
                       Hardware Serial Number :{" "}
                     </Typography>
                     <Typography variant="body1" sx={{ mx: 1 }}>
-                      {apiData?.serianNo}
+                      {apiData?.serialNo}
                     </Typography>
                   </Box>
                   <Box

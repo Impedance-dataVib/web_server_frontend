@@ -23,7 +23,7 @@ import {
 
 import CircularProgress, {
   CircularProgressProps,
-} from '@mui/material/CircularProgress';
+} from "@mui/material/CircularProgress";
 import React, { useEffect, useState } from "react";
 
 import { NotificationsOutlined } from "@mui/icons-material";
@@ -35,21 +35,27 @@ import { APP_NAV_MENU_ITEMS, INavMenuItem } from "../../../contants";
 const drawerWidth = 240;
 
 export function CircularProgressWithLabel(
-  props: CircularProgressProps & { value: number },
+  props: CircularProgressProps & { value: number }
 ) {
   return (
-    <Box sx={{ position: 'relative', display: 'inline-flex', marginLeft: '5px' }}>
-      <CircularProgress variant="determinate" {...props} sx={{color: 'green'}}/>
+    <Box
+      sx={{ position: "relative", display: "inline-flex", marginLeft: "5px" }}
+    >
+      <CircularProgress
+        variant="determinate"
+        {...props}
+        sx={{ color: "green" }}
+      />
       <Box
         sx={{
           top: 0,
           left: 0,
           bottom: 0,
           right: 0,
-          position: 'absolute',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          position: "absolute",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <Typography
@@ -102,7 +108,7 @@ const DrawerAppBar = () => {
   }, []);
 
   const getFile = () => {
-    setNotificationOpen(false)
+    setNotificationOpen(false);
     DownloadInfoApi.getDownloadFile(setProgressBar)
       .then((res: any) => {
         const url = window.URL.createObjectURL(res.data);
@@ -113,16 +119,19 @@ const DrawerAppBar = () => {
             "download",
             `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.json`
           );
+          link.setAttribute("target", "_blank");
         } else if (notificationType === "raw") {
           link.setAttribute(
             "download",
             `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.zip`
           );
+          link.setAttribute("target", "_blank");
         } else if (notificationType === "spreadsheet") {
           link.setAttribute(
             "download",
             `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.csv`
           );
+          link.setAttribute("target", "_blank");
         } else if (notificationType === "graphical") {
           link.setAttribute(
             "download",
@@ -291,10 +300,10 @@ const DrawerAppBar = () => {
     window !== undefined ? () => window.document.body : undefined;
 
   useEffect(() => {
-    if(progressBar === 100) {
+    if (progressBar === 100) {
       setProgressBar(0);
     }
-  }, [progressBar])
+  }, [progressBar]);
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar
@@ -366,10 +375,13 @@ const DrawerAppBar = () => {
             <Typography>{currtime}</Typography>
           </Box>
           {progressBar > 0 && (
-          <Typography color={'green'} sx={{mr: 3, display: 'flex', alignItems: 'center'}}>
-            {` Downloading:`}
-            <CircularProgressWithLabel value={progressBar} />
-          </Typography>
+            <Typography
+              color={"green"}
+              sx={{ mr: 3, display: "flex", alignItems: "center" }}
+            >
+              {` Downloading:`}
+              <CircularProgressWithLabel value={progressBar} />
+            </Typography>
           )}
           <Box>
             <IconButton

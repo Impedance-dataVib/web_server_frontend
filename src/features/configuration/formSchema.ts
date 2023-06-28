@@ -272,7 +272,7 @@ const formSchema = {
         helperNote: "Phase shift of firing orders in degrees",
       },
       {
-        name: "Power (W)",
+        name: "Power (Watt)",
         label: "power",
         type: "text",
         helperNote: "Power Value in Watts",
@@ -332,7 +332,7 @@ const formSchema = {
       },
       {
         name: "Max Speed Variation",
-        label: "min_volt",
+        label: "MaxRPMVar",
         type: "text",
         helperNote: "Maximum Speed Variation",
       },
@@ -480,7 +480,7 @@ const formSchema = {
       },
       {
         name: "Max Speed Variation",
-        label: "min_volt",
+        label: "MaxRPMVar",
         type: "text",
         helperNote: "Maximum Speed Variation",
       },
@@ -504,13 +504,13 @@ const formSchema = {
         helperNote: "Enter zero degree",
       },
       {
-        name: "Rigidity (R)",
+        name: "Rigidity (in N-m/rad)",
         label: "rigidity",
         type: "popup",
         helperNote: "Calculate the rigidity",
       },
       {
-        name: "Power (W) ",
+        name: "Power (Watt) ",
         label: "power",
         type: "text",
         helperNote: "Enter the power in watts",
@@ -647,7 +647,7 @@ const formSchema = {
       },
       {
         name: "Max Speed Variation ",
-        label: "min_volt",
+        label: "MaxRPMVar",
         type: "text",
         helperNote: "Maximum Speed Variation",
       },
@@ -748,7 +748,7 @@ const formSchema = {
       },
       {
         name: "Max Speed Variation ",
-        label: "min_volt",
+        label: "MaxRPMVar",
         type: "text",
         helperNote: "Maximum Speed Variation ",
       },
@@ -887,7 +887,7 @@ const formSchema = {
       },
       {
         name: "Max Speed Variation ",
-        label: "min_volt",
+        label: "MaxRPMVar",
         type: "text",
         helperNote: "Maximum Speed Variation",
       },

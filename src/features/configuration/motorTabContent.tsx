@@ -188,7 +188,7 @@ const MotorTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       motor_crankshaft_teeth: "",
       motor_crankshaft_wheel_type: "",
       min_speed: "",
-      min_volt: "",
+      MaxRPMVar: "",
       recording_period: "",
       recording_length: "",
       name: "",

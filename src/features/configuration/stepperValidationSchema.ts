@@ -8,7 +8,7 @@ export const bearingStepperValidationSchemaGroups: any = {
   ],
   "Diagnostic Details": [
     "min_speed",
-    "min_volt",
+    "MaxRPMVar",
     "recording_period",
     "recording_length",
   ],
@@ -55,7 +55,7 @@ export const engineStepperValidationSchemaGroups: any = {
   ],
   "Diagnostic Details": [
     "min_speed",
-    "min_volt",
+    "MaxRPMVar",
     "recording_period",
     "recording_length",
   ],
@@ -74,7 +74,7 @@ export const torqueStepperValidationSchemaGroups: any = {
   ],
   "Diagnostic Details": [
     "min_speed",
-    "min_volt",
+    "MaxRPMVar",
     "recording_period",
     "recording_length",
     "zero_degree",
@@ -93,7 +93,7 @@ export const motorStepperValidationSchemaGroups: any = {
   ],
   "Diagnostic Details": [
     "min_speed",
-    "min_volt",
+    "MaxRPMVar",
     "recording_period",
     "recording_length",
   ],
@@ -109,7 +109,7 @@ export const turbineStepperValidationSchemaGroups: any = {
   ],
   "Diagnostic Details": [
     "min_speed",
-    "min_volt",
+    "MaxRPMVar",
     "recording_period",
     "recording_length",
   ],

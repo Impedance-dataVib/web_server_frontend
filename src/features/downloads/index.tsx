@@ -436,9 +436,17 @@ const DownloadPage = () => {
                   <TableCell component="th" scope="row" align="center">
                     {row.id}
                   </TableCell>
-                  <TableCell align="center">{row.request_time}</TableCell>
                   <TableCell align="center">
-                    {row.process_complete_time}
+                    {row.request_time
+                      ? convertUTCDateToLocalTime(new Date(row.request_time))
+                      : ""}
+                  </TableCell>
+                  <TableCell align="center">
+                    {row.process_complete_time
+                      ? convertUTCDateToLocalTime(
+                          new Date(row.process_complete_time)
+                        )
+                      : ""}
                   </TableCell>
                   <TableCell align="center">
                     {row.filter_data.startDate

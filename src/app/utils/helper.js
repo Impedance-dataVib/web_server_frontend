@@ -183,9 +183,13 @@ export function buildSoketData(response, modelType, formData) {
 
 function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
   let isOffline = false;
-  const value = data ? data[key] : 0;
   if (!data || !data[key]) {
     isOffline = true;
+  }
+  let value = data ? data[key] : 0;
+
+  if (key !== "value") {
+    value = roundToNearest10(value);
   }
   let indicatorUnit = "Stable";
   let indicatorType = "success";
@@ -256,7 +260,8 @@ export function buildData(response) {
     const firingOrder = moduleData["FiringOrder"];
     const firingOrderSplit = firingOrder.length / 2;
     const first = firingOrder.slice(0, firingOrderSplit);
-    const second = firingOrder.slice(firingOrderSplit + 1);
+
+    const second = firingOrder.slice(first.length);
     let cylinder_specific_indicators = [];
 
     if (data?.Compression) {
@@ -557,6 +562,21 @@ function buildCompressionData(first, second, compressionData, graphLabel) {
         });
       }
     }
+    if (i === first.length - 1 && first.length < second.length) {
+      for (let k = first.length; k < second.length; k++) {
+        const secondItem = second[k];
+        const secondCompression = cylinderHealth[k];
+        firstChild.children[0].children = [
+          {
+            name: "Cyl " + secondItem,
+            value: showSecondValue,
+            fill: checkFillColor(secondCompression),
+            showValue: secondCompression,
+          },
+        ];
+      }
+    }
+
     children.push(firstChild);
   }
   const compression = {
@@ -1181,7 +1201,6 @@ function buildTurbineAlertData(data) {
       const item = data[i];
 
       const moduleData = JSON.parse(item["jsondata"]);
-      console.log(moduleData);
       const RegularityDeviation = moduleData["RegularityDeviation"];
 
       if (RegularityDeviation) {
@@ -2197,6 +2216,7 @@ function buildBearingChart(data, key, key2, title, isGradientOpposite) {
     isGradientOpposite: isGradientOpposite ?? false,
   };
 }
+
 const month = [
   "Jan",
   "Feb",
@@ -2278,3 +2298,6 @@ const max_value = {
   CrankcasePressure: { max: 251.99, min: -250 },
   BoostPressure: { max: 8031.87, min: 0 },
 };
+function roundToNearest10(number) {
+  return Math.round(number / 10) * 10;
+}

@@ -157,25 +157,6 @@ const SettingsPage = () => {
                     variant="body2"
                     sx={{ width: "32%", textAlign: "end" }}
                   >
-                    Display dates in UTC
-                  </Typography>
-                  <Box sx={{ mx: 1 }}>
-                    <ToggleSwitch
-                      value={apiData.display_date_utc}
-                      onChange={(e: any) => {
-                        changeEventHandler(
-                          "display_date_utc",
-                          e.target.checked
-                        );
-                      }}
-                    />
-                  </Box>
-                </Box>
-                <Box sx={{ display: "flex", mt: 2 }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ width: "32%", textAlign: "end" }}
-                  >
                     Automatically set date with NTP
                   </Typography>
                   <Box sx={{ mx: 1 }}>

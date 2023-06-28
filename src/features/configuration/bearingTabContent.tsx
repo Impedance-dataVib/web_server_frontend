@@ -123,7 +123,7 @@ const BearingTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       bearing_crankshaft_teeth: "",
       bearing_crankshaft_wheel_type: "",
       min_speed: "",
-      min_volt: "",
+      MaxRPMVar: "",
       recording_period: "",
       recording_length: "",
       name: "",

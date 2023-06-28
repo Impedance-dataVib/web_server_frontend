@@ -249,7 +249,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       engine_history: "",
       vessel_type: "",
       min_speed: "",
-      min_volt: "",
+      MaxRPMVar: "",
       recording_period: "",
       recording_length: "",
       overWrite: [],

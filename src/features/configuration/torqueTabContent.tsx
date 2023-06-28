@@ -3,7 +3,13 @@ import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import { Alert, AlertTitle, Grid, LinearProgress, Typography } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Grid,
+  LinearProgress,
+  Typography,
+} from "@mui/material";
 import CustomConnector from "../../app/components/custom-stepper";
 import AccordionBase from "../../app/components/accordion-base";
 import formSchema from "./formSchema";
@@ -20,10 +26,7 @@ import {
 import { useFormik } from "formik";
 import { deleteModule, saveModuleData } from "../../app/services";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  useGetModuleById,
-  useGetSystemCustomerNameInfo,
-} from "./hooks";
+import { useGetModuleById, useGetSystemCustomerNameInfo } from "./hooks";
 import { useSnackbar } from "notistack";
 import { Delete } from "@mui/icons-material";
 import { eventBus } from "src/EventBus";
@@ -167,7 +170,7 @@ const TorqueTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       nde_channel_teeth: "",
       nde_channel_wheel_type: "",
       min_speed: "",
-      min_volt: "",
+      MaxRPMVar: "",
       recording_period: "",
       recording_length: "",
       zero_degree: "",

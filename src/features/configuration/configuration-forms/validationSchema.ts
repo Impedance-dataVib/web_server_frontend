@@ -109,7 +109,7 @@ export const torqueValidationSchema = yup.object({
       "Min RPM should greater than 10",
       (value) => value > 10
     ),
-  min_volt: yup
+  MaxRPMVar: yup
     .number()
     .required()
     .test(
@@ -219,7 +219,7 @@ export const motorValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value) => value > 0
     ),
-  min_volt: yup
+  MaxRPMVar: yup
     .number()
     .required("This is a required field")
     .test(
@@ -381,7 +381,7 @@ export const turbineValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value: any) => value > 0 || !value || value == ""
     ),
-  min_volt: yup
+  MaxRPMVar: yup
     .number()
     .required("This is a required field")
     .test(
@@ -479,7 +479,7 @@ export const bearingValidationSchema = yup.object({
       "ERROR: The number must be greater than 0!",
       (value: any) => value > 0 || !value || value == ""
     ),
-  min_volt: yup
+  MaxRPMVar: yup
     .number()
     .required("This is a required field")
     .test(
@@ -909,7 +909,7 @@ export const engineValidationSchema = yup.object({
       "Min RPM should greater than 10",
       (value) => value > 10
     ),
-  min_volt: yup
+  MaxRPMVar: yup
     .number()
     .required("This is a required field")
     .test(

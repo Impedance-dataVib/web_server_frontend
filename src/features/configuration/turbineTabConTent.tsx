@@ -3,7 +3,13 @@ import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import { Alert, AlertTitle, Grid, LinearProgress, Typography } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Grid,
+  LinearProgress,
+  Typography,
+} from "@mui/material";
 import CustomConnector from "../../app/components/custom-stepper";
 import AccordionBase from "../../app/components/accordion-base";
 import formSchema from "./formSchema";
@@ -85,8 +91,7 @@ const TurbineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
-  const { isLoading, data, isError } =
-    useGetModuleById(moduleId);
+  const { isLoading, data, isError } = useGetModuleById(moduleId);
   const navigate = useNavigate();
   const { data: customerName } = useGetSystemCustomerNameInfo();
   useEffect(() => {
@@ -184,7 +189,7 @@ const TurbineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       turbine_crankshaft_teeth: "",
       turbine_crankshaft_wheel_type: "",
       min_speed: "",
-      min_volt: "",
+      MaxRPMVar: "",
       recording_period: "",
       recording_length: "",
       zero_degree: "",
