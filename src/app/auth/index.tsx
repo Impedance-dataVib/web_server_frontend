@@ -91,11 +91,7 @@ const AuthProvider = ({ children }: any) => {
     setUserName,
   ]);
   return (
-    <authContext.Provider
-      value={{
-        ...authContextValueProps,
-      }}
-    >
+    <authContext.Provider value={authContextValueProps}>
       {children}
     </authContext.Provider>
   );

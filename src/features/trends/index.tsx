@@ -101,49 +101,14 @@ const TrendsPage = () => {
         <Grid
           sx={{
             display: "flex",
-            p: 1,
+            p: 2,
             justifyContent: "flex-end",
-            marginRight: 5,
+            marginRight: 1,
           }}
           container
           spacing={1}
         >
-          <Grid item>
-            <Autocomplete
-              multiple
-              disableClearable
-              value={value}
-              onChange={(event, newValue) => {
-                setValue((val: any) => {
-                  return [...newValue];
-                });
-              }}
-              options={options}
-              getOptionLabel={(option: string) => option}
-              renderTags={(tagValue, getTagProps) =>
-                tagValue.map((option: string, index: number) => (
-                  <Chip
-                    label={option}
-                    {...getTagProps({ index })}
-                    disabled={index === 0}
-                  />
-                ))
-              }
-              sx={{
-                width: "12rem",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  border: "1px solid rgba(29, 69, 128, 0.5)",
-                },
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Indicators"
-                  placeholder="Indicators"
-                />
-              )}
-            />
-          </Grid>
+          
           <Grid item>
             <Button
               variant="outlined"
@@ -203,6 +168,42 @@ const TrendsPage = () => {
                 ))}
               </Select>
             </FormControl>
+          </Grid>
+          <Grid item>
+            <Autocomplete
+              multiple
+              disableClearable
+              value={value}
+              onChange={(event, newValue) => {
+                setValue((val: any) => {
+                  return [...newValue];
+                });
+              }}
+              options={options}
+              getOptionLabel={(option: string) => option}
+              renderTags={(tagValue, getTagProps) =>
+                tagValue.map((option: string, index: number) => (
+                  <Chip
+                    label={option}
+                    {...getTagProps({ index })}
+                    disabled={index === 0}
+                  />
+                ))
+              }
+              sx={{
+                width: "12rem",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "1px solid rgba(29, 69, 128, 0.5)",
+                },
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Indicators"
+                  placeholder="Indicators"
+                />
+              )}
+            />
           </Grid>
         </Grid>
       </Box>

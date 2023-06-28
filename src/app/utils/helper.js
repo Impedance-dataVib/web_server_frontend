@@ -528,7 +528,6 @@ function checkFillColor(value) {
 
 function buildCompressionData(first, second, compressionData, graphLabel) {
   let children = [];
-  const showValue = 100 / first.length;
   const showSecondValue = 100 / second.length;
 
   const cylinderHealth = compressionData?.cylinderHealth;

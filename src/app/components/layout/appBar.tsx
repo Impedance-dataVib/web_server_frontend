@@ -72,8 +72,7 @@ const DrawerAppBar = () => {
   const [module, setModule] = useState<any>("");
   const [filterData, setFilterData] = useState<any>("");
 
-  const [navMenuItems, setNavMenuItems] =
-    useState<INavMenuItem[]>(APP_NAV_MENU_ITEMS);
+  const [navMenuItems] = useState<INavMenuItem[]>(APP_NAV_MENU_ITEMS);
 
   const location = useLocation();
 
@@ -159,9 +158,6 @@ const DrawerAppBar = () => {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
   const handleClose = () => {
     setAnchorEl(null);
   };

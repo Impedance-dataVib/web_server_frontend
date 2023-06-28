@@ -197,8 +197,10 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
           control={
             <Switch
               name={fieldProps.label}
-              onChange={formContext?.handleChange}
-              value={formContext?.values?.[fieldProps.label]}
+              onChange={(e) => {
+                formContext?.setFieldValue(e.target.name, e.target.checked);
+              }}
+              checked={formContext?.values?.[fieldProps.label]}
               color="primary"
             />
           }

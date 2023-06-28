@@ -207,7 +207,7 @@ function App() {
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           autoHideDuration={2500}
         >
-          <appContext.Provider value={{ ...appContextProviderValues }}>
+          <appContext.Provider value={appContextProviderValues}>
             <ThemeProvider theme={activeTheme}>
               <CssBaseline />
               {licenseLoading ? (

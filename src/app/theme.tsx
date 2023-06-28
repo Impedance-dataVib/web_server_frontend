@@ -314,7 +314,7 @@ export const darkTheme = createTheme(
 );
 
 export interface ThemeContextProps {
-  themeMode?: string | undefined;
+  themeMode?: string;
   toggleThemeMode?: () => void;
 }
 
