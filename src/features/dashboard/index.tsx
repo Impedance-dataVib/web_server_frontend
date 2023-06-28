@@ -313,18 +313,17 @@ const DashboardPage = () => {
               setIsDataAvailable(false);
             }}
           >
-            <AlertTitle>{isDataAvailable}</AlertTitle>
-            <Typography variant="caption" component={"span"}>
-              {isDataAvailable}
-            </Typography>
-            <Button
-              size="small"
-              sx={{ ml: "30px" }}
-              variant="outlined"
-              onClick={handleClick}
-            >
-              Restart WebSocket
-            </Button>
+            <Box sx={{display: 'flex'}}>
+              <AlertTitle>{isDataAvailable}</AlertTitle>
+              <Button
+                size="small"
+                sx={{ ml: "30px" }}
+                variant="outlined"
+                onClick={handleClick}
+              >
+                Restart WebSocket
+              </Button>
+            </Box>
           </Alert>
         </Box>
       )}
