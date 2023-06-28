@@ -1167,13 +1167,13 @@ function buildMotorAlertData(data) {
 function buildTurbineAlertData(data) {
   let returnArray = [];
 
-  const regularityDeviation = []; //data['RegularityDeviation'];
+  const regularityDeviation = [];
 
-  const bearingStatus = []; //data['BearingStatus'];
+  const bearingStatus = [];
 
-  const bladeStatus = []; //data['BladeStatus'];
+  const bladeStatus = [];
 
-  const turbineCoupling = []; //data['TurbineCoupling'];
+  const turbineCoupling = [];
   const combustionCondition = [];
 
   if (data) {
