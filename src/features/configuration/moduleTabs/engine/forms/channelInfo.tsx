@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useGetChannelByConfigIdName } from "src/features/configuration/hooks";
 import { useSnackbar } from "notistack";
 
@@ -47,7 +47,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
     ChannelType,
     WheelType,
   };
-
+  const [channelInfoChanged, setChannelInfo] = useState(false);
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const { data: crankShatftData, isPending: crankShaftisPending } =
@@ -57,7 +57,12 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
       formContext.dirty
     );
   useEffect(() => {
-    if (crankShatftData && formContext.dirty && !crankShaftisPending) {
+    if (
+      crankShatftData &&
+      formContext.dirty &&
+      !crankShaftisPending &&
+      channelInfoChanged
+    ) {
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -84,17 +89,17 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
         await formContext.validateForm();
       }, 100);
     } else {
-      if (formContext.dirty && !crankShaftisPending) {
+      if (formContext.dirty && !crankShaftisPending && channelInfoChanged) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
           variant: "info",
         });
+        formContext.validateForm().then(() => {
+          formContext.setFieldValue("Crankshaft_ChannelType", "", false);
+          formContext.setFieldValue("Crankshaft_Teeth", "", false);
+          formContext.setFieldValue("Crankshaft_WheelType", "", false);
+        });
       }
-      formContext.validateForm().then(() => {
-        formContext.setFieldValue("Crankshaft_ChannelType", "", false);
-        formContext.setFieldValue("Crankshaft_Teeth", "", false);
-        formContext.setFieldValue("Crankshaft_WheelType", "", false);
-      });
     }
     return () => {};
   }, [crankShatftData, crankShaftisPending]);
@@ -105,7 +110,16 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
       formContext.dirty
     );
   useEffect(() => {
-    if (camShatftData && formContext.dirty && !camShaftisPending) {
+    if (
+      camShatftData &&
+      formContext.dirty &&
+      !camShaftisPending &&
+      channelInfoChanged
+    ) {
+      console.log(
+        "triggered 2",
+        camShatftData && formContext.dirty && !camShaftisPending
+      );
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -132,16 +146,16 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
         await formContext.validateForm();
       }, 100);
     } else {
-      if (formContext.dirty) {
+      if (formContext.dirty && !camShaftisPending && channelInfoChanged) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
           variant: "info",
         });
+        formContext.setFieldValue("CamShaft_ChannelType", "", false);
+        formContext.setFieldValue("CamShaft_Teeth", "", false);
+        formContext.setFieldValue("CamShaft_WheelType", "", false);
+        formContext.validateForm();
       }
-      formContext.setFieldValue("CamShaft_ChannelType", "", false);
-      formContext.setFieldValue("CamShaft_Teeth", "", false);
-      formContext.setFieldValue("CamShaft_WheelType", "", false);
-      formContext.validateForm();
     }
     return () => {};
   }, [camShatftData, camShaftisPending]);
@@ -153,7 +167,8 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
       formContext.dirty
     );
   useEffect(() => {
-    if (tdcData && formContext.dirty && !tdcIsPending) {
+    if (tdcData && formContext.dirty && !tdcIsPending && channelInfoChanged) {
+      console.log("triggered 3");
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -172,16 +187,16 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
         await formContext.validateForm();
       }, 100);
     } else {
-      if (formContext.dirty && !tdcIsPending) {
+      if (formContext.dirty && !tdcIsPending && channelInfoChanged) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
           variant: "info",
         });
+        formContext.setFieldValue("TDC_ChannelType", "", false);
+        formContext.setFieldValue("TDC_Teeth", "", false);
+        formContext.setFieldValue("TDC_WheelType", "", false);
+        formContext.validateForm();
       }
-      formContext.setFieldValue("TDC_ChannelType", "", false);
-      formContext.setFieldValue("TDC_Teeth", "", false);
-      formContext.setFieldValue("TDC_WheelType", "", false);
-      formContext.validateForm();
     }
     return () => {};
   }, [tdcData, tdcIsPending]);
@@ -193,7 +208,13 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
       formContext.dirty
     );
   useEffect(() => {
-    if (peakPressureData && formContext.dirty && !peakPressureIsPending) {
+    if (
+      peakPressureData &&
+      formContext.dirty &&
+      !peakPressureIsPending &&
+      channelInfoChanged
+    ) {
+      console.log("triggered 4");
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -220,20 +241,25 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
         await formContext.validateForm();
       }, 100);
     } else {
-      if (formContext.dirty && !peakPressureIsPending) {
+      if (formContext.dirty && !peakPressureIsPending && channelInfoChanged) {
         enqueueSnackbar({
           message: "Channel is not used in another module",
           variant: "info",
         });
+        formContext.validateForm().then(() => {
+          formContext.setFieldValue("Peak_Pressure_ChannelType", "", false);
+          formContext.setFieldValue("Peak_Pressure_Teeth", "", false);
+          formContext.setFieldValue("Peak_Pressure_WheelType", "", false);
+        });
       }
-      formContext.validateForm().then(() => {
-        formContext.setFieldValue("Peak_Pressure_ChannelType", "", false);
-        formContext.setFieldValue("Peak_Pressure_Teeth", "", false);
-        formContext.setFieldValue("Peak_Pressure_WheelType", "", false);
-      });
     }
     return () => {};
   }, [peakPressureData, peakPressureIsPending]);
+  useEffect(() => {
+    return () => {
+      setChannelInfo(false);
+    };
+  }, []);
 
   return (
     <>
@@ -262,7 +288,10 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               <Select
                 labelId={`Crankshaft_SENSORx-label`}
                 name="Crankshaft_SENSORx"
-                onChange={formContext?.handleChange}
+                onChange={(e: any) => {
+                  setChannelInfo(true);
+                  formContext?.handleChange(e);
+                }}
                 value={formContext?.values?.["Crankshaft_SENSORx"]}
                 label={"Sensorx"}
               >
@@ -405,7 +434,10 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               <Select
                 labelId={`CamShaft_SENSORx-label`}
                 name="CamShaft_SENSORx"
-                onChange={formContext?.handleChange}
+                onChange={(e: any) => {
+                  setChannelInfo(true);
+                  formContext?.handleChange(e);
+                }}
                 value={formContext?.values?.["CamShaft_SENSORx"]}
                 label={"Sensorx"}
               >
@@ -545,7 +577,10 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               <Select
                 labelId={`TDC_SENSORx-label`}
                 name="TDC_SENSORx"
-                onChange={formContext?.handleChange}
+                onChange={(e: any) => {
+                  setChannelInfo(true);
+                  formContext?.handleChange(e);
+                }}
                 value={formContext?.values?.["TDC_SENSORx"]}
                 label={"Sensorx"}
               >
@@ -688,7 +723,10 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               <Select
                 labelId={`Peak_Pressure_SENSORx-label`}
                 name="Peak_Pressure_SENSORx"
-                onChange={formContext?.handleChange}
+                onChange={(e: any) => {
+                  setChannelInfo(true);
+                  formContext?.handleChange(e);
+                }}
                 value={formContext?.values?.["Peak_Pressure_SENSORx"]}
                 label={"Sensorx"}
               >

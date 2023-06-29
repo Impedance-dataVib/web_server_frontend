@@ -115,6 +115,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       });
     }
   };
+
   const handleSubmit = async () => {
     try {
       const validate = await moduleFormContext.validateForm();
@@ -136,6 +137,10 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       enqueueSnackbar({
         message: "Module Saved!",
         variant: "success",
+      });
+      moduleFormContext.resetForm({
+        values: { ...moduleFormContext.values },
+        isSubmitting: false,
       });
     } catch (error: any) {
       enqueueSnackbar({
@@ -279,6 +284,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   });
 
   useEffect(() => {
+    console.log("dirty", moduleFormContext.dirty);
     setIsUnsaved(moduleFormContext.dirty);
   }, [moduleFormContext.dirty]);
 

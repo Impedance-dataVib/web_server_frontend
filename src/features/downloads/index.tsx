@@ -27,7 +27,7 @@ import { enqueueSnackbar } from "notistack";
 import DatePickerModal from "../trends/modals/DatePickerModal";
 import api from "../../app/api";
 import dateFormat from "../../app/utils/dateFormat";
-import { convertUTCDateToLocalTime } from "src/app/utils/helper";
+import { convertUTCDateToLocalTime, convertDate } from "src/app/utils/helper";
 
 const DownloadPage = () => {
   const initial = "";
@@ -101,7 +101,10 @@ const DownloadPage = () => {
     if (asset == "") {
       setAssetError(true);
       return;
-    } else if (dateRangeValues.startDate === "" || dateRangeValues.endDate === "") {
+    } else if (
+      dateRangeValues.startDate === "" ||
+      dateRangeValues.endDate === ""
+    ) {
       setPeriodError(true);
       return;
     } else if (reportType == "" && dataSelection == "data") {
@@ -112,8 +115,8 @@ const DownloadPage = () => {
     DownloadInfoApi.postDownloadInfo({
       type: dataSelection,
       module_id: asset,
-      startDate: dateRangeValues.startDate,
-      endDate: dateRangeValues.endDate,
+      startDate: convertDate(dateRangeValues.startDate),
+      endDate: convertDate(dateRangeValues.endDate),
       report_type: reportType,
     })
       .then((val) => {

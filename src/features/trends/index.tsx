@@ -22,6 +22,8 @@ import DateRangeIcon from "@mui/icons-material/DateRange";
 import SpeedIcon from "@mui/icons-material/Speed";
 import dateFormat from "../../app/utils/dateFormat";
 import RPMRangeModal from "./modals/RPMRangeModal";
+import IndicatorsModal from "./modals/Indicators";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 const TrendsPage = () => {
   const [options, setOption] = useState([]);
   const [value, setValue] = React.useState<string[]>([]);
@@ -38,7 +40,8 @@ const TrendsPage = () => {
   const [rpmRange, setRPMRange] = useState<any>({ rpm_min: 0, rpm_max: 0 });
   const [openRpmModal, setOpenRpmModal] = useState(false);
   const [toggleDatePicker, setToggleDatePicker] = useState(false);
-  const [moduleType, setModuleType]= useState('');
+  const [moduleType, setModuleType] = useState("");
+  const [openIndicatorsModal, setIndicatorsModal] = useState(false);
   const { data, isLoading, getAllTrends, errorMessage, isError, setIsError } =
     useGetAllTrends(moduleId, dateRangeValues, rpmRange, allModules);
 
@@ -74,8 +77,8 @@ const TrendsPage = () => {
   }, [moduleId, dateRangeValues, rpmRange, allModules]);
 
   useEffect(() => {
-    const moduleType = allModules.find((val:any) => val?.id === moduleId)
-    setModuleType(moduleType?.module_type || '');
+    const moduleType = allModules.find((val: any) => val?.id === moduleId);
+    setModuleType(moduleType?.module_type || "");
   }, [moduleId]);
 
   useEffect(() => {
@@ -108,7 +111,6 @@ const TrendsPage = () => {
           container
           spacing={1}
         >
-          
           <Grid item>
             <Button
               variant="outlined"
@@ -170,39 +172,17 @@ const TrendsPage = () => {
             </FormControl>
           </Grid>
           <Grid item>
-            <Autocomplete
-              multiple
-              disableClearable
-              value={value}
-              onChange={(event, newValue) => {
-                setValue((val: any) => {
-                  return [...newValue];
-                });
-              }}
-              options={options}
-              getOptionLabel={(option: string) => option}
-              renderTags={(tagValue, getTagProps) =>
-                tagValue.map((option: string, index: number) => (
-                  <Chip
-                    label={option}
-                    {...getTagProps({ index })}
-                  />
-                ))
-              }
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => setIndicatorsModal(true)}
               sx={{
-                width: "12rem",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  border: "1px solid rgba(29, 69, 128, 0.5)",
-                },
+                height: "3.32rem",
               }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Indicators"
-                  placeholder="Indicators"
-                />
-              )}
-            />
+              startIcon={<DragIndicatorIcon />}
+            >
+              Add Indicators +{value?.length || 0}
+            </Button>
           </Grid>
         </Grid>
       </Box>
@@ -233,7 +213,7 @@ const TrendsPage = () => {
               dataPoints={data?.dataSet}
               labels={data?.labels}
               maxRpm={data?.maxRpm}
-              yLabel={moduleType !== "Torque" ? "Percentage (%)": "Power"}
+              yLabel={moduleType !== "Torque" ? "Percentage (%)" : "Power"}
               selectedValue={value}
             />
           )}
@@ -251,6 +231,13 @@ const TrendsPage = () => {
         rpmRange={rpmRange}
         setRPMRange={setRPMRange}
       ></RPMRangeModal>
+      <IndicatorsModal
+        open={openIndicatorsModal}
+        onClose={() => setIndicatorsModal(false)}
+        indicators={value}
+        setIndicators={setValue}
+        options={options}
+      ></IndicatorsModal>
     </Box>
   );
 };

@@ -165,6 +165,9 @@ const BearingTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
         message: "Module Saved",
         variant: "success",
       });
+      moduleFormContext.resetForm({
+        values: { ...moduleFormContext.values },
+      });
     } catch (error: any) {
       enqueueSnackbar({
         message:

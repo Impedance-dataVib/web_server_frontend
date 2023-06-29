@@ -208,6 +208,7 @@ const TorqueTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
         message: "Delete Succeess!",
         variant: "success",
       });
+      moduleFormContext.resetForm();
     } catch (error: any) {
       enqueueSnackbar({
         message: "Delete Failed!",
