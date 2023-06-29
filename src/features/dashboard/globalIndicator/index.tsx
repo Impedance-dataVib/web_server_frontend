@@ -72,6 +72,7 @@ const GlobalIndicatorChart = ({
                 isTorqueModule={isTorqueModule}
                 indicatorName={val?.indicatorName}
                 tooltip={val?.tooltip}
+                height={150}
               />
             </Box>
           </Grid>
