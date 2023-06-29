@@ -335,12 +335,7 @@ export function buildData(response) {
     const peakPressure = data["Pressure"];
     // TODO: if (peakPressure && parseInt(peakPressure["value"]) !== 0) {
 
-    const peak_pressure = buildPeekPressureChart(
-      peakPressure,
-      firingOrder,
-      from_data["max_pressure"]
-    );
-    trends.push(peak_pressure);
+  
     // }
     const mechanical_health = buildLineGradientChart(
       historical_data,
@@ -350,6 +345,12 @@ export function buildData(response) {
     );
 
     trends.push(mechanical_health);
+    const peak_pressure = buildPeekPressureChart(
+      peakPressure,
+      firingOrder,
+      from_data["max_pressure"]
+    );
+    trends.push(peak_pressure);
     return {
       cylinder_specific_indicators: cylinder_specific_indicators,
       trends: trends,
@@ -1875,7 +1876,6 @@ export function buildTrendData(historical_data, type, from_data) {
   for (const itemData of historical_data) {
     const item = JSON.parse(itemData["jsondata"]);
 
-    console.log(item);
     let toPush = false;
     if (type === "Engine") {
       const firingOrder = item?.Engine.FiringOrder;

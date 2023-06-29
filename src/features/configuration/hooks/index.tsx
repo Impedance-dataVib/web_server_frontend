@@ -81,14 +81,6 @@ export const useGetModuleById = (
   return { isLoading, data, isError, getModuleDataById };
 };
 
-export const useStepperValidation = (
-  formContext: any,
-  validationSchema: any,
-  steps: [],
-  setActiveStep: () => {},
-  completed?: boolean
-) => {};
-
 export const useGetSystemCustomerNameInfo = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<string>("");

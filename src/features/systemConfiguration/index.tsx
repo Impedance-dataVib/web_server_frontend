@@ -25,7 +25,6 @@ const SystemConfiguration = () => {
       return;
     }
     const response = await SystemInfoApi.getSystemInfo();
-    console.log(response);
     setApiData((val: any) => {
       return {
         ...val,

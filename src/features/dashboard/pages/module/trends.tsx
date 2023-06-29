@@ -23,13 +23,13 @@ export default function Trends({ trends, fullScreen }: any) {
     <>
       <Grid container spacing={2} sx={{ overflow: "auto" }}>
         {trendsData &&
-          trendsData.map((val: any, index: any) => (
+          trendsData.map((val: any) => (
             <Grid
               item
               lg={6}
               md={6}
               sm={12}
-              key={`trends${index}`}
+              key={`trends${val?.trendsName.replace(' ', '_')}`}
               sx={{ display: "flex", flexDirection: "column" }}
             >
               <Typography

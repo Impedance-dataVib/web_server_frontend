@@ -118,7 +118,6 @@ const ReportsRow = ({
 };
 
 const ReportsCardContent = ({ liveStatus, processName }: IReportsCardProps) => {
-  console.log('liveStatus?.currentStep', liveStatus?.currentStep);
   return (
     <Box>
       <Grid container spacing={1}>
