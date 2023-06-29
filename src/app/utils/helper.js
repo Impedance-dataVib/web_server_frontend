@@ -394,7 +394,8 @@ export function buildData(response) {
         historical_data,
         "RegularityDeviation",
         "BladeStatus",
-        "Regularity Deviation, Shaft Health"
+        "Regularity Deviation, Shaft Health",
+        true,
       );
       trends.push(steamTurbineChart1);
 
@@ -402,7 +403,8 @@ export function buildData(response) {
         historical_data,
         "BearingStatus",
         "TurbineCoupling",
-        "Bearing status, Coupling"
+        "Bearing status, Coupling",
+        true,
       );
       trends.push(steamTurbineChart2);
       return {
@@ -417,7 +419,8 @@ export function buildData(response) {
         historical_data,
         "RegularityDeviation",
         "BladeStatus",
-        "Regularity Deviation, Shaft Health"
+        "Regularity Deviation, Shaft Health",
+        true,
       );
       trends.push(gasTurbineChart1);
 
@@ -425,7 +428,8 @@ export function buildData(response) {
         historical_data,
         "BearingStatus",
         "CombustionKit",
-        "Bearing status, Combustion Kit Status"
+        "Bearing status, Combustion Kit Status",
+        true,
       );
       trends.push(gasTurbineChart2);
       return {
@@ -443,7 +447,8 @@ export function buildData(response) {
       historical_data,
       "MElectromag",
       null,
-      "Electromagnetic Stress"
+      "Electromagnetic Stress",
+      true,
     );
     trends.push(motorChart1);
 
@@ -451,7 +456,8 @@ export function buildData(response) {
       historical_data,
       "MBearing",
       "MStressStability",
-      "Bearing , Stability"
+      "Bearing , Stability",
+      true,
     );
     trends.push(motorChart2);
 
@@ -469,7 +475,8 @@ export function buildData(response) {
       historical_data,
       "GlobalMixed",
       null,
-      "Global(Unbalance/Alignment/Looseness)"
+      "Global(Unbalance/Alignment/Looseness)",
+      true,
     );
     trends.push(bearingChart1);
 
@@ -477,7 +484,8 @@ export function buildData(response) {
       historical_data,
       "BearingGlobal",
       "4KMixed",
-      " Mechanical health, Stability"
+      " Mechanical health, Stability",
+      true,
     );
     trends.push(bearingChart2);
     return {
