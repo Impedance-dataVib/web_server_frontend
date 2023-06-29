@@ -186,7 +186,6 @@ const TrendsPage = () => {
                   <Chip
                     label={option}
                     {...getTagProps({ index })}
-                    disabled={index === 0}
                   />
                 ))
               }

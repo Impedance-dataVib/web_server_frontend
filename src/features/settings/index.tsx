@@ -13,6 +13,7 @@ import {
   LinearProgress,
 } from "@mui/material";
 
+import api from "../../app/api";
 import ToggleSwitch from "../../app/components/toggle-switch";
 import { Language, radioData } from "./schema";
 import AccordionBase from "../../app/components/accordion-base";
@@ -111,6 +112,22 @@ const SettingsPage = () => {
         });
       });
   };
+  const handleClick = () => {
+    api.get(
+      `/vbox/synk_time.php`
+    ).then((res) => {
+      enqueueSnackbar({
+        message: res?.data?.Message,
+        variant: "success",
+      });
+     }
+    ).catch((e) => {
+      enqueueSnackbar({
+        message: e?.response?.data?.Message || '',
+        variant: "error",
+      });
+    });
+  };
 
   useEffect(() => {
     getSettingsInfo();
@@ -118,13 +135,30 @@ const SettingsPage = () => {
 
   return (
     <Box>
-      {isLoading && (
-        <Box sx={{ my: 1 }}>
-          <LinearProgress />
-        </Box>
-      )}
-      <form>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        {isLoading && (
+          <Box sx={{ my: 1 }}>
+            <LinearProgress />
+          </Box>
+        )}
+
         <Typography variant="h5">Settings</Typography>
+        <Button
+          size="small"
+          sx={{ mr: "18px" }}
+          variant="outlined"
+          onClick={handleClick}
+        >
+          Synchronise Time Difference
+        </Button>
+      </Box>
+      <form>
         <Box
           sx={{
             m: 2,
@@ -157,54 +191,6 @@ const SettingsPage = () => {
                     variant="body2"
                     sx={{ width: "32%", textAlign: "end" }}
                   >
-                    Automatically set date with NTP
-                  </Typography>
-                  <Box sx={{ mx: 1 }}>
-                    <ToggleSwitch
-                      value={apiData.auto_date_ntp}
-                      onChange={(e: any) => {
-                        changeEventHandler("auto_date_ntp", e.target.checked);
-                      }}
-                    />
-                  </Box>
-                </Box>
-                <Box sx={{ display: "flex", mt: 2 }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ width: "32%", textAlign: "end" }}
-                  >
-                    Date in UTC
-                  </Typography>
-                  <Box sx={{ mx: 1 }}>
-                    <TextField
-                      placeholder="DD.MM.YYYY"
-                      value={apiData.date_in_utc}
-                      onChange={(e: any) => {
-                        changeEventHandler("date_in_utc", e.target.value);
-                      }}
-                      variant="outlined"
-                      sx={{
-                        fontSize: "16px",
-                        mb: "20px",
-                        width: "182px",
-                        padding: "1px 1px",
-                      }}
-                      inputProps={{
-                        style: {
-                          padding: 1,
-                          marginLeft: 10,
-                        },
-                        pattern: "{4}-{2}-{2}",
-                        // readOnly: true,
-                      }}
-                    />
-                  </Box>
-                </Box>
-                <Box sx={{ display: "flex", mt: 2 }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ width: "32%", textAlign: "end" }}
-                  >
                     Time in UTC (hh:mm:ss)
                   </Typography>
                   <Box sx={{ mx: 1 }}>
@@ -231,104 +217,7 @@ const SettingsPage = () => {
                     />
                   </Box>
                 </Box>
-                <Box sx={{ display: "flex", mt: 2 }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ width: "32%", textAlign: "end" }}
-                  >
-                    Language
-                  </Typography>
-                  <Box sx={{ mx: 1 }}>
-                    <FormControl sx={{ py: 0, width: "110px" }}>
-                      <Select
-                        value={apiData.language}
-                        displayEmpty
-                        sx={{
-                          height: "1.5rem",
-                          color: "grey",
-                          width: "182px",
-                          "& .MuiOutlinedInput-notchedOutline": {
-                            borderColor: "grey",
-                          },
-                          "& .MuiSvgIcon-root": {
-                            color: "grey",
-                          },
-                          "&:hover .MuiOutlinedInput-notchedOutline": {
-                            borderColor: "grey",
-                            borderWidth: "0.1rem",
-                          },
-                        }}
-                        name="language"
-                        onChange={(e) =>
-                          changeEventHandler("language", e.target.value)
-                        }
-                        autoWidth
-                        size="small"
-                      >
-                        {Language.map((val) => (
-                          <MenuItem value={val.value} key={`language${val?.value}`}>
-                            <Typography variant="body2" color="#1D4580">
-                              {val.label}
-                            </Typography>
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Box>
-                </Box>
-                <Box sx={{ display: "flex", mt: 2 }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ width: "32%", textAlign: "end" }}
-                  >
-                    Display warning on time difference{" "}
-                  </Typography>
-                  <Box sx={{ mx: 1 }}>
-                    <ToggleSwitch
-                      value={apiData.display_warming_time}
-                      onChange={(e: any) => {
-                        changeEventHandler(
-                          "display_warming_time",
-                          e.target.checked
-                        );
-                      }}
-                    />
-                  </Box>
-                </Box>
-                <Box sx={{ display: "flex", mt: 2 }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ width: "32%", textAlign: "end" }}
-                  >
-                    Significant time difference (seconds){" "}
-                  </Typography>
-                  <Box sx={{ mx: 1 }}>
-                    <TextField
-                      type="number"
-                      value={apiData.significant_time_diff}
-                      onChange={(e: any) => {
-                        changeEventHandler(
-                          "significant_time_diff",
-                          e.target.value
-                        );
-                      }}
-                      variant="outlined"
-                      sx={{
-                        fontSize: "16px",
-                        mb: "20px",
-                        width: "182px",
-                        padding: "1px 1px",
-                      }}
-                      inputProps={{
-                        style: {
-                          padding: 1,
-                          marginLeft: 10,
-                        },
-                        min: 1,
-                      }}
-                    />
-                  </Box>
-                </Box>
+
                 <Box sx={{ display: "flex", mt: 2 }}>
                   <Typography
                     variant="body2"
@@ -441,55 +330,6 @@ const SettingsPage = () => {
                         },
                         maxLength: "4",
                         pattern: "d{4}",
-                      }}
-                    />
-                  </Box>
-                </Box>
-                <Box sx={{ display: "flex", mt: 2 }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ width: "32%", textAlign: "end" }}
-                  >
-                    Disk Management
-                  </Typography>
-                  <Box sx={{ mx: 1 }}>
-                    <input
-                      type="radio"
-                      value={"circular"}
-                      checked={apiData.disk_management === "circular"}
-                      onChange={(e: any) => {
-                        changeEventHandler("disk_management", e.target.value);
-                      }}
-                    />
-                    <span>Circular</span>
-                  </Box>
-                </Box>
-                <Box sx={{ display: "flex", mt: 2 }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ width: "32%", textAlign: "end" }}
-                  >
-                    Description
-                  </Typography>
-                  <Box sx={{ mx: 1 }}>
-                    <TextField
-                      value={apiData.description}
-                      onChange={(e: any) => {
-                        changeEventHandler("description", e.target.value);
-                      }}
-                      multiline
-                      rows={3}
-                      sx={{
-                        fontSize: "16px",
-                        mb: "20px",
-                        width: "500px",
-                        padding: "1px 1px",
-                      }}
-                      inputProps={{
-                        style: {
-                          padding: 1,
-                          marginLeft: 10,
-                        },
                       }}
                     />
                   </Box>

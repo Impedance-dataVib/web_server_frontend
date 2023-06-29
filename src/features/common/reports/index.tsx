@@ -100,24 +100,13 @@ const ReportsRow = ({
             )}
           </Box>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={4}>
           <Box>
-            <IconButton disabled={disabled || !viewUrl}>
-              <RemoveRedEyeOutlined
-                sx={{
-                  color: disabled || !downloadUrl ? "lightgrey" : "#1A5DDD",
-                }}
-              />
-            </IconButton>
-          </Box>
-        </Grid>
-        <Grid item xs={2}>
-          <Box>
-            <IconButton disabled={disabled || !downloadUrl}>
+            <IconButton disabled={disabled}>
               <DownloadOutlined
                 onClick={() => handleDownload(reportName)}
                 sx={{
-                  color: disabled || !downloadUrl ? "lightgrey" : "#1A5DDD",
+                  color: disabled ? "lightgrey" : "#1A5DDD",
                 }}
               />
             </IconButton>
@@ -129,13 +118,14 @@ const ReportsRow = ({
 };
 
 const ReportsCardContent = ({ liveStatus, processName }: IReportsCardProps) => {
+  console.log('liveStatus?.currentStep', liveStatus?.currentStep);
   return (
     <Box>
       <Grid container spacing={1}>
         <Grid xs={12} item>
           <ReportsRow
             disabled={
-              liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"
+              liveStatus?.currentStep === "2" || liveStatus?.currentStep === "3"
             }
             icon={<TrendingUpOutlined />}
             reportName="Graphical Report"
@@ -143,10 +133,10 @@ const ReportsCardContent = ({ liveStatus, processName }: IReportsCardProps) => {
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
-        <Grid xs={12} item>
+        <Grid xs={32} item>
           <ReportsRow
             disabled={
-              liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"
+              liveStatus?.currentStep === "2" || liveStatus?.currentStep === "3"
             }
             icon={<List />}
             reportName="Spreadsheet Report"
@@ -154,10 +144,10 @@ const ReportsCardContent = ({ liveStatus, processName }: IReportsCardProps) => {
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
-        <Grid xs={12} item>
+        <Grid xs={32} item>
           <ReportsRow
             disabled={
-              liveStatus?.currentStep === "2" || liveStatus?.currentStep === "1"
+              liveStatus?.currentStep === "2" || liveStatus?.currentStep === "3"
             }
             icon={<TextSnippetOutlined />}
             reportName="Raw Data"

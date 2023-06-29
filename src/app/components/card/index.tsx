@@ -204,12 +204,12 @@ const CardWidget = ({
 
           {fullScreenContent && (
             <>
-              <Box component="section" sx={{ mr: "4px", cursor: "pointer" }}>
+              {/* <Box component="section" sx={{ mr: "4px", cursor: "pointer" }}>
                 <Search
                   sx={{ fontSize: "16px" }}
                   onClick={() => setOpenModal(true)}
                 />
-              </Box>
+              </Box> */}
               <Box component="section" sx={{ mr: "4px", cursor: "pointer" }}>
                 <OpenInFull
                   sx={{ fontSize: "14px" }}

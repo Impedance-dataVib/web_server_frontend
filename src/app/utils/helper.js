@@ -211,6 +211,7 @@ function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
     isGradientColor: true,
     indicatorType: isOffline ? " " : indicatorType,
     isGradientOpposite: isGradientOpposite ?? false,
+    tooltip: "test Data",
   };
 }
 
@@ -223,6 +224,7 @@ function buildRpmData(indicator_title, data, maxValue) {
     isPercentage: false,
     isGradientColor: false,
     indicatorType: "error",
+    tooltip: "Speed",
   };
 }
 function buildPeekPressureChart(data, firingOrder, maxPressure) {
@@ -269,7 +271,7 @@ export function buildData(response) {
         first,
         second,
         data["Compression"],
-        "compression"
+        "Compression Condition"
       );
       if (compression) {
         cylinder_specific_indicators.push(compression);
@@ -489,35 +491,6 @@ export function buildData(response) {
     cylinder_specific_indicators: [],
     trends: [],
   };
-}
-
-function buildTrendChart(data, name, type) {
-  const increase_fuel_consumption = {
-    trendsName: name,
-    min: 0,
-    max: 100,
-    avg: 50,
-    datapoints: [0, 20, 20, 60, 60, 20, 100, 80, 20, 25, 5, 10, 70],
-    labels: [
-      "0H",
-      "1H",
-      "2H",
-      "3H",
-      "4H",
-      "5H",
-      "6H",
-      "7H",
-      "8H",
-      "9H",
-      "10H",
-      "11H",
-      "12H",
-    ],
-    chartType: type,
-    xLabel: "Increase Fuel Consumption",
-    yLabel: "Time",
-  };
-  return increase_fuel_consumption;
 }
 
 function checkFillColor(value) {
@@ -771,8 +744,8 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
     dataPointsY1: zAxisDataPoints,
     labels: labels,
     chartType: "LineGradient",
-    xLabel: title,
-    yLabel: "Time",
+    yLabel: title === "Engine Health" ? 'Engine Percent' : title,
+    xLabel: "Time",
     isGradientOpposite: isGradientOpposite ?? false,
   };
 }
@@ -804,7 +777,7 @@ function average(datapoints) {
     }
   }
 
-  return sum / datapoints.length;
+  return parseFloat(sum / datapoints.length).toFixed(2);
 }
 export function round(num) {
   return Math.round(num * 100) / 100;
@@ -1887,8 +1860,8 @@ function buildLineChart(data, key, title, isGradientOpposite, hideBackground) {
     dataPointsY1: zAxisDataPoints,
     labels: labels,
     chartType: "LineGradient",
-    xLabel: title,
-    yLabel: "Time",
+    yLabel: title === "Engine Health" ? 'Engine Percent' : title,
+    xLabel: "Time",
     hideBackground: hideBackground ?? false,
     isGradientOpposite: isGradientOpposite ?? false,
   };
@@ -2060,8 +2033,8 @@ function buildTurbineChart(data, key, key2, title, isGradientOpposite) {
     dataPointsY2: datapoints2,
     labels: labels,
     chartType: "LineGradient",
-    xLabel: title,
-    yLabel: "Time",
+    yLabel: 'Engine Percent',
+    xLabel: "Time",
     isGradientOpposite: isGradientOpposite ?? false,
   };
 }
@@ -2106,8 +2079,8 @@ function buildMotorChart(data, key, key2, title, isGradientOpposite) {
     dataPointsY2: datapoints2,
     labels: labels,
     chartType: "LineGradient",
-    xLabel: title,
-    yLabel: "Time",
+    yLabel: 'Engine Percent',
+    xLabel: "Time",
     isGradientOpposite: isGradientOpposite ?? false,
   };
 }
@@ -2151,8 +2124,8 @@ function buildBearingChart(data, key, key2, title, isGradientOpposite) {
     dataPointsY2: datapoints2,
     labels: labels,
     chartType: "LineGradient",
-    xLabel: title,
-    yLabel: "Time",
+    yLabel: 'Engine Percent',
+    xLabel: "Time",
     isGradientOpposite: isGradientOpposite ?? false,
   };
 }
@@ -2230,7 +2203,7 @@ const max_value = {
   FuelLevel: { max: 250.99, min: -251 },
   EngineOilTemp: { max: 1735, min: -273 },
   EngineOilPressure: { max: 8031.87, min: 0 },
-  EngineCoulantTemp: { max: 1735, min: -273 },
+  EngineCoolantTemp: { max: 1735, min: -273 },
   BatteryVoltage: { max: 3212.75, min: 0 },
   EngineRPM: { max: 8031.87, min: 0 },
   OperatingHours: { max: 210554060.75, min: 0 },

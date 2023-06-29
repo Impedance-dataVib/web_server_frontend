@@ -28,7 +28,7 @@ export default function NotActiveLicenseTable({ notActiveLicenseInfo }: any) {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row" align="center">
-                {row.license_number}
+                {row?.license_number}
               </TableCell>
               <TableCell align="center">{row.expiry_date}</TableCell>
               <TableCell align="center">{row.status}</TableCell>

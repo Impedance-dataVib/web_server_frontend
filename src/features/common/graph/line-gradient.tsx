@@ -51,6 +51,7 @@ export default function LineGradient({
   datapoints,
   dataPointsY1,
   dataPointsY2,
+  yLabel,
   labels,
   hideBackground,
 }: any) {
@@ -64,6 +65,7 @@ export default function LineGradient({
         label: speedName,
         data: dataPointsY1,
         borderColor: "black",
+        backgroundColor: 'black',
         cubicInterpolationMode: "monotone" as const,
         tension: 1,
         pointBackgroundColor: "black",
@@ -76,7 +78,8 @@ export default function LineGradient({
         label: datasetsName[0],
         data: datapoints,
         borderColor: "red",
-        pointBackgroundColor: "#1D4580",
+        backgroundColor: 'red',
+        pointBackgroundColor: "red",
         yAxisID: "y",
         borderWidth: 1,
       },
@@ -88,8 +91,9 @@ export default function LineGradient({
       {
         label: datasetsName[1] || datasetsName[0],
         data: dataPointsY2,
-        borderColor: "yellow",
-        pointBackgroundColor: "#1D4580",
+        borderColor: "#00008b",
+        backgroundColor: '#00008b',
+        pointBackgroundColor: "#00008b",
         yAxisID: "y",
         borderWidth: 1,
       }
@@ -197,7 +201,7 @@ export default function LineGradient({
         },
         title: {
           padding: 7,
-          text: trendsName,
+          text: yLabel,
           display: true,
           font: {
             size: 14,
@@ -219,7 +223,7 @@ export default function LineGradient({
         beginAtZero: true,
         type: "linear" as const,
         display: true,
-        max: round(Math.max(...dataPointsY1)),
+        max: round(Math.max(...dataPointsY1))+500,
         position: "right" as const,
         title: {
           text: speedName || trendsName,

@@ -1,5 +1,5 @@
 import React from "react";
-import { WarningAmber, WarningAmberOutlined } from "@mui/icons-material";
+import { Error, Warning } from "@mui/icons-material";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
@@ -92,8 +92,9 @@ const AlertsAndInstructions = ({
                   <Box sx={{ mr: 1, color: "#4d4e4e" }}>
                     {val?.instructionType === "success" ? (
                       <ThumbUpIcon color={val?.instructionType} />
-                    ) : (
-                      <WarningAmberOutlined color={val?.instructionType} />
+                    ) : (val?.instructionType === "error" 
+                      ? <Error color={val?.instructionType} />
+                      : <Warning color={val?.instructionType} />
                     )}
                   </Box>
                   {!val?.isTorque && (
@@ -138,7 +139,7 @@ const AlertsAndInstructions = ({
             sx={{ display: "flex", flexDirection: "column" }}
           >
             <Typography textAlign={"center"} sx={{ width: "100%" }}>
-              No Alert's
+              No Alerts
             </Typography>
           </Grid>
         )}

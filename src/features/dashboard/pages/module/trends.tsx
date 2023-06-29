@@ -55,6 +55,7 @@ export default function Trends({ trends, fullScreen }: any) {
                     speedName={val.speedName}
                     datapoints={val?.datapoints}
                     labels={val?.labels}
+                    yLabel={val.yLabel}
                     isGradientOpposite={val?.isGradientOpposite}
                   />
                 )} 
@@ -66,45 +67,7 @@ export default function Trends({ trends, fullScreen }: any) {
                   />
                 )}
               </Box>
-              <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-                {val?.chartType === "LineGradient" && (
-                  <Typography
-                    component="span"
-                    textAlign={"left"}
-                    alignItems="center"
-                    display={"flex"}
-                  >
-                    <CircleIcon color="primary" sx={{ mr: 1 }} />
-                    {val?.trendsName.split(",")[0]}
-                  </Typography>
-                )}
-
-                <Typography
-                  component="span"
-                  textAlign={"left"}
-                  alignItems="center"
-                  display={"flex"}
-                >
-                  Min. {val?.min}
-                </Typography>
-
-                <Typography
-                  component="span"
-                  textAlign={"left"}
-                  alignItems="center"
-                  display={"flex"}
-                >
-                  Max. {val?.max}
-                </Typography>
-                <Typography
-                  component="span"
-                  textAlign={"left"}
-                  alignItems="center"
-                  display={"flex"}
-                >
-                  Avg. {val?.avg}
-                </Typography>
-              </Box>
+             
             </Grid>
           ))}
         {trendsData.length === 0 && (

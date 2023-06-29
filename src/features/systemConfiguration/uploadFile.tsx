@@ -69,18 +69,31 @@ export default function UploadFile({ setApiData }: any) {
       data.append("type", "license");
       SystemInfoApi.getFirmwareDetails(data)
         .then((res: any) => {
-          enqueueSnackbar({
-            message: `You have Successfully fetched the License data`,
-            variant: "success",
-          });
-          setFileInfo([res.data.data]);
-          setOpen(true);
+          
+          if(res.data.data){
+            enqueueSnackbar({
+              message: `You have Successfully fetched the License data`,
+              variant: "success",
+            });
+            setFileInfo([res.data.data]);
+            setOpen(true);
+            setFileName1(null);
+          } else {
+            enqueueSnackbar({
+              message: 'Something went wrong!',
+              variant: "error",
+            })
+            setFileName1(null);
+
+          }
         })
-        .catch((err: any) =>
-          enqueueSnackbar({
-            message: err.Message,
-            variant: "error",
-          })
+        .catch((err: any) => {
+            enqueueSnackbar({
+              message: err.Message,
+              variant: "error",
+            })
+            setFileName1(null);
+          }
         );
       setFile(file);
     } else if (type === "Software Update File") {
@@ -228,27 +241,27 @@ export default function UploadFile({ setApiData }: any) {
                 </TableHead>
                 <TableBody>
                   {fileInfo.map((row: any) => (
-                    <StyledTableRow key={row.license_id}>
+                    <StyledTableRow key={row?.license_id || ""}>
                       <StyledTableCell component="th" scope="row">
-                        {row.license_number}
+                        {row?.license_number}
                       </StyledTableCell>
                       <StyledTableCell component="th" scope="row">
-                        {row.license_tenure}
+                        {row?.license_tenure}
                       </StyledTableCell>
                       <StyledTableCell component="th" scope="row">
-                        {row.engine_quantity}
+                        {row?.engine_quantity}
                       </StyledTableCell>
                       <StyledTableCell component="th" scope="row">
-                        {row.bearing_quantity}
+                        {row?.bearing_quantity}
                       </StyledTableCell>
                       <StyledTableCell component="th" scope="row">
-                        {row.motor_quantity}
+                        {row?.motor_quantity}
                       </StyledTableCell>
                       <StyledTableCell component="th" scope="row">
-                        {row.turbine_quantity}
+                        {row?.turbine_quantity}
                       </StyledTableCell>
                       <StyledTableCell component="th" scope="row">
-                        {row.torque_quantity}
+                        {row?.torque_quantity}
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}
@@ -267,12 +280,12 @@ export default function UploadFile({ setApiData }: any) {
                 </TableHead>
                 <TableBody>
                   {fileInfo.map((row: any) => (
-                    <StyledTableRow key={row.license_id}>
+                    <StyledTableRow key={row?.license_id}>
                       <StyledTableCell component="th" scope="row">
-                        {row.version}
+                        {row?.version}
                       </StyledTableCell>
                       <StyledTableCell component="th" scope="row">
-                        {row.readme}
+                        {row?.readme}
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}
