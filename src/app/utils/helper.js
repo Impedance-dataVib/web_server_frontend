@@ -753,7 +753,7 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
     dataPointsY1: zAxisDataPoints,
     labels: labels,
     chartType: "LineGradient",
-    yLabel: title === "Engine Health" ? 'Engine Percent' : title,
+    yLabel: title === "Engine Health" ? 'Health Percent' : title,
     xLabel: "Time",
     isGradientOpposite: isGradientOpposite ?? false,
   };
@@ -1869,7 +1869,7 @@ function buildLineChart(data, key, title, isGradientOpposite, hideBackground) {
     dataPointsY1: zAxisDataPoints,
     labels: labels,
     chartType: "LineGradient",
-    yLabel: title === "Engine Health" ? 'Engine Percent' : title,
+    yLabel: title === "Engine Health" ? 'Health Percent' : title,
     xLabel: "Time",
     hideBackground: hideBackground ?? false,
     isGradientOpposite: isGradientOpposite ?? false,
@@ -2041,7 +2041,7 @@ function buildTurbineChart(data, key, key2, title, isGradientOpposite) {
     dataPointsY2: datapoints2,
     labels: labels,
     chartType: "LineGradient",
-    yLabel: 'Engine Percent',
+    yLabel: 'Health Percent',
     xLabel: "Time",
     isGradientOpposite: isGradientOpposite ?? false,
   };
@@ -2087,7 +2087,7 @@ function buildMotorChart(data, key, key2, title, isGradientOpposite) {
     dataPointsY2: datapoints2,
     labels: labels,
     chartType: "LineGradient",
-    yLabel: 'Engine Percent',
+    yLabel: 'Health Percent',
     xLabel: "Time",
     isGradientOpposite: isGradientOpposite ?? false,
   };
@@ -2132,7 +2132,7 @@ function buildBearingChart(data, key, key2, title, isGradientOpposite) {
     dataPointsY2: datapoints2,
     labels: labels,
     chartType: "LineGradient",
-    yLabel: 'Engine Percent',
+    yLabel: 'Health Percent',
     xLabel: "Time",
     isGradientOpposite: isGradientOpposite ?? false,
   };

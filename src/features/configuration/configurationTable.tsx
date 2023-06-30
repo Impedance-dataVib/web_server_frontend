@@ -164,21 +164,35 @@ const ConfigurationTable = ({
         <Table sx={{ minWidth: 500 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Configuration Name</StyledTableCell>
-              <StyledTableCell>Active Date</StyledTableCell>
-              <StyledTableCell align="left">Actions</StyledTableCell>
+              <StyledTableCell align="center">
+                Configuration Name
+              </StyledTableCell>
+              <StyledTableCell align="center">Client Name</StyledTableCell>
+              <StyledTableCell align="center">Sampling Rate</StyledTableCell>
+
+              <StyledTableCell align="center">Active Date</StyledTableCell>
+              <StyledTableCell align="center">Actions</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data.map((row: any) => (
               <StyledTableRow key={row.name}>
-                <StyledTableCell component="th" scope="row">
+                <StyledTableCell align="center" component="th" scope="row">
                   {row.name}
                 </StyledTableCell>
-                <StyledTableCell component="th" scope="row">
-                  {row.status === "Active" ? convertUTCDateToLocalTime(new Date(row.active_date)) : null}
+                {/* //----- */}
+                <StyledTableCell align="center" component="th" scope="row">
+                  {row.client_name}
                 </StyledTableCell>
-                <StyledTableCell align="left">
+                <StyledTableCell align="center" component="th" scope="row">
+                  {row.sampling_rate}
+                </StyledTableCell>
+                <StyledTableCell align="center" component="th" scope="row">
+                  {row.status === "Active"
+                    ? convertUTCDateToLocalTime(new Date(row.active_date))
+                    : null}
+                </StyledTableCell>
+                <StyledTableCell align="center">
                   <IconButton
                     onClick={() => onExportConfiguartion(row.id)}
                     aria-label="Export"
@@ -187,14 +201,14 @@ const ConfigurationTable = ({
                   >
                     <FileDownloadIcon></FileDownloadIcon>
                   </IconButton>
-                  <IconButton
+                  {/* <IconButton
                     onClick={() => onDeleteConfiguration(row)}
                     aria-label="delete"
                     color="primary"
                     title="Delete Configuration"
                   >
                     <DeleteOutlineIcon></DeleteOutlineIcon>
-                  </IconButton>
+                  </IconButton> */}
                   <IconButton
                     onClick={() => navigate(`${row.id}`)}
                     aria-label="edit"
@@ -211,8 +225,16 @@ const ConfigurationTable = ({
                     onClick={() => onActiveConfig(row)}
                     title="Click here to activate"
                   >
-                    {row.status === "Active" ? "Active" : "In Active"}
+                    {row.status === "Active  " ? "Active" : "In Active"}
                   </Button>
+                  <IconButton
+                    onClick={() => onDeleteConfiguration(row)}
+                    aria-label="delete"
+                    color="primary"
+                    title="Delete Configuration"
+                  >
+                    <DeleteOutlineIcon></DeleteOutlineIcon>
+                  </IconButton>
                 </StyledTableCell>
               </StyledTableRow>
             ))}

@@ -100,7 +100,9 @@ const ModuleMonitoringPage = ({
         <CardWidget
           showDate={trendsData?.alertUpdatedOn}
           headerLabel={
-            moduleType !== "Torque" ? "Alerts & Instructions" : "Status Messages"
+            moduleType !== "Torque"
+              ? "Alerts & Instructions"
+              : "Status Messages"
           }
           headerIcon={<WarningAmber />}
           content={
@@ -213,7 +215,7 @@ const ModuleMonitoringPage = ({
       </Grid>
       <Grid item lg={4} md={12} sm={12}>
         <CardWidget
-          headerLabel="Live Status"
+          headerLabel="Live Diagnostic Status"
           headerIcon={<VisibilityOutlined />}
           content={
             <LiveStatus
