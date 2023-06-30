@@ -59,7 +59,6 @@ export default function UploadFile({ setApiData }: any) {
     const file = e.target.files[0];
     const fileName = file?.name;
     const data = new FormData();
-    console.log("fileName", fileName);
     if (!file) {
       return;
     } else if (type === "License File") {
