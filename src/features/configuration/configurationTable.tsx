@@ -17,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 import {
   deleteConfig,
   activeConfig,
-  exportConfiguration,
 } from "../../app/services";
 import ConfirmDeleteConfigurationModal from "./modals/confirmDeleteConfig";
 import { useSnackbar } from "notistack";

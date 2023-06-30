@@ -3,7 +3,6 @@ import {
   CropFreeOutlined,
   OpenInFull,
   Remove,
-  Search,
 } from "@mui/icons-material";
 import {
   Box,

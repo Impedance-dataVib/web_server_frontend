@@ -15,7 +15,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 
 import zoomPlugin from "chartjs-plugin-zoom";
 import { round } from "src/app/utils/helper";
-import { Box, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 type ObjectDataSet = {
   title: string;

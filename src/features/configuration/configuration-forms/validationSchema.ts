@@ -1,4 +1,3 @@
-import { findAllByDisplayValue } from "@testing-library/react";
 import * as yup from "yup";
 export const torqueValidationSchema = yup.object({
   asset_name: yup.string().required("This is a required field"),

@@ -26,8 +26,7 @@ const Signal = ({ signals, formData, moduleType }: any) => {
       const data = lastMessage?.data;
       if (data) {
         let parsedData = JSON.parse(data);
-        if (parsedData?.Status === "Failed") {
-        } else {
+        if (parsedData?.Status !== "Failed") {
           parsedData = buildSignalData(parsedData, formData, moduleType);
           setGraphData(parsedData || []);
         }

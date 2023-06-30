@@ -131,7 +131,7 @@ export function buildSoketData(response, modelType, formData) {
     );
   } else if (modelType === "Bearing") {
     globalIndicator.push(
-      buildIndicatorData("Bearing", data["4KMixed"], "valueInHealth")
+      buildIndicatorData("Bearings", data["4KMixed"], "valueInHealth")
     );
     globalIndicator.push(
       buildRpmData("RPM", data?.ChannelSpeed, maxRPMThrshhold)
@@ -200,7 +200,7 @@ function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
     indicatorUnit = "Attention";
     indicatorType = "warning";
   }
-
+  // console.log(indicator_title);
   return {
     indicatorName: indicator_title,
     indicatorMin: 0,
@@ -211,7 +211,7 @@ function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
     isGradientColor: true,
     indicatorType: isOffline ? " " : indicatorType,
     isGradientOpposite: isGradientOpposite ?? false,
-    tooltip: "test Data",
+    tooltip: trendTooltip[indicator_title],
   };
 }
 
@@ -335,7 +335,6 @@ export function buildData(response) {
     const peakPressure = data["Pressure"];
     // TODO: if (peakPressure && parseInt(peakPressure["value"]) !== 0) {
 
-  
     // }
     const mechanical_health = buildLineGradientChart(
       historical_data,
@@ -395,7 +394,7 @@ export function buildData(response) {
         "RegularityDeviation",
         "BladeStatus",
         "Regularity Deviation, Shaft Health",
-        true,
+        true
       );
       trends.push(steamTurbineChart1);
 
@@ -404,7 +403,7 @@ export function buildData(response) {
         "BearingStatus",
         "TurbineCoupling",
         "Bearing status, Coupling",
-        true,
+        true
       );
       trends.push(steamTurbineChart2);
       return {
@@ -420,7 +419,7 @@ export function buildData(response) {
         "RegularityDeviation",
         "BladeStatus",
         "Regularity Deviation, Shaft Health",
-        true,
+        true
       );
       trends.push(gasTurbineChart1);
 
@@ -429,7 +428,7 @@ export function buildData(response) {
         "BearingStatus",
         "CombustionKit",
         "Bearing status, Combustion Kit Status",
-        true,
+        true
       );
       trends.push(gasTurbineChart2);
       return {
@@ -448,7 +447,7 @@ export function buildData(response) {
       "MElectromag",
       null,
       "Electromagnetic Stress",
-      true,
+      true
     );
     trends.push(motorChart1);
 
@@ -457,7 +456,7 @@ export function buildData(response) {
       "MBearing",
       "MStressStability",
       "Bearing , Stability",
-      true,
+      true
     );
     trends.push(motorChart2);
 
@@ -476,7 +475,7 @@ export function buildData(response) {
       "GlobalMixed",
       null,
       "Global(Unbalance/Alignment/Looseness)",
-      true,
+      true
     );
     trends.push(bearingChart1);
 
@@ -485,7 +484,7 @@ export function buildData(response) {
       "BearingGlobal",
       "4KMixed",
       " Mechanical health, Stability",
-      true,
+      true
     );
     trends.push(bearingChart2);
     return {
@@ -753,7 +752,7 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
     dataPointsY1: zAxisDataPoints,
     labels: labels,
     chartType: "LineGradient",
-    yLabel: title === "Engine Health" ? 'Health Percent' : title,
+    yLabel: title === "Engine Health" ? "Health Percent" : title,
     xLabel: "Time",
     isGradientOpposite: isGradientOpposite ?? false,
   };
@@ -1518,13 +1517,9 @@ function buildEngineAlertData(historical_data) {
     });
   }
 
-  const item = historical_data[0];
+  const item = historical_data.at(-1);
 
-  const objectData = JSON.parse(item["jsondata"]);
-
-  const firstKey = Object.keys(objectData)[0];
-
-  const data = objectData[firstKey];
+  const data = JSON.parse(item["jsondata"]);
 
   const compression = data["Compression"];
 
@@ -1869,7 +1864,7 @@ function buildLineChart(data, key, title, isGradientOpposite, hideBackground) {
     dataPointsY1: zAxisDataPoints,
     labels: labels,
     chartType: "LineGradient",
-    yLabel: title === "Engine Health" ? 'Health Percent' : title,
+    yLabel: title === "Engine Health" ? "Health Percent" : title,
     xLabel: "Time",
     hideBackground: hideBackground ?? false,
     isGradientOpposite: isGradientOpposite ?? false,
@@ -2041,7 +2036,7 @@ function buildTurbineChart(data, key, key2, title, isGradientOpposite) {
     dataPointsY2: datapoints2,
     labels: labels,
     chartType: "LineGradient",
-    yLabel: 'Health Percent',
+    yLabel: "Health Percent",
     xLabel: "Time",
     isGradientOpposite: isGradientOpposite ?? false,
   };
@@ -2087,7 +2082,7 @@ function buildMotorChart(data, key, key2, title, isGradientOpposite) {
     dataPointsY2: datapoints2,
     labels: labels,
     chartType: "LineGradient",
-    yLabel: 'Health Percent',
+    yLabel: "Health Percent",
     xLabel: "Time",
     isGradientOpposite: isGradientOpposite ?? false,
   };
@@ -2132,7 +2127,7 @@ function buildBearingChart(data, key, key2, title, isGradientOpposite) {
     dataPointsY2: datapoints2,
     labels: labels,
     chartType: "LineGradient",
-    yLabel: 'Health Percent',
+    yLabel: "Health Percent",
     xLabel: "Time",
     isGradientOpposite: isGradientOpposite ?? false,
   };
@@ -2281,4 +2276,62 @@ const trendTitle = {
   Bearing: "Bearing Status",
   BladeStatus: "Shaft Health",
   CombustionKit: "Combustion Kit",
+};
+const trendTooltip = {
+  "Engine Health":
+    "Overall indication of mechanical condition of Engine. Indicates the minor and major mechanical problems in the moving parts of the engine.Calculated from the wear/friction, cylinder pressure and crankshaft bearings indicators.",
+  "Combustion Condition":
+    "Indication of Engine running efficiently with regard to Fuel Consumption.Calculated from the injection condition and compression indicators.Even when this indicator approaches the warning limits, the engine can still be kept in operation without concern of damage to the engine as long as the mechanical condition indicator is normal.The consequences of allowing the engine to continue running under this condition are only higher operational costs and higher fuel consumption.",
+  "Performance of Mounts & Supports":
+    "Mounts indicator provides information about the health of Supporting structures, Excessive frame vibrations.Mount Supports have weakened due to ageing/weathering/lost elasticity/spoilt due to liquid leaks",
+  "Governor, Crank driven Accessories Health":
+    "This indicator measures irregularities of external/auxilliary equipment directly driven by the Governor and crankshaft.Irregularities in control system/fuel regulation system, turbocharger valves,fuel/lube/water pumps, turbocharger, coulping, shaft line or screw.",
+  "Performance of Vibration Damper":
+    "Damper indicator provides information about the effectiveness of rotational vibration absorption by Damper. When Damper health is low, the vibrations from the engine are transferred onto the gearboxes/propellers or associated driven systems. ",
+  "Increase in Fuel Consumption":
+    "Overall indication of engine imbalance, expressed as a percentagem, due to non-optimal thermal health(refer to indicators) and the inertia resistance of the rotating and moving parts.",
+  //motor
+  Stability:
+    "This indicator tracks the degradation of components of electromagnetic circuits during operation",
+  Bearing:
+    "This indicator monitors dynamic stresses on the bearings or play and wear of the guide elements,and bearing degradation during operation",
+  "Electromagnetic Stress":
+    "This indicator expresses the electromagnetic stresses resulting from the windings and rotor during operation.",
+  //torque
+  Torsion: "Torsion In degrees",
+  Torque: "Torque in KNm",
+  Power: "Power in MW",
+  //steam turbine
+  "Regularity/Deviation":
+    "Indicates the Faults in the steam intake system or lubrication control system of the bearings and thrust bearings",
+  "Bearing Status":
+    'Condition of Bearings due to Insufficient load due to: - coupling malfunction (dynamic misalignment; see "Coupling" indicator). - structure/support bending - excessive dynamic gearmesh force  (see gearbox levels). - Bearing wear - Cylinder defect (bore/bearing shell) - Stator geometry defect - Friction (dynamic seal defects) - Axial stability between the thrust bearings',
+  "Shaft Health":
+    "Indicates the overall health of Shaft/Blade and any deterioration due to Loss of clamping, dynamic instabilities, damage to rotating/ Fixed blades",
+  Coupling:
+    "This indicator expresses the fatigue during operation of the coupling during each cycle.It also describes a variable dynamic misalignment (isokinetic defect) between the turbine and the coupled element of the shaft line",
+  //gas turbine
+  "Regularity/Deviation":
+    "Indicates the Faults in the steam intake system or lubrication control system of the bearings and thrust bearings",
+  "Bearing Status":
+    'Condition of Bearings due to: - coupling malfunction (dynamic misalignment; see "Coupling" indicator). - structure/support bending - excessive dynamic gearmesh force  (see gearbox levels). - Bearing wear - Cylinder defect (bore/bearing shell) - Stator geometry defect - Friction (dynamic seal defects) - Axial stability between the thrust bearings',
+  "Shaft Health":
+    "Indicates the overall health of Shaft/Blade and any deterioration due to Loss of clamping, dynamic instabilities, damage to rotating/ Fixed blades",
+  "Combustion Kit":
+    "This indicator expresses the fatigue during operation of the coupling during each cycle.It also describes a variable dynamic misalignment (isokinetic defect) between the turbine and the coupled element of the shaft line",
+  //Bearing
+  Bearings:
+    "Assembly irregularity Roller bearing case:Incorrect alignment of the inner ring with the outer ring.Race spill, axial sliding irregularities (in the case of a free bearing) between outer ring and housing (stick slip, wear housing?Insufficient axial preload in the case of a preloaded bearing (angular contact).Irregularities of the rolling of the bearing elements on the races (inner/outer race) due to excessive clearance related to an underload in a radial direction.Damage of a bearing element (cage / elements / races).Wear of pulleys / belts.Defective bearing between the bearing outer ring and the bore.Wear of the housingPlain bearing case:Instability due to axial excessive clearance in the case of a thrust bearing, radial in the case of the guide bearingPadsbearing case:Pivot wearDifficulties of pivoting pads (jamming)",
+  Friction:
+    "Assembly irregularityRoller bearing case:Incorrect alignment of the inner ring with the outer ring.Race spill, axial sliding irregularities (in the case of a free bearing) between outer ring and housing (stick slip, wear housing?Insufficient axial preload in the case of a preloaded bearing (angular contact).Irregularities of the rolling of the bearing elements on the races (inner/outer race) due to excessive clearance related to an underload in a radial direction.Damage of a bearing element (cage / elements / races).Wear of pulleys / belts.Defective bearing between thebearing outer ring and the bore.Wear of the housingPlain bearing case:Instability due to axial excessive clearance in the case of a thrust bearing, radial in the case of the guide bearing Pads bearing case:Pivot wearDifficulties of pivoting pads (jamming)",
+  "Mechanical Health":
+    "Overall indication of mechanical condition of Bearings. Also Identifies if the continuation of the operation presents an aggravation of the damages evolving towards the loss of function. Then, An intervention is to be expected",
+  "Global(Umbalance/Alignment/Loosness)":
+    "Roller bearing case-  Without high choc indexUmbalance,misalignment Cantilever rotor umbalance Mode (bending,tilting) excitation-  With high choc index value Loosening and / or clearance at the support structure (assembly at the supports)Coupling: clearance, clamping wear (toothed coupling), axial distance not respected (coupling with flexible blades), cracking (flector) Degradation of bearingsPlain bearings case:Without high choc index Umbalance,misalignment Cantilever rotor umbalance-  With high choc index valueCoupling: clearance,clamping wear (toothed coupling), axial distance not respected (coupling with flexible blades), cracking (flector)Loosening of caps and supports",
+  "Shock Index":
+    "This indicator measures the presence of irregular pulses (shocks),translating a malfunction in the mechanical behavior of the component",
+  "Level(RMS)":
+    "This indicator gives an overall level (2Hz-1KHz) in mm /s and compared to the ISO standard 10816.",
+  "Shaft/Clearance":
+    "Excessive shaft displacement,Bad guiding effect:Roller bearing case :Excessive clearance in all type of bearings Excessive excentricity (static/dynamic) in the case of electric motors : electromagnetic circuit defectExcessive tipping displacement in case of vertical installations Excessive stresses causing the shaft to move with high displacement Excessive teeth mesh stresses in the case of a gearbox Plain bearing case :Clearance between bearing pad/bearing cap Excessive excentricity (static/dynamic) in the case of electric motors : electromagnetic circuit defect Excessive tipping displacement in case of vertical installations Excessive teeth mesh stresses in the case of a gearbox Excessive lubrification",
 };
