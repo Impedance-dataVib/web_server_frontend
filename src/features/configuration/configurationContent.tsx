@@ -108,13 +108,11 @@ const ConfigurationContent = ({
   const [tab, setTab] = useState(0);
   const [tabs, setTabs] = useState<string[] | undefined>();
   const navigate = useNavigate();
-  // const [addModules, setAddModules] = useState<any>([]);
-  // const [selectedModule, setSelectedModule] = useState<any>({});
   const { configId } = useParams();
   const [openAddModule, setOpenAddModule] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data, isPending, isError, getAllModulesByConfigId } =
+  const { data, getAllModulesByConfigId } =
     useGetConfigurationModuleByConfigId(configId);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -128,23 +126,24 @@ const ConfigurationContent = ({
     try {
       setIsLoading(true);
       await AddModule(payload);
-      await getAllModulesByConfigId(configId);
+      // await getAllModulesByConfigId(configId);
 
       enqueueSnackbar({
         message: "Module successfully added!",
         variant: "success",
       });
       setIsLoading(false);
-      // setSelectedModule({});
       handleCloseDialog();
     } catch (error: any) {
       enqueueSnackbar({
-        message: error.response.data.Message,
+        message:
+          error?.response?.data?.Message ||
+          error?.Message ||
+          "Module add failed!",
         variant: "error",
       });
 
       setIsLoading(false);
-      // setSelectedModule({});
     }
   };
 
