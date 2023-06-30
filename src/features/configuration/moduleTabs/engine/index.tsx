@@ -284,7 +284,6 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   });
 
   useEffect(() => {
-    console.log("dirty", moduleFormContext.dirty);
     setIsUnsaved(moduleFormContext.dirty);
   }, [moduleFormContext.dirty]);
 

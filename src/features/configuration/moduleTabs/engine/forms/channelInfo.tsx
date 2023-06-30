@@ -116,10 +116,6 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
       !camShaftisPending &&
       channelInfoChanged
     ) {
-      console.log(
-        "triggered 2",
-        camShatftData && formContext.dirty && !camShaftisPending
-      );
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -168,7 +164,6 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
     );
   useEffect(() => {
     if (tdcData && formContext.dirty && !tdcIsPending && channelInfoChanged) {
-      console.log("triggered 3");
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -214,7 +209,6 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
       !peakPressureIsPending &&
       channelInfoChanged
     ) {
-      console.log("triggered 4");
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
