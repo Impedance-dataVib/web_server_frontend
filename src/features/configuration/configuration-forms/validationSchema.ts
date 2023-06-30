@@ -200,16 +200,54 @@ export const motorValidationSchema = yup.object({
     .required("This is a required field"),
   motor_crankshaft_teeth: yup
     .number()
-    .integer("The field should be an integer !")
-    .required("This is a required field")
+    .test("Is Required", "This is a required field", (value, context) => {
+      if (
+        context.parent.motor_crankshaft_channel_type === "Speed" &&
+        value != undefined
+      ) {
+        return true;
+      } else if (
+        context.parent.motor_crankshaft_channel_type === "Speed" &&
+        value == undefined
+      ) {
+        return false;
+      } else if (
+        context.parent.motor_crankshaft_channel_type === "Transducer" &&
+        value == undefined
+      ) {
+        return true;
+      } else {
+        return true;
+      }
+    })
     .test(
       "Is positive?",
       "ERROR: The number must be greater than 0!",
-      (value) => value > 0
-    ),
+      (value: any) => value > 0
+    )
+    .integer("The field should be an integer !"),
   motor_crankshaft_wheel_type: yup
     .string()
-    .required("This is a required field"),
+    .test("Is Required", "This is a required field", (value, context) => {
+      if (
+        context.parent.motor_crankshaft_channel_type === "Speed" &&
+        value != undefined
+      ) {
+        return true;
+      } else if (
+        context.parent.motor_crankshaft_channel_type === "Speed" &&
+        value == undefined
+      ) {
+        return false;
+      } else if (
+        context.parent.motor_crankshaft_channel_type === "Transducer" &&
+        value == undefined
+      ) {
+        return true;
+      } else {
+        return true;
+      }
+    }),
   min_speed: yup
     .number()
     .required("This is a required field")
@@ -448,16 +486,54 @@ export const bearingValidationSchema = yup.object({
     .required("This is a required field"),
   bearing_crankshaft_teeth: yup
     .number()
-    .required("This is a required field")
+    .test("Is Required", "This is a required field", (value, context) => {
+      if (
+        context.parent.bearing_crankshaft_channel_type === "Speed" &&
+        value != undefined
+      ) {
+        return true;
+      } else if (
+        context.parent.bearing_crankshaft_channel_type === "Speed" &&
+        value == undefined
+      ) {
+        return false;
+      } else if (
+        context.parent.bearing_crankshaft_channel_type === "Transducer" &&
+        value == undefined
+      ) {
+        return true;
+      } else {
+        return true;
+      }
+    })
     .test(
       "Is positive?",
       "ERROR: The number must be greater than 0!",
-      (value) => value > 0
+      (value: any) => value > 0
     )
     .integer("The field should be an integer !"),
   bearing_crankshaft_wheel_type: yup
     .string()
-    .required("This is a required field"),
+    .test("Is Required", "This is a required field", (value, context) => {
+      if (
+        context.parent.bearing_crankshaft_channel_type === "Speed" &&
+        value != undefined
+      ) {
+        return true;
+      } else if (
+        context.parent.bearing_crankshaft_channel_type === "Speed" &&
+        value == undefined
+      ) {
+        return false;
+      } else if (
+        context.parent.bearing_crankshaft_channel_type === "Transducer" &&
+        value == undefined
+      ) {
+        return true;
+      } else {
+        return true;
+      }
+    }),
   min_speed: yup
     .number()
     .required("This is a required field")
