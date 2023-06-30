@@ -1,6 +1,5 @@
 import { Box, LinearProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
 import { buildSignalData, getCommaSepratedChannel } from "src/app/utils/helper";
 import { LineChart } from "src/features/common/graph/line-chart";
 import useWebSocket from "react-use-websocket";

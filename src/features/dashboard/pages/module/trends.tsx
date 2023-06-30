@@ -1,6 +1,5 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import LineGradient from "src/features/common/graph/line-gradient";
-import CircleIcon from "@mui/icons-material/Circle";
 import { BarChart } from "src/features/common/graph/bar-chart";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";

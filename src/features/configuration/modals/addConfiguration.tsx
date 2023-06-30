@@ -10,10 +10,8 @@ import {
   Select,
   TextField,
   MenuItem,
-  FormHelperText,
 } from "@mui/material";
 import { useState } from "react";
-import { useGetSystemCustomerNameInfo } from "../hooks";
 
 export interface IAddConfigurationModalProps {
   open: boolean;

@@ -11,10 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import LineGradientTrends from "src/features/common/graph/line-gradient-trends";
-import Autocomplete from "@mui/material/Autocomplete";
-import Chip from "@mui/material/Chip";
-import TextField from "@mui/material/TextField";
-
 import { useGetAllTrends, useGetAllModules } from "../hooks";
 import FullScreenLoader from "../../app/components/fullscreen-loader";
 import DatePickerModal from "./modals/DatePickerModal";

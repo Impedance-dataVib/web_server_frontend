@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import {
   Autocomplete,
   Box,
@@ -10,23 +10,12 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import * as yup from "yup";
-import { useFormik } from "formik";
-const validationSchema = yup.object({
-  rpm_min: yup.number(),
-  rpm_max: yup
-    .number()
-    .test(
-      "Max Rpm should be greater!",
-      "MAX RPM should be greater than MIN RPM",
-      (value: any, context) => value >= context.parent.rpm_min
-    ),
-});
 
 const propsAreEqual = (prev: any, next: any) => {
   return (
     JSON.stringify(prev.indicators) === JSON.stringify(next.indicators) &&
-    prev.open === next.open
+    prev.open === next.open &&
+    prev.options === next.options
   );
 };
 const IndicatorsModal = memo(

@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Box, LinearProgress, Paper, Typography } from "@mui/material";
-import Humanize from 'humanize-plus';
 
 import {
   Chart as ChartJS,

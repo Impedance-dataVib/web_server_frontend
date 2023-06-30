@@ -44,10 +44,6 @@ const useStyles = makeStyles()((theme) => {
   };
 });
 
-const getKeysFromSchema = (schema: any) => {
-  return Object.keys(schema);
-};
-
 const TabModuleRender = ({ type, moduleId, isUnsaved, setIsUnsaved }: any) => {
   switch (type) {
     case "Engine":
@@ -106,7 +102,7 @@ const ConfigurationContent = ({
 }: any) => {
   const [midTab, setMidTab] = useState(0);
   const [tab, setTab] = useState(0);
-  const [tabs, setTabs] = useState<string[] | undefined>();
+  const [, setTabs] = useState<string[] | undefined>();
   const navigate = useNavigate();
   const { configId } = useParams();
   const [openAddModule, setOpenAddModule] = useState(false);

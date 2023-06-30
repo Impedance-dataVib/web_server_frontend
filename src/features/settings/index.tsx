@@ -4,8 +4,6 @@ import {
   Box,
   Button,
   FormControl,
-  Select,
-  MenuItem,
   RadioGroup,
   FormControlLabel,
   Radio,
@@ -15,7 +13,7 @@ import {
 
 import api from "../../app/api";
 import ToggleSwitch from "../../app/components/toggle-switch";
-import { Language, radioData } from "./schema";
+import { radioData } from "./schema";
 import AccordionBase from "../../app/components/accordion-base";
 import SettingsApi from "./api";
 import { enqueueSnackbar } from "notistack";

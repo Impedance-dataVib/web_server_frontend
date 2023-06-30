@@ -93,7 +93,6 @@ const ConfigurationTable = ({
     let filename: "";
     const listFile = data.filter((item: any) => item.id === id);
     filename = listFile[0].name;
-    // TODO
     setIsLoading(true);
     api
       .get("/configuration/export-configuration.php/" + id, {
@@ -115,19 +114,6 @@ const ConfigurationTable = ({
         });
         setIsLoading(false);
       });
-
-    //   setIsLoading(true);
-    //   try {
-    //   const res:any = await exportConfiguration(id);
-
-    //   setIsLoading(false);
-    // } catch (e) {
-    // enqueueSnackbar({
-    //   message: "Error occurred while exporting configuration",
-    //   variant: "error",
-    // });
-    //   setIsLoading(false);
-    // }
   };
 
   const onActiveConfig = async (row: any) => {
@@ -201,14 +187,6 @@ const ConfigurationTable = ({
                   >
                     <FileDownloadIcon></FileDownloadIcon>
                   </IconButton>
-                  {/* <IconButton
-                    onClick={() => onDeleteConfiguration(row)}
-                    aria-label="delete"
-                    color="primary"
-                    title="Delete Configuration"
-                  >
-                    <DeleteOutlineIcon></DeleteOutlineIcon>
-                  </IconButton> */}
                   <IconButton
                     onClick={() => navigate(`${row.id}`)}
                     aria-label="edit"

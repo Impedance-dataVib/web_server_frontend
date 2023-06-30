@@ -24,8 +24,6 @@ const schema = [
     type: "text",
   },
   { name: "Length(L)(Mtrs)", label: "length", type: "text" },
-  // { name: "MaxRPM(RPM)", label: "max_rpm", type: "text" },
-  // { name: "MaxPower(Watts)", label: "max_power", type: "text" },
 ];
 const validationSchema: any = yup.object({
   outer_diameter: yup.number().required("This is a required field"),
@@ -36,11 +34,6 @@ const validationSchema: any = yup.object({
   max_power: yup.number().required("This is a required field"),
 });
 
-const getFieldObjectsInitialValues = (schema: any) => {
-  return schema.reduce((init: any, prev: any) => {
-    return { ...init, [prev.label]: "" };
-  }, {});
-};
 
 export const PopupRigidity = ({ formContext, fieldProps }: any) => {
   const [open, setOpen] = useState(false);

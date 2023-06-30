@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ContentBox from "../../app/components/content-box";
@@ -16,10 +16,7 @@ import { addConfiguration, importConfiguration } from "../../app/services";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 import { eventBus } from "src/EventBus";
-interface IAddConfigurationState {
-  name: string;
-  sampling_rate: string;
-}
+
 const ConfigurationPageContent = () => {
   const [openAddConfigDialog, setOpenAddConfigDialog] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -132,7 +129,6 @@ const ConfigurationPageContent = () => {
                 }}
               >
                 <Button
-                  // onClick={handleAddConfigDialog}
                   variant="contained"
                   component="label"
                   startIcon={<AttachFileIcon />}

@@ -5,9 +5,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import LockIcon from "@mui/icons-material/Lock";
-import LockOpenIcon from "@mui/icons-material/LockOpen";
-import { Typography } from "@mui/material";
 
 export default function NotActiveLicenseTable({ notActiveLicenseInfo }: any) {
   return (

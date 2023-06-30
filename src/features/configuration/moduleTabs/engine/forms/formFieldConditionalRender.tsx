@@ -13,8 +13,6 @@ import {
   Typography,
 } from "@mui/material";
 import { FieldArray, FieldArrayRenderProps, FormikProvider } from "formik";
-import debounce from "lodash/debounce";
-import { useCallback } from "react";
 import { OVER_WRITE_INDICATORS } from "src/features/configuration/formSchema";
 
 const MultipleFields = ({ fieldProps, formContext }: any) => {
@@ -245,9 +243,6 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                           <Box key={index}>
                             <FormControl
                               sx={{ minWidth: "182px", marginBottom: "20px" }}
-                              // error={Boolean(
-                              //   formContext?.errors?.[fieldProps.label]
-                              // )}
                               disabled={
                                 fieldProps?.userName === "admin" ? false : true
                               }
@@ -273,11 +268,6 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                                   )
                                 )}
                               </Select>
-                              {/* {Boolean(formContext?.errors?.[fieldProps.label]) && (
-                            <FormHelperText>
-                              {formContext?.errors?.[fieldProps.label]}
-                            </FormHelperText>
-                          )} */}
                             </FormControl>
 
                             <TextField

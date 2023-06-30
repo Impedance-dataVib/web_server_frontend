@@ -1,6 +1,6 @@
 import React from "react";
 import { Error, Warning } from "@mui/icons-material";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box,Grid, Typography } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 const AlertsAndInstructions = ({
