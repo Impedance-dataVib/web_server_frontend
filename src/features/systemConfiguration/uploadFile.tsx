@@ -59,6 +59,7 @@ export default function UploadFile({ setApiData }: any) {
     const file = e.target.files[0];
     const fileName = file?.name;
     const data = new FormData();
+    console.log("fileName", fileName);
     if (!file) {
       return;
     } else if (type === "License File") {
@@ -69,32 +70,28 @@ export default function UploadFile({ setApiData }: any) {
       data.append("type", "license");
       SystemInfoApi.getFirmwareDetails(data)
         .then((res: any) => {
-          
-          if(res.data.data){
+          if (res?.data?.data) {
             enqueueSnackbar({
               message: `You have Successfully fetched the License data`,
               variant: "success",
             });
             setFileInfo([res.data.data]);
             setOpen(true);
-            setFileName1(null);
           } else {
             enqueueSnackbar({
-              message: 'Something went wrong!',
+              message: "Something went wrong!",
               variant: "error",
-            })
+            });
             setFileName1(null);
-
           }
         })
         .catch((err: any) => {
-            enqueueSnackbar({
-              message: err.Message,
-              variant: "error",
-            })
-            setFileName1(null);
-          }
-        );
+          enqueueSnackbar({
+            message: err.Message,
+            variant: "error",
+          });
+          setFileName1(null);
+        });
       setFile(file);
     } else if (type === "Software Update File") {
       setFileName2(fileName);
@@ -104,12 +101,20 @@ export default function UploadFile({ setApiData }: any) {
       data.append("type", "vbox");
       SystemInfoApi.getFirmwareDetails(data)
         .then((res: any) => {
-          setFileInfo([res.data.data]);
-          enqueueSnackbar({
-            message: `You have Successfully fetched the Software details`,
-            variant: "success",
-          });
-          setOpen(true);
+          if (res?.data?.data) {
+            setFileInfo([res.data.data]);
+            enqueueSnackbar({
+              message: `You have Successfully fetched the Software details`,
+              variant: "success",
+            });
+            setOpen(true);
+          } else {
+            enqueueSnackbar({
+              message: "Something went wrong!",
+              variant: "error",
+            });
+            setFileName2(null);
+          }
         })
         .catch((err: any) =>
           enqueueSnackbar({
