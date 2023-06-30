@@ -122,7 +122,7 @@ const ConfigurationContent = ({
     try {
       setIsLoading(true);
       await AddModule(payload);
-
+      await getAllModulesByConfigId(configId);
       enqueueSnackbar({
         message: "Module successfully added!",
         variant: "success",

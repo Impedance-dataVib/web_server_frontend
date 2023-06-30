@@ -69,11 +69,11 @@ const LicenseImportForm = () => {
           message: res?.data?.Message + " , Please refresh the page",
           variant: "success",
         });
-        window.open(`/`, '_self');
+        window.open(`/`, "_self");
       })
       .catch((e) => {
         enqueueSnackbar({
-          message: e?.response?.data?.Message || '',
+          message: e?.response?.data?.Message || e?.message ||e?.Message|| "Something went wrong please contact the administrator!",
           variant: "error",
         });
       });
