@@ -193,19 +193,33 @@ function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
   }
   let indicatorUnit = "Stable";
   let indicatorType = "success";
-  if (value <= 30) {
-    indicatorUnit = "Alert";
-    indicatorType = "error";
-  } else if (value > 30 && value <= 70) {
-    indicatorUnit = "Attention";
-    indicatorType = "warning";
+  if (isGradientOpposite) {
+    if (value >= 3) {
+      indicatorUnit = "Alert";
+      indicatorType = "error";
+    } else if (value >= 2 && value < 3) {
+      indicatorUnit = "Attention";
+      indicatorType = "warning";
+    }
+  } else {
+    if (value <= 30) {
+      indicatorUnit = "Alert";
+      indicatorType = "error";
+    } else if (value > 30 && value <= 70) {
+      indicatorUnit = "Attention";
+      indicatorType = "warning";
+    }
   }
   // console.log(indicator_title);
   return {
     indicatorName: indicator_title,
     indicatorMin: 0,
     indicatorMax: isGradientOpposite ? 6 : 100,
-    indicatorValue: isOffline ? "Offline" : parseFloat(value).toFixed(2),
+    indicatorValue: isOffline
+      ? "Offline"
+      : isGradientOpposite
+      ? parseFloat(value).toFixed(2)
+      : parseInt(value),
     isPercentage: isOffline ? false : true,
     indicatorUnit: isOffline ? " " : indicatorUnit,
     isGradientColor: true,

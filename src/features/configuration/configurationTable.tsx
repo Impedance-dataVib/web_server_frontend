@@ -14,10 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import api from "../../app/api";
 import { useNavigate } from "react-router-dom";
-import {
-  deleteConfig,
-  activeConfig,
-} from "../../app/services";
+import { deleteConfig, activeConfig } from "../../app/services";
 import ConfirmDeleteConfigurationModal from "./modals/confirmDeleteConfig";
 import { useSnackbar } from "notistack";
 import { eventBus } from "src/EventBus";
@@ -197,12 +194,12 @@ const ConfigurationTable = ({
 
                   <Button
                     color={row.status === "Active" ? "success" : "warning"}
-                    sx={{ ml: 1 }}
+                    sx={{ ml: 1, width: "90px" }}
                     variant="contained"
                     onClick={() => onActiveConfig(row)}
                     title="Click here to activate"
                   >
-                    {row.status === "Active  " ? "Active" : "In Active"}
+                    {row.status === "Active" ? "Active" : "In Active"}
                   </Button>
                   <IconButton
                     onClick={() => onDeleteConfiguration(row)}
