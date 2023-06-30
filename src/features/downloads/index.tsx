@@ -474,7 +474,9 @@ const DownloadPage = () => {
                     sx={{ bgcolor: status(row.status), color: "white" }}
                     align="center"
                   >
-                    {row.status}
+                    {row.status === "Completed"
+                      ? "Ready to Download"
+                      : row.status}
                   </TableCell>
                 </TableRow>
               ))}

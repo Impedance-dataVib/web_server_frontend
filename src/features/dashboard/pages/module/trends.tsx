@@ -29,7 +29,7 @@ export default function Trends({ trends, fullScreen }: any) {
               lg={6}
               md={6}
               sm={12}
-              key={`trends${val?.trendsName.replace(' ', '_')}`}
+              key={`trends${val?.trendsName.replace(" ", "_")}`}
               sx={{ display: "flex", flexDirection: "column" }}
             >
               <Typography
@@ -58,16 +58,15 @@ export default function Trends({ trends, fullScreen }: any) {
                     yLabel={val.yLabel}
                     isGradientOpposite={val?.isGradientOpposite}
                   />
-                )} 
-                {val?.chartType === "bar" && 
-                  (<BarChart
+                )}
+                {val?.chartType === "bar" && (
+                  <BarChart
                     datapoints={val?.datapoints}
                     labels={val?.labels}
                     maxValue={val?.yMax}
                   />
                 )}
               </Box>
-             
             </Grid>
           ))}
         {trendsData.length === 0 && (
@@ -79,7 +78,7 @@ export default function Trends({ trends, fullScreen }: any) {
             sx={{ display: "flex", flexDirection: "column" }}
           >
             <Typography textAlign={"center"} sx={{ width: "100%" }}>
-              No Trend's Data found
+              No Trend Data found
             </Typography>
           </Grid>
         )}
