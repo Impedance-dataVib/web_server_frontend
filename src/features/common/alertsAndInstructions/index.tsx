@@ -66,6 +66,20 @@ const AlertsAndInstructions = ({
       </>
     );
   };
+
+  const getThumbIcon = (instructionType: string) => {
+    switch(instructionType) {
+      case "success": 
+        return  <ThumbUpIcon color={instructionType} />;
+      case "error": 
+        return  <Error color={instructionType} />;
+      case "warning": 
+        return  <Warning color={instructionType} />
+      default :
+        return;
+    }
+  }
+
   return (
     <Box sx={{ height: "", overflowX: "auto" }}>
       <Grid
@@ -90,12 +104,7 @@ const AlertsAndInstructions = ({
               >
                 <Box sx={{ display: "flex" }}>
                   <Box sx={{ mr: 1, color: "#4d4e4e" }}>
-                    {val?.instructionType === "success" ? (
-                      <ThumbUpIcon color={val?.instructionType} />
-                    ) : (val?.instructionType === "error" 
-                      ? <Error color={val?.instructionType} />
-                      : <Warning color={val?.instructionType} />
-                    )}
+                    {getThumbIcon(val?.instructionType)}
                   </Box>
                   {!val?.isTorque && (
                     <Box>

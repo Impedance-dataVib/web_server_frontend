@@ -92,8 +92,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const { configId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
-  const { isLoading, data, isError, getModuleDataById } =
-    useGetModuleById(moduleId);
+  const { isLoading, data, isError } = useGetModuleById(moduleId);
   const navigate = useNavigate();
   const { data: customerName } = useGetSystemCustomerNameInfo();
   const handleDeleteModule = async () => {

@@ -30,6 +30,17 @@ export default function SpeedoMeter({
     }
     return "#FFA326";
   };
+  const getTypographyColor = (type: string) => {
+    switch (type) {
+      case "warning":
+        return "#E18442";
+      case "error":
+        return "#E21A00";
+      default:
+        return "#02B271";
+    }
+  }
+
   return (
     <div title={tooltip ?? ""}>
       <ReactSpeedometer
@@ -59,12 +70,7 @@ export default function SpeedoMeter({
         component={"p"}
         textAlign={"center"}
         sx={{
-          color:
-            indicatorType === "warning"
-              ? "#E18442"
-              : indicatorType === "error"
-              ? "#E21A00"
-              : "#02B271",
+          color: getTypographyColor(indicatorType),
         }}
       >
         {indicatorUnit}

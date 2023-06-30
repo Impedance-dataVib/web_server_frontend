@@ -1,10 +1,7 @@
 import {
-  Api,
   ArticleOutlined,
-  DescriptionOutlined,
   DownloadOutlined,
   List,
-  RemoveRedEyeOutlined,
   TextSnippetOutlined,
   TrendingUpOutlined,
 } from "@mui/icons-material";
@@ -38,8 +35,6 @@ const ReportsRow = ({
   disabled,
   icon,
   reportName,
-  viewUrl,
-  downloadUrl,
   processName,
 }: IReportsRowProps) => {
   const handleDownload = (reportName: any) => {
