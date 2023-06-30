@@ -119,7 +119,10 @@ const DrawerAppBar = () => {
             "download",
             `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.json`
           );
-        } else if (notificationType === "raw") {
+        } else if (
+          notificationType === "raw" ||
+          notificationType === "graphical"
+        ) {
           link.setAttribute(
             "download",
             `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.zip`
@@ -128,11 +131,6 @@ const DrawerAppBar = () => {
           link.setAttribute(
             "download",
             `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.csv`
-          );
-        } else if (notificationType === "graphical") {
-          link.setAttribute(
-            "download",
-            `${module.asset_name}_${module.equipment_name}_${filterData.startDate}-${filterData.endDate}.zip`
           );
         } else if (notificationType === "PDF") {
           link.setAttribute(
