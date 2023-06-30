@@ -131,9 +131,12 @@ const ConfigurationTable = ({
         eventBus.dispatch("ConfigActive", {});
       }, 500);
       setIsLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       enqueueSnackbar({
-        message: "Error occurred while activating configuration",
+        message:
+          error?.Message ||
+          error?.response?.data?.Message ||
+          "Something went wrong while activating!",
         variant: "error",
       });
       setIsLoading(false);
