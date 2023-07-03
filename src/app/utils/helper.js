@@ -677,6 +677,7 @@ export function buildSignalData(data, formData, type) {
 
     let returnArray = [];
 
+    let i = 0;
     for (const item of data) {
         const firstKey = Object.keys(item)[0];
         const itemData = item[firstKey];
@@ -689,6 +690,7 @@ export function buildSignalData(data, formData, type) {
                 value: channelData["ChannelSpeed"],
             });
         }
+        i++;
     }
     return returnArray;
 }
