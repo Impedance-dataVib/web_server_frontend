@@ -182,6 +182,12 @@ export function buildSoketData(response, modelType, formData) {
     };
 }
 
+function getConditionalIndicatorValue(isOffline, isGradientOpposite, value) {
+    if (isOffline) return "Offline";
+
+    return isGradientOpposite ? parseFloat(value).toFixed(2) : parseInt(value);
+}
+
 function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
     let isOffline = false;
     if (!data || !data[key]) {
@@ -215,11 +221,7 @@ function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
         indicatorName: indicator_title,
         indicatorMin: 0,
         indicatorMax: isGradientOpposite ? 6 : 100,
-        indicatorValue: isOffline
-            ? "Offline"
-            : (isGradientOpposite
-                ? parseFloat(value).toFixed(2)
-                : parseInt(value)),
+        indicatorValue: getConditionalIndicatorValue(isOffline, isGradientOpposite, value),
         isPercentage: isOffline ? false : true,
         indicatorUnit: isOffline ? " " : indicatorUnit,
         isGradientColor: true,
