@@ -137,10 +137,6 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
         message: "Module Saved!",
         variant: "success",
       });
-      moduleFormContext.resetForm({
-        values: { ...moduleFormContext.values },
-        isSubmitting: false,
-      });
     } catch (error: any) {
       enqueueSnackbar({
         message:

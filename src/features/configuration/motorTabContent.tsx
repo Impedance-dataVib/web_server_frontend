@@ -231,7 +231,6 @@ const MotorTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
         message: "Module Saved",
         variant: "success",
       });
-      moduleFormContext.resetForm();
     } catch (error: any) {
       enqueueSnackbar({
         message:
