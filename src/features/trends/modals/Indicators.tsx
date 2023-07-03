@@ -41,7 +41,6 @@ const IndicatorsModal = memo(
                   <Chip
                     label={option}
                     {...getTagProps({ index })}
-                    disabled={index === 0}
                   />
                 ))
               }
@@ -64,7 +63,7 @@ const IndicatorsModal = memo(
         </DialogContent>
         <DialogActions>
           <Button color="secondary" variant="contained" onClick={onClose}>
-            Cancel
+            Close
           </Button>
           <Button
             color="info"
