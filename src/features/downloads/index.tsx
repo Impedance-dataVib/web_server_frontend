@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Typography,
   Box,
@@ -28,8 +28,14 @@ import DatePickerModal from "../trends/modals/DatePickerModal";
 import api from "../../app/api";
 import dateFormat from "../../app/utils/dateFormat";
 import { convertUTCDateToLocalTime, convertDate } from "src/app/utils/helper";
+import SpeedoMeter from "../common/graph/speedo-meter";
+import { exportComponentAsPNG } from "react-component-export-image";
+import { useRef } from "react";
+import To_png from "./To_png";
+import { toPng } from "html-to-image";
 
 const DownloadPage = () => {
+  const ref = useRef<HTMLDivElement>(null);
   const initial = "";
   const [dataSelection, setDataSelection] = useState(initial);
   const [asset, setAsset] = useState(initial);
@@ -501,6 +507,40 @@ const DownloadPage = () => {
           </Button>
         </Tooltip>
       </Box>
+      To png
+      {/* <To_png ref={ref} /> */}
+      <div ref={ref}>
+        <SpeedoMeter
+          maxValue={100}
+          isGradientOpposite={true}
+          minValue={0}
+          value={60}
+          isPercent={true}
+          isGradientColor={true}
+          indicatorType={"indicator"}
+        />
+      </div>
+      <Button
+        onClick={useCallback(() => {
+          if (ref.current === null) {
+            return;
+          }
+          console.log(ref);
+          toPng(ref.current, { cacheBust: true })
+            .then((dataUrl) => {
+              const link = document.createElement("a");
+              link.download = "my-image-name.png";
+              link.href = dataUrl;
+              link.click();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }, [ref])}
+        variant="contained"
+      >
+        To Png
+      </Button>
     </Box>
   );
 };
