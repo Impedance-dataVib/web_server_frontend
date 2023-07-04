@@ -147,10 +147,56 @@ const DrawerAppBar = () => {
 
     //for rerender
   };
-
   const currentTime = () => {
     return CommonApi.getLicenseInfo()
-      .then((res) => setCurrTime(res.data.currant_time))
+      .then((res) => {
+        const day = res.data.currant_time
+          .toString()
+          .split(" ")
+          .splice(0, 1)
+          .join();
+        const date = res.data.currant_time
+          .toString()
+          .split(" ")
+          .splice(1, 1)
+          .join();
+        const time = res.data.currant_time
+          .toString()
+          .split(" ")
+          .splice(2, 1)
+          .join();
+        let hr = 0;
+        let min = 0;
+        let sec = 0;
+        const timeFormat = time.split(":");
+        hr = Number(timeFormat[0]);
+        min = Number(timeFormat[1]);
+        sec = Number(timeFormat[2]);
+        // console.log(hr, min, sec);
+        // console.log(day, date, time);
+
+        var timerID = setInterval(() => {
+          if (sec < 60) {
+            sec++;
+          }
+          if (sec === 60) {
+            min++;
+            sec = 1;
+          }
+          if (min === 60 && hr <= 24) {
+            hr++;
+            min = 1;
+          }
+          const str =
+            day + " " + date + "   " + hr + " : " + min + " : " + sec + " UTC";
+          setCurrTime(str);
+        }, 1000);
+
+        // setCurrTime(res.data.currant_time);
+        return function cleanup() {
+          clearInterval(timerID);
+        };
+      })
       .catch((error) => console.error(error));
   };
 
@@ -372,7 +418,7 @@ const DrawerAppBar = () => {
                 mr: "3px",
               }}
             />
-            <Typography>{currtime}</Typography>
+            <Typography sx={{ width: "300px" }}>{currtime}</Typography>
           </Box>
           {progressBar > 0 && (
             <Typography

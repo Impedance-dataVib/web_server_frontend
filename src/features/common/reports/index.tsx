@@ -63,6 +63,7 @@ const ReportsRow = ({
         }
       )
       .then((res) => {
+        console.log(res);
         const url = window.URL.createObjectURL(res.data);
         const link = document.createElement("a");
         link.href = url;
@@ -80,6 +81,7 @@ const ReportsRow = ({
       })
       .catch((err) => console.error(err));
   };
+
   return (
     <Box>
       <Grid container>

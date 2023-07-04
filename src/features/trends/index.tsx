@@ -34,7 +34,6 @@ const TrendsPage = () => {
     startDate: new Date(),
     key: "selection",
   });
-
   const [moduleId, setModuleId] = useState<string>("");
   const [rpmRange, setRPMRange] = useState<any>({ rpm_min: 0, rpm_max: 0 });
   const [openRpmModal, setOpenRpmModal] = useState(false);
@@ -157,7 +156,7 @@ const TrendsPage = () => {
                 sx={{
                   height: "3.32rem",
                   color: "#1D4580",
-                  width: "10rem",
+                  minWidth: "15rem",
                   "& .MuiOutlinedInput-notchedOutline": {
                     borderColor: "rgba(29, 69, 128, 0.5)",
                   },
@@ -174,10 +173,11 @@ const TrendsPage = () => {
                 autoWidth
                 size="medium"
               >
-                {allModules?.map(({ id, name }: any) => (
+                {allModules?.map(({ id, from_data }: any) => (
                   <MenuItem value={id} key={`allModules_${id}`}>
                     <Typography variant="body2" color="#1D4580">
-                      {name}
+                      {JSON.parse(from_data).asset_name} -{" "}
+                      {JSON.parse(from_data).equipment_name}
                     </Typography>
                   </MenuItem>
                 ))}

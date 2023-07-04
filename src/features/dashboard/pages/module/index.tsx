@@ -9,7 +9,7 @@ import {
   DescriptionOutlined,
   VisibilityOutlined,
   SyncDisabled,
-  WarningAmber
+  WarningAmber,
 } from "@mui/icons-material";
 import GlobalIndicatorChart from "../../globalIndicator";
 import ReportsCard from "src/features/common/reports";
@@ -37,7 +37,6 @@ const ModuleMonitoringPage = ({
   const [trendsCylinder, setTrendsCylinder] = useState<string[]>([]);
   const [liveStatus, setLiveStatus] = useState<any>({});
   const [currentMode, setCurrentMode] = useState<any>("");
-
   const onActiveModuleChange = (event: any, params: any) => {
     setActiveModule(params);
   };

@@ -114,10 +114,8 @@ const DashboardPage = () => {
   const [showLicenseExpiryMsg, setShowLicenseExpiryMsg] =
     useState<boolean>(false);
   const [licExpiryText, setLicExpiryText] = useState<string>("");
-
   const { classes } = useStyles();
   const { t } = useTranslation();
-
   const { licenseInfo, licenseStatus } = useContext(appContext);
   const intervalHandle = useRef();
   const { sendMessage, lastMessage } = useWebSocket(
@@ -313,7 +311,7 @@ const DashboardPage = () => {
               setIsDataAvailable(false);
             }}
           >
-            <Box sx={{display: 'flex'}}>
+            <Box sx={{ display: "flex" }}>
               <AlertTitle>{isDataAvailable}</AlertTitle>
               <Button
                 size="small"
@@ -358,7 +356,10 @@ const DashboardPage = () => {
               scrollButtons="auto"
             >
               {moduleTabs?.map((tabElement: any, index: number) => (
-                <Tooltip title={tabElement.name} key={`toolTip${tabElement?.id}`}>
+                <Tooltip
+                  title={tabElement.name}
+                  key={`toolTip${tabElement?.id}`}
+                >
                   <Tab
                     label={
                       <Box>
