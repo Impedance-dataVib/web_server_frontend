@@ -60,7 +60,7 @@ const IndicatorsModal = memo(
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" variant="contained" onClick={onClose}>
+          <Button variant="contained" color="success" onClick={onClose}>
             Apply
           </Button>
           <Button
@@ -71,6 +71,9 @@ const IndicatorsModal = memo(
             }}
           >
             Reset
+          </Button>
+          <Button variant="contained" color="secondary" onClick={onClose}>
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>

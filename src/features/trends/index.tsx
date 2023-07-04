@@ -6,8 +6,10 @@ import {
   Button,
   FormControl,
   Grid,
+  IconButton,
   MenuItem,
   Select,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import LineGradientTrends from "src/features/common/graph/line-gradient-trends";
@@ -20,6 +22,7 @@ import dateFormat from "../../app/utils/dateFormat";
 import RPMRangeModal from "./modals/RPMRangeModal";
 import IndicatorsModal from "./modals/Indicators";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import HelpIcon from "@mui/icons-material/Help";
 const TrendsPage = () => {
   const [options, setOption] = useState([]);
   const [value, setValue] = React.useState<string[]>([]);
@@ -81,26 +84,14 @@ const TrendsPage = () => {
     if (data?.dataSet && data?.dataSet.length > 0) {
       const titles = data?.dataSet.map((val: any) => val?.title);
       setOption(titles);
-      if (value.length > 0) {
-        const calculatedValues = value.reduce((init: any, prev: string) => {
-          if (titles.includes(prev)) {
-            return [...init, prev];
-          }
-          return init;
-        }, []);
-        const getPreValues =
-          calculatedValues.length > 0 ? calculatedValues : [titles[0]];
-        setValue(getPreValues);
-      } else {
-        setValue([titles[0]]);
-      }
+      setValue([titles[0]]);
     }
   }, [data]);
 
   return (
     <Box>
       <Box sx={{ display: "flex" }}>
-        <Box sx={{ flex: 1 }}>
+        <Box sx={{ display: "flex", flex: 1, flexDirection: "row" }}>
           <Typography
             variant="h5"
             padding={2}
@@ -108,6 +99,28 @@ const TrendsPage = () => {
           >
             Trends
           </Typography>
+          <Box sx={{ marginTop: "10px" }}>
+            <Tooltip
+              title={
+                <div>
+                  <ul>
+                    <li>Select the start date and end date from date picker</li>
+                    <li>Select the Min RPM and Max RPM is optional</li>
+                    <li>Select the required module from the third dropdown</li>
+                    <li>
+                      One indicator is pre selected from the beginning, after
+                      selecting start date and end date. The indicators will get
+                      reset after changing the other filters.
+                    </li>
+                  </ul>
+                </div>
+              }
+            >
+              <IconButton>
+                <HelpIcon></HelpIcon>
+              </IconButton>
+            </Tooltip>
+          </Box>
         </Box>
         <Grid
           sx={{
