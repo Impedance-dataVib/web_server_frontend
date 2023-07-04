@@ -311,7 +311,7 @@ export function buildData(response) {
                 first,
                 second,
                 data["Injection"],
-                "Injection Condition"
+                "Injection Condition", firingOrderLabel
             );
             if (injection_Condition) {
                 cylinder_specific_indicators.push(injection_Condition);
@@ -322,7 +322,7 @@ export function buildData(response) {
                 first,
                 second,
                 data["Bearing"],
-                "Bearing Condition"
+                "Bearing Condition", firingOrderLabel
             );
             if (bearing_Condition) {
                 cylinder_specific_indicators.push(bearing_Condition);
@@ -333,7 +333,7 @@ export function buildData(response) {
                 first,
                 second,
                 data["BearingBis"],
-                "Condition of cyl moving parts"
+                "Condition of cyl moving parts", firingOrderLabel
             );
             if (condition_of_cyl_moving_parts) {
                 cylinder_specific_indicators.push(condition_of_cyl_moving_parts);
