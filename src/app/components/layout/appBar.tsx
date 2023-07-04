@@ -187,8 +187,12 @@ const DrawerAppBar = () => {
             hr++;
             min = 1;
           }
+          if (hr > 24) {
+            hr = 1;
+          }
           const str =
-            day + " " + date + "   " + hr + " : " + min + " : " + sec + " UTC";
+            day + " " + date + "  " + hr + " : " + min + " : " + sec + " UTC";
+
           setCurrTime(str);
         }, 1000);
 
@@ -197,7 +201,7 @@ const DrawerAppBar = () => {
           clearInterval(timerID);
         };
       })
-      .catch((error) => console.error(error));
+      .catch((error: any) => console.error(error));
   };
 
   useEffect(() => {
