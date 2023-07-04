@@ -172,8 +172,6 @@ const DrawerAppBar = () => {
         hr = Number(timeFormat[0]);
         min = Number(timeFormat[1]);
         sec = Number(timeFormat[2]);
-        // console.log(hr, min, sec);
-        // console.log(day, date, time);
 
         var timerID = setInterval(() => {
           if (sec < 60) {
@@ -190,16 +188,12 @@ const DrawerAppBar = () => {
           if (hr > 24) {
             hr = 1;
           }
-          const str =
-            day + " " + date + "  " + hr + " : " + min + " : " + sec + " UTC";
+          const str = `${day}  ${date} ${" "} ${hr < 10 ? "0" + hr : hr} : ${
+            min < 10 ? "0" + min : min
+          }  :  ${sec < 10 ? "0" + sec : sec} UTC`;
 
           setCurrTime(str);
         }, 1000);
-
-        // setCurrTime(res.data.currant_time);
-        return function cleanup() {
-          clearInterval(timerID);
-        };
       })
       .catch((error: any) => console.error(error));
   };
