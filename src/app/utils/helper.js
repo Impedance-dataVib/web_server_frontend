@@ -249,7 +249,7 @@ function buildRpmData(indicator_title, data, maxValue) {
     isPercentage: false,
     isGradientColor: false,
     indicatorType: "error",
-    tooltip: "Speed",
+    tooltip: trendTooltip[indicator_title],
   };
 }
 
@@ -2384,9 +2384,11 @@ const trendTooltip = {
   "Electromagnetic Stress":
     "This indicator expresses the electromagnetic stresses resulting from the windings and rotor during operation.",
   //torque
-  Torsion: "Torsion In degrees",
-  Torque: "Torque in KNm",
-  Power: "Power in MW",
+  "Torsion(degree)": "Torsion In degrees",
+  "Torque(kNm)": "Torque in KNm",
+  "Power(MW)": "Power in MW",
+  RPM: "Speed",
+  Speed: "Speed",
   //turbine
   "Regularity/Deviation":
     "Indicates the Faults in the steam intake system or lubrication control system of the bearings and thrust bearings",

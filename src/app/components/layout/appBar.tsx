@@ -194,6 +194,10 @@ const DrawerAppBar = () => {
 
           setCurrTime(str);
         }, 1000);
+
+        return function cleanup() {
+          clearInterval(timerID);
+        };
       })
       .catch((error: any) => console.error(error));
   };
