@@ -103,16 +103,8 @@ const TrendsPage = () => {
             <Tooltip
               title={
                 <div>
-                  <ul>
-                    <li>Select the start date and end date from date picker</li>
-                    <li>Select the Min RPM and Max RPM is optional</li>
-                    <li>Select the required module from the third dropdown</li>
-                    <li>
-                      One indicator is pre selected from the beginning, after
-                      selecting start date and end date. The indicators will get
-                      reset after changing the other filters.
-                    </li>
-                  </ul>
+                  To apply the RPM filter, Please note that the RPM range has to
+                  be inserted before selecting any indicator.
                 </div>
               }
             >
