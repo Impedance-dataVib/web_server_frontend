@@ -25,9 +25,6 @@ const IndicatorsModal = memo(
       <Dialog open={open} onClose={onClose} maxWidth="lg">
         <DialogTitle>Add Indicators</DialogTitle>
         <DialogContent>
-          <Typography component={"span"}>
-            *On selection of indicators it will get applied automatically
-          </Typography>
           <Box sx={{ mt: 1 }}>
             <Autocomplete
               multiple
@@ -63,8 +60,8 @@ const IndicatorsModal = memo(
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button color="secondary" variant="contained" onClick={onClose}>
-            Close
+          <Button color="primary" variant="contained" onClick={onClose}>
+            Apply
           </Button>
           <Button
             color="info"
