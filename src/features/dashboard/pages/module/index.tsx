@@ -9,6 +9,7 @@ import {
   DescriptionOutlined,
   VisibilityOutlined,
   SyncDisabled,
+  WarningAmber
 } from "@mui/icons-material";
 import GlobalIndicatorChart from "../../globalIndicator";
 import ReportsCard from "src/features/common/reports";
@@ -17,7 +18,6 @@ import useWebSocket from "react-use-websocket";
 
 import Signal from "./signal";
 import Trends from "./trends";
-import { WarningAmber } from "@mui/icons-material";
 import CylinderIndicator from "./cylinder-indicator";
 import { SIGNAL_STATUS_QUALITY } from "../../schema";
 import { buildLiveStatusData } from "src/app/utils/helper";
