@@ -348,7 +348,7 @@ export function buildData(response) {
                 first,
                 second,
                 data["Misfiring"],
-                "Misfiring"
+                "Misfiring",firingOrderLabel
             );
             if (miss_firing) {
                 cylinder_specific_indicators.push(miss_firing);
