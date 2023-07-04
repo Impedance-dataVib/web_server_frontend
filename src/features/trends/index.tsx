@@ -6,8 +6,10 @@ import {
   Button,
   FormControl,
   Grid,
+  IconButton,
   MenuItem,
   Select,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import LineGradientTrends from "src/features/common/graph/line-gradient-trends";
@@ -20,6 +22,7 @@ import dateFormat from "../../app/utils/dateFormat";
 import RPMRangeModal from "./modals/RPMRangeModal";
 import IndicatorsModal from "./modals/Indicators";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import HelpIcon from "@mui/icons-material/Help";
 const TrendsPage = () => {
   const [options, setOption] = useState([]);
   const [value, setValue] = React.useState<string[]>([]);
@@ -88,7 +91,7 @@ const TrendsPage = () => {
   return (
     <Box>
       <Box sx={{ display: "flex" }}>
-        <Box sx={{ flex: 1 }}>
+        <Box sx={{ display: "flex", flex: 1, flexDirection: "row" }}>
           <Typography
             variant="h5"
             padding={2}
@@ -96,6 +99,20 @@ const TrendsPage = () => {
           >
             Trends
           </Typography>
+          <Box sx={{ marginTop: "10px" }}>
+            <Tooltip
+              title={
+                <div>
+                  To apply the RPM filter, Please note that the RPM range has to
+                  be inserted before selecting any indicator.
+                </div>
+              }
+            >
+              <IconButton>
+                <HelpIcon></HelpIcon>
+              </IconButton>
+            </Tooltip>
+          </Box>
         </Box>
         <Grid
           sx={{

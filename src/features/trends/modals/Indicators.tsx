@@ -9,6 +9,7 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Typography,
 } from "@mui/material";
 
 const propsAreEqual = (prev: any, next: any) => {
@@ -38,10 +39,7 @@ const IndicatorsModal = memo(
               getOptionLabel={(option: string) => option}
               renderTags={(tagValue, getTagProps) =>
                 tagValue.map((option: string, index: number) => (
-                  <Chip
-                    label={option}
-                    {...getTagProps({ index })}
-                  />
+                  <Chip label={option} {...getTagProps({ index })} />
                 ))
               }
               sx={{
@@ -62,8 +60,8 @@ const IndicatorsModal = memo(
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button color="secondary" variant="contained" onClick={onClose}>
-            Close
+          <Button variant="contained" color="success" onClick={onClose}>
+            Apply
           </Button>
           <Button
             color="info"
@@ -73,6 +71,9 @@ const IndicatorsModal = memo(
             }}
           >
             Reset
+          </Button>
+          <Button variant="contained" color="secondary" onClick={onClose}>
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
