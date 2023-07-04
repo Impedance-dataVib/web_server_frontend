@@ -274,11 +274,11 @@ const ModuleMonitoringPage = ({
           setIsLatestReportOpen={setIsLatestReportOpen}
           headerIcon={<DescriptionOutlined />}
           content={
-            <ReportsCard liveStatus={liveStatus} processName={processName} />
+            <ReportsCard liveStatus={liveStatus} processName={processName} formData={formData}/>
           }
           initiallyCollapsed={true}
           fullScreenContent={
-            <ReportsCard liveStatus={liveStatus} processName={processName} />
+            <ReportsCard liveStatus={liveStatus} processName={processName} formData={formData}/>
           }
         />
       </Grid>

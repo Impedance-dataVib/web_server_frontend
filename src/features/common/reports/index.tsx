@@ -15,11 +15,13 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
+import { convertUTCDateToLocalTime } from "src/app/utils/helper";
 import api from "../../../app/api";
 
 export interface IReportsCardProps {
   liveStatus: any;
   processName: any;
+  formData: any;
 }
 
 export interface IReportsRowProps {
@@ -29,6 +31,7 @@ export interface IReportsRowProps {
   viewUrl?: string;
   downloadUrl?: string;
   processName: any;
+  formData: any;
 }
 
 const ReportsRow = ({
@@ -36,8 +39,12 @@ const ReportsRow = ({
   icon,
   reportName,
   processName,
+  formData,
 }: IReportsRowProps) => {
+  const parsedFormData = JSON.parse(formData);
+
   const handleDownload = (reportName: any) => {
+    const fileName = `${parsedFormData?.asset_name} - ${parsedFormData?.equipment_name} -${convertUTCDateToLocalTime(new Date())}`
     let type: string = "";
     if (reportName === "Graphical Report") {
       type = "graphical";
@@ -60,13 +67,13 @@ const ReportsRow = ({
         const link = document.createElement("a");
         link.href = url;
         if (type === "json") {
-          link.setAttribute("download", "data.json");
+          link.setAttribute("download", `${fileName}.json`);
         } else if (type === "raw") {
-          link.setAttribute("download", "raw-data.wav");
+          link.setAttribute("download", `${fileName}.wav`);
         } else if (type === "spredsheet") {
-          link.setAttribute("download", "spreadsheet.excel");
+          link.setAttribute("download", `${fileName}.csv`);
         } else if (type === "graphical") {
-          link.setAttribute("download", "graphical-report.pdf");
+          link.setAttribute("download", `${fileName}.pdf`);
         }
         document.body.appendChild(link);
         link.click();
@@ -112,7 +119,7 @@ const ReportsRow = ({
   );
 };
 
-const ReportsCardContent = ({ liveStatus, processName }: IReportsCardProps) => {
+const ReportsCardContent = ({ liveStatus, processName, formData }: IReportsCardProps) => {
   return (
     <Box>
       <Grid container spacing={1}>
@@ -124,6 +131,7 @@ const ReportsCardContent = ({ liveStatus, processName }: IReportsCardProps) => {
             icon={<TrendingUpOutlined />}
             reportName="Graphical Report"
             processName={processName}
+            formData={formData}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -135,6 +143,7 @@ const ReportsCardContent = ({ liveStatus, processName }: IReportsCardProps) => {
             icon={<List />}
             reportName="Spreadsheet Report"
             processName={processName}
+            formData={formData}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -146,6 +155,7 @@ const ReportsCardContent = ({ liveStatus, processName }: IReportsCardProps) => {
             icon={<TextSnippetOutlined />}
             reportName="Raw Data"
             processName={processName}
+            formData={formData}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -157,6 +167,7 @@ const ReportsCardContent = ({ liveStatus, processName }: IReportsCardProps) => {
             icon={<ArticleOutlined />}
             reportName="JSON Text Report"
             processName={processName}
+            formData={formData}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -174,10 +185,10 @@ const ReportsCardContent = ({ liveStatus, processName }: IReportsCardProps) => {
   );
 };
 
-const ReportsCard = ({ liveStatus, processName }: IReportsCardProps) => {
+const ReportsCard = ({ liveStatus, processName, formData }: IReportsCardProps) => {
   return (
     <Box>
-      <ReportsCardContent liveStatus={liveStatus} processName={processName} />
+      <ReportsCardContent liveStatus={liveStatus} processName={processName} formData={formData}/>
     </Box>
   );
 };
