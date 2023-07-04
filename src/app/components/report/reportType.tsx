@@ -10,12 +10,10 @@ export interface ReportTypeProps {
 
 const ReportType = ({ label, downloadUrl, viewUrl }: ReportTypeProps) => {
   const onClickDownload = () => {
-    // TODO
     window.open(downloadUrl, "_blank");
   };
 
   const onClickView = () => {
-    // TODO
     window.open(viewUrl, "viewUrl");
   };
 
