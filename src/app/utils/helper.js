@@ -769,7 +769,7 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
     speedName: "Speed",
     min: round(Math.min(...datapoints)),
     max: round(Math.max(...datapoints)),
-    yMax: title === "Engine Health" ? 100 : 6,
+    yMax: title === "Engine Health" ? 110 : 6,
     avg: round(avg),
     datapoints: datapoints,
     dataPointsY1: zAxisDataPoints,
@@ -1875,7 +1875,7 @@ function buildLineChart(data, key, title, isGradientOpposite, hideBackground) {
     speedName: "Speed",
     min: round(Math.min(...datapoints)),
     max: round(Math.max(...datapoints)),
-    yMax: title === "Engine Health" ? 100 : 6,
+    yMax: title === "Engine Health" ? 110 : 6,
     avg: round(avg),
     datapoints: datapoints,
     dataPointsY1: zAxisDataPoints,
@@ -1983,6 +1983,7 @@ export function buildTrendData(historical_data, type, from_data) {
 }
 
 function buildDataSet(title, color, dataPoints, axisId) {
+  const isAverage = ["Increase in Fuel Consumption", "Torque", "Power"].includes(title)
   return {
     title: title,
     data: dataPoints,
@@ -1995,7 +1996,7 @@ function buildDataSet(title, color, dataPoints, axisId) {
     hidden: false,
     minVal: Math.min(...dataPoints),
     maxValue: Math.max(...dataPoints),
-    avgValue: average(dataPoints),
+    avgValue: isAverage ? average(dataPoints) : roundToNearest10(average(dataPoints)),
   };
 }
 
@@ -2046,7 +2047,7 @@ function buildTurbineChart(data, key, key2, title, isGradientOpposite) {
     speedName: "Speed",
     min: round(Math.min(...datapoints)),
     max: round(Math.max(...datapoints)),
-    yMax: 100,
+    yMax: 110,
     avg: round(avg),
     datapoints: datapoints,
     dataPointsY1: zAxisDataPoints,
@@ -2092,7 +2093,7 @@ function buildMotorChart(data, key, key2, title, isGradientOpposite) {
     speedName: "Speed",
     min: round(Math.min(...datapoints)),
     max: round(Math.max(...datapoints)),
-    yMax: 100,
+    yMax: 110,
     avg: round(avg),
     datapoints: datapoints,
     dataPointsY1: zAxisDataPoints,
@@ -2137,7 +2138,7 @@ function buildBearingChart(data, key, key2, title, isGradientOpposite) {
     speedName: "Speed",
     min: round(Math.min(...datapoints)),
     max: round(Math.max(...datapoints)),
-    yMax: 100,
+    yMax: 110,
     avg: round(avg),
     datapoints: datapoints,
     dataPointsY1: zAxisDataPoints,

@@ -12,7 +12,6 @@ export default function SpeedoMeter({
   indicatorUnit,
   isTorqueModule,
   indicatorName,
-  tooltip,
   height
 }: any) {
   const getMeterColor = () => {
@@ -42,7 +41,7 @@ export default function SpeedoMeter({
   }
 
   return (
-    <div title={tooltip ?? ""}>
+    <div>
       <ReactSpeedometer
         forceRender={true}
         maxValue={maxValue}

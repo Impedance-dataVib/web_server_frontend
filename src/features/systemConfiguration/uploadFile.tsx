@@ -40,6 +40,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 export default function UploadFile({ setApiData }: any) {
   const [fileName1, setFileName1] = useState<any>();
+  const [softwareVersionLoader, setSoftwareVersionLoader] = useState<boolean>(false);
+  const [licenseLoader, setLicenseLoader] = useState<boolean>(false);
   const [fileName2, setFileName2] = useState<any>();
   const [file, setFile] = useState<any>();
   const inputRef = useRef<any>(null);
@@ -58,10 +60,12 @@ export default function UploadFile({ setApiData }: any) {
   const handleFileinfo = (type: FileType) => (e: any) => {
     const file = e.target.files[0];
     const fileName = file?.name;
+    e.target.value = null;
     const data = new FormData();
     if (!file) {
       return;
     } else if (type === "License File") {
+      setLicenseLoader(true);
       setFileName1(fileName);
       setFileName2(null);
 
@@ -69,6 +73,7 @@ export default function UploadFile({ setApiData }: any) {
       data.append("type", "license");
       SystemInfoApi.getFirmwareDetails(data)
         .then((res: any) => {
+          setLicenseLoader(false);
           if (res?.data?.data) {
             enqueueSnackbar({
               message: `You have Successfully fetched the License data`,
@@ -85,6 +90,8 @@ export default function UploadFile({ setApiData }: any) {
           }
         })
         .catch((err: any) => {
+          setFileName1(null);
+          setLicenseLoader(false);
           enqueueSnackbar({
             message: err.Message,
             variant: "error",
@@ -93,6 +100,7 @@ export default function UploadFile({ setApiData }: any) {
         });
       setFile(file);
     } else if (type === "Software Update File") {
+      setSoftwareVersionLoader(true);
       setFileName2(fileName);
       setFileName1(null);
 
@@ -100,6 +108,7 @@ export default function UploadFile({ setApiData }: any) {
       data.append("type", "vbox");
       SystemInfoApi.getFirmwareDetails(data)
         .then((res: any) => {
+          setSoftwareVersionLoader(false);
           if (res?.data?.data) {
             setFileInfo([res.data.data]);
             enqueueSnackbar({
@@ -108,6 +117,7 @@ export default function UploadFile({ setApiData }: any) {
             });
             setOpen(true);
           } else {
+            setSoftwareVersionLoader(false);
             enqueueSnackbar({
               message: "Something went wrong!",
               variant: "error",
@@ -115,25 +125,32 @@ export default function UploadFile({ setApiData }: any) {
             setFileName2(null);
           }
         })
-        .catch((err: any) =>
-          enqueueSnackbar({
-            message: err.Message,
-            variant: "error",
-          })
+        .catch((err: any) => {
+            setSoftwareVersionLoader(false);
+            setFileName2(null);
+            enqueueSnackbar({
+              message: err.Message,
+              variant: "error",
+            })
+          }
         );
       setFile(file);
     }
   };
 
   const handleFileUpload = () => {
+    setOpen(false);
     if (!file) {
       return;
     } else if (fileName1 && !fileName2) {
+      setLicenseLoader(true);
       const data = new FormData();
       data.append("file", file);
       data.append("upload_type", "license_file");
       SystemInfoApi.updateSystemLicenseFile(data)
         .then((val) => {
+          setFileName1(null);
+          setLicenseLoader(false);
           enqueueSnackbar({
             message: `You have Successfully updated the License data`,
             variant: "success",
@@ -145,6 +162,8 @@ export default function UploadFile({ setApiData }: any) {
           });
         })
         .catch((error) => {
+          setFileName1(null);
+          setLicenseLoader(false);
           console.error("update system Liscense error", error);
           setApiData((val: any) => {
             return {
@@ -161,9 +180,12 @@ export default function UploadFile({ setApiData }: any) {
       const formdata = new FormData();
       formdata.append("file", file);
       formdata.append("upload_type", "software_file");
+      setSoftwareVersionLoader(true);
 
       SystemInfoApi.updateSystemSoftwareFile(formdata)
         .then((val) => {
+          setFileName2(null);
+          setSoftwareVersionLoader(false);
           enqueueSnackbar({
             message: `You have Successfully updated the Software data`,
             variant: "success",
@@ -175,6 +197,8 @@ export default function UploadFile({ setApiData }: any) {
           });
         })
         .catch((error) => {
+          setFileName2(null);
+          setSoftwareVersionLoader(false);
           console.error("update system software error ", error);
           setApiData((val: any) => {
             return {
@@ -205,6 +229,7 @@ export default function UploadFile({ setApiData }: any) {
             onChangeHandler={handleFileinfo("License File")}
             file=".dat"
             inputRef={inputRef}
+            isLoader={licenseLoader}
           />
           {fileName1 ? (
             <Box sx={{ color: "green" }}>{fileName1}</Box>
@@ -218,6 +243,7 @@ export default function UploadFile({ setApiData }: any) {
             onChangeHandler={handleFileinfo("Software Update File")}
             file=".zip"
             inputRef={inputRef}
+            isLoader={softwareVersionLoader}
           />
           {fileName2 ? (
             <Box sx={{ color: "green" }}>{fileName2}</Box>

@@ -25,7 +25,6 @@ const Auxiliarydata_speedometer = ({ val }: any) => {
             isGradientColor={val?.isGradientColor}
             indicatorType={val?.indicatorType}
             indicatorUnit={val?.indicatorUnit}
-            tooltip={val?.tooltip}
           />
         </Box>
       </Grid>

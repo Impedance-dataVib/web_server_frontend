@@ -46,7 +46,8 @@ const GlobalIndicatorChart = ({
               variant="body1"
               component={"span"}
               textAlign={"center"}
-              sx={{ mb: 1, fontWeight: "500" }}
+              sx={{ mb: 1, fontWeight: "500", cursor: 'pointer'}}
+              title={val?.tooltip}
             >
               {val?.indicatorName}
             </Typography>
@@ -71,7 +72,6 @@ const GlobalIndicatorChart = ({
                 indicatorUnit={val?.indicatorUnit}
                 isTorqueModule={isTorqueModule}
                 indicatorName={val?.indicatorName}
-                tooltip={val?.tooltip}
                 height={150}
               />
             </Box>
