@@ -9,6 +9,7 @@ export function buildSoketData(response, modelType, formData) {
     const firstKey = Object.keys(response)[0];
     const parserFormData = JSON.parse(formData);
     const maxRPMThrshhold = parseInt(parserFormData.rated_rpm);
+    const maxPower = parseInt(parserFormData.power);
     const data = response[firstKey];
     let globalIndicator = [];
 
@@ -73,7 +74,7 @@ export function buildSoketData(response, modelType, formData) {
         );
 
         globalIndicator.push(
-            buildRpmData("Power(MW)", (data.StaticPower?.value || 0) * 1.0e-6, 100)
+            buildRpmData("Power(MW)", (data.StaticPower?.value || 0) * 1.0e-6, maxPower)
         );
 
         globalIndicator.push(
@@ -267,6 +268,7 @@ function buildPeekPressureChart(data, firingOrder, maxPressure) {
 
 export function buildData(response) {
     const from_data = response["from_data"];
+    const maxPower = from_data?.power;
     const historical_data = response["historical_data"];
     let data = {};
 
@@ -386,7 +388,8 @@ export function buildData(response) {
             "StaticTorque",
             "Torque with RPM",
             false,
-            true
+            true,
+            100,
         );
         trends.push(torsionWithRpm);
 
@@ -395,7 +398,8 @@ export function buildData(response) {
             "StaticPower",
             "Power with RPM",
             false,
-            true
+            true,
+            maxPower,
         );
         trends.push(powerWithRpm);
 
@@ -1859,7 +1863,8 @@ function buildEngineAlertData(historical_data) {
     return returnArray;
 }
 
-function buildLineChart(data, key, title, isGradientOpposite, hideBackground) {
+function buildLineChart(data, key, title, isGradientOpposite, hideBackground, maxPower) {
+    let yMaxValue = maxPower || 6;
     let labels = [];
     let datapoints = [];
     let zAxisDataPoints = [];
@@ -1895,7 +1900,7 @@ function buildLineChart(data, key, title, isGradientOpposite, hideBackground) {
         speedName: "Speed",
         min: round(Math.min(...datapoints)),
         max: round(Math.max(...datapoints)),
-        yMax: title === "Engine Health" ? 110 : 6,
+        yMax: title === "Engine Health" ? 110 : yMaxValue,
         avg: round(avg),
         datapoints: datapoints,
         dataPointsY1: zAxisDataPoints,
