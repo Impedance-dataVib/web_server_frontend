@@ -81,7 +81,19 @@ const TrendsPage = () => {
     if (data?.dataSet && data?.dataSet.length > 0) {
       const titles = data?.dataSet.map((val: any) => val?.title);
       setOption(titles);
-      setValue([titles[0]]);
+      if (value.length > 0) {
+        const calculatedValues = value.reduce((init: any, prev: string) => {
+          if (titles.includes(prev)) {
+            return [...init, prev];
+          }
+          return init;
+        }, []);
+        const getPreValues =
+          calculatedValues.length > 0 ? calculatedValues : [titles[0]];
+        setValue(getPreValues);
+      } else {
+        setValue([titles[0]]);
+      }
     }
   }, [data]);
 

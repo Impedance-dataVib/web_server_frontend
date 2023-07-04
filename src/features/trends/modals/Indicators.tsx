@@ -9,6 +9,7 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Typography,
 } from "@mui/material";
 
 const propsAreEqual = (prev: any, next: any) => {
@@ -24,6 +25,9 @@ const IndicatorsModal = memo(
       <Dialog open={open} onClose={onClose} maxWidth="lg">
         <DialogTitle>Add Indicators</DialogTitle>
         <DialogContent>
+          <Typography component={"span"}>
+            *On selection of indicators it will get applied automatically
+          </Typography>
           <Box sx={{ mt: 1 }}>
             <Autocomplete
               multiple
@@ -38,10 +42,7 @@ const IndicatorsModal = memo(
               getOptionLabel={(option: string) => option}
               renderTags={(tagValue, getTagProps) =>
                 tagValue.map((option: string, index: number) => (
-                  <Chip
-                    label={option}
-                    {...getTagProps({ index })}
-                  />
+                  <Chip label={option} {...getTagProps({ index })} />
                 ))
               }
               sx={{
