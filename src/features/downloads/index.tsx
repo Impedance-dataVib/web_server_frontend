@@ -33,6 +33,7 @@ import { exportComponentAsPNG } from "react-component-export-image";
 import { useRef } from "react";
 import To_png from "./To_png";
 import { toPng } from "html-to-image";
+import JSZip from "jszip";
 
 const DownloadPage = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -509,7 +510,14 @@ const DownloadPage = () => {
       </Box>
       To png
       {/* <To_png ref={ref} /> */}
-      <div ref={ref}>
+      <Box
+        ref={ref}
+        sx={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          flexWrap: "wrap",
+        }}
+      >
         <SpeedoMeter
           maxValue={100}
           isGradientOpposite={true}
@@ -519,13 +527,30 @@ const DownloadPage = () => {
           isGradientColor={true}
           indicatorType={"indicator"}
         />
-      </div>
+        <SpeedoMeter
+          maxValue={100}
+          isGradientOpposite={true}
+          minValue={0}
+          value={60}
+          isPercent={true}
+          isGradientColor={true}
+          indicatorType={"indicator"}
+        />
+        <SpeedoMeter
+          maxValue={100}
+          isGradientOpposite={true}
+          minValue={0}
+          value={60}
+          isPercent={true}
+          isGradientColor={true}
+          indicatorType={"indicator"}
+        />
+      </Box>
       <Button
         onClick={useCallback(() => {
           if (ref.current === null) {
             return;
           }
-          console.log(ref);
           toPng(ref.current, { cacheBust: true })
             .then((dataUrl) => {
               const link = document.createElement("a");
