@@ -31,13 +31,22 @@ export const useGetAllTrends = (
       setIsError(false);
       setErrorMessage("");
       const result = await getAllTrendsData(payload);
-      setData(
-        buildTrendData(
-          result.data.data,
-          moduleType?.module_type,
-          moduleType?.from_data
-        )
-      );
+      const data = buildTrendData(
+        result.data.data,
+        moduleType?.module_type,
+        moduleType?.from_data
+      )
+      if(data?.dataSet && data?.dataSet?.length > 0) {
+        setData(
+          data
+        );
+        setErrorMessage("");
+        setIsError(false);
+      } else {
+        setErrorMessage("No valid reading found");
+        setIsError(true);
+        setData([]);
+      }
       setIsLoading(false);
     } catch (e: any) {
       setErrorMessage(e?.Message);
