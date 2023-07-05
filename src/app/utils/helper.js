@@ -2347,12 +2347,20 @@ const trendTitle = {
         CamPump: "Governor, Crank driven Accessories Health",
         Damper: "Performance of Vibration Damper",
         MechanicalHealth: "Engine Health",
+        "Compression": "Compression Condition",
+        "Injection": "Injection Condition",
+        "Bearing": "Bearing Condition",
+        "BearingBis": "Condition of cyl moving parts",
+        "InjectionCondition": "Fuel Injection Performance"
     },
     Turbine: {
         RegularityDeviation: "Regularity/Deviation",
         MBearing: "Bearing Status",
-        BladeStatus: "Shaft Health",
+        BladeStatus: "Shaft/Blades Health",
         combustionCondition: "Combustion Kit",
+        BladeStatusGas: "Shaft /Blades Health",
+        "CombustionKit": "Combustion Kit",
+        TurbineCoupling: "Coupling/Alignment"
     },
     Motor: {
         MStressStability: "Stability",
@@ -2360,12 +2368,14 @@ const trendTitle = {
         MBearing: "Bearing",
     },
     Bearing: {
-        "8KMixed": "Friction",
-        GlobalKurto: "Shock Index",
-        GlobalMixed: "Global(Umbalance/Alignment/Loosness)",
-        BearingGlobal: "Mechanical Health",
-        "2KMixed": "Shaft/Clearance",
-        GlobalLevel: "Level(RMS)",
+      BearingGlobal: "Mechanical Health",
+      GlobalMixed: "Global(Umbalance/Alignment/Loosness)",
+      GlobalKurto: "Shock Index",
+      GlobalLevel: "Level(RMS)",
+      "2KMixed": "Shaft/Clearance",
+      "4KMixed": "Bearings",
+      "8KMixed": "Friction",
+
     },
     Torque: {
         StaticTorsion: "Torsion",
