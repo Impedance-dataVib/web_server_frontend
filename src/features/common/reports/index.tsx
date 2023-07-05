@@ -77,7 +77,7 @@ const ReportsRow = ({
         } else if (type === "spredsheet") {
           link.setAttribute("download", `${fileName}.csv`);
         } else if (type === "graphical") {
-          link.setAttribute("download", `${fileName}.pdf`);
+          link.setAttribute("download", `${fileName}.png`);
         }
         document.body.appendChild(link);
         link.click();
