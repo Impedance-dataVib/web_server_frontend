@@ -467,7 +467,6 @@ export const MotorChannelInformationForm = ({
     formContext?.values["motor_crankshaft_sensorx"],
     formContext.dirty
   );
-  console.log('error',formContext.errors);
   useEffect(() => {
     if (data && formContext.dirty && !isPending) {
       enqueueSnackbar({
