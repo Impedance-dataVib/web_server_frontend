@@ -345,7 +345,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   Filter low
                 </Typography>
                 <TextField
-                  name={"Filter Low"}
+                  name={"Filter_low"}
                   label={"Filter low"}
                   onChange={formContext?.handleChange}
                   value={formContext?.values?.["Filter_low"]}
