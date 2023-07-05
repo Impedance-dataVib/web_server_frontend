@@ -9,7 +9,6 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
-  Typography,
 } from "@mui/material";
 
 const propsAreEqual = (prev: any, next: any) => {
