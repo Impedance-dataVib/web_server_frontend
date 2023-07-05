@@ -22,6 +22,7 @@ export interface IReportsCardProps {
   liveStatus: any;
   processName: any;
   formData: any;
+  moduleId: any;
 }
 
 export interface IReportsRowProps {
@@ -32,9 +33,11 @@ export interface IReportsRowProps {
   downloadUrl?: string;
   processName: any;
   formData: any;
+  moduleId: any;
 }
 
 const ReportsRow = ({
+  moduleId,
   disabled,
   icon,
   reportName,
@@ -42,9 +45,10 @@ const ReportsRow = ({
   formData,
 }: IReportsRowProps) => {
   const parsedFormData = JSON.parse(formData);
-
   const handleDownload = (reportName: any) => {
-    const fileName = `${parsedFormData?.asset_name} - ${parsedFormData?.equipment_name} -${convertUTCDateToLocalTime(new Date())}`
+    const fileName = `${parsedFormData?.asset_name} - ${
+      parsedFormData?.equipment_name
+    } -${convertUTCDateToLocalTime(new Date())}`;
     let type: string = "";
     if (reportName === "Graphical Report") {
       type = "graphical";
@@ -57,13 +61,12 @@ const ReportsRow = ({
     }
     api
       .get(
-        `/download/current_download.php?process_name=${processName}&type=${type}`,
+        `/download/current_download.php?process_name=${processName}&type=${type}&module_id=${moduleId}`,
         {
           responseType: "blob",
         }
       )
       .then((res) => {
-        console.log(res);
         const url = window.URL.createObjectURL(res.data);
         const link = document.createElement("a");
         link.href = url;
@@ -121,7 +124,12 @@ const ReportsRow = ({
   );
 };
 
-const ReportsCardContent = ({ liveStatus, processName, formData }: IReportsCardProps) => {
+const ReportsCardContent = ({
+  liveStatus,
+  processName,
+  formData,
+  moduleId,
+}: IReportsCardProps) => {
   return (
     <Box>
       <Grid container spacing={1}>
@@ -134,6 +142,7 @@ const ReportsCardContent = ({ liveStatus, processName, formData }: IReportsCardP
             reportName="Graphical Report"
             processName={processName}
             formData={formData}
+            moduleId={moduleId}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -146,6 +155,7 @@ const ReportsCardContent = ({ liveStatus, processName, formData }: IReportsCardP
             reportName="Spreadsheet Report"
             processName={processName}
             formData={formData}
+            moduleId={moduleId}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -158,6 +168,7 @@ const ReportsCardContent = ({ liveStatus, processName, formData }: IReportsCardP
             reportName="Raw Data"
             processName={processName}
             formData={formData}
+            moduleId={moduleId}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -170,6 +181,7 @@ const ReportsCardContent = ({ liveStatus, processName, formData }: IReportsCardP
             reportName="JSON Text Report"
             processName={processName}
             formData={formData}
+            moduleId={moduleId}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -187,10 +199,20 @@ const ReportsCardContent = ({ liveStatus, processName, formData }: IReportsCardP
   );
 };
 
-const ReportsCard = ({ liveStatus, processName, formData }: IReportsCardProps) => {
+const ReportsCard = ({
+  liveStatus,
+  processName,
+  formData,
+  moduleId,
+}: IReportsCardProps) => {
   return (
     <Box>
-      <ReportsCardContent liveStatus={liveStatus} processName={processName} formData={formData}/>
+      <ReportsCardContent
+        liveStatus={liveStatus}
+        processName={processName}
+        formData={formData}
+        moduleId={moduleId}
+      />
     </Box>
   );
 };
