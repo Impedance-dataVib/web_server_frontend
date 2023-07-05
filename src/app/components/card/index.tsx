@@ -381,7 +381,7 @@ const CardWidget = ({
                 <Box>
                   <>
                     <Cancel
-                      onClick={() => setOpenModal(false)}
+                      onClick={() => setOpenDownload(false)}
                       sx={{ fontSize: "16px", cursor: "pointer" }}
                     />
                   </>
