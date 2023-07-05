@@ -64,7 +64,7 @@ const Signal = ({ signals, formData, moduleType }: any) => {
         graphData.map((val: any, index) => (
           <Box
             sx={{ width: graphData.length === 1 ? "100%" : "50%" }}
-            key={`signalgraph${val.title}-${Date.now()}`}
+            key={`signalgraph${val.title}`}
           >
             <LineChart
               max={parseInt(val?.value) + 20}

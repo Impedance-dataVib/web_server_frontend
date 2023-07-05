@@ -2,7 +2,7 @@ import React from "react";
 import { Error, Warning } from "@mui/icons-material";
 import { Box, Grid, Typography } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-
+import uniqueIDGenarator from "src/app/utils/uniqueIDGenarator";
 const AlertsAndInstructions = ({
   moduleData,
   isModalOpen = false,
@@ -126,7 +126,7 @@ const AlertsAndInstructions = ({
                 {val.instructions &&
                   val.instructions.map(
                     (instruction: string, instructionIndex: any) => (
-                      <Box key={`ins${Date.now()}`}>
+                      <Box key={`ins${uniqueIDGenarator(10)}`}>
                         {renderInstruction(
                           instructionIndex,
                           instruction,
