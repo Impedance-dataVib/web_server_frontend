@@ -64,6 +64,7 @@ function tabProps(index: number) {
 }
 
 const TabModuleRender = ({
+  moduleId,
   type,
   moduleData,
   classes,
@@ -83,6 +84,7 @@ const TabModuleRender = ({
       return (
         <Box>
           <ModuleMonitoringPage
+            moduleId={moduleId}
             moduleData={moduleData}
             classes={classes}
             trendsData={trendsData}

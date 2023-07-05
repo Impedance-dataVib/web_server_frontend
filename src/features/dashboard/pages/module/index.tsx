@@ -22,6 +22,7 @@ import CylinderIndicator from "./cylinder-indicator";
 import { SIGNAL_STATUS_QUALITY } from "../../schema";
 import { buildLiveStatusData } from "src/app/utils/helper";
 const ModuleMonitoringPage = ({
+  moduleId,
   moduleData,
   classes,
   trendsData,
@@ -40,7 +41,6 @@ const ModuleMonitoringPage = ({
   const onActiveModuleChange = (event: any, params: any) => {
     setActiveModule(params);
   };
-
   const { sendMessage, lastMessage } = useWebSocket(
     process.env.REACT_APP_LIVE_WEBSOCKET_URL ||
       `ws:${window.location.hostname}:8082`,
@@ -277,6 +277,7 @@ const ModuleMonitoringPage = ({
               liveStatus={liveStatus}
               processName={processName}
               formData={formData}
+              moduleId={moduleId}
             />
           }
           initiallyCollapsed={true}
@@ -285,6 +286,7 @@ const ModuleMonitoringPage = ({
               liveStatus={liveStatus}
               processName={processName}
               formData={formData}
+              moduleId={moduleId}
             />
           }
         />
