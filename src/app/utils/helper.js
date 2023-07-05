@@ -187,9 +187,7 @@ export function buildSoketData(response, modelType, formData) {
   };
 }
 
-function getConditionalIndicatorValue(isOffline, isGradientOpposite, value) {
-  if (isOffline) return "Offline";
-
+function getConditionalIndicatorValue(isGradientOpposite, value) {
   return isGradientOpposite ? parseFloat(value).toFixed(2) : parseInt(value);
 }
 
@@ -226,8 +224,7 @@ function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
     indicatorName: indicator_title,
     indicatorMin: 0,
     indicatorMax: isGradientOpposite ? 6 : 100,
-    indicatorValue: getConditionalIndicatorValue(
-      isOffline,
+    indicatorValue: isOffline ? "Offline" : getConditionalIndicatorValue(
       isGradientOpposite,
       value
     ),
@@ -561,7 +558,6 @@ function buildCompressionData(
     return null;
   }
   for (let i = 0; i < first.length; i++) {
-    const item = first[i];
     const compression = cylinderHealth[i];
     let firstChild = {
       name: "Cyl " + firingOrderLabel[i],
@@ -573,7 +569,6 @@ function buildCompressionData(
 
     for (let j = 0; j < second.length; j++) {
       if (i === j) {
-        const secondItem = second[j];
         const secondCompression = cylinderHealth[first.length + j];
         firstChild["children"].push({
           name: "Cyl " + firingOrderLabel[first.length + j],
@@ -585,7 +580,6 @@ function buildCompressionData(
     }
     if (i === first.length - 1 && first.length < second.length) {
       for (let k = first.length; k < second.length; k++) {
-        //  const secondItem = second[k];
         const secondCompression = cylinderHealth[k];
         firstChild.children[0].children = [
           {
