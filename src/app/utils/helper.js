@@ -844,11 +844,11 @@ function average(datapoints) {
   let sum = 0;
   for (let i of datapoints) {
     if (i) {
-      sum += i;
+      sum = parseFloat(sum) + parseFloat(i);
     }
   }
-
-  return parseFloat(sum / datapoints.length).toFixed(2);
+  const avg = sum / datapoints.length;
+  return parseFloat(avg).toFixed(2);
 }
 
 export function round(num) {
@@ -1966,16 +1966,18 @@ export function buildTrendData(historical_data, type, from_data) {
             const cylArray = objData?.cylinderHealth;
             let i = 0;
             for (let order of firingOrder) {
-              const foundIndex = resultSet.findIndex(
-                (x) => x.key === key + "Cyl " + firingOrderLabel[i + 1]
-              );
-              if (foundIndex !== -1) {
-                resultSet[foundIndex].data.push(cylArray[i]);
-              } else {
-                resultSet.push({
-                  key: key + "Cyl " + firingOrderLabel[i + 1],
-                  data: [cylArray[i]],
-                });
+              if (firingOrderLabel[i]) {
+                const foundIndex = resultSet.findIndex(
+                  (x) => x.key === key + "Cyl " + firingOrderLabel[i]
+                );
+                if (foundIndex !== -1) {
+                  resultSet[foundIndex].data.push(cylArray[i]);
+                } else {
+                  resultSet.push({
+                    key: key + "Cyl " + firingOrderLabel[i],
+                    data: [cylArray[i]],
+                  });
+                }
               }
               i++;
             }
@@ -1984,13 +1986,18 @@ export function buildTrendData(historical_data, type, from_data) {
           const foundIndex = resultSet.findIndex((x) => x.key === key);
           if (foundIndex !== -1) {
             if (key === "PowerLoss") {
-              resultSet[foundIndex].data.push(objData?.value);
+              resultSet[foundIndex].data.push(
+                parseFloat(objData?.value).toFixed(2)
+              );
             } else {
               resultSet[foundIndex].data.push(objData?.valueInHealth);
             }
           } else {
             if (key === "PowerLoss") {
-              resultSet.push({ key, data: [objData?.value] });
+              resultSet.push({
+                key,
+                data: [parseFloat(objData?.value).toFixed(2)],
+              });
             } else {
               resultSet.push({ key, data: [objData?.valueInHealth] });
             }
@@ -2068,8 +2075,12 @@ function buildDataSet(title, color, dataPoints, axisId) {
     fill: false,
     yAxisID: axisId ?? "y",
     hidden: false,
-    minVal: Math.min(...dataPoints),
-    maxValue: Math.max(...dataPoints),
+    minVal: isAverage
+      ? Math.round(Math.min(...dataPoints))
+      : Math.min(...dataPoints),
+    maxValue: isAverage
+      ? Math.round(Math.max(...dataPoints))
+      : Math.max(...dataPoints),
     avgValue: isAverage
       ? average(dataPoints)
       : roundToNearest10(average(dataPoints)),
