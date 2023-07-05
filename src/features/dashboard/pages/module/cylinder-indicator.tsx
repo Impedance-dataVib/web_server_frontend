@@ -13,12 +13,12 @@ function CylinderIndicator({ cylinderSpecificIndicators, fullScreen }: any) {
         flexDirection: "row",
         marginTop: "15px",
         overflow: "auto",
-        height : cylinderSpecificIndicators.length <= 4 ? '33vh': 'unset'
+        height: cylinderSpecificIndicators.length <= 4 ? "33vh" : "unset",
       }}
     >
       {cylinderSpecificIndicators.map((val: any, index: any) => (
         <Grid
-          key={`globalIndicator${index}`}
+          key={`globalIndicator-${val.graphLabel}`}
           item
           md={6}
           sm={6}
@@ -26,7 +26,6 @@ function CylinderIndicator({ cylinderSpecificIndicators, fullScreen }: any) {
           xs={fullScreen ? 6 : 12}
         >
           <SunburstChart
-            key={`cylinder${index}`}
             data={val}
             elementId={`sunbrust${index}`}
             fullScreen={fullScreen}

@@ -218,11 +218,7 @@ const DashboardPage = () => {
 
           const currentDate = new Date();
           const fifteenDaysBeforeExpiry = dateFns.subDays(parsedExpiryDate, 15);
-          if (dateFns.isBefore(parsedExpiryDate, currentDate)) {
-            // already expired, do nothing - should be redirected to license import page
-            setShowLicenseExpiryMsg(false);
-            setLicExpiryText("");
-          } else if (dateFns.isBefore(fifteenDaysBeforeExpiry, currentDate)) {
+          if (dateFns.isBefore(fifteenDaysBeforeExpiry, currentDate)) {
             // in 15 days range
             setShowLicenseExpiryMsg(true);
             setLicExpiryText(

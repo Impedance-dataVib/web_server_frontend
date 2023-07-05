@@ -163,7 +163,7 @@ const LiveStatus = ({
             >
               {apiData.steps.map((label, index) => (
                 <Step
-                  key={index}
+                  key={`${label.topText}-${label.bottomText}`}
                   // completed={completed[index]}
                   sx={{
                     display: "flex",

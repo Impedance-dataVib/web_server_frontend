@@ -82,7 +82,7 @@ const CoreSystem = () => {
             <Box>
               {systemData?.disk?.capacity !== undefined && (
                 <Typography variant="caption">
-                  {  systemData?.disk?.used} / {systemData?.disk?.capacity}
+                  {systemData?.disk?.used} / {systemData?.disk?.capacity}
                 </Typography>
               )}
             </Box>
@@ -108,9 +108,7 @@ const CoreSystem = () => {
             <Box>
               {systemData?.ram?.capacity !== undefined && (
                 <Typography variant="caption">
-                  {systemData?.ram?.used} of {
-                  systemData?.ram?.capacity 
-                  } MB
+                  {systemData?.ram?.used} of {systemData?.ram?.capacity} MB
                 </Typography>
               )}
             </Box>
@@ -205,6 +203,7 @@ const CoreSystem = () => {
             systemData?.queue?.length > 0 &&
             systemData?.queue?.map((q: any) => (
               <Box
+                key={q?.name}
                 sx={{
                   display: "flex",
                   color: q?.active ? "orange" : "black",

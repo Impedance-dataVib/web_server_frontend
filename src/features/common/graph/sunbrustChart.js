@@ -4,23 +4,24 @@ import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 
 export default function SunburstChart({ elementId, data, fullScreen }) {
-
   const getColor = (type) => {
-    switch(type) {
+    switch (type) {
       case "success":
         return "#02B271";
       case "error":
         return "#FF0000";
-      case "warning": 
-        return "#FFA326"
+      case "warning":
+        return "#FFA326";
       default:
         return "white";
     }
-  }
+  };
 
   useEffect(() => {
     if (data?.graphData) {
-      document.getElementById(`${elementId}${fullScreen ? "full": ""}`).innerHTML = "";
+      document.getElementById(
+        `${elementId}${fullScreen ? "full" : ""}`
+      ).innerHTML = "";
       let chart = Sunburst();
       chart
         .data({
@@ -38,21 +39,22 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
         .centerRadius(0)
         .radiusScaleExponent(1)
         .labelOrientation("angular")
-        .onClick(() => {
-        })
+        .onClick(() => {})
         .color((d) => {
           return getColor(d.fill);
         })
-        .excludeRoot(true)(document.getElementById(`${elementId}${fullScreen ? "full": ""}`));
+        .excludeRoot(true)(
+        document.getElementById(`${elementId}${fullScreen ? "full" : ""}`)
+      );
     }
   }, [data]);
 
   return (
-    <Box sx={{display: 'flex', flexDirection: 'column', textAlign: 'center'}}>
-      <Typography variant="body1" component={"span"} sx={{mb: 1}}>
+    <Box sx={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
+      <Typography variant="body1" component={"span"} sx={{ mb: 1 }}>
         {data?.graphLabel}
       </Typography>
-      <div id={`${elementId}${fullScreen ? "full": ""}`}></div>
+      <div id={`${elementId}${fullScreen ? "full" : ""}`}></div>
     </Box>
   );
 }

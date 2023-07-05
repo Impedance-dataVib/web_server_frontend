@@ -173,7 +173,7 @@ const DrawerAppBar = () => {
         min = Number(timeFormat[1]);
         sec = Number(timeFormat[2]);
 
-        var timerID = setInterval(() => {
+        const timerID = setInterval(() => {
           if (sec < 60) {
             sec++;
           }

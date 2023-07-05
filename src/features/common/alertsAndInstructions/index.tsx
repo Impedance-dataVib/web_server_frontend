@@ -1,6 +1,6 @@
 import React from "react";
 import { Error, Warning } from "@mui/icons-material";
-import { Box,Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 const AlertsAndInstructions = ({
@@ -68,17 +68,17 @@ const AlertsAndInstructions = ({
   };
 
   const getThumbIcon = (instructionType: string) => {
-    switch(instructionType) {
-      case "success": 
-        return  <ThumbUpIcon color={instructionType} />;
-      case "error": 
-        return  <Error color={instructionType} />;
-      case "warning": 
-        return  <Warning color={instructionType} />
-      default :
+    switch (instructionType) {
+      case "success":
+        return <ThumbUpIcon color={instructionType} />;
+      case "error":
+        return <Error color={instructionType} />;
+      case "warning":
+        return <Warning color={instructionType} />;
+      default:
         return;
     }
-  }
+  };
 
   return (
     <Box sx={{ height: "", overflowX: "auto" }}>
@@ -89,9 +89,9 @@ const AlertsAndInstructions = ({
         overflow={"auto"}
       >
         {alertData &&
-          alertData.map((val: any, index: any) => (
+          alertData.map((val: any) => (
             <Grid
-              key={`alertData${index}`}
+              key={`alertData$-${val?.instructionName}`}
               item
               xs={12}
               md={12}
@@ -126,7 +126,7 @@ const AlertsAndInstructions = ({
                 {val.instructions &&
                   val.instructions.map(
                     (instruction: string, instructionIndex: any) => (
-                      <Box key={`ins${instructionIndex}`}>
+                      <Box key={`ins${Date.now()}`}>
                         {renderInstruction(
                           instructionIndex,
                           instruction,

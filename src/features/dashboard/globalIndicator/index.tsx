@@ -33,9 +33,9 @@ const GlobalIndicatorChart = ({
       }}
     >
       {globalIndicator &&
-        show.map((val: any, index: any) => (
+        show.map((val: any) => (
           <Grid
-            key={`globalIndicator${index}`}
+            key={`globalIndicator-${val.indicatorName}`}
             item
             sx={{ display: "flex", flexDirection: "column" }}
             lg={4}
@@ -46,7 +46,7 @@ const GlobalIndicatorChart = ({
               variant="body1"
               component={"span"}
               textAlign={"center"}
-              sx={{ mb: 1, fontWeight: "500", cursor: 'pointer'}}
+              sx={{ mb: 1, fontWeight: "500", cursor: "pointer" }}
               title={val?.tooltip}
             >
               {val?.indicatorName}
