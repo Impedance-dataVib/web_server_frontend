@@ -337,13 +337,13 @@ const formSchema = {
         helperNote: "Maximum Speed Variation",
       },
       {
-        name: "Gap between acquisitions (secs)",
+        name: "Gap between acquisitions (in seconds)",
         label: "recording_period",
         type: "text",
         helperNote: "time between two recordings (in seconds)",
       },
       {
-        name: "Recording Length (secs)",
+        name: "Recording Length (in seconds)",
         label: "recording_length",
         type: "text",
         helperNote: `Recording length should be between 1 & 200s.
@@ -485,13 +485,13 @@ const formSchema = {
         helperNote: "Maximum Speed Variation",
       },
       {
-        name: "Gap between acquisitions",
+        name: "Gap between acquisitions (in seconds)",
         label: "recording_period",
         type: "text",
         helperNote: "recording time for one diagnosis (in seconds)",
       },
       {
-        name: "Recording Length ",
+        name: "Recording Length (in seconds)",
         label: "recording_length",
         type: "text",
         helperNote: `Recording length should be between 1 & 200s.
@@ -652,13 +652,13 @@ const formSchema = {
         helperNote: "Maximum Speed Variation",
       },
       {
-        name: "Gap between acquisitions ",
+        name: "Gap between acquisitions (in seconds) ",
         label: "recording_period",
         type: "text",
         helperNote: "recording time for one diagnosis (in seconds)",
       },
       {
-        name: "Recording Length ",
+        name: "Recording Length (in seconds) ",
         label: "recording_length",
         type: "text",
         helperNote: `Recording length should be between 1 & 200s.
@@ -753,13 +753,13 @@ const formSchema = {
         helperNote: "Maximum Speed Variation ",
       },
       {
-        name: "Gap between acquisitions ",
+        name: "Gap between acquisitions (in seconds) ",
         label: "recording_period",
         type: "text",
         helperNote: "recording time for one diagnosis (in seconds)",
       },
       {
-        name: "Recording Length ",
+        name: "Recording Length (in seconds) ",
         label: "recording_length",
         type: "text",
         helperNote: `Recording length should be between 1 & 200s.
@@ -892,13 +892,13 @@ const formSchema = {
         helperNote: "Maximum Speed Variation",
       },
       {
-        name: "Gap between acquisitions ",
+        name: "Gap between acquisitions (in seconds) ",
         label: "recording_period",
         type: "text",
         helperNote: "recording time for one diagnosis (in seconds)",
       },
       {
-        name: "Recording Length ",
+        name: "Recording Length (in seconds)",
         label: "recording_length",
         type: "text",
         helperNote: `Recording length should be between 1 & 200s.
