@@ -357,7 +357,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                   Filter low
                 </Typography>
                 <TextField
-                  name={"Filter Low"}
+                  name={"Filter_low"}
                   label={"Filter low"}
                   onChange={formContext?.handleChange}
                   value={formContext?.values?.["Filter_low"]}
@@ -467,7 +467,6 @@ export const MotorChannelInformationForm = ({
     formContext?.values["motor_crankshaft_sensorx"],
     formContext.dirty
   );
-  console.log('error',formContext.errors);
   useEffect(() => {
     if (data && formContext.dirty && !isPending) {
       enqueueSnackbar({
