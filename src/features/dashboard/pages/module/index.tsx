@@ -110,6 +110,9 @@ const ModuleMonitoringPage = ({
               alertData={trendsData?.alert || []}
             />
           }
+          formData={formData}
+          moduleType={moduleType}
+          moduleId={moduleId}
           initiallyCollapsed={false}
           fullScreenContent={
             <AlertsAndInstructions

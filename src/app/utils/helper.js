@@ -2086,6 +2086,11 @@ export function convertDate(dateVal) {
   return dateExtract;
 }
 
+export function convertDateOnly(dateVal) {
+  let dateExtract = format(dateVal, "yyyy-MM-dd");
+  return dateExtract;
+}
+
 export function convertUTCDateToLocalTime(dateVal) {
   let dateExtract = format(dateVal, "dd-MMM-yyyy HH:mm:ss");
   return dateExtract;

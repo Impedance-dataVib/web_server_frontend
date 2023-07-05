@@ -125,3 +125,9 @@ export const getAllTrendsData = (payload: any) => {
 export const getModules = () => {
   return axiosInstance.get("/module/get-all.php");
 };
+
+export const getDownloadStatusLog = (payload: any) => {
+  return axiosInstance.post(`/download/download-status-log.php`, payload, {
+    responseType: "blob",
+  });
+}

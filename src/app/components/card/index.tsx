@@ -1,21 +1,29 @@
 import {
   Cancel,
   CropFreeOutlined,
+  Download,
   OpenInFull,
   Remove,
 } from "@mui/icons-material";
 import {
   Box,
+  Button,
   Dialog,
   DialogContent,
   Divider,
+  Grid,
   Paper,
   Theme,
   Typography,
   useMediaQuery,
 } from "@mui/material";
+import DateRangeIcon from "@mui/icons-material/DateRange";
 import React, { useEffect, useState, useMemo } from "react";
-import { convertUTCDateToLocalTime } from "src/app/utils/helper";
+import { convertDate, convertDateOnly, convertUTCDateToLocalTime } from "src/app/utils/helper";
+import dateFormat from "src/app/utils/dateFormat";
+import DateRangePickerModal from "src/features/trends/modals/DatePickerModal";
+import { getDownloadStatusLog } from "src/app/services";
+import { enqueueSnackbar } from "notistack";
 
 export interface CardWidgetProps {
   headerLabel: string;
@@ -30,6 +38,9 @@ export interface CardWidgetProps {
   fullScreenContent?: React.ReactNode;
   headerContent?: React.ReactNode;
   section?: "top" | "middle" | "bottom";
+  moduleId?: any;
+  moduleType?: string;
+  formData?:any;
 }
 
 const CardWidget = ({
@@ -45,9 +56,21 @@ const CardWidget = ({
   initiallyCollapsed,
   fullScreenContent,
   section,
+  moduleId,
+  moduleType,
+  formData,
 }: CardWidgetProps) => {
   const [collapsed, setCollapsed] = useState(initiallyCollapsed || false);
   const [openModal, setOpenModal] = useState<boolean>(false);
+
+  const [isDownloading, setIsdownloading] = useState(false);
+  const [openDownload, setOpenDownload] = useState<boolean>(false);
+  const [toggleDatePicker, setToggleDatePicker] = useState(false);
+  const [dateRangeValues, setDateRangeValues] = useState<any>({
+    endDate: new Date(),
+    startDate: new Date(),
+    key: "downloadDateRange",
+  });
 
   const isBelow1800Pixel = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down(1800)
@@ -106,6 +129,59 @@ const CardWidget = ({
         }
       : topSection;
   }, [section, collapsed]);
+
+  const calculatedButtonDate = useMemo(() => {
+    if (dateRangeValues?.startDate && dateRangeValues?.endDate) {
+      return `${dateFormat(dateRangeValues?.startDate)}-${dateFormat(
+        dateRangeValues?.endDate
+      )}`;
+    }
+    return "StartDate-EndDate";
+  }, [dateRangeValues]);
+
+  const downloadStatusLog = (dateRange: any) => {
+    if(dateRange.startDate && dateRange.endDate) {
+      const payload = {
+        startDate: convertDate(dateRange.startDate),
+        endDate: convertDate(dateRange.endDate),
+        moduleId,
+      }
+      setIsdownloading(true);
+      getDownloadStatusLog(payload).then((res) => {
+        const parsedFormData = JSON.parse(formData);
+        const fileName = `${parsedFormData?.asset_name} - ${parsedFormData?.equipment_name}-${convertDateOnly(dateRange.startDate)}-${convertDateOnly(dateRange.endDate)}`;
+        setDateRangeValues( (val:any) => {
+          return {
+            ...val,
+            endDate: new Date(),
+            startDate: new Date(),
+          }
+        })
+        const url = window.URL.createObjectURL(res.data);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute(
+          "download",
+          `${fileName}.log`
+        );
+        document.body.appendChild(link);
+        link.click();
+
+        setOpenDownload(false);
+        setIsdownloading(false);
+      }).catch(error => {
+        console.error(error);
+        enqueueSnackbar({
+          message:
+            error?.response?.data?.Message ||
+            error?.Message ||
+            "Something went wrong!",
+          variant: "error",
+        });
+      })
+    }
+
+  }
   return (
     <Paper sx={getSectionSx}>
       <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
@@ -203,12 +279,14 @@ const CardWidget = ({
 
           {fullScreenContent && (
             <>
-              {/* <Box component="section" sx={{ mr: "4px", cursor: "pointer" }}>
-                <Search
-                  sx={{ fontSize: "16px" }}
-                  onClick={() => setOpenModal(true)}
-                />
-              </Box> */}
+              {moduleType === "Torque" && (
+                <Box component="section" sx={{ mr: "4px", cursor: "pointer" }}>
+                  <Download
+                    sx={{ fontSize: "16px" }}
+                    onClick={() => setOpenDownload(true)}
+                  />
+                </Box>
+              )}
               <Box component="section" sx={{ mr: "4px", cursor: "pointer" }}>
                 <OpenInFull
                   sx={{ fontSize: "14px" }}
@@ -264,6 +342,85 @@ const CardWidget = ({
             </Box>
           )}
         </Box>
+      )}
+      {openDownload && (
+        <Dialog
+          open={openDownload}
+          onClose={() => setOpenDownload(false)}
+          maxWidth={"xl"}
+        >
+          <DialogContent sx={{ minWidth: "40vw"}}>
+          <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
+              <Box component="section">
+                <Box sx={{ display: "flex" }}>
+                  <Typography
+                    variant="body1"
+                    component={"span"}
+                    sx={{
+                      fontSize: "20px",
+                      color: "#4d4e4e",
+                      fontWeight: 600,
+                      letterSpacing: "0.08px",
+                    }}
+                  >
+                    {'Download Logs'}
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Box
+                component="section"
+                sx={{
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  color: "#4D4E4E",
+                }}
+              >
+                <Box>
+                  <>
+                    <Cancel
+                      onClick={() => setOpenModal(false)}
+                      sx={{ fontSize: "16px", cursor: "pointer" }}
+                    />
+                  </>
+                </Box>
+              </Box>
+            </Box>
+            <Grid container spacing={2} sx={{mb: 2, mt: 2, alignItems: "center"}}>
+              <Grid item lg={12}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => setToggleDatePicker(true)}
+                  sx={{
+                    height: "3.32rem",
+                    width: "100%",
+                  }}
+                  startIcon={<DateRangeIcon />}
+                >
+                  {calculatedButtonDate}
+                </Button>
+              </Grid>
+              
+    
+            </Grid>
+            <Grid container justifyContent={"flex-end"}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => downloadStatusLog(dateRangeValues)}
+                  sx={{
+                    height: "3.32rem",
+                  }}
+                  startIcon={<Download />}
+                >
+                  {"Download"}
+                </Button>
+              </Grid>
+          </DialogContent>
+        </Dialog>
       )}
       {openModal && fullScreenContent && (
         <Dialog
@@ -359,6 +516,12 @@ const CardWidget = ({
           </DialogContent>
         </Dialog>
       )}
+      <DateRangePickerModal
+        open={toggleDatePicker}
+        onClose={() => setToggleDatePicker(false)}
+        dateRangeValues={dateRangeValues}
+        setDateRangeValues={setDateRangeValues}
+      />
     </Paper>
   );
 };
