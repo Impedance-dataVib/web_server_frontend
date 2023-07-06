@@ -8,6 +8,7 @@ import {
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogContent,
   Divider,
@@ -413,11 +414,13 @@ const CardWidget = ({
                   onClick={() => downloadStatusLog(dateRangeValues)}
                   sx={{
                     height: "3.32rem",
+                    width: "150px"
                   }}
-                  startIcon={<Download />}
+                  disabled={isDownloading}
+                  startIcon={!isDownloading ? <Download /> : <CircularProgress color="primary" />}
                 >
                   {"Download"}
-                </Button>
+                </Button>              
               </Grid>
           </DialogContent>
         </Dialog>
