@@ -188,7 +188,7 @@ export function buildSoketData(response, modelType, formData) {
 }
 
 function getConditionalIndicatorValue(isGradientOpposite, value) {
-    return isGradientOpposite ? ""+parseFloat(value).toFixed(2) : ""+parseInt(value);
+    return isGradientOpposite ? "" + parseFloat(value).toFixed(2) : "" + parseInt(value);
 }
 
 function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
@@ -583,7 +583,7 @@ function buildCompressionData(
                 const secondCompression = cylinderHealth[k];
                 firstChild.children[0].children = [
                     {
-                        name: "Cyl " + firingOrderLabel[firingOrderLabel.length-1],
+                        name: "Cyl " + firingOrderLabel[firingOrderLabel.length - 1],
                         value: showSecondValue,
                         fill: checkFillColor(secondCompression),
                         showValue: secondCompression,
@@ -1929,6 +1929,18 @@ function buildLineChart(
     };
 }
 
+function calculateTorqueValue(value, key) {
+
+    if (key === "StaticTorque") {
+        return (value || 0) * 0.001;
+    }
+
+    if (key === "StaticPower") {
+        return (value || 0) * 1.0e-6
+    }
+    return value;
+}
+
 export function buildTrendData(historical_data, type, from_data) {
     let labels = [];
     const rpmData = [];
@@ -1944,6 +1956,7 @@ export function buildTrendData(historical_data, type, from_data) {
         if (item.Status <= 0) {
             continue;
         }
+
 
         let toPush = false;
         if (type === "Engine") {
@@ -2005,9 +2018,10 @@ export function buildTrendData(historical_data, type, from_data) {
                     const objData = item[key];
                     const foundIndex = resultSet.findIndex((x) => x.key === key);
                     if (foundIndex !== -1) {
-                        resultSet[foundIndex].data.push(objData?.value);
+
+                        resultSet[foundIndex].data.push(calculateTorqueValue(objData?.value, key));
                     } else {
-                        resultSet.push({key, data: [objData?.value]});
+                        resultSet.push({key, data: [calculateTorqueValue(objData?.value, key)]});
                     }
                     toPush = true;
                 }
@@ -2368,13 +2382,13 @@ const trendTitle = {
         MBearing: "Bearing",
     },
     Bearing: {
-      BearingGlobal: "Mechanical Health",
-      GlobalMixed: "Global(Umbalance/Alignment/Loosness)",
-      GlobalKurto: "Shock Index",
-      GlobalLevel: "Level(RMS)",
-      "2KMixed": "Shaft/Clearance",
-      "4KMixed": "Bearings",
-      "8KMixed": "Friction",
+        BearingGlobal: "Mechanical Health",
+        GlobalMixed: "Global(Umbalance/Alignment/Loosness)",
+        GlobalKurto: "Shock Index",
+        GlobalLevel: "Level(RMS)",
+        "2KMixed": "Shaft/Clearance",
+        "4KMixed": "Bearings",
+        "8KMixed": "Friction",
 
     },
     Torque: {
