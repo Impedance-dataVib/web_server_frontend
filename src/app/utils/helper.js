@@ -77,7 +77,7 @@ export function buildSoketData(response, modelType, formData) {
             buildRpmData(
                 "Power(MW)",
                 (data.StaticPower?.value || 0) * 1.0e-6,
-                maxPower  * 1.0e-6
+                maxPower * 1.0e-6
             )
         );
 
@@ -405,7 +405,7 @@ export function buildData(response) {
             "Power with RPM",
             false,
             true,
-            maxPower
+            maxPower * 1.0e-6
         );
         trends.push(powerWithRpm);
 
