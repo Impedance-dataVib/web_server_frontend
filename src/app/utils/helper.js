@@ -1963,7 +1963,7 @@ export function buildTrendData(historical_data, type, from_data) {
             const firingOrder = item?.Engine.FiringOrder;
 
             for (const key in item) {
-                if (!keysToIgnore.includes(key)) {
+                if (keysToIgnore[type].includes(key)) {
                     const objData = item[key];
 
                     if (
@@ -2014,7 +2014,7 @@ export function buildTrendData(historical_data, type, from_data) {
             }
         } else if (type === "Torque") {
             for (const key in item) {
-                if (!keysToIgnore.includes(key)) {
+                if (keysToIgnore[type].includes(key)) {
                     const objData = item[key];
                     const foundIndex = resultSet.findIndex((x) => x.key === key);
                     if (foundIndex !== -1) {
@@ -2028,7 +2028,7 @@ export function buildTrendData(historical_data, type, from_data) {
             }
         } else {
             for (const key in item) {
-                if (!keysToIgnore.includes(key)) {
+                if (keysToIgnore[type].includes(key)) {
                     const objData = item[key];
                     const foundIndex = resultSet.findIndex((x) => x.key === key);
                     if (foundIndex !== -1) {
@@ -2352,7 +2352,50 @@ function getRandomColor() {
     return color;
 }
 
-const keysToIgnore = ["DynTorsion", "DynTorque", "DynPower", "Acy1", "Acy2", "Static_zeroTorsion", "Static_rigitidy", "Static_1", "Static_2", "2KLevel", "2KKurto", "4KLevel", "4KKurto", "8KLevel", "8KKurto", "DateAndTime", "Engine", "Status", "ChannelSpeed", "Aux", "InjectionAngle", "InjectionConditionBis", "InjectionOver", "Acy1", "Stresses", "Acyclism", "Pressure_max", "Pressure_min", "OverUnderI"];
+const keysToIgnore = {
+    Engine: [
+        "PowerLoss",
+        "Unbalance",
+        "EngineEfficiency",
+        "CamPump",
+        "Damper",
+        "MechanicalHealth",
+        "Compression",
+        "Injection",
+        "Bearing",
+        "BearingBis",
+        "InjectionCondition"
+    ],
+    Turbine: [
+        "RegularityDeviation",
+        "MBearing",
+        "BladeStatus",
+        "combustionCondition",
+        "BladeStatusGas",
+        "CombustionKit",
+        "TurbineCoupling",
+    ],
+    Motor: [
+        "MStressStability",
+        "MElectromag",
+        "MBearing",
+    ],
+    Bearing: [
+        "BearingGlobal",
+        "GlobalMixed",
+        "GlobalKurto",
+        "GlobalLevel",
+        "2KMixed",
+        "4KMixed",
+        "8KMixed",
+    ],
+    Torque: [
+        "StaticTorsion",
+        "StaticTorque",
+        "StaticPower",
+    ],
+};
+
 const trendTitle = {
     Engine: {
         PowerLoss: "Increase in Fuel Consumption",
