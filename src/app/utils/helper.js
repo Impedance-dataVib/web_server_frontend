@@ -2048,7 +2048,7 @@ export function buildTrendData(historical_data, type, from_data) {
     const dataSet = [];
     let maxRpm = 0;
     if (rpmData && rpmData.length > 0) {
-        const rpmDataArr = buildDataSet("RPM", "black", rpmData, "y1");
+        const rpmDataArr = buildDataSet(type === "Engine" ? "RPM" : "Speed", "black", rpmData, "y1");
         dataSet.push(rpmDataArr);
         maxRpm = rpmDataArr.maxValue;
     }
