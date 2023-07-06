@@ -188,7 +188,7 @@ export function buildSoketData(response, modelType, formData) {
 }
 
 function getConditionalIndicatorValue(isGradientOpposite, value) {
-    return isGradientOpposite ? parseFloat(value).toFixed(2) : parseInt(value);
+    return isGradientOpposite ? ""+parseFloat(value).toFixed(2) : ""+parseInt(value);
 }
 
 function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
@@ -228,7 +228,7 @@ function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
             isGradientOpposite,
             value
         ),
-        isPercentage: isOffline ? false : true,
+        isPercentage: !isOffline,
         indicatorUnit: isOffline ? " " : indicatorUnit,
         isGradientColor: true,
         indicatorType: isOffline ? " " : indicatorType,
@@ -583,7 +583,7 @@ function buildCompressionData(
                 const secondCompression = cylinderHealth[k];
                 firstChild.children[0].children = [
                     {
-                        name: "Cyl " + firingOrderLabel[k],
+                        name: "Cyl " + firingOrderLabel[firingOrderLabel.length-1],
                         value: showSecondValue,
                         fill: checkFillColor(secondCompression),
                         showValue: secondCompression,
