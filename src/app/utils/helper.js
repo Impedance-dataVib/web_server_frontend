@@ -77,7 +77,7 @@ export function buildSoketData(response, modelType, formData) {
             buildRpmData(
                 "Power(MW)",
                 (data.StaticPower?.value || 0) * 1.0e-6,
-                maxPower
+                maxPower  * 1.0e-6
             )
         );
 
