@@ -50,7 +50,7 @@ export default function Trends({ trends, fullScreen }: any) {
                     dataPointsY1={val?.dataPointsY1}
                     dataPointsY2={val?.dataPointsY2}
                     trendsName={val?.trendsName}
-                    hideBackground={val?.hideBackground}
+                    hideBackground={true}
                     speedName={val.speedName}
                     datapoints={val?.datapoints}
                     labels={val?.labels}
