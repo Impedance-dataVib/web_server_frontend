@@ -62,6 +62,14 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
       !crankShaftisPending &&
       channelInfoChanged
     ) {
+      if (crankShatftData?.channel_type === "Transducer") {
+        enqueueSnackbar({
+          message:
+            "The current channel is configured with channel type transducer! Please select a different channel",
+          variant: "error",
+        });
+        return;
+      }
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -115,6 +123,14 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
       !camShaftisPending &&
       channelInfoChanged
     ) {
+      if (camShatftData?.channel_type === "Transducer") {
+        enqueueSnackbar({
+          message:
+            "The current channel is configured with channel type transducer! Please select a different channel",
+          variant: "error",
+        });
+        return;
+      }
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -163,6 +179,14 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
     );
   useEffect(() => {
     if (tdcData && formContext.dirty && !tdcIsPending && channelInfoChanged) {
+      if (tdcData?.channel_type === "Transducer") {
+        enqueueSnackbar({
+          message:
+            "The current channel is configured with channel type transducer! Please select a different channel",
+          variant: "error",
+        });
+        return;
+      }
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -208,6 +232,14 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
       !peakPressureIsPending &&
       channelInfoChanged
     ) {
+      if (peakPressureData?.channel_type === "Transducer") {
+        enqueueSnackbar({
+          message:
+            "The current channel is configured with channel type transducer! Please select a different channel",
+          variant: "error",
+        });
+        return;
+      }
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",

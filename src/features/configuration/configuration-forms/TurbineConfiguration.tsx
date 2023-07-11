@@ -462,23 +462,54 @@ export const TurbineChannelInformationForm = ({
           "Channel has been used in another module the value will be populate automatically or please use another channel",
         variant: "warning",
       });
-      formContext.validateForm().then(() => {
-        formContext.setFieldValue(
-          "turbine_crankshaft_channel_type",
-          data?.channel_type,
-          false
-        );
-        formContext.setFieldValue(
-          "turbine_crankshaft_teeth",
-          data?.teeth,
-          false
-        );
-        formContext.setFieldValue(
-          "turbine_crankshaft_wheel_type",
-          data?.wheel_type,
-          false
-        );
-      });
+      if (data.channel_type === "Speed") {
+        formContext.validateForm().then(() => {
+          formContext.setFieldValue(
+            "turbine_crankshaft_channel_type",
+            data?.channel_type,
+            false
+          );
+          formContext.setFieldValue(
+            "turbine_crankshaft_teeth",
+            data?.teeth,
+            false
+          );
+          formContext.setFieldValue(
+            "turbine_crankshaft_wheel_type",
+            data?.wheel_type,
+            false
+          );
+        });
+      } else {
+        formContext.validateForm().then(() => {
+          formContext.setFieldValue(
+            "turbine_crankshaft_channel_type",
+            data?.channel_type,
+            false
+          );
+          formContext.setFieldValue(
+            "turbine_crankshaft_unit",
+            data?.chanel_unit,
+            false
+          );
+          formContext.setFieldValue(
+            "turbine_crankshaft_sensitivity",
+            data?.chanel_sens,
+            false
+          );
+          formContext.setFieldValue(
+            "turbine_crankshaft_ac_dc",
+            data?.chanel_ac_dc,
+            false
+          );
+          formContext.setFieldValue(
+            "turbine_crankshaft_power_source",
+            data?.chanel_source,
+            false
+          );
+        });
+      }
+
       setTimeout(async () => {
         await formContext.validateForm();
       }, 100);

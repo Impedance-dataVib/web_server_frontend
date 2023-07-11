@@ -431,16 +431,7 @@ export const TorqueChannelInformationForm = ({
   formContext,
 }: any) => {
   const [optionsChannelInformation] = useState({
-    SENSORx: [
-      "Ch1",
-      "Ch2",
-      "Ch3",
-      "Ch4",
-      "Ch5",
-      "CH6",
-      "CH7",
-      "CH8",
-    ],
+    SENSORx: ["Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "CH6", "CH7", "CH8"],
     ChannelType: ["Speed"],
     WheelType: [
       "Standard",
@@ -474,6 +465,14 @@ export const TorqueChannelInformationForm = ({
     );
   useEffect(() => {
     if (deChannelData && formContext.dirty && !deChannelisPending) {
+      if (deChannelData?.channel_type === "Transducer") {
+        enqueueSnackbar({
+          message:
+            "The current channel is configured with channel type transducer! Please select a different channel",
+          variant: "error",
+        });
+        return;
+      }
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
@@ -516,6 +515,14 @@ export const TorqueChannelInformationForm = ({
 
   useEffect(() => {
     if (ndeChannel && formContext.dirty && !ndeChannelisPending) {
+      if (ndeChannel?.channel_type === "Transducer") {
+        enqueueSnackbar({
+          message:
+            "The current channel is configured with channel type transducer! Please select a different channel",
+          variant: "error",
+        });
+        return;
+      }
       enqueueSnackbar({
         message:
           "Channel has been used in another module the value will be populate automatically or please use another channel",
