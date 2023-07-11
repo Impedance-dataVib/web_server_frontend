@@ -111,6 +111,7 @@ const DashboardPage = () => {
   const [isDataAvailable, setIsDataAvailable] = useState<any>(undefined);
   const [trendsData, setTrendsData] = useState({});
   const [isWebsocketConnect, setIsWebSocketConnect] = useState(true);
+  const [isWebSocketFailed, setIsWebSocketFailed] = useState(false);
   const [activeModule, setActiveModule] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showLicenseExpiryMsg, setShowLicenseExpiryMsg] =
@@ -129,8 +130,9 @@ const DashboardPage = () => {
       },
       onError: (e) => {
         setIsDataAvailable(
-          "Something went wrong!. Please try to start websocket by clicking this button."
+          "Failed to connect web socket server. Please try to start websocket by clicking this button."
         );
+        setIsWebSocketFailed(true);
 
         setIsLoading(false);
       },
@@ -175,7 +177,7 @@ const DashboardPage = () => {
   }
 
   useEffect(() => {
-    if (lastMessage !== undefined) {
+    if (lastMessage) {
       const data = lastMessage?.data;
       if (data) {
         try {
@@ -183,6 +185,7 @@ const DashboardPage = () => {
 
           if (parsedData?.Status === "Failed") {
             setIsDataAvailable(parsedData?.Message);
+            setIsWebSocketFailed(false);
             setWebSocketsData({});
           } else {
             parsedData = buildSoketData(
@@ -191,6 +194,7 @@ const DashboardPage = () => {
               moduleTabs[activeModule].from_data
             );
             setIsDataAvailable(undefined);
+            setIsWebSocketFailed(false);
             setWebSocketsData(parsedData);
           }
           setIsLoading(false);
@@ -198,7 +202,12 @@ const DashboardPage = () => {
           console.error(ex);
           setIsLoading(false);
           setIsDataAvailable("Something went wrong");
+          setIsWebSocketFailed(false);
         }
+      } else {
+        setIsDataAvailable('Process file not found on server. Please check the configurations.');
+        setIsWebSocketFailed(false);
+        setWebSocketsData({});
       }
     }
   }, [lastMessage]);
@@ -307,18 +316,19 @@ const DashboardPage = () => {
             onClose={() => {
               clearInterval(intervalHandle.current);
               setIsDataAvailable(false);
+              setIsWebSocketFailed(false);
             }}
           >
-            <Box sx={{ display: "flex" }}>
+           <Box sx={{ display: "flex" }}>
               <AlertTitle>{isDataAvailable}</AlertTitle>
-              <Button
+            {isWebSocketFailed && <Button
                 size="small"
                 sx={{ ml: "30px" }}
                 variant="outlined"
                 onClick={handleClick}
               >
                 Restart WebSocket
-              </Button>
+              </Button>}
             </Box>
           </Alert>
         </Box>
