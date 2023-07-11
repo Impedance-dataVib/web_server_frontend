@@ -77,7 +77,7 @@ export function buildSoketData(response, modelType, formData) {
             buildRpmData(
                 "Power(MW)",
                 (data.StaticPower?.value || 0) * 1.0e-6,
-                maxPower
+                maxPower * 1.0e-6
             )
         );
 
@@ -188,7 +188,7 @@ export function buildSoketData(response, modelType, formData) {
 }
 
 function getConditionalIndicatorValue(isGradientOpposite, value) {
-    return isGradientOpposite ? parseFloat(value).toFixed(2) : parseInt(value);
+    return isGradientOpposite ? "" + parseFloat(value).toFixed(2) : "" + parseInt(value);
 }
 
 function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
@@ -228,7 +228,7 @@ function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
             isGradientOpposite,
             value
         ),
-        isPercentage: isOffline ? false : true,
+        isPercentage: !isOffline,
         indicatorUnit: isOffline ? " " : indicatorUnit,
         isGradientColor: true,
         indicatorType: isOffline ? " " : indicatorType,
@@ -405,7 +405,7 @@ export function buildData(response) {
             "Power with RPM",
             false,
             true,
-            maxPower
+            maxPower * 1.0e-6
         );
         trends.push(powerWithRpm);
 
@@ -583,7 +583,7 @@ function buildCompressionData(
                 const secondCompression = cylinderHealth[k];
                 firstChild.children[0].children = [
                     {
-                        name: "Cyl " + firingOrderLabel[k],
+                        name: "Cyl " + firingOrderLabel[firingOrderLabel.length - 1],
                         value: showSecondValue,
                         fill: checkFillColor(secondCompression),
                         showValue: secondCompression,
@@ -1929,6 +1929,18 @@ function buildLineChart(
     };
 }
 
+function calculateTorqueValue(value, key) {
+
+    if (key === "StaticTorque") {
+        return (value || 0) * 0.001;
+    }
+
+    if (key === "StaticPower") {
+        return (value || 0) * 1.0e-6
+    }
+    return value;
+}
+
 export function buildTrendData(historical_data, type, from_data) {
     let labels = [];
     const rpmData = [];
@@ -1945,12 +1957,13 @@ export function buildTrendData(historical_data, type, from_data) {
             continue;
         }
 
+
         let toPush = false;
         if (type === "Engine") {
             const firingOrder = item?.Engine.FiringOrder;
 
             for (const key in item) {
-                if (!keysToIgnore.includes(key)) {
+                if (keysToIgnore[type].includes(key)) {
                     const objData = item[key];
 
                     if (
@@ -2001,20 +2014,21 @@ export function buildTrendData(historical_data, type, from_data) {
             }
         } else if (type === "Torque") {
             for (const key in item) {
-                if (!keysToIgnore.includes(key)) {
+                if (keysToIgnore[type].includes(key)) {
                     const objData = item[key];
                     const foundIndex = resultSet.findIndex((x) => x.key === key);
                     if (foundIndex !== -1) {
-                        resultSet[foundIndex].data.push(objData?.value);
+
+                        resultSet[foundIndex].data.push(calculateTorqueValue(objData?.value, key));
                     } else {
-                        resultSet.push({key, data: [objData?.value]});
+                        resultSet.push({key, data: [calculateTorqueValue(objData?.value, key)]});
                     }
                     toPush = true;
                 }
             }
         } else {
             for (const key in item) {
-                if (!keysToIgnore.includes(key)) {
+                if (keysToIgnore[type].includes(key)) {
                     const objData = item[key];
                     const foundIndex = resultSet.findIndex((x) => x.key === key);
                     if (foundIndex !== -1) {
@@ -2034,7 +2048,7 @@ export function buildTrendData(historical_data, type, from_data) {
     const dataSet = [];
     let maxRpm = 0;
     if (rpmData && rpmData.length > 0) {
-        const rpmDataArr = buildDataSet("RPM", "black", rpmData, "y1");
+        const rpmDataArr = buildDataSet(type === "Engine" ? "RPM" : "Speed", "black", rpmData, "y1");
         dataSet.push(rpmDataArr);
         maxRpm = rpmDataArr.maxValue;
     }
@@ -2338,7 +2352,50 @@ function getRandomColor() {
     return color;
 }
 
-const keysToIgnore = ["DynTorsion", "DynTorque", "DynPower", "Acy1", "Acy2", "Static_zeroTorsion", "Static_rigitidy", "Static_1", "Static_2", "2KLevel", "2KKurto", "4KLevel", "4KKurto", "8KLevel", "8KKurto", "DateAndTime", "Engine", "Status", "ChannelSpeed", "Aux", "InjectionAngle", "InjectionConditionBis", "InjectionOver", "Acy1", "Stresses", "Acyclism", "Pressure_max", "Pressure_min", "OverUnderI"];
+const keysToIgnore = {
+    Engine: [
+        "PowerLoss",
+        "Unbalance",
+        "EngineEfficiency",
+        "CamPump",
+        "Damper",
+        "MechanicalHealth",
+        "Compression",
+        "Injection",
+        "Bearing",
+        "BearingBis",
+        "InjectionCondition"
+    ],
+    Turbine: [
+        "RegularityDeviation",
+        "MBearing",
+        "BladeStatus",
+        "combustionCondition",
+        "BladeStatusGas",
+        "CombustionKit",
+        "TurbineCoupling",
+    ],
+    Motor: [
+        "MStressStability",
+        "MElectromag",
+        "MBearing",
+    ],
+    Bearing: [
+        "BearingGlobal",
+        "GlobalMixed",
+        "GlobalKurto",
+        "GlobalLevel",
+        "2KMixed",
+        "4KMixed",
+        "8KMixed",
+    ],
+    Torque: [
+        "StaticTorsion",
+        "StaticTorque",
+        "StaticPower",
+    ],
+};
+
 const trendTitle = {
     Engine: {
         PowerLoss: "Increase in Fuel Consumption",
@@ -2368,13 +2425,13 @@ const trendTitle = {
         MBearing: "Bearing",
     },
     Bearing: {
-      BearingGlobal: "Mechanical Health",
-      GlobalMixed: "Global(Umbalance/Alignment/Loosness)",
-      GlobalKurto: "Shock Index",
-      GlobalLevel: "Level(RMS)",
-      "2KMixed": "Shaft/Clearance",
-      "4KMixed": "Bearings",
-      "8KMixed": "Friction",
+        BearingGlobal: "Mechanical Health",
+        GlobalMixed: "Global(Umbalance/Alignment/Loosness)",
+        GlobalKurto: "Shock Index",
+        GlobalLevel: "Level(RMS)",
+        "2KMixed": "Shaft/Clearance",
+        "4KMixed": "Bearings",
+        "8KMixed": "Friction",
 
     },
     Torque: {

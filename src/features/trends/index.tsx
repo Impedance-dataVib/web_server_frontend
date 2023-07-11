@@ -84,6 +84,9 @@ const TrendsPage = () => {
       const titles = data?.dataSet.map((val: any) => val?.title);
       setOption(titles);
       setValue([titles[0]]);
+    } else {
+      setOption([]);
+      setValue([]);
     }
   }, [data]);
 

@@ -56,7 +56,7 @@ export default function LineGradient({
   hideBackground,
 }: any) {
   const chartRef = useRef<any>(null);
-  const datasetsName = trendsName.split(',');
+  const datasetsName = trendsName.split(",");
 
   const data = {
     labels: labels,
@@ -65,7 +65,7 @@ export default function LineGradient({
         label: speedName,
         data: dataPointsY1,
         borderColor: "black",
-        backgroundColor: 'black',
+        backgroundColor: "black",
         cubicInterpolationMode: "monotone" as const,
         tension: 1,
         pointBackgroundColor: "black",
@@ -78,26 +78,23 @@ export default function LineGradient({
         label: datasetsName[0],
         data: datapoints,
         borderColor: "red",
-        backgroundColor: 'red',
+        backgroundColor: "red",
         pointBackgroundColor: "red",
         yAxisID: "y",
         borderWidth: 1,
       },
-     
     ],
   };
-  if(dataPointsY2 && dataPointsY2.length) {
-    data.datasets.push(
-      {
-        label: datasetsName[1] || datasetsName[0],
-        data: dataPointsY2,
-        borderColor: "#00008b",
-        backgroundColor: '#00008b',
-        pointBackgroundColor: "#00008b",
-        yAxisID: "y",
-        borderWidth: 1,
-      }
-    )
+  if (dataPointsY2 && dataPointsY2.length) {
+    data.datasets.push({
+      label: datasetsName[1] || datasetsName[0],
+      data: dataPointsY2,
+      borderColor: "#00008b",
+      backgroundColor: "#00008b",
+      pointBackgroundColor: "#00008b",
+      yAxisID: "y",
+      borderWidth: 1,
+    });
   }
   const plugins = [
     {
@@ -110,7 +107,7 @@ export default function LineGradient({
         let gradientBack = canvas
           .getContext("2d")
           .createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-        if(!hideBackground){
+        if (!hideBackground) {
           if (!isGradientOpposite) {
             gradientBack.addColorStop(1, "#ffffff");
             gradientBack.addColorStop(0.41, "#ffffff");
@@ -223,7 +220,7 @@ export default function LineGradient({
         beginAtZero: true,
         type: "linear" as const,
         display: true,
-        max: round(Math.max(...dataPointsY1))+500,
+        max: round(Math.max(...dataPointsY1)) + 500,
         position: "right" as const,
         title: {
           text: speedName || trendsName,

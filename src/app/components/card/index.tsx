@@ -20,7 +20,11 @@ import {
 } from "@mui/material";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import React, { useEffect, useState, useMemo } from "react";
-import { convertDate, convertDateOnly, convertUTCDateToLocalTime } from "src/app/utils/helper";
+import {
+  convertDate,
+  convertDateOnly,
+  convertUTCDateToLocalTime,
+} from "src/app/utils/helper";
 import dateFormat from "src/app/utils/dateFormat";
 import DateRangePickerModal from "src/features/trends/modals/DatePickerModal";
 import { getDownloadStatusLog } from "src/app/services";
@@ -41,7 +45,7 @@ export interface CardWidgetProps {
   section?: "top" | "middle" | "bottom";
   moduleId?: any;
   moduleType?: string;
-  formData?:any;
+  formData?: any;
 }
 
 const CardWidget = ({
@@ -141,48 +145,50 @@ const CardWidget = ({
   }, [dateRangeValues]);
 
   const downloadStatusLog = (dateRange: any) => {
-    if(dateRange.startDate && dateRange.endDate) {
+    if (dateRange.startDate && dateRange.endDate) {
       const payload = {
         startDate: convertDate(dateRange.startDate),
         endDate: convertDate(dateRange.endDate),
         moduleId,
-      }
+      };
       setIsdownloading(true);
-      getDownloadStatusLog(payload).then((res) => {
-        const parsedFormData = JSON.parse(formData);
-        const fileName = `${parsedFormData?.asset_name} - ${parsedFormData?.equipment_name}-${convertDateOnly(dateRange.startDate)}-${convertDateOnly(dateRange.endDate)}`;
-        setDateRangeValues( (val:any) => {
-          return {
-            ...val,
-            endDate: new Date(),
-            startDate: new Date(),
-          }
+      getDownloadStatusLog(payload)
+        .then((res) => {
+          const parsedFormData = JSON.parse(formData);
+          const fileName = `${parsedFormData?.asset_name} - ${
+            parsedFormData?.equipment_name
+          }-${convertDateOnly(dateRange.startDate)}-${convertDateOnly(
+            dateRange.endDate
+          )}`;
+          setDateRangeValues((val: any) => {
+            return {
+              ...val,
+              endDate: new Date(),
+              startDate: new Date(),
+            };
+          });
+          const url = window.URL.createObjectURL(res.data);
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", `${fileName}.log`);
+          document.body.appendChild(link);
+          link.click();
+
+          setOpenDownload(false);
+          setIsdownloading(false);
         })
-        const url = window.URL.createObjectURL(res.data);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute(
-          "download",
-          `${fileName}.log`
-        );
-        document.body.appendChild(link);
-        link.click();
-
-        setOpenDownload(false);
-        setIsdownloading(false);
-      }).catch(error => {
-        console.error(error);
-        enqueueSnackbar({
-          message:
-            error?.response?.data?.Message ||
-            error?.Message ||
-            "Something went wrong!",
-          variant: "error",
+        .catch((error) => {
+          console.error(error);
+          enqueueSnackbar({
+            message:
+              error?.response?.data?.Message ||
+              error?.Message ||
+              "Something went wrong!",
+            variant: "error",
+          });
         });
-      })
     }
-
-  }
+  };
   return (
     <Paper sx={getSectionSx}>
       <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
@@ -247,7 +253,9 @@ const CardWidget = ({
                   mr: "20px",
                 }}
               >
-                {showDate ? ` Updated on ${convertUTCDateToLocalTime(showDate)}` : ""}
+                {showDate
+                  ? ` Updated on ${convertUTCDateToLocalTime(showDate)}`
+                  : ""}
               </Typography>
 
               {isBelow1800Pixel && (
@@ -350,8 +358,8 @@ const CardWidget = ({
           onClose={() => setOpenDownload(false)}
           maxWidth={"xl"}
         >
-          <DialogContent sx={{ minWidth: "40vw"}}>
-          <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
+          <DialogContent sx={{ minWidth: "40vw" }}>
+            <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
               <Box component="section">
                 <Box sx={{ display: "flex" }}>
                   <Typography
@@ -364,7 +372,7 @@ const CardWidget = ({
                       letterSpacing: "0.08px",
                     }}
                   >
-                    {'Download Logs'}
+                    {"Download Logs"}
                   </Typography>
                 </Box>
               </Box>
@@ -389,7 +397,11 @@ const CardWidget = ({
                 </Box>
               </Box>
             </Box>
-            <Grid container spacing={2} sx={{mb: 2, mt: 2, alignItems: "center"}}>
+            <Grid
+              container
+              spacing={2}
+              sx={{ mb: 2, mt: 2, alignItems: "center" }}
+            >
               <Grid item lg={12}>
                 <Button
                   variant="outlined"
@@ -404,24 +416,28 @@ const CardWidget = ({
                   {calculatedButtonDate}
                 </Button>
               </Grid>
-              
-    
             </Grid>
             <Grid container justifyContent={"flex-end"}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => downloadStatusLog(dateRangeValues)}
-                  sx={{
-                    height: "3.32rem",
-                    width: "150px"
-                  }}
-                  disabled={isDownloading}
-                  startIcon={!isDownloading ? <Download /> : <CircularProgress color="primary" />}
-                >
-                  {"Download"}
-                </Button>              
-              </Grid>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => downloadStatusLog(dateRangeValues)}
+                sx={{
+                  height: "3.32rem",
+                  width: "150px",
+                }}
+                disabled={isDownloading}
+                startIcon={
+                  !isDownloading ? (
+                    <Download />
+                  ) : (
+                    <CircularProgress color="primary" />
+                  )
+                }
+              >
+                {"Download"}
+              </Button>
+            </Grid>
           </DialogContent>
         </Dialog>
       )}
@@ -490,7 +506,9 @@ const CardWidget = ({
                     mr: "20px",
                   }}
                 >
-                  {showDate ? ` Updated on ${showDate} (UTC)` : ""}
+                  {showDate
+                    ? ` Updated on ${convertUTCDateToLocalTime(showDate)}`
+                    : ""}
                 </Typography>
                 {!isBelow1800Pixel && subHeadingRight && (
                   <Box sx={{ mr: 1 }}>{subHeadingRight}</Box>

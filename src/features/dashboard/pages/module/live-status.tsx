@@ -125,6 +125,9 @@ const LiveStatus = ({
   currentMode,
   setCurrentMode,
 }: any) => {
+  if (currentMode === "Manual" && liveStatus?.currentStep === 4) {
+    setCurrentMode("Auto");
+  }
   const restartVbox = () => {
     api
       .get(`/vbox/reset.php/${processName}`)
