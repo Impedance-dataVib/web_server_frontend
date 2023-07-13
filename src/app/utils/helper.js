@@ -2517,3 +2517,246 @@ const trendTooltip = {
   "Shaft/Clearance":
     "Excessive shaft displacement,Bad guiding effect:Roller bearing case :Excessive clearance in all type of bearings Excessive excentricity (static/dynamic) in the case of electric motors : electromagnetic circuit defectExcessive tipping displacement in case of vertical installations Excessive stresses causing the shaft to move with high displacement Excessive teeth mesh stresses in the case of a gearbox Plain bearing case :Clearance between bearing pad/bearing cap Excessive excentricity (static/dynamic) in the case of electric motors : electromagnetic circuit defect Excessive tipping displacement in case of vertical installations Excessive teeth mesh stresses in the case of a gearbox Excessive lubrification",
 };
+
+export function buildPngReportData(data, modelType, formData) {
+  const maxRPMThrshhold = parseInt(formData.rated_rpm);
+  const maxPower = parseInt(formData.power);
+  let globalIndicator = [];
+  let cylinder_specific_indicators = [];
+
+  if (modelType === "Engine") {
+    globalIndicator.push(
+      buildIndicatorData(
+        "Engine Health",
+        data?.MechanicalHealth,
+        "valueInHealth"
+      )
+    );
+    globalIndicator.push(
+      buildIndicatorData(
+        "Combustion Condition",
+        data?.EngineEfficiency,
+        "valueInHealth"
+      )
+    );
+    globalIndicator.push(
+      buildRpmData("RPM", data?.ChannelSpeed, maxRPMThrshhold)
+    );
+    globalIndicator.push(
+      buildIndicatorData(
+        "Performance of Mounts & Supports",
+        data?.Unbalance,
+        "valueInHealth"
+      )
+    );
+    globalIndicator.push(
+      buildIndicatorData(
+        "Governor, Crank driven Accessories Health",
+        data?.CamPump,
+        "valueInHealth"
+      )
+    );
+    globalIndicator.push(
+      buildIndicatorData(
+        "Performance of Vibration Damper",
+        data?.Damper,
+        "valueInHealth"
+      )
+    );
+    globalIndicator.push(
+      buildIndicatorData(
+        "Increase in Fuel Consumption",
+        data?.PowerLoss,
+        "value",
+        true
+      )
+    );
+
+    const moduleData = data["Engine"];
+    const firingOrder = moduleData["FiringOrder"];
+    const firingOrderSplit = firingOrder.length / 2;
+    const first = firingOrder.slice(0, firingOrderSplit);
+
+    const second = firingOrder.slice(first.length);
+    const firingOrderLabel = formData?.firing_order.trim().split(",");
+    if (data?.Compression) {
+      const compression = buildCompressionData(
+        first,
+        second,
+        data["Compression"],
+        "Compression Condition",
+        firingOrderLabel
+      );
+      console.log(compression);
+      if (compression) {
+        cylinder_specific_indicators.push(compression);
+      }
+    }
+    if (data?.Injection) {
+      const injection_Condition = buildCompressionData(
+        first,
+        second,
+        data["Injection"],
+        "Injection Condition",
+        firingOrderLabel
+      );
+      if (injection_Condition) {
+        cylinder_specific_indicators.push(injection_Condition);
+      }
+    }
+    if (data?.Bearing) {
+      const bearing_Condition = buildCompressionData(
+        first,
+        second,
+        data["Bearing"],
+        "Bearing Condition",
+        firingOrderLabel
+      );
+      if (bearing_Condition) {
+        cylinder_specific_indicators.push(bearing_Condition);
+      }
+    }
+    if (data?.BearingBis) {
+      const condition_of_cyl_moving_parts = buildCompressionData(
+        first,
+        second,
+        data["BearingBis"],
+        "Condition of cyl moving parts",
+        firingOrderLabel
+      );
+      if (condition_of_cyl_moving_parts) {
+        cylinder_specific_indicators.push(condition_of_cyl_moving_parts);
+      }
+    }
+    if (
+      formData["fuel"] === "Hydrogen" ||
+      formData["fuel"] === "Ammonia" ||
+      formData["fuel"] === "Natural Gas"
+    ) {
+      const miss_firing = buildCompressionData(
+        first,
+        second,
+        data["Misfiring"],
+        "Misfiring",
+        firingOrderLabel
+      );
+      if (miss_firing) {
+        cylinder_specific_indicators.push(miss_firing);
+      }
+    }
+  } else if (modelType === "Torque") {
+    globalIndicator.push(
+      buildRpmData("Torsion(degree)", data.StaticTorsion?.value || 0, 6)
+    );
+
+    globalIndicator.push(
+      buildRpmData("Torque(kNm)", (data.StaticTorque?.value || 0) * 0.001, 1000)
+    );
+
+    globalIndicator.push(
+      buildRpmData(
+        "Power(MW)",
+        (data.StaticPower?.value || 0) * 1.0e-6,
+        maxPower * 1.0e-6
+      )
+    );
+
+    globalIndicator.push(
+      buildRpmData("Speed", data.ChannelSpeed || 0, maxRPMThrshhold)
+    );
+  } else if (modelType === "Turbine") {
+    globalIndicator.push(
+      buildRpmData("Speed", data?.ChannelSpeed, maxRPMThrshhold)
+    );
+    globalIndicator.push(
+      buildIndicatorData(
+        "Regularity/Deviation",
+        data?.RegularityDeviation,
+        "valueInPercent"
+      )
+    );
+    globalIndicator.push(
+      buildIndicatorData(
+        "Bearing Status",
+        data?.BearingStatus,
+        "valueInPercent"
+      )
+    );
+    globalIndicator.push(
+      buildIndicatorData("Shaft Health", data?.BladeStatus, "valueInPercent")
+    );
+    if (JSON.parse(formData).type === "Steam") {
+      globalIndicator.push(
+        buildIndicatorData("Coupling", data?.TurbineCoupling, "valueInPercent")
+      );
+    } else {
+      globalIndicator.push(
+        buildIndicatorData(
+          "Combustion Kit",
+          data?.CombustionKit,
+          "valueInPercent"
+        )
+      );
+    }
+  } else if (modelType === "Motor") {
+    globalIndicator.push(
+      buildIndicatorData("Stability", data?.MStressStability, "valueInHealth")
+    );
+    globalIndicator.push(
+      buildIndicatorData("Bearing", data?.MBearing, "valueInHealth")
+    );
+    globalIndicator.push(
+      buildRpmData("Speed", data?.ChannelSpeed, maxRPMThrshhold)
+    );
+    globalIndicator.push(
+      buildIndicatorData(
+        "Electromagnetic Stress",
+        data?.MElectromag,
+        "valueInHealth"
+      )
+    );
+  } else if (modelType === "Bearing") {
+    globalIndicator.push(
+      buildIndicatorData("Bearings", data["4KMixed"], "valueInHealth")
+    );
+    globalIndicator.push(
+      buildRpmData("RPM", data?.ChannelSpeed, maxRPMThrshhold)
+    );
+    globalIndicator.push(
+      buildIndicatorData("Friction", data["8KMixed"], "valueInHealth")
+    );
+
+    //-----
+
+    globalIndicator.push(
+      buildIndicatorData(
+        "Mechanical Health",
+        data?.BearingGlobal,
+        "valueInHealth"
+      )
+    );
+
+    globalIndicator.push(
+      buildIndicatorData(
+        "Global(Umbalance/Alignment/Loosness)",
+        data?.GlobalMixed,
+        "valueInHealth"
+      )
+    );
+    globalIndicator.push(
+      buildIndicatorData("Shock Index", data?.GlobalKurto, "valueInHealth")
+    );
+    globalIndicator.push(
+      buildIndicatorData("Level(RMS)", data?.GlobalLevel, "valueInHealth")
+    );
+    globalIndicator.push(
+      buildIndicatorData("Shaft/Clearance", data["2KMixed"], "valueInHealth")
+    );
+  }
+  console.log(cylinder_specific_indicators);
+
+  return {
+    globalIndicator,
+    cylinder_specific_indicators,
+  };
+}

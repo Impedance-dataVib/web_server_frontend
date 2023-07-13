@@ -24,6 +24,8 @@ import ProtectedRoute from "./app/components/protectedRoute";
 import { SnackbarProvider } from "notistack";
 import UnsavedPrompt from "./app/components/unsavedPrompt";
 import { useQuery } from "./app/utils/helper";
+import Engine from "./features/downloads/engine";
+import Motor from "./features/downloads/motor";
 
 const AppRoutes = ({
   isUnsaved,

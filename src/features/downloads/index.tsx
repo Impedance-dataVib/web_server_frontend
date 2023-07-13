@@ -19,7 +19,14 @@ import {
   TableRow,
   Paper,
   Tooltip,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  CircularProgress,
 } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import FolderIcon from "@mui/icons-material/Folder";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import { selectOption, selectReportType } from "./schema";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import DownloadInfoApi from "./api";
@@ -28,6 +35,10 @@ import DatePickerModal from "../trends/modals/DatePickerModal";
 import api from "../../app/api";
 import dateFormat from "../../app/utils/dateFormat";
 import { convertUTCDateToLocalTime, convertDate } from "src/app/utils/helper";
+import TreeView, { flattenTree } from "react-accessible-treeview";
+import { FaList, FaRegFolder, FaRegFolderOpen } from "react-icons/fa";
+import { AiFillFile } from "react-icons/ai";
+import DownloadPngModal from "../configuration/modals/downloadPngModal";
 
 const DownloadPage = () => {
   const initial = "";
@@ -45,6 +56,10 @@ const DownloadPage = () => {
     key: "selection",
   });
   const [showData, setShowData] = useState([]);
+  const [showPngGraphical, setShowPngGraphical] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState<any>([]);
+  const [open, setOpen] = React.useState<any>(null);
 
   const datePickerText = useMemo(() => {
     const startDate = dateRangeValues?.startDate
@@ -72,7 +87,6 @@ const DownloadPage = () => {
     setAsset(e.target.value);
     setAssetError(false);
   };
-
   const reportTypeHandler = (e: SelectChangeEvent) => {
     setReportType(e.target.value);
     setReportTypeError(false);
@@ -112,6 +126,10 @@ const DownloadPage = () => {
       return;
     }
 
+    if (reportType === "graphical") {
+      setIsLoading(true);
+    }
+
     DownloadInfoApi.postDownloadInfo({
       type: dataSelection,
       module_id: asset,
@@ -120,13 +138,23 @@ const DownloadPage = () => {
       report_type: reportType,
     })
       .then((val) => {
-        enqueueSnackbar({
-          message: `Download request is posted, once ready you will get notified`,
-          variant: "warning",
-        });
-        show();
+        if (reportType === "graphical") {
+          setShowPngGraphical(true);
+          setData(val);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+
+          enqueueSnackbar({
+            message: `Download request is posted, once ready you will get notified`,
+            variant: "warning",
+          });
+          show();
+        }
       })
       .catch((error) => {
+        setIsLoading(false);
+
         console.error(error);
         enqueueSnackbar({
           message: error.Message,
@@ -183,6 +211,32 @@ const DownloadPage = () => {
         });
       });
   };
+
+  const transformData = () => {
+    const jsonDate = data?.data.data.historicalData.map((item: any) => {
+      const parsedChildren = JSON.parse(item.children);
+      return {
+        name: item?.name,
+        children: [...parsedChildren],
+      };
+    });
+    const folder = {
+      name: "",
+      children: [...jsonDate],
+    };
+    return flattenTree(folder);
+  };
+  const FolderIcon = ({ isOpen }: any) =>
+    isOpen ? (
+      <FaRegFolderOpen color="e8a87c" className="icon" />
+    ) : (
+      <FaRegFolder color="e8a87c" className="icon" />
+    );
+  const handleOpenModal = (val: any) => {
+    setOpen(val.metadata);
+    // setJsonData(val.metadata);
+  };
+
   return (
     <Box>
       <Typography variant="h5">
@@ -389,12 +443,19 @@ const DownloadPage = () => {
                   <Button
                     size="small"
                     variant="contained"
-                    startIcon={<FileDownloadOutlinedIcon />}
+                    startIcon={
+                      reportType === "graphical" ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <FileDownloadOutlinedIcon />
+                      )
+                    }
                     sx={{ backgroundColor: "#1D4580", m: 1, my: 3 }}
                     type="submit"
                   >
-                    Download
+                    {reportType === "graphical" ? "View" : "Download"}
                   </Button>
+
                   <Button
                     size="small"
                     variant="contained"
@@ -416,90 +477,174 @@ const DownloadPage = () => {
         </Box>
       </form>
       <Box>
-        <Typography fontWeight={"500"}>Download History</Typography>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">Request ID</TableCell>
-                <TableCell align="center">Request Time</TableCell>
-                <TableCell align="center">Process Complete Time</TableCell>
-                <TableCell align="center"> Start Date</TableCell>
-                <TableCell align="center"> End Date</TableCell>
-                <TableCell align="center"> Report Type</TableCell>
-                <TableCell align="center"> Status</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {showData.map((row: any) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row" align="center">
-                    {row.id}
-                  </TableCell>
-                  <TableCell align="center">
-                    {row.request_time
-                      ? convertUTCDateToLocalTime(new Date(row.request_time))
-                      : ""}
-                  </TableCell>
-                  <TableCell align="center">
-                    {row.process_complete_time
-                      ? convertUTCDateToLocalTime(
-                          new Date(row.process_complete_time)
-                        )
-                      : ""}
-                  </TableCell>
-                  <TableCell align="center">
-                    {row.filter_data.startDate
-                      ? convertUTCDateToLocalTime(
-                          new Date(row.filter_data.startDate)
-                        )
-                      : ""}
-                  </TableCell>
-                  <TableCell align="center">
-                    {row.filter_data.endDate
-                      ? convertUTCDateToLocalTime(
-                          new Date(row.filter_data.endDate)
-                        )
-                      : ""}
-                  </TableCell>
-                  <TableCell align="center">
-                    {row.filter_data.type === "historicReports"
-                      ? "Health Report(Pdf)"
-                      : row.filter_data.report_type}
-                  </TableCell>
-                  <TableCell
-                    sx={{ bgcolor: status(row.status), color: "white" }}
-                    align="center"
-                  >
-                    {row.status === "Completed"
-                      ? "Ready to Download"
-                      : row.status}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-      <Box
-        sx={{
-          mt: "10px",
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-      >
-        <Tooltip title="Only Pending and Completed status will be affected">
-          <Button
-            sx={{ bgcolor: "warning.main" }}
-            onClick={deleteDownloadHistory}
-            variant="contained"
+        {isLoading && (
+          <Box
+            sx={{
+              // mx: "20px",
+              position: "absolute",
+
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
-            Clear Download Queue
-          </Button>
-        </Tooltip>
+            <CircularProgress />
+            Loading....
+          </Box>
+        )}
+        {showPngGraphical && (
+          <Box
+            sx={{ maxHeight: "450px", overflowY: "scroll", mb: "15px" }}
+            className="directory"
+          >
+            <Typography
+              my={"10px"}
+              pl={"10px"}
+              fontWeight={"500"}
+              fontSize={"16px"}
+            >
+              Graphical Report
+            </Typography>
+            <Box sx={{ bgcolor: "white" }}>
+              <TreeView
+                data={transformData()}
+                aria-label="directory tree"
+                nodeRenderer={({
+                  element,
+                  isBranch,
+                  isExpanded,
+                  getNodeProps,
+                  level,
+                }) => (
+                  <div
+                    {...getNodeProps()}
+                    style={{ paddingLeft: 20 * (level - 1) }}
+                  >
+                    {isBranch ? (
+                      <div>
+                        <FolderIcon isOpen={isExpanded} /> {element.name}
+                      </div>
+                    ) : (
+                      <div
+                        onClick={() => {
+                          handleOpenModal(element);
+                        }}
+                      >
+                        <AiFillFile
+                          color="green"
+                          size={"20px"}
+                          style={{
+                            marginRight: "10px",
+                          }}
+                        />
+                        {element.name}
+                      </div>
+                    )}
+                  </div>
+                )}
+              />
+            </Box>
+            <DownloadPngModal open={open} setOpen={setOpen} data={data} />
+          </Box>
+        )}
+        <Accordion sx={{ bgcolor: "#EAEAEA" }}>
+          <AccordionSummary
+            // expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography fontSize={"16px"} fontWeight={"500"}>
+              Download History
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">Request ID</TableCell>
+                    <TableCell align="center">Request Time</TableCell>
+                    <TableCell align="center">Process Complete Time</TableCell>
+                    <TableCell align="center"> Start Date</TableCell>
+                    <TableCell align="center"> End Date</TableCell>
+                    <TableCell align="center"> Report Type</TableCell>
+                    <TableCell align="center"> Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {showData.map((row: any) => (
+                    <TableRow
+                      key={row.id}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row" align="center">
+                        {row.id}
+                      </TableCell>
+                      <TableCell align="center">
+                        {row.request_time
+                          ? convertUTCDateToLocalTime(
+                              new Date(row.request_time)
+                            )
+                          : ""}
+                      </TableCell>
+                      <TableCell align="center">
+                        {row.process_complete_time
+                          ? convertUTCDateToLocalTime(
+                              new Date(row.process_complete_time)
+                            )
+                          : ""}
+                      </TableCell>
+                      <TableCell align="center">
+                        {row.filter_data.startDate
+                          ? convertUTCDateToLocalTime(
+                              new Date(row.filter_data.startDate)
+                            )
+                          : ""}
+                      </TableCell>
+                      <TableCell align="center">
+                        {row.filter_data.endDate
+                          ? convertUTCDateToLocalTime(
+                              new Date(row.filter_data.endDate)
+                            )
+                          : ""}
+                      </TableCell>
+                      <TableCell align="center">
+                        {row.filter_data.type === "historicReports"
+                          ? "Health Report(Pdf)"
+                          : row.filter_data.report_type}
+                      </TableCell>
+                      <TableCell
+                        sx={{ bgcolor: status(row.status), color: "white" }}
+                        align="center"
+                      >
+                        {row.status === "Completed"
+                          ? "Ready to Download"
+                          : row.status}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Box
+              sx={{
+                mt: "10px",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Tooltip title="Only Pending and Completed status will be affected">
+                <Button
+                  sx={{ bgcolor: "warning.main" }}
+                  onClick={deleteDownloadHistory}
+                  variant="contained"
+                >
+                  Clear Download Queue
+                </Button>
+              </Tooltip>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
       </Box>
     </Box>
   );
