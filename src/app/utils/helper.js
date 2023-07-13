@@ -64,15 +64,9 @@ export function buildSoketData(response, modelType, formData) {
     );
   } else if (modelType === "Torque") {
     isAlert = false;
-
     globalIndicator.push(
-      buildTorqueIndicatorData(
-        "Torsion(degree)",
-        data.StaticTorsion?.value || 0,
-        6
-      )
+      buildRpmData("RPM", data.ChannelSpeed || 0, maxRPMThrshhold)
     );
-
     globalIndicator.push(
       buildTorqueIndicatorData(
         "Torque(kNm)",
@@ -88,9 +82,12 @@ export function buildSoketData(response, modelType, formData) {
         maxPower * 1.0e-6
       )
     );
-
     globalIndicator.push(
-      buildRpmData("Speed", data.ChannelSpeed || 0, maxRPMThrshhold)
+      buildTorqueIndicatorData(
+        "Torsion(degree)",
+        data.StaticTorsion?.value || 0,
+        6
+      )
     );
   } else if (modelType === "Turbine") {
     globalIndicator.push(
@@ -1914,7 +1911,7 @@ function buildLineChart(
     for (let item of data) {
       const moduleData = JSON.parse(item["jsondata"]);
 
-      if (moduleData?.Status <= 0) {
+      if (moduleData?.Status <= 0 || !moduleData?.DateAndTime) {
         continue;
       }
       labels.push(getdate(moduleData?.DateAndTime));
@@ -1960,13 +1957,13 @@ function buildLineChart(
 
 function calculateTorqueValue(value, key) {
   if (key === "StaticTorque") {
-    return (value || 0) * 0.001;
+    return parseFloat((value || 0) * 0.001).toFixed(2);
   }
 
   if (key === "StaticPower") {
-    return (value || 0) * 1.0e-6;
+    return parseFloat((value || 0) * 1.0e-6).toFixed(2);
   }
-  return value;
+  return parseFloat(value).toFixed(2);
 }
 
 export function buildTrendData(historical_data, type, from_data) {
@@ -1981,7 +1978,7 @@ export function buildTrendData(historical_data, type, from_data) {
   for (const itemData of historical_data) {
     const item = JSON.parse(itemData["jsondata"]);
 
-    if (item.Status <= 0) {
+    if (item.Status <= 0 || !item?.DateAndTime) {
       continue;
     }
 
