@@ -171,7 +171,7 @@ export default function LineGradient({
           maxTicksLimit: 7,
         },
         title: {
-          text: "Time",
+          text: "Time(UTC)",
           display: true,
           font: {
             size: 14,
