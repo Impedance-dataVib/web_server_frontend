@@ -139,6 +139,8 @@ const DownloadPage = () => {
     })
       .then((val) => {
         if (reportType === "graphical") {
+          console.log(val);
+
           setShowPngGraphical(true);
           setData(val);
           setIsLoading(false);
@@ -236,7 +238,6 @@ const DownloadPage = () => {
     setOpen(val.metadata);
     // setJsonData(val.metadata);
   };
-
   return (
     <Box>
       <Typography variant="h5">
@@ -482,10 +483,16 @@ const DownloadPage = () => {
             sx={{
               // mx: "20px",
               position: "absolute",
-
+              top: 0,
+              right: 0,
+              left: 0,
+              bottom: 0,
+              bgcolor: "#D3D3D3",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              zIndex: 2,
+              opacity: 0.4,
             }}
           >
             <CircularProgress />

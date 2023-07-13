@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import {
   Container,
+  Divider,
   Table,
   TableBody,
   TableCell,
@@ -17,7 +18,7 @@ import Torque from "src/features/downloads/torque";
 import Bearing from "src/features/downloads/bearing";
 import Motor from "src/features/downloads/motor";
 import Turbine from "src/features/downloads/turbine";
-// import { buildPngReportData } from "src/app/utils/helper";
+import { buildPngReportData } from "src/app/utils/helper";
 
 const style = {
   position: "absolute" as "absolute",
@@ -33,6 +34,10 @@ const style = {
   p: 4,
   overflow: "scroll",
 };
+const fontStyle = {
+  fontSize: "20px",
+  fontWeight: 500,
+};
 
 export default function DownloadPngModal({ open, setOpen, data }: any) {
   const [isActive, setIsActive] = React.useState<boolean>(false);
@@ -43,30 +48,31 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
   const footerData = data?.data.data.otherData;
   const formData = data?.data.data.formData;
   const jsondata = open;
-  const modletype = data?.data.data.formData.module_type;
+  const modletype = data?.data.data.formData.module_type || "Torque";
+  console.log(modletype);
   React.useEffect(() => {
     if (jsondata) {
-      // const indicatorData = buildPngReportData(jsondata, modletype, formData);
-      // setRenderData(indicatorData);
+      const indicatorData = buildPngReportData(jsondata, modletype, formData);
+      setRenderData(indicatorData);
 
       if (modletype === "Engine") {
         setComponent(<Engine renderData={renderData} />);
         setActiveClass("Engine");
       } else if (modletype === "Torque") {
-        setComponent(<Torque socketData={renderData} />);
+        setComponent(<Torque renderData={renderData} />);
         setActiveClass("Torque");
       } else if (modletype === "Bearing") {
-        setComponent(<Bearing socketData={renderData} />);
+        setComponent(<Bearing renderData={renderData} />);
         setActiveClass("Bearing");
       } else if (modletype === "Motor") {
-        setComponent(<Motor socketData={renderData} />);
+        setComponent(<Motor renderData={renderData} />);
         setActiveClass("Motor");
       } else if (modletype === "Turbine") {
-        setComponent(<Turbine socketData={renderData} />);
+        setComponent(<Turbine renderData={renderData} />);
         setActiveClass("Turbine");
       }
     }
-  }, []);
+  }, [jsondata]);
   return (
     <Container>
       <Modal
@@ -77,8 +83,9 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
       >
         <Box sx={style}>
           <Box>
+            <Divider sx={{ marginLeft: "84%", width: "160px", pb: 1 }} />
             <img
-              style={{ marginLeft: "90%", width: "90px", height: "45px" }}
+              style={{ marginLeft: "85%", width: "140px", height: "75px" }}
               src="logo_vib_360.png"
               alt="logo"
             />
@@ -88,29 +95,37 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              width: "90%",
+              ml: 8,
             }}
           >
-            <Button disabled={activeClass !== "Engine"} sx={{ color: "black" }}>
+            <Button
+              disabled={activeClass === "Engine" ? false : true}
+              sx={{ color: "black", fontSize: "22px", fontWeight: 500 }}
+            >
               ENGINE
             </Button>
             <Button
-              disabled={activeClass !== " TORQUE"}
-              sx={{ color: "black" }}
+              disabled={activeClass === "Torque" ? false : true}
+              sx={{ color: "black", fontSize: "22px", fontWeight: 500 }}
             >
               TORQUE
             </Button>
             <Button
-              disabled={activeClass !== "BEARING"}
-              sx={{ color: "black" }}
+              disabled={activeClass === "Bearing" ? false : true}
+              sx={{ color: "black", fontSize: "22px", fontWeight: 500 }}
             >
               BEARING
             </Button>
-            <Button disabled={activeClass !== "MOTOR"} sx={{ color: "black" }}>
+            <Button
+              disabled={activeClass === "Motor" ? false : true}
+              sx={{ color: "black", fontSize: "22px", fontWeight: 500 }}
+            >
               MOTOR
             </Button>
             <Button
-              disabled={activeClass !== "TURBINE"}
-              sx={{ color: "black" }}
+              disabled={activeClass === "Turbine" ? false : true}
+              sx={{ color: "black", fontSize: "22px", fontWeight: 500 }}
             >
               TURBINE
             </Button>
@@ -121,28 +136,36 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
               alignItems: "center",
               justifyContent: "space-between",
               bgcolor: "lightgrey",
-              p: "5px 10px",
+              p: "10px 10px",
+              width: "95%",
+              ml: 5,
             }}
           >
             <Box component={"span"}>
-              <Typography>Timestamp (UTC)</Typography>
-              <Typography>{open?.DateAndTime}</Typography>
+              <Typography sx={{ fontStyle }}>Timestamp (UTC)</Typography>
+              <Typography sx={{ fontStyle }}>{open?.DateAndTime}</Typography>
             </Box>
             <Box component={"span"}>
-              <Typography>Asset- Equipment</Typography>
-              <Typography>{formData?.asset_name}</Typography>
+              <Typography sx={{ fontStyle }}>Asset- Equipment</Typography>
+              <Typography sx={{ fontStyle, ml: 4 }}>
+                {formData?.asset_name}
+              </Typography>
             </Box>
             <Box component={"span"}>
-              <Typography>Speed (RPM)</Typography>
-              <Typography>{formData?.rated_rpm}</Typography>
+              <Typography sx={{ fontStyle }}>Speed (RPM)</Typography>
+              <Typography sx={{ fontStyle, ml: 4 }}>
+                {formData?.rated_rpm}
+              </Typography>
             </Box>
             <Box component={"span"}>
-              <Typography>SW Version</Typography>
-              <Typography>{footerData.sw_version}</Typography>
+              <Typography sx={{ fontStyle }}>SW Version</Typography>
+              <Typography sx={{ fontStyle, ml: 4 }}>
+                {footerData.sw_version}
+              </Typography>
             </Box>
             <Box component={"span"}>
-              <Typography>Synchronisation</Typography>
-              <Typography>TDC</Typography>
+              <Typography sx={{ fontStyle }}>Synchronisation</Typography>
+              <Typography sx={{ fontStyle, ml: 5 }}>TDC</Typography>
             </Box>
           </Box>
           {/* specific components */}
@@ -170,28 +193,16 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
                       },
                     }}
                   >
-                    <TableCell
-                      sx={{ fontWeight: 500, fontSize: "16px" }}
-                      align="center"
-                    >
+                    <TableCell sx={{ fontStyle }} align="center">
                       Customer Name
                     </TableCell>
-                    <TableCell
-                      sx={{ fontWeight: 500, fontSize: "16px" }}
-                      align="center"
-                    >
+                    <TableCell sx={{ fontStyle }} align="center">
                       Model & Make
                     </TableCell>
-                    <TableCell
-                      sx={{ fontWeight: 500, fontSize: "16px" }}
-                      align="center"
-                    >
+                    <TableCell sx={{ fontStyle }} align="center">
                       Equipment Type
                     </TableCell>
-                    <TableCell
-                      sx={{ fontWeight: 500, fontSize: "16px" }}
-                      align="center"
-                    >
+                    <TableCell sx={{ fontStyle }} align="center">
                       Application
                     </TableCell>
                   </TableRow>
@@ -205,29 +216,20 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
                     }}
                   >
                     <TableCell
-                      sx={{ fontWeight: 500, fontSize: "16px" }}
+                      sx={{ fontStyle }}
                       align="center"
                       component="th"
                       scope="row"
                     >
                       {footerData?.client_name}
                     </TableCell>
-                    <TableCell
-                      sx={{ fontWeight: 500, fontSize: "16px" }}
-                      align="center"
-                    >
+                    <TableCell sx={{ fontStyle }} align="center">
                       {formData?.make_model}
                     </TableCell>
-                    <TableCell
-                      sx={{ fontWeight: 500, fontSize: "16px" }}
-                      align="center"
-                    >
+                    <TableCell sx={{ fontStyle, color: "blue" }} align="center">
                       {formData?.equipment_name}
                     </TableCell>
-                    <TableCell
-                      sx={{ fontWeight: 500, fontSize: "16px" }}
-                      align="center"
-                    >
+                    <TableCell sx={{ fontStyle }} align="center">
                       {formData?.application}
                     </TableCell>
                   </TableRow>
@@ -236,18 +238,19 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
             </TableContainer>
           </Box>
           <Box sx={{ my: "10px" }}>
-            <Typography textAlign={"center"} fontWeight={"500"}>
+            <Typography
+              sx={{ color: "darkblue" }}
+              textAlign={"center"}
+              fontWeight={500}
+            >
               Impedance DataVib
             </Typography>
-            <Typography textAlign={"center"}>
+            <Typography textAlign={"center"} fontWeight={500}>
               80 Dom. de Montvoisin, 91400 Gometz-la-Ville, France
             </Typography>
-            <Typography textAlign={"center"}>
-              Tel : +33 169351525 | Email:{" "}
-              <a href="support-vib360@impedance.fr">
-                support-vib360@impedance.fr
-              </a>{" "}
-              I Website: <a href="www.vib360world.com">www.vib360world.com</a>
+            <Typography textAlign={"center"} fontWeight={500}>
+              Tel : +33 169351525 | Email: support-vib360@impedance.fr I
+              Website: www.vib360world.com
             </Typography>
           </Box>
         </Box>

@@ -12,7 +12,7 @@ export default function SpeedoMeter({
   indicatorUnit,
   isTorqueModule,
   indicatorName,
-  height
+  height,
 }: any) {
   const getMeterColor = () => {
     const indicator = indicatorName?.split(" ");
@@ -38,7 +38,7 @@ export default function SpeedoMeter({
       default:
         return "#02B271";
     }
-  }
+  };
 
   return (
     <div>
@@ -46,7 +46,7 @@ export default function SpeedoMeter({
         forceRender={true}
         maxValue={maxValue}
         minValue={minValue}
-        height={height||200}
+        height={height || 200}
         width={250}
         ringWidth={20}
         value={parseInt(value)}

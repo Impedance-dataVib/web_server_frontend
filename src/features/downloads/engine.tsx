@@ -25,7 +25,13 @@ const Engine = ({ renderData }: any) => {
 
   return (
     <Box>
-      <Typography sx={{ textAlign: "center" }}>Global Indicators</Typography>
+      <Typography
+        fontWeight={500}
+        fontSize={"24px"}
+        sx={{ textAlign: "center" }}
+      >
+        Global Indicators
+      </Typography>
       <Grid item xs={12} my={"20px"}>
         <Grid
           container
@@ -34,7 +40,11 @@ const Engine = ({ renderData }: any) => {
           spacing={8}
         >
           {globalIndicator
-            ?.filter((item: any) => item.indicatorName !== "RPM")
+            ?.filter(
+              (item: any) =>
+                item.indicatorName !== "RPM" &&
+                item.indicatorName !== "Bearings"
+            )
             .map((val: any) => (
               <Grid
                 key={`globalIndicator-${val.indicatorName}`}
@@ -81,12 +91,16 @@ const Engine = ({ renderData }: any) => {
             ))}
         </Grid>
       </Grid>
-      <Typography sx={{ textAlign: "center" }}>
+      <Typography
+        fontWeight={500}
+        fontSize={"24px"}
+        sx={{ textAlign: "center" }}
+      >
         CYLINDER SPECIFIC INDICATORS
       </Typography>
       <Box
         sx={{
-          my: "20px",
+          my: "10px",
           width: "100%",
           display: "flex",
           justifyContent: "center",

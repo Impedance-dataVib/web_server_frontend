@@ -1,7 +1,170 @@
-import React from "react";
+import {
+  Box,
+  Divider,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 
-const Bearing = ({ socketData }: any) => {
-  return <div>Bearing</div>;
+import React from "react";
+import SpeedoMeter from "../common/graph/speedo-meter";
+import CylinderIndicator from "../dashboard/pages/module/cylinder-indicator";
+import SunburstChart from "../common/graph/sunbrustChart";
+
+const Bearing = ({ renderData }: any) => {
+  console.log("renderData", renderData);
+
+  const globalIndicator = renderData?.globalIndicator || [];
+  const cylinder_specific_indicators =
+    renderData?.cylinder_specific_indicators || [];
+
+  return (
+    <Box>
+      <Grid item xs={12} my={"20px"}>
+        <Grid
+          container
+          alignItems={"center"}
+          justifyContent="center"
+          spacing={8}
+        >
+          {globalIndicator
+            ?.filter(
+              (item: any) =>
+                item.indicatorName !== "Bearings" &&
+                item.indicatorName !== "Shaft/Clearance" &&
+                item.indicatorName !== "Friction" &&
+                item.indicatorName !== "RPM"
+            )
+            .map((val: any) => (
+              <Grid
+                key={`globalIndicator-${val.indicatorName}`}
+                item
+                sx={{ display: "flex", flexDirection: "column" }}
+                lg={6}
+                md={12}
+                sm={12}
+              >
+                <Typography
+                  variant="body1"
+                  component={"span"}
+                  textAlign={"center"}
+                  sx={{
+                    mb: 1,
+                    fontWeight: "500",
+                    cursor: "pointer",
+                    fontSize: "20px",
+                  }}
+                  title={val?.tooltip}
+                >
+                  {val?.indicatorName}
+                </Typography>
+                <Box
+                  sx={{
+                    height: "65%",
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  <SpeedoMeter
+                    maxValue={val.indicatorMax}
+                    isGradientOpposite={val?.isGradientOpposite}
+                    minValue={val?.indicatorMin}
+                    value={val?.indicatorValue}
+                    isPercent={val?.isPercentage}
+                    isGradientColor={val?.isGradientColor}
+                    indicatorType={val?.indicatorType}
+                    indicatorUnit={val?.indicatorUnit}
+                    isTorqueModule={val?.isTorqueModule}
+                    indicatorName={val?.indicatorName}
+                    height={150}
+                  />
+                </Box>
+              </Grid>
+            ))}
+        </Grid>
+        <Grid
+          container
+          alignItems={"center"}
+          justifyContent="center"
+          spacing={4}
+          my={3}
+        >
+          {globalIndicator
+            ?.filter(
+              (item: any) =>
+                item.indicatorName !== "Shock Index" &&
+                item.indicatorName !== "Level(RMS)" &&
+                item.indicatorName !== "Global(Umbalance/Alignment/Loosness)" &&
+                item.indicatorName !== "RPM" &&
+                item.indicatorName !== "Mechanical Health"
+            )
+            .map((val: any) => (
+              <Grid
+                key={`globalIndicator-${val.indicatorName}`}
+                item
+                sx={{ display: "flex", flexDirection: "column" }}
+                lg={4}
+                md={12}
+                sm={12}
+              >
+                <Typography
+                  variant="body1"
+                  component={"span"}
+                  textAlign={"center"}
+                  sx={{
+                    mb: 1,
+                    fontWeight: "500",
+                    cursor: "pointer",
+                    fontSize: "16px",
+                  }}
+                  title={val?.tooltip}
+                >
+                  {val?.indicatorName}
+                </Typography>
+                <Box
+                  sx={{
+                    height: "65%",
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  <SpeedoMeter
+                    maxValue={val.indicatorMax}
+                    isGradientOpposite={val?.isGradientOpposite}
+                    minValue={val?.indicatorMin}
+                    value={val?.indicatorValue}
+                    isPercent={val?.isPercentage}
+                    isGradientColor={val?.isGradientColor}
+                    indicatorType={val?.indicatorType}
+                    indicatorUnit={val?.indicatorUnit}
+                    isTorqueModule={val?.isTorqueModule}
+                    indicatorName={val?.indicatorName}
+                    height={150}
+                  />
+                </Box>
+              </Grid>
+            ))}
+        </Grid>
+      </Grid>
+
+      <Divider
+        flexItem
+        sx={{ width: "85%", my: 2, ml: 10, borderBottomWidth: 5 }}
+      />
+    </Box>
+  );
 };
 
 export default Bearing;

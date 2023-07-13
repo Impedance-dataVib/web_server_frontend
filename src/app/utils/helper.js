@@ -2685,7 +2685,7 @@ export function buildPngReportData(data, modelType, formData) {
     globalIndicator.push(
       buildIndicatorData("Shaft Health", data?.BladeStatus, "valueInPercent")
     );
-    if (JSON.parse(formData).type === "Steam") {
+    if (formData.type === "Steam") {
       globalIndicator.push(
         buildIndicatorData("Coupling", data?.TurbineCoupling, "valueInPercent")
       );
