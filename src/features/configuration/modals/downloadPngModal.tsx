@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import {
+  CircularProgress,
   Container,
   Divider,
   Table,
@@ -21,8 +22,8 @@ import Turbine from "src/features/downloads/turbine";
 import { buildPngReportData } from "src/app/utils/helper";
 import CancelIcon from "@mui/icons-material/Cancel";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import { useRef } from "react";
-import { toPng } from "html-to-image";
+import { useCallback, useRef } from "react";
+import { toJpeg, toPng } from "html-to-image";
 // import JSZip from "jszip";
 
 const style = {
@@ -46,7 +47,7 @@ const fontStyle = {
 
 export default function DownloadPngModal({ open, setOpen, data }: any) {
   const ref = useRef<HTMLDivElement>(null);
-  const [isActive, setIsActive] = React.useState<boolean>(false);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [renderData, setRenderData] = React.useState<any>(false);
   const [activeClass, setActiveClass] = React.useState<any>("Engine");
   const [component, setComponent] = React.useState<any>(null);
@@ -79,25 +80,25 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
       }
     }
   }, [jsondata, modletype, open]);
-  const downloadPngReport = () => {
-    console.log("clicked");
-    React.useCallback(() => {
-      if (ref.current === null) {
-        return;
-      }
 
-      toPng(ref.current, { cacheBust: true })
-        .then((dataUrl: any) => {
-          const link = document.createElement("a");
-          link.download = "my-image-name.png";
-          link.href = dataUrl;
-          link.click();
-        })
-        .catch((err: any) => {
-          console.log(err);
-        });
-    }, [ref]);
-  };
+  const downloadPngReport = useCallback(() => {
+    if (ref.current === null) {
+      return;
+    }
+    setIsLoading(true);
+    toJpeg(ref.current, { quality: 0.5 })
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = "my-image-name.png";
+        link.href = dataUrl;
+        setIsLoading(false);
+        link.click();
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err);
+      });
+  }, [ref]);
   return (
     <Container>
       <Modal
@@ -125,10 +126,14 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
               size="small"
             >
               To PNG
-              <FileDownloadIcon sx={{ mx: 1 }} />
+              {isLoading ? (
+                <CircularProgress sx={{ mx: 1 }} />
+              ) : (
+                <FileDownloadIcon sx={{ mx: 1 }} />
+              )}
             </Button>
           </Box>
-          <Box sx={{ mt: 3 }} ref={ref}>
+          <Box sx={{ mt: 3, mb: 5, bgcolor: "white" }} ref={ref}>
             <Box>
               <Divider sx={{ marginLeft: "84%", width: "160px", pb: 1 }} />
               <img
@@ -287,7 +292,7 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
                 </Table>
               </TableContainer>
             </Box>
-            <Box sx={{ my: "10px" }}>
+            <Box sx={{ my: "10px", mb: 15 }}>
               <Typography
                 sx={{ color: "darkblue" }}
                 textAlign={"center"}
