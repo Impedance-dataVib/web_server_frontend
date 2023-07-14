@@ -139,7 +139,7 @@ const DownloadPage = () => {
     })
       .then((val) => {
         if (reportType === "graphical") {
-          console.log(val);
+          console.log("val", val);
 
           setShowPngGraphical(true);
           setData(val);

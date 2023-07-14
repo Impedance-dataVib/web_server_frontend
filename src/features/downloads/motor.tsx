@@ -46,7 +46,6 @@ const Motor = ({ renderData }: any) => {
                 lg={6}
                 md={12}
                 sm={12}
-                border="1px solid black"
               >
                 <Typography
                   variant="body1"

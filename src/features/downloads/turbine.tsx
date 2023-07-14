@@ -31,10 +31,10 @@ const Turbine = ({ renderData }: any) => {
           container
           alignItems={"center"}
           justifyContent="center"
-          spacing={8}
+          spacing={4}
         >
           {globalIndicator
-            ?.filter((item: any) => item.indicatorName !== "RPM")
+            ?.filter((item: any) => item.indicatorName !== "Speed")
             .map((val: any) => (
               <Grid
                 key={`globalIndicator-${val.indicatorName}`}
