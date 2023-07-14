@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Typography,
   Box,
@@ -23,6 +23,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   CircularProgress,
+  Modal,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FolderIcon from "@mui/icons-material/Folder";
@@ -39,9 +40,12 @@ import TreeView, { flattenTree } from "react-accessible-treeview";
 import { FaList, FaRegFolder, FaRegFolderOpen } from "react-icons/fa";
 import { AiFillFile } from "react-icons/ai";
 import DownloadPngModal from "../configuration/modals/downloadPngModal";
+import { toBlob, toPng } from "html-to-image";
 
 const DownloadPage = () => {
   const initial = "";
+  const elementRef= useRef<(HTMLDivElement | null)[]>([])
+  const [documents, setDocuments] = useState<any>([])
   const [dataSelection, setDataSelection] = useState(initial);
   const [asset, setAsset] = useState(initial);
   const [reportType, setReportType] = useState(initial);
@@ -103,13 +107,46 @@ const DownloadPage = () => {
   };
 
   const cancelHandler = () => {
-    setDataSelection(initial);
-    setAsset(initial);
-    setDateRangeValues({ startDate: "", endDate: "", key: "selection" });
+    downloadPngReport()
+    // setDataSelection(initial);
+    // setAsset(initial);
+    // setDateRangeValues({ startDate: "", endDate: "", key: "selection" });
 
-    setReportType(initial);
+    // setReportType(initial);
   };
 
+  const downloadPngReport = useCallback(() => {
+    if (elementRef.current === null) {
+      return;
+    }
+    console.log(elementRef.current);
+    (elementRef.current).map((val: any) => {
+      toPng(val)
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = "my-image-name.png";
+        link.href = dataUrl;
+        setIsLoading(false);
+        link.click();
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err);
+      });
+    })
+    // setIsLoading(true);
+    // toBlob()
+    //   .then((dataUrl) => {
+    //     setIsLoading(false);
+    //     console.log(dataUrl);
+    //   })
+    //   .catch((err) => {
+    //     setIsLoading(false);
+    //     console.log(err);
+    //   });
+  }, [elementRef]);
+
+  
   const postDownloadHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (asset == "") {
@@ -235,9 +272,16 @@ const DownloadPage = () => {
       <FaRegFolder color="e8a87c" className="icon" />
     );
   const handleOpenModal = (val: any) => {
-    setOpen(val.metadata);
+    console.log(val.metadata)
+    // setOpen(val.metadata);
+    setDocuments([val.metadata]);
+    downloadPngReport();
+    // ["sss", "dddd"].map((val:any) => {
+    //   setDummy(val);
+    // })
     // setJsonData(val.metadata);
   };
+
   return (
     <Box>
       <Typography variant="h5">
@@ -653,6 +697,22 @@ const DownloadPage = () => {
           </AccordionDetails>
         </Accordion>
       </Box>
+      <div 
+        // style={{visibility: 'hidden'}}
+      >
+      {documents.map((offer: any,i: number)=>(
+        <div ref={ref => {
+          elementRef.current[i] = ref;
+        }}>
+          {offer.Status || "ssss"}
+        </div>
+   )
+)
+
+}
+
+     </div>
+
     </Box>
   );
 };
