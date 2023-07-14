@@ -48,38 +48,35 @@ const fontStyle = {
 export default function DownloadPngModal({ open, setOpen, data }: any) {
   const ref = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [renderData, setRenderData] = React.useState<any>(false);
   const [activeClass, setActiveClass] = React.useState<any>("Engine");
   const [component, setComponent] = React.useState<any>(null);
-  console.log("transfered data to modal page", data);
-  const footerData = data?.data.data.otherData;
-  const formData = data?.data.data.formData;
-  const jsondata = open;
-  const modletype = data?.data.data.otherData.module_type;
-  console.log("modletype =>", modletype);
+  const [footerData] = React.useState(data?.data.data.otherData);
+  const [formData] = React.useState(data?.data.data.formData);
+  const [modletype] = React.useState(data?.data.data.otherData.module_type);
+
   React.useEffect(() => {
+    const jsondata = open;
     if (jsondata) {
       const indicatorData = buildPngReportData(jsondata, modletype, formData);
-      setRenderData(indicatorData);
 
       if (modletype === "Engine") {
-        setComponent(<Engine renderData={renderData} />);
+        setComponent(<Engine renderData={indicatorData} />);
         setActiveClass("Engine");
       } else if (modletype === "Torque") {
-        setComponent(<Torque renderData={renderData} />);
+        setComponent(<Torque renderData={indicatorData} />);
         setActiveClass("Torque");
       } else if (modletype === "Bearing") {
-        setComponent(<Bearing renderData={renderData} />);
+        setComponent(<Bearing renderData={indicatorData} />);
         setActiveClass("Bearing");
       } else if (modletype === "Motor") {
-        setComponent(<Motor renderData={renderData} />);
+        setComponent(<Motor renderData={indicatorData} />);
         setActiveClass("Motor");
       } else if (modletype === "Turbine") {
-        setComponent(<Turbine renderData={renderData} />);
+        setComponent(<Turbine renderData={indicatorData} />);
         setActiveClass("Turbine");
       }
     }
-  }, [jsondata, modletype, open]);
+  }, [modletype, open, formData]);
 
   const downloadPngReport = useCallback(() => {
     if (ref.current === null) {
