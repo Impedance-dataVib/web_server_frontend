@@ -21,6 +21,9 @@ import Turbine from "src/features/downloads/turbine";
 import { buildPngReportData } from "src/app/utils/helper";
 import CancelIcon from "@mui/icons-material/Cancel";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import { useRef } from "react";
+import { toPng } from "html-to-image";
+// import JSZip from "jszip";
 
 const style = {
   position: "absolute" as "absolute",
@@ -42,6 +45,7 @@ const fontStyle = {
 };
 
 export default function DownloadPngModal({ open, setOpen, data }: any) {
+  const ref = useRef<HTMLDivElement>(null);
   const [isActive, setIsActive] = React.useState<boolean>(false);
   const [renderData, setRenderData] = React.useState<any>(false);
   const [activeClass, setActiveClass] = React.useState<any>("Engine");
@@ -77,6 +81,22 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
   }, [jsondata, modletype, open]);
   const downloadPngReport = () => {
     console.log("clicked");
+    React.useCallback(() => {
+      if (ref.current === null) {
+        return;
+      }
+
+      toPng(ref.current, { cacheBust: true })
+        .then((dataUrl: any) => {
+          const link = document.createElement("a");
+          link.download = "my-image-name.png";
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    }, [ref]);
   };
   return (
     <Container>
@@ -108,7 +128,7 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
               <FileDownloadIcon sx={{ mx: 1 }} />
             </Button>
           </Box>
-          <Box sx={{ mt: 3 }}>
+          <Box sx={{ mt: 3 }} ref={ref}>
             <Box>
               <Divider sx={{ marginLeft: "84%", width: "160px", pb: 1 }} />
               <img
