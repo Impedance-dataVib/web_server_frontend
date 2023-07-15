@@ -154,7 +154,6 @@ const DownloadPage = () => {
             time = time.replaceAll(" ", "_");
             time = time.replaceAll(":", "_");
             time = time.replace("/", "_");
-            console.log('fileName', time);
             zip.file(time + ".png", data);
 
             i++;
@@ -173,7 +172,6 @@ const DownloadPage = () => {
         .then((zipData: any) => {
           const link = document.createElement("a");
           link.href = window.URL.createObjectURL(zipData);
-          console.log(dataVal);
 
           const moduleData = dataVal?.data.data.formData;
           const fileName =
