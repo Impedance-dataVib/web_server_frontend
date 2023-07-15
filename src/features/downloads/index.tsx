@@ -58,6 +58,7 @@ import { toBlob, toPng } from "html-to-image";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import JSZip from "jszip";
 import cx from "classnames";
+import { Folder, FolderOpen } from "@mui/icons-material";
 
 const DownloadPage = () => {
   const initial = "";
@@ -134,7 +135,7 @@ const DownloadPage = () => {
   };
 
   const downloadPngReport = useCallback(
-    async (array: any) => {
+    async (array: any, dataVal: any) => {
       if (elementRef.current === null) {
         setIsLoading(false);
         return;
@@ -150,8 +151,10 @@ const DownloadPage = () => {
 
             const fileData = array[i];
             let time = fileData.DateAndTime;
-            time = time.replace(" ", "_");
-            time = time.replace(":", "_");
+            time = time.replaceAll(" ", "_");
+            time = time.replaceAll(":", "_");
+            time = time.replace("/", "_");
+            console.log('fileName', time);
             zip.file(time + ".png", data);
 
             i++;
@@ -170,7 +173,9 @@ const DownloadPage = () => {
         .then((zipData: any) => {
           const link = document.createElement("a");
           link.href = window.URL.createObjectURL(zipData);
-          const moduleData = data?.data.data.formData;
+          console.log(dataVal);
+
+          const moduleData = dataVal?.data.data.formData;
           const fileName =
             moduleData?.asset_name +
             " - " +
@@ -342,7 +347,7 @@ const DownloadPage = () => {
     }, 1000);
   };
 
-  const exportToZip = () => {
+  const exportToZip = (dataVal: any) => {
     setIsLoading(true);
     if (selectedItem.length > 10) {
       enqueueSnackbar({
@@ -363,9 +368,9 @@ const DownloadPage = () => {
 
     if (array.length > 0) {
       setDocuments(array);
-      setIsLoading(false);
+      setIsLoading(true);
       setTimeout(function () {
-        downloadPngReport(array);
+        downloadPngReport(array, dataVal);
       }, 4000);
     } else {
       setIsLoading(false);
@@ -673,7 +678,7 @@ const DownloadPage = () => {
                 </Typography>
                 <Button
                   sx={{ my: "10px" }}
-                  onClick={exportToZip}
+                  onClick={()=> exportToZip(data)}
                   variant="contained"
                 >
                   Export zip
@@ -694,7 +699,6 @@ const DownloadPage = () => {
                 data={transformData()}
                 multiSelect
                 selectedIds={selectedIds}
-                defaultExpandedIds={[1]}
                 propagateSelect
                 propagateSelectUpwards
                 togglableSelect
@@ -718,9 +722,12 @@ const DownloadPage = () => {
                     style={{
                       marginLeft: 40 * (level - 1),
                       opacity: isDisabled ? 0.5 : 1,
+                      display: 'flex',
+                      alignItems: 'center',
                     }}
                   >
-                    {isBranch && <ArrowIcon isOpen={isExpanded} />}
+                    {isBranch && isExpanded && <FolderOpen />}
+                    {isBranch && !isExpanded && <Folder />}
                     {!isBranch && (
                       <CheckBoxIcon
                         className="checkbox-icon"
@@ -733,7 +740,7 @@ const DownloadPage = () => {
                         }
                       />
                     )}
-                    <span className="name">{element.name}</span>
+                    <span style={{marginLeft: '5px'}} className="name">{element.name}</span>
                   </div>
                 )}
               />
@@ -840,7 +847,7 @@ const DownloadPage = () => {
           </AccordionDetails>
         </Accordion>
       </Box>
-      <div style={{ opacity: 0, height: 0 }}>
+      <div style={{ opacity: 0, height: 0, overflow: "hidden" }}>
         {documents.map((offer: any, i: number) => (
           <div
             key={`div${i}`}

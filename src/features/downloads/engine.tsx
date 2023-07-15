@@ -61,7 +61,7 @@ const Engine = ({ indicatorData }: any) => {
                   variant="body1"
                   component={"span"}
                   textAlign={"center"}
-                  sx={{ mb: 1, fontWeight: "500", cursor: "pointer" }}
+                  sx={{ mb: 1, fontWeight: "400", cursor: "pointer", fontSize: "20px" }}
                   title={val?.tooltip}
                 >
                   {val?.indicatorName}
@@ -127,6 +127,7 @@ const Engine = ({ indicatorData }: any) => {
                   data={val}
                   elementId={`sunbrust${index}${+new Date()}`}
                   fullScreen={false}
+                  borderFlag={true}
                 />
               </Grid>
             ))}

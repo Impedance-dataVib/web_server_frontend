@@ -36,6 +36,7 @@ const style = {
 const fontStyle = {
   fontSize: "20px",
   fontWeight: 500,
+  textAlign: 'center',
 };
 
 export default function DownloadPngModal({ open, setOpen, data }: any) {
@@ -84,12 +85,16 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
   }
   return (
     <Container>
-      <Box sx={style}>
-        <Box sx={{ mt: 3, mb: 5, bgcolor: "white" }} ref={ref}>
-          <Box>
-            <Divider sx={{ marginLeft: "84%", width: "160px", pb: 1 }} />
+      <Box>
+        <Box sx={{ mt: 3, mb: 5, padding: "5px 40px", bgcolor: "white" }} ref={ref}>
+          <Box 
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                marginTop: '5px'
+          }}>
             <img
-              style={{ marginLeft: "85%", width: "140px", height: "75px" }}
+              style={{ width: "140px", height: "75px" }}
               src="logo_vib_360.png"
               alt="logo"
             />
@@ -99,8 +104,6 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              width: "90%",
-              ml: 8,
             }}
           >
             <Button
@@ -141,8 +144,8 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
               justifyContent: "space-between",
               bgcolor: "lightgrey",
               p: "10px 10px",
-              width: "95%",
-              ml: 5,
+              width: "100%",
+              // ml: 5,
             }}
           >
             <Box component={"span"}>
@@ -151,42 +154,46 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
             </Box>
             <Box component={"span"}>
               <Typography sx={{ fontStyle }}>Asset- Equipment</Typography>
-              <Typography sx={{ fontStyle, ml: 2 }}>
+              <Typography sx={{ fontStyle}}>
                 {data?.data.data.formData.asset_name}
               </Typography>
             </Box>
             <Box component={"span"}>
               <Typography sx={{ fontStyle }}>Speed (RPM)</Typography>
-              <Typography sx={{ fontStyle, ml: 4 }}>
+              <Typography sx={{ fontStyle }}>
                 {data?.data.data.formData.rated_rpm}
               </Typography>
             </Box>
             <Box component={"span"}>
               <Typography sx={{ fontStyle }}>SW Version</Typography>
-              <Typography sx={{ fontStyle, ml: 4 }}>
+              <Typography sx={{ fontStyle }}>
                 {data?.data.data.otherData.sw_version}
               </Typography>
             </Box>
             {data?.data.data.otherData.module_type === "Engine" && (
               <Box component={"span"}>
-                <Typography sx={{ fontStyle }}>Synchronisation</Typography>
-                <Typography sx={{ fontWeight: 500 }}>{status}</Typography>
+                <Typography sx={{ fontStyle }}>Status</Typography>
+                <Typography sx={{ ...fontStyle, fontSize: '16px' }}>{status}</Typography>
               </Box>
             )}
           </Box>
           {/* specific components */}
           <Box sx={{ mt: 2 }}>{component}</Box>
           {/* Footer starts */}
+          <Divider
+            flexItem
+            sx={{ width: "100%", mt: 8, mb: 4, borderBottomWidth: 5 }}
+          />
           <Box
             sx={{
-              ml: "10%",
+              width: "100%", 
+              marginBottom: "30px"
             }}
           >
-            <TableContainer>
+            <TableContainer sx={{padding: '0 5%'}}>
               <Table
                 sx={{
-                  maxWidth: 900,
-                  border: "3px solid black",
+                  border: "1px solid black",
                   borderCollapse: "collapse",
                 }}
                 aria-label="a dense table"

@@ -28,6 +28,7 @@ const Torque = ({ indicatorData }: any) => {
     <Box>
       <Grid item xs={12} my={"20px"}>
         <Grid
+          sx={{padding: "0 100px"}}
           container
           alignItems={"center"}
           justifyContent="center"
@@ -48,7 +49,7 @@ const Torque = ({ indicatorData }: any) => {
                   variant="body1"
                   component={"span"}
                   textAlign={"center"}
-                  sx={{ mb: 1, fontWeight: "500", cursor: "pointer" }}
+                  sx={{ mb: 1, fontWeight: "400", cursor: "pointer", fontSize: "25px" }}
                   title={val?.tooltip}
                 >
                   {val?.indicatorName}
@@ -81,11 +82,6 @@ const Torque = ({ indicatorData }: any) => {
             ))}
         </Grid>
       </Grid>
-
-      <Divider
-        flexItem
-        sx={{ width: "85%", my: 8, ml: 10, borderBottomWidth: 5 }}
-      />
     </Box>
   );
 };
