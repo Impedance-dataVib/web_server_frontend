@@ -127,7 +127,7 @@ const Engine = ({ indicatorData }: any) => {
               >
                 <SunburstChart
                   data={val}
-                  elementId={`sunbrust${index}`}
+                  elementId={`sunbrust${index}${+new Date()}`}
                   fullScreen={false}
                 />
               </Grid>

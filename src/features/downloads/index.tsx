@@ -123,70 +123,49 @@ const DownloadPage = () => {
     };
 
     const downloadPngReport = useCallback(
-        async (isZip: boolean) => {
+        async () => {
             if (elementRef.current === null) {
+                setIsLoading(false);
                 return;
             }
 
-            if (isZip) {
-                let i = 0;
-                const zip = new JSZip();
-                setIsLoading(true);
+            let i = 0;
+            const zip = new JSZip();
 
-                await Promise.all(elementRef.current.map(async (val: any) => {
-                    if (val) {
-                        const data: any = await toBlob(val, {quality: 0.50});
-                        zip.file("file" + i++ + ".png", data);
-                    }
-                }));
-                zip
-                    .generateAsync({
-                        type: "blob",
-                        streamFiles: true,
-                    })
-                    .then((zipData: any) => {
-                        const link = document.createElement("a");
-                        link.href = window.URL.createObjectURL(zipData);
-                        link.download = "snapcial-ai.zip";
-                        link.click();
-                        setDocuments([]);
-                        setIsLoading(false);
-                    }).catch((err: any) => {
+            await Promise.all(elementRef.current.map((val: any) => {
+                if (val) {
+                    console.log(1, new Date());
+                    const data: any = toBlob(val, {quality: 0.1});
+                    console.log(2, new Date());
+                    zip.file("file" + i++ + ".png", data);
+                    console.log(3, new Date());
+                }
+            }));
+            console.log(4, new Date());
+            zip
+                .generateAsync({
+                    type: "blob",
+                    compression: "DEFLATE",
+                    compressionOptions: {
+                         /* compression level ranges from 1 (best speed) to 9 (best compression) */
+                        level: 1
+                    },
+                })
+                .then((zipData: any) => {
+                    const link = document.createElement("a");
+                    link.href = window.URL.createObjectURL(zipData);
+                    link.download = "snapcial-ai.zip";
+                    link.click();
+                    console.log(5, new Date());
+                    setDocuments([]);
+                    setIsLoading(false);
+                }).catch((err: any) => {
+                    console.log(6, new Date());
                     setIsLoading(false);
                     console.log(err);
                     setDocuments([]);
                 });
-            } else {
-                elementRef.current.map((val: any) => {
-                    if (val) {
-                        setIsLoading(true);
-                        toPng(val, {quality: 0.50})
-                            .then((dataUrl: string) => {
-                                const link = document.createElement("a");
-                                link.download = "my-image-name.png";
-                                link.href = dataUrl;
-                                setIsLoading(false);
-                                link.click();
-                                setDocuments([]);
-                            })
-                            .catch((err) => {
-                                setIsLoading(false);
-                                console.log(err);
-                                setDocuments([]);
-                            });
-                    }
-                });
-            }
-            // setIsLoading(true);
-            // toBlob()
-            //   .then((dataUrl) => {
-            //     setIsLoading(false);
-            //     console.log(dataUrl);
-            //   })
-            //   .catch((err) => {
-            //     setIsLoading(false);
-            //     console.log(err);
-            //   });
+            
         },
         [elementRef]
     );
@@ -319,10 +298,33 @@ const DownloadPage = () => {
             <FaRegFolder color="e8a87c" className="icon"/>
         );
     const handleOpenModal = (val: any) => {
+        setIsLoading(true);
         setDocuments([val.metadata]);
-        downloadPngReport(false);
+        setTimeout(function(){
+            elementRef.current.map((val: any) => {
+                if (val) {
+                    toPng(val, {quality: 0.50})
+                        .then((dataUrl: string) => {
+                            const link = document.createElement("a");
+                            link.download = "my-image-name.png";
+                            link.href = dataUrl;
+                            setIsLoading(false);
+                            link.click();
+                            setDocuments([]);
+                        })
+                        .catch((err) => {
+                            
+                            console.log(err);
+                            setDocuments([]);
+                        });
+                } else {
+                    setIsLoading(false);
+                }
+            });
+        }, 1000)
     };
     const exportToZip = () => {
+        setIsLoading(true);
         const array = [];
 
         let i = 0;
@@ -335,8 +337,15 @@ const DownloadPage = () => {
                 array.push(child.metadata);
             }
         }
-        setDocuments(array);
-        downloadPngReport(true);
+        if(array.length > 0) {
+            setDocuments(array);
+            setTimeout(function(){
+                downloadPngReport();
+            }, 2000);
+            
+        } else {
+            setIsLoading(false)
+        }
     };
     return (
         <Box>
@@ -773,11 +782,13 @@ const DownloadPage = () => {
                 </Accordion>
             </Box>
             <div
-               /* style={{opacity: 0, height: 0, overflow: "hidden"}}*/
+                style={{opacity: 1, }}
             >
                 {documents.map((offer: any, i: number) => (
                     <div
+                        key={`div${i}`}
                         ref={(ref) => {
+                            console.log(ref, 'ref');
                             elementRef.current[i] = ref;
                         }}
                     >

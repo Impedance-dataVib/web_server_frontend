@@ -40,6 +40,7 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
         .radiusScaleExponent(1)
         .labelOrientation("angular")
         .onClick(() => {})
+        .transitionDuration(0)
         .color((d) => {
           return getColor(d.fill);
         })
