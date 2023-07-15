@@ -2601,7 +2601,6 @@ export function buildPngReportData(data, modelType, formData) {
         "Compression Condition",
         firingOrderLabel
       );
-      console.log(compression);
       if (compression) {
         cylinder_specific_indicators.push(compression);
       }
@@ -2822,7 +2821,6 @@ export function buildPngReportData(data, modelType, formData) {
       );
     }
   }
-  console.log(cylinder_specific_indicators);
 
   return {
     globalIndicator,

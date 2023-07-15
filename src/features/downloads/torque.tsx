@@ -17,8 +17,6 @@ import SpeedoMeter from "../common/graph/speedo-meter";
 import CylinderIndicator from "../dashboard/pages/module/cylinder-indicator";
 import SunburstChart from "../common/graph/sunbrustChart";
 const Torque = ({ renderData }: any) => {
-  console.log("renderData", renderData);
-
   const globalIndicator = renderData?.globalIndicator || [];
   const cylinder_specific_indicators =
     renderData?.cylinder_specific_indicators || [];

@@ -11,17 +11,21 @@ import {
   Typography,
 } from "@mui/material";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SpeedoMeter from "../common/graph/speedo-meter";
 import CylinderIndicator from "../dashboard/pages/module/cylinder-indicator";
 import SunburstChart from "../common/graph/sunbrustChart";
 
-const Engine = ({ renderData }: any) => {
-  console.log("renderData", renderData);
+const Engine = ({ indicatorData }: any) => {
+  const [renderData, setRenderData] = useState<any>();
 
   const globalIndicator = renderData?.globalIndicator || [];
   const cylinder_specific_indicators =
     renderData?.cylinder_specific_indicators || [];
+
+  useEffect(() => {
+    setRenderData(indicatorData);
+  }, [indicatorData]);
 
   return (
     <Box>

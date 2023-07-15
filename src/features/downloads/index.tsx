@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Typography,
   Box,
@@ -41,11 +47,13 @@ import { FaList, FaRegFolder, FaRegFolderOpen } from "react-icons/fa";
 import { AiFillFile } from "react-icons/ai";
 import DownloadPngModal from "../configuration/modals/downloadPngModal";
 import { toBlob, toPng } from "html-to-image";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import JSZip from "jszip";
 
 const DownloadPage = () => {
   const initial = "";
-  const elementRef= useRef<(HTMLDivElement | null)[]>([])
-  const [documents, setDocuments] = useState<any>([])
+  const elementRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [documents, setDocuments] = useState<any>([]);
   const [dataSelection, setDataSelection] = useState(initial);
   const [asset, setAsset] = useState(initial);
   const [reportType, setReportType] = useState(initial);
@@ -107,46 +115,78 @@ const DownloadPage = () => {
   };
 
   const cancelHandler = () => {
-    downloadPngReport()
-    // setDataSelection(initial);
-    // setAsset(initial);
-    // setDateRangeValues({ startDate: "", endDate: "", key: "selection" });
+    setDataSelection(initial);
+    setAsset(initial);
+    setDateRangeValues({ startDate: "", endDate: "", key: "selection" });
 
-    // setReportType(initial);
+    setReportType(initial);
   };
 
-  const downloadPngReport = useCallback(() => {
-    if (elementRef.current === null) {
-      return;
-    }
-    console.log(elementRef.current);
-    (elementRef.current).map((val: any) => {
-      toPng(val)
-      .then((dataUrl) => {
-        const link = document.createElement("a");
-        link.download = "my-image-name.png";
-        link.href = dataUrl;
-        setIsLoading(false);
-        link.click();
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.log(err);
-      });
-    })
-    // setIsLoading(true);
-    // toBlob()
-    //   .then((dataUrl) => {
-    //     setIsLoading(false);
-    //     console.log(dataUrl);
-    //   })
-    //   .catch((err) => {
-    //     setIsLoading(false);
-    //     console.log(err);
-    //   });
-  }, [elementRef]);
+  const downloadPngReport = useCallback(
+    (isZip: boolean) => {
+      if (elementRef.current === null) {
+        return;
+      }
 
-  
+      if (isZip) {
+        let i = 0;
+        const zip = new JSZip();
+        console.log("1");
+        elementRef.current.map((val: any) => {
+          toBlob(val)
+            .then((blob: any) => {
+              console.log("2");
+
+              zip.file("file" + i++ + ".png", blob);
+            })
+            .catch((err) => {
+              setIsLoading(false);
+              console.log(err);
+            });
+        });
+        console.log("3");
+
+        zip
+          .generateAsync({
+            type: "blob",
+            streamFiles: true,
+          })
+          .then((zipData) => {
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(zipData);
+            link.download = "snapcial-ai.zip";
+            link.click();
+          });
+      } else {
+        elementRef.current.map((val: any) => {
+          toPng(val)
+            .then((dataUrl) => {
+              const link = document.createElement("a");
+              link.download = "my-image-name.png";
+              link.href = dataUrl;
+              setIsLoading(false);
+              link.click();
+            })
+            .catch((err) => {
+              setIsLoading(false);
+              console.log(err);
+            });
+        });
+      }
+      // setIsLoading(true);
+      // toBlob()
+      //   .then((dataUrl) => {
+      //     setIsLoading(false);
+      //     console.log(dataUrl);
+      //   })
+      //   .catch((err) => {
+      //     setIsLoading(false);
+      //     console.log(err);
+      //   });
+    },
+    [elementRef]
+  );
+
   const postDownloadHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (asset == "") {
@@ -176,8 +216,6 @@ const DownloadPage = () => {
     })
       .then((val) => {
         if (reportType === "graphical") {
-          console.log("val", val);
-
           setShowPngGraphical(true);
           setData(val);
           setIsLoading(false);
@@ -254,17 +292,22 @@ const DownloadPage = () => {
   const transformData = () => {
     const jsonDate = data?.data.data.historicalData.map((item: any) => {
       const parsedChildren = JSON.parse(item.children);
+
       return {
         name: item?.name,
         children: [...parsedChildren],
       };
     });
+
     const folder = {
       name: "",
       children: [...jsonDate],
     };
+    // folder.children.map((item) => setPngArray(item.children));
+
     return flattenTree(folder);
   };
+
   const FolderIcon = ({ isOpen }: any) =>
     isOpen ? (
       <FaRegFolderOpen color="e8a87c" className="icon" />
@@ -272,16 +315,29 @@ const DownloadPage = () => {
       <FaRegFolder color="e8a87c" className="icon" />
     );
   const handleOpenModal = (val: any) => {
-    console.log(val.metadata)
-    // setOpen(val.metadata);
     setDocuments([val.metadata]);
-    downloadPngReport();
+    // downloadPngReport(false);
     // ["sss", "dddd"].map((val:any) => {
     //   setDummy(val);
     // })
     // setJsonData(val.metadata);
   };
+  const exportToZip = () => {
+    const array = [];
 
+    let i = 0;
+    for (let item of data.data.data.historicalData) {
+      for (let child of JSON.parse(item.children)) {
+        if (i === 10) {
+          break;
+        }
+        i++;
+        array.push(child.metadata);
+      }
+    }
+    setDocuments(array);
+    downloadPngReport(true);
+  };
   return (
     <Box>
       <Typography variant="h5">
@@ -537,6 +593,7 @@ const DownloadPage = () => {
               justifyContent: "center",
               zIndex: 2,
               opacity: 0.4,
+              height: "100%",
             }}
           >
             <CircularProgress />
@@ -544,19 +601,36 @@ const DownloadPage = () => {
           </Box>
         )}
         {showPngGraphical && (
-          <Box
-            sx={{ maxHeight: "450px", overflowY: "scroll", mb: "15px" }}
-            className="directory"
-          >
-            <Typography
-              my={"10px"}
-              pl={"10px"}
-              fontWeight={"500"}
-              fontSize={"16px"}
+          <Box className="directory">
+            <Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography my={"10px"} fontWeight={"500"} fontSize={"16px"}>
+                  Graphical Report
+                </Typography>
+                <Button
+                  sx={{ my: "10px" }}
+                  onClick={exportToZip}
+                  variant="contained"
+                >
+                  Export zip
+                  <FileDownloadIcon sx={{ pl: 1 }} />
+                </Button>
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                maxHeight: "450px",
+                overflowY: "scroll",
+                mb: "15px",
+                bgcolor: "white",
+              }}
             >
-              Graphical Report
-            </Typography>
-            <Box sx={{ bgcolor: "white" }}>
               <TreeView
                 data={transformData()}
                 aria-label="directory tree"
@@ -595,9 +669,10 @@ const DownloadPage = () => {
                 )}
               />
             </Box>
-            <DownloadPngModal open={open} setOpen={setOpen} data={data} />
+            {/* <DownloadPngModal open={open} setOpen={setOpen} data={data} /> */}
           </Box>
         )}
+
         <Accordion sx={{ bgcolor: "#EAEAEA" }}>
           <AccordionSummary
             // expandIcon={<ExpandMoreIcon />}
@@ -697,22 +772,19 @@ const DownloadPage = () => {
           </AccordionDetails>
         </Accordion>
       </Box>
-      <div 
-        // style={{visibility: 'hidden'}}
+      <div
+      // style={{visibility: 'hidden'}}
       >
-      {documents.map((offer: any,i: number)=>(
-        <div ref={ref => {
-          elementRef.current[i] = ref;
-        }}>
-          {offer.Status || "ssss"}
-        </div>
-   )
-)
-
-}
-
-     </div>
-
+        {documents.map((offer: any, i: number) => (
+          <div
+            ref={(ref) => {
+              elementRef.current[i] = ref;
+            }}
+          >
+            <DownloadPngModal open={offer} setOpen={setOpen} data={data} />
+          </div>
+        ))}
+      </div>
     </Box>
   );
 };
