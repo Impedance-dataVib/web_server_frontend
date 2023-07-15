@@ -17,10 +17,13 @@ import SpeedoMeter from "../common/graph/speedo-meter";
 import CylinderIndicator from "../dashboard/pages/module/cylinder-indicator";
 import SunburstChart from "../common/graph/sunbrustChart";
 
-const Turbine = ({ renderData }: any) => {
+const Turbine = ({ indicatorData }: any) => {
+  const [renderData, setRenderData] = React.useState<any>();
+
   const globalIndicator = renderData?.globalIndicator || [];
-  const cylinder_specific_indicators =
-    renderData?.cylinder_specific_indicators || [];
+  React.useEffect(() => {
+    setRenderData(indicatorData);
+  }, [indicatorData]);
 
   return (
     <Box>
@@ -70,7 +73,6 @@ const Turbine = ({ renderData }: any) => {
                     isGradientColor={val?.isGradientColor}
                     indicatorType={val?.indicatorType}
                     indicatorUnit={val?.indicatorUnit}
-                    // isTorqueModule={isTorqueModule}
                     indicatorName={val?.indicatorName}
                     height={150}
                   />

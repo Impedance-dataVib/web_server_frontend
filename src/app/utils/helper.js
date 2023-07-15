@@ -97,29 +97,40 @@ export function buildSoketData(response, modelType, formData) {
       buildIndicatorData(
         "Regularity/Deviation",
         data?.RegularityDeviation,
-        "valueInPercent"
+        "valueInHealth"
       )
     );
+    if (data?.BearingStatus && data?.BearingStatus.valueInHealth) {
+      globalIndicator.push(
+        buildIndicatorData(
+          "Bearing Status",
+          data?.BearingStatus,
+          "valueInHealth"
+        )
+      );
+    }
+    if (data?.BearingStatusGas && data?.BearingStatusGas.valueInHealth) {
+      globalIndicator.push(
+        buildIndicatorData(
+          "Bearing Status ",
+          data?.BearingStatusGas,
+          "valueInHealth"
+        )
+      );
+    }
     globalIndicator.push(
-      buildIndicatorData(
-        "Bearing Status",
-        data?.BearingStatus,
-        "valueInPercent"
-      )
-    );
-    globalIndicator.push(
-      buildIndicatorData("Shaft Health", data?.BladeStatus, "valueInPercent")
+      buildIndicatorData("Shaft Health", data?.BladeStatus, "valueInHealth")
     );
     if (JSON.parse(formData).type === "Steam") {
       globalIndicator.push(
-        buildIndicatorData("Coupling", data?.TurbineCoupling, "valueInPercent")
+        buildIndicatorData("Coupling", data?.TurbineCoupling, "valueInHealth")
       );
     } else {
       globalIndicator.push(
         buildIndicatorData(
           "Combustion Kit",
           data?.CombustionKit,
-          "valueInPercent"
+          "valueInHealth"
         )
       );
     }
@@ -2523,7 +2534,7 @@ export function buildPngReportData(data, modelType, formData) {
   const maxPower = parseInt(formData.power);
   let globalIndicator = [];
   let cylinder_specific_indicators = [];
-
+  console.log(data, modelType);
   if (modelType === "Engine") {
     if (data?.MechanicalHealth && data?.MechanicalHealth.valueInHealth) {
       globalIndicator.push(
@@ -2658,6 +2669,12 @@ export function buildPngReportData(data, modelType, formData) {
       }
     }
   } else if (modelType === "Torque") {
+    if (data?.Status <= 0) {
+      return {
+        globalIndicator,
+        cylinder_specific_indicators,
+      };
+    }
     if (data?.StaticTorsion && data?.StaticTorsion.value) {
       globalIndicator.push(
         buildTorqueIndicatorData(
@@ -2700,68 +2717,73 @@ export function buildPngReportData(data, modelType, formData) {
         buildRpmData("Speed", data?.ChannelSpeed, maxRPMThrshhold)
       );
     }
-    if (data?.RegularityDeviation && data?.RegularityDeviation.valueInPercent) {
+    if (data?.RegularityDeviation && data?.RegularityDeviation.valueInHealth) {
       globalIndicator.push(
         buildIndicatorData(
           "Regularity/Deviation",
           data?.RegularityDeviation,
-          "valueInPercent"
+          "valueInHealth"
         )
       );
     }
-    if (data?.BearingStatus && data?.BearingStatus.valueInPercent) {
+    if (data?.BearingStatus && data?.BearingStatus.valueInHealth) {
       globalIndicator.push(
         buildIndicatorData(
           "Bearing Status",
           data?.BearingStatus,
-          "valueInPercent"
+          "valueInHealth"
         )
       );
     }
-    if (data?.BladeStatus && data?.BladeStatus.valueInPercent) {
+    if (data?.BearingStatusGas && data?.BearingStatusGas.valueInHealth) {
       globalIndicator.push(
-        buildIndicatorData("Shaft Health", data?.BladeStatus, "valueInPercent")
+        buildIndicatorData(
+          "Bearing Status ",
+          data?.BearingStatusGas,
+          "valueInHealth"
+        )
+      );
+    }
+    if (data?.BladeStatus && data?.BladeStatus.valueInHealth) {
+      globalIndicator.push(
+        buildIndicatorData("Shaft Health", data?.BladeStatus, "valueInHealth")
       );
     }
 
     if (formData.type === "Steam") {
-      if (data?.TurbineCoupling && data?.TurbineCoupling.valueInPercent) {
+      if (data?.TurbineCoupling && data?.TurbineCoupling.valueInHealth) {
         globalIndicator.push(
-          buildIndicatorData(
-            "Coupling",
-            data?.TurbineCoupling,
-            "valueInPercent"
-          )
+          buildIndicatorData("Coupling", data?.TurbineCoupling, "valueInHealth")
         );
       }
     } else {
-      if (data?.CombustionKit && data?.CombustionKit.valueInPercent) {
+      if (data?.CombustionKit && data?.CombustionKit.valueInHealth) {
         globalIndicator.push(
           buildIndicatorData(
             "Combustion Kit",
             data?.CombustionKit,
-            "valueInPercent"
+            "valueInHealth"
           )
         );
       }
     }
   } else if (modelType === "Motor") {
-    if (data?.MStressStability && data?.MStressStability.valueInPercent) {
+    if (data?.MStressStability && data?.MStressStability.valueInHealth) {
       globalIndicator.push(
         buildIndicatorData("Stability", data?.MStressStability, "valueInHealth")
       );
     }
-    if (data?.MBearing && data?.MBearing.valueInPercent) {
+    if (data?.MBearing && data?.MBearing.valueInHealth) {
       globalIndicator.push(
         buildIndicatorData("Bearing", data?.MBearing, "valueInHealth")
       );
     }
-    if (data?.ChannelSpeed && data?.ChannelSpeed.valueInPercent) {
+    if (data?.ChannelSpeed) {
       globalIndicator.push(
         buildRpmData("Speed", data?.ChannelSpeed, maxRPMThrshhold)
       );
     }
-    if (data?.MElectromag && data?.MElectromag.valueInPercent) {
+    if (data?.MElectromag && data?.MElectromag.valueInHealth) {
       globalIndicator.push(
         buildIndicatorData(
           "Electromagnetic Stress",
@@ -2771,7 +2793,7 @@ export function buildPngReportData(data, modelType, formData) {
       );
     }
   } else if (modelType === "Bearing") {
-    if (data["4KMixed"] && data["4KMixed"].valueInPercent) {
+    if (data["4KMixed"] && data["4KMixed"].valueInHealth) {
       globalIndicator.push(
         buildIndicatorData("Bearings", data["4KMixed"], "valueInHealth")
       );
@@ -2781,13 +2803,13 @@ export function buildPngReportData(data, modelType, formData) {
         buildRpmData("RPM", data?.ChannelSpeed, maxRPMThrshhold)
       );
     }
-    if (data["8KMixed"] && data["8KMixed"].valueInPercent) {
+    if (data["8KMixed"] && data["8KMixed"].valueInHealth) {
       globalIndicator.push(
         buildIndicatorData("Friction", data["8KMixed"], "valueInHealth")
       );
     }
     //-----
-    if (data?.BearingGlobal && data?.BearingGlobal.valueInPercent) {
+    if (data?.BearingGlobal && data?.BearingGlobal.valueInHealth) {
       globalIndicator.push(
         buildIndicatorData(
           "Mechanical Health",
@@ -2796,7 +2818,7 @@ export function buildPngReportData(data, modelType, formData) {
         )
       );
     }
-    if (data?.GlobalMixed && data?.GlobalMixed.valueInPercent) {
+    if (data?.GlobalMixed && data?.GlobalMixed.valueInHealth) {
       globalIndicator.push(
         buildIndicatorData(
           "Global(Umbalance/Alignment/Loosness)",
@@ -2805,17 +2827,17 @@ export function buildPngReportData(data, modelType, formData) {
         )
       );
     }
-    if (data?.GlobalKurto && data?.GlobalKurto.valueInPercent) {
+    if (data?.GlobalKurto && data?.GlobalKurto.valueInHealth) {
       globalIndicator.push(
         buildIndicatorData("Shock Index", data?.GlobalKurto, "valueInHealth")
       );
     }
-    if (data?.GlobalLevel && data?.GlobalLevel.valueInPercent) {
+    if (data?.GlobalLevel && data?.GlobalLevel.valueInHealth) {
       globalIndicator.push(
         buildIndicatorData("Level(RMS)", data?.GlobalLevel, "valueInHealth")
       );
     }
-    if (data["2KMixed"] && data["2KMixed"].valueInPercent) {
+    if (data["2KMixed"] && data["2KMixed"].valueInHealth) {
       globalIndicator.push(
         buildIndicatorData("Shaft/Clearance", data["2KMixed"], "valueInHealth")
       );

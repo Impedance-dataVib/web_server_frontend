@@ -16,10 +16,13 @@ import React from "react";
 import SpeedoMeter from "../common/graph/speedo-meter";
 import CylinderIndicator from "../dashboard/pages/module/cylinder-indicator";
 import SunburstChart from "../common/graph/sunbrustChart";
-const Torque = ({ renderData }: any) => {
+const Torque = ({ indicatorData }: any) => {
+  const [renderData, setRenderData] = React.useState<any>();
+
   const globalIndicator = renderData?.globalIndicator || [];
-  const cylinder_specific_indicators =
-    renderData?.cylinder_specific_indicators || [];
+  React.useEffect(() => {
+    setRenderData(indicatorData);
+  }, [indicatorData]);
 
   return (
     <Box>

@@ -13,7 +13,6 @@ import {
 
 import React, { useEffect, useState } from "react";
 import SpeedoMeter from "../common/graph/speedo-meter";
-import CylinderIndicator from "../dashboard/pages/module/cylinder-indicator";
 import SunburstChart from "../common/graph/sunbrustChart";
 
 const Engine = ({ indicatorData }: any) => {
@@ -86,7 +85,6 @@ const Engine = ({ indicatorData }: any) => {
                     isGradientColor={val?.isGradientColor}
                     indicatorType={val?.indicatorType}
                     indicatorUnit={val?.indicatorUnit}
-                    // isTorqueModule={isTorqueModule}
                     indicatorName={val?.indicatorName}
                     height={150}
                   />
@@ -110,7 +108,7 @@ const Engine = ({ indicatorData }: any) => {
           justifyContent: "center",
         }}
       >
-        <Box sx={{ minWidth: 1100, border: "3px solid black", my: 5, py: 5 }}>
+        <Box sx={{ minWidth: 1100, border: "1px dotted black", my: 5, py: 5 }}>
           <Grid
             container
             alignItems={"center"}

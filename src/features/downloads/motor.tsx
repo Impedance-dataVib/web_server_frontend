@@ -16,10 +16,13 @@ import React from "react";
 import SpeedoMeter from "../common/graph/speedo-meter";
 import CylinderIndicator from "../dashboard/pages/module/cylinder-indicator";
 import SunburstChart from "../common/graph/sunbrustChart";
-const Motor = ({ renderData }: any) => {
+const Motor = ({ indicatorData }: any) => {
+  const [renderData, setRenderData] = React.useState<any>();
+
   const globalIndicator = renderData?.globalIndicator || [];
-  const cylinder_specific_indicators =
-    renderData?.cylinder_specific_indicators || [];
+  React.useEffect(() => {
+    setRenderData(indicatorData);
+  }, [indicatorData]);
 
   return (
     <Box>
@@ -29,7 +32,6 @@ const Motor = ({ renderData }: any) => {
           alignItems={"center"}
           justifyContent="center"
           spacing={4}
-          border="1px solid black"
           width={"80%"}
           ml={13}
           mt={2}

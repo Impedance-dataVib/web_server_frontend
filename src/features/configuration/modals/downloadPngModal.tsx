@@ -52,50 +52,36 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
   const [activeClass, setActiveClass] = React.useState<any>("Engine");
   const [component, setComponent] = React.useState<any>(null);
   const [status, setStatus] = React.useState<any>(null);
-  const [footerData] = React.useState(data?.data.data.otherData);
-  const [formData] = React.useState(data?.data.data.formData);
-  const [modletype] = React.useState(data?.data.data.otherData.module_type);
 
-  const downloadPngReport = useCallback(() => {
-    if (ref.current === null) {
-      return;
-    }
-    setIsLoading(true);
-    toJpeg(ref.current, { quality: 0.5 })
-      .then((dataUrl) => {
-        const link = document.createElement("a");
-        link.download = "my-image-name.png";
-        link.href = dataUrl;
-        setIsLoading(false);
-        link.click();
-      })
-      .catch((err) => {
-        setIsLoading(false);
-      });
-  }, [ref]);
   React.useEffect(() => {
+    const newModel = data?.data.data.otherData.module_type;
+
     const jsondata = open;
     if (jsondata) {
-      const indicatorData = buildPngReportData(jsondata, modletype, formData);
-      if (modletype === "Engine") {
+      const indicatorData = buildPngReportData(
+        jsondata,
+        newModel,
+        data?.data.data.formData
+      );
+      if (newModel === "Engine") {
         setComponent(<Engine indicatorData={indicatorData} />);
         setActiveClass("Engine");
-      } else if (modletype === "Torque") {
-        setComponent(<Torque renderData={indicatorData} />);
+      } else if (newModel === "Torque") {
+        setComponent(<Torque indicatorData={indicatorData} />);
         setActiveClass("Torque");
-      } else if (modletype === "Bearing") {
-        setComponent(<Bearing renderData={indicatorData} />);
+      } else if (newModel === "Bearing") {
+        setComponent(<Bearing indicatorData={indicatorData} />);
         setActiveClass("Bearing");
-      } else if (modletype === "Motor") {
-        setComponent(<Motor renderData={indicatorData} />);
+      } else if (newModel === "Motor") {
+        setComponent(<Motor indicatorData={indicatorData} />);
         setActiveClass("Motor");
-      } else if (modletype === "Turbine") {
-        setComponent(<Turbine renderData={indicatorData} />);
+      } else if (newModel === "Turbine") {
+        setComponent(<Turbine indicatorData={indicatorData} />);
         setActiveClass("Turbine");
       }
     }
     synchronisation(open?.Status);
-  }, [modletype, open, formData]);
+  }, [data?.data.data.otherData.module_type, open, data?.data.data.formData]);
 
   function synchronisation(val: any) {
     SIGNAL_STATUS_QUALITY.map((item) => {
@@ -106,19 +92,7 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
   }
   return (
     <Container>
-      {/* <Modal
-        open={open}
-        onClose={() => setOpen(null)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      > */}
       <Box sx={style}>
-        {/* <Box sx={{ position: "absolute", right: 15, top: 15 }}>
-          <Button onClick={() => setOpen(null)}>
-            <CancelIcon />
-          </Button>
-        </Box> */}
-
         <Box sx={{ mt: 3, mb: 5, bgcolor: "white" }} ref={ref}>
           <Box>
             <Divider sx={{ marginLeft: "84%", width: "160px", pb: 1 }} />
@@ -186,22 +160,22 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
             <Box component={"span"}>
               <Typography sx={{ fontStyle }}>Asset- Equipment</Typography>
               <Typography sx={{ fontStyle, ml: 4 }}>
-                {formData?.asset_name}
+                {data?.data.data.formData.asset_name}
               </Typography>
             </Box>
             <Box component={"span"}>
               <Typography sx={{ fontStyle }}>Speed (RPM)</Typography>
               <Typography sx={{ fontStyle, ml: 4 }}>
-                {formData?.rated_rpm}
+                {data?.data.data.formData.rated_rpm}
               </Typography>
             </Box>
             <Box component={"span"}>
               <Typography sx={{ fontStyle }}>SW Version</Typography>
               <Typography sx={{ fontStyle, ml: 4 }}>
-                {footerData.sw_version}
+                {data?.data.data.otherData.sw_version}
               </Typography>
             </Box>
-            {modletype === "Engine" && (
+            {data?.data.data.otherData.module_type === "Engine" && (
               <Box component={"span"}>
                 <Typography sx={{ fontStyle }}>Synchronisation</Typography>
                 <Typography sx={{ fontWeight: 500 }}>{status}</Typography>
@@ -261,23 +235,23 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
                       component="th"
                       scope="row"
                     >
-                      {footerData?.client_name}
+                      {data?.data.data.otherData.client_name}
                     </TableCell>
                     <TableCell sx={{ fontStyle }} align="center">
-                      {formData?.make_model}
+                      {data?.data.data.formData.make_model}
                     </TableCell>
                     <TableCell sx={{ fontStyle, color: "blue" }} align="center">
-                      {formData?.equipment_name}
+                      {data?.data.data.formData.equipment_name}
                     </TableCell>
                     <TableCell sx={{ fontStyle }} align="center">
-                      {formData?.application}
+                      {data?.data.data.formData.application}
                     </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
           </Box>
-          <Box sx={{ my: "10px", mb: 15 }}>
+          <Box sx={{ my: "10px", mb: 5 }}>
             <Typography
               sx={{ color: "darkblue" }}
               textAlign={"center"}
@@ -295,7 +269,6 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
           </Box>
         </Box>
       </Box>
-      {/* </Modal> */}
     </Container>
   );
 }
