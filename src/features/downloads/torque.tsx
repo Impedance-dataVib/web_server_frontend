@@ -84,7 +84,7 @@ const Torque = ({ indicatorData }: any) => {
 
       <Divider
         flexItem
-        sx={{ width: "85%", my: 2, ml: 10, borderBottomWidth: 5 }}
+        sx={{ width: "85%", my: 8, ml: 10, borderBottomWidth: 5 }}
       />
     </Box>
   );

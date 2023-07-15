@@ -721,17 +721,19 @@ const DownloadPage = () => {
                     }}
                   >
                     {isBranch && <ArrowIcon isOpen={isExpanded} />}
-                    <CheckBoxIcon
-                      className="checkbox-icon"
-                      onClick={(e: any) => {
-                        handleSelect(e);
-                        e.stopPropagation();
-                      }}
-                      variant={
-                        isHalfSelected ? "some" : isSelected ? "all" : "none"
-                      }
-                    />
-                    <span className="name">{element.name}.png</span>
+                    {!isBranch && (
+                      <CheckBoxIcon
+                        className="checkbox-icon"
+                        onClick={(e: any) => {
+                          handleSelect(e);
+                          e.stopPropagation();
+                        }}
+                        variant={
+                          isHalfSelected ? "some" : isSelected ? "all" : "none"
+                        }
+                      />
+                    )}
+                    <span className="name">{element.name}</span>
                   </div>
                 )}
               />

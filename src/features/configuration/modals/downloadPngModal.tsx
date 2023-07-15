@@ -28,18 +28,10 @@ import { SIGNAL_STATUS_QUALITY } from "src/features/dashboard/schema";
 // import JSZip from "jszip";
 
 const style = {
-  // position: "absolute" as "absolute",
-  // top: "50%",
-  // left: "50%",
-  // transform: "translate(-50%, -50%)",
-  // width: "70%",
-  // maxHeight: "95vh",
-
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  overflow: "scroll",
+  pt: 1,
+  pb: 1,
+  pr: 4,
+  pl: 4,
 };
 const fontStyle = {
   fontSize: "20px",
@@ -159,7 +151,7 @@ export default function DownloadPngModal({ open, setOpen, data }: any) {
             </Box>
             <Box component={"span"}>
               <Typography sx={{ fontStyle }}>Asset- Equipment</Typography>
-              <Typography sx={{ fontStyle, ml: 4 }}>
+              <Typography sx={{ fontStyle, ml: 2 }}>
                 {data?.data.data.formData.asset_name}
               </Typography>
             </Box>
