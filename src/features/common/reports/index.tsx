@@ -13,7 +13,7 @@ import {
   Link as Matlink,
   Typography,
 } from "@mui/material";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { convertUTCDateToLocalTime } from "src/app/utils/helper";
 import api from "../../../app/api";
@@ -46,6 +46,7 @@ const ReportsRow = ({
   processName,
   formData,
 }: IReportsRowProps) => {
+  const [responseData, setResponseData] = useState([]);
   const ref = useRef<HTMLDivElement>(null);
   const parsedFormData = JSON.parse(formData);
   const handleDownload = (reportName: any) => {
@@ -66,27 +67,13 @@ const ReportsRow = ({
       .get(
         `/download/current_download.php?process_name=${processName}&type=${type}&module_id=${moduleId}`,
         {
-          responseType: "blob",
+          responseType: type === "graphical" ? "json" : "blob",
         }
       )
       .then((res) => {
         console.log("res in graphicalReport", res);
-        const url = window.URL.createObjectURL(res.data);
-        const link = document.createElement("a");
-        link.href = url;
-        if (type === "json") {
-          link.setAttribute("download", `${fileName}.json`);
-          document.body.appendChild(link);
-          link.click();
-        } else if (type === "raw") {
-          link.setAttribute("download", `${fileName}.wav`);
-          document.body.appendChild(link);
-          link.click();
-        } else if (type === "spredsheet") {
-          link.setAttribute("download", `${fileName}.csv`);
-          document.body.appendChild(link);
-          link.click();
-        } else if (type === "graphical") {
+
+        if (type === "graphical") {
           link.setAttribute("download", `${fileName}.png`);
           if (ref.current === null) {
             return;
@@ -101,6 +88,25 @@ const ReportsRow = ({
             .catch((err: any) => {
               console.error(err);
             });
+        } else {
+          const url = window.URL.createObjectURL(res.data);
+          const link = document.createElement("a");
+          link.href = url;
+          if (type === "json") {
+            link.setAttribute("download", `${fileName}.json`);
+            document.body.appendChild(link);
+            link.click();
+          }
+          if (type === "raw") {
+            link.setAttribute("download", `${fileName}.wav`);
+            document.body.appendChild(link);
+            link.click();
+          }
+          if (type === "spredsheet") {
+            link.setAttribute("download", `${fileName}.csv`);
+            document.body.appendChild(link);
+            link.click();
+          }
         }
       })
       .catch((err) => console.error(err));
