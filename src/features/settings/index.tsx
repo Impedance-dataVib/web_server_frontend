@@ -111,20 +111,22 @@ const SettingsPage = () => {
       });
   };
   const handleClick = () => {
-    api.get(
-      `/vbox/synk_time.php`
-    ).then((res) => {
-      enqueueSnackbar({
-        message: res?.data?.Message,
-        variant: "success",
+    const date = new Date().toLocaleDateString();
+    console.log("date", date);
+    api
+      .get(`/vbox/synk_time.php`)
+      .then((res) => {
+        enqueueSnackbar({
+          message: res?.data?.Message,
+          variant: "success",
+        });
+      })
+      .catch((e) => {
+        enqueueSnackbar({
+          message: e?.response?.data?.Message || "",
+          variant: "error",
+        });
       });
-     }
-    ).catch((e) => {
-      enqueueSnackbar({
-        message: e?.response?.data?.Message || '',
-        variant: "error",
-      });
-    });
   };
 
   useEffect(() => {

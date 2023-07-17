@@ -146,24 +146,43 @@ export default function DownloadPngModal({ open, data }: any) {
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center" sx={{border: 'none', padding: '5px', paddingBottom: 0}}>
+                    <TableCell
+                      align="center"
+                      sx={{ border: "none", padding: "5px", paddingBottom: 0 }}
+                    >
                       <Typography sx={{ fontStyle }}>
                         Timestamp (UTC)
                       </Typography>
                     </TableCell>
-                    <TableCell align="center" sx={{border: 'none', padding: '5px', paddingBottom: 0}}>
+                    <TableCell
+                      align="center"
+                      sx={{ border: "none", padding: "5px", paddingBottom: 0 }}
+                    >
                       <Typography sx={{ fontStyle }}>
                         Asset- Equipment
                       </Typography>
                     </TableCell>
-                    <TableCell align="center" sx={{border: 'none', padding: '5px', paddingBottom: 0}}>
+                    <TableCell
+                      align="center"
+                      sx={{ border: "none", padding: "5px", paddingBottom: 0 }}
+                    >
                       <Typography sx={{ fontStyle }}>Speed (RPM)</Typography>
                     </TableCell>
-                    <TableCell align="center" sx={{border: 'none', padding: '5px', paddingBottom: 0}}>
+                    <TableCell
+                      align="center"
+                      sx={{ border: "none", padding: "5px", paddingBottom: 0 }}
+                    >
                       <Typography sx={{ fontStyle }}>SW Version</Typography>
                     </TableCell>
                     {data?.data.data.otherData.module_type === "Engine" && (
-                      <TableCell align="center" sx={{border: 'none', padding: '5px', paddingBottom: 0}}>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "none",
+                          padding: "5px",
+                          paddingBottom: 0,
+                        }}
+                      >
                         <Typography sx={{ fontStyle }}>Status</Typography>
                       </TableCell>
                     )}
@@ -171,33 +190,48 @@ export default function DownloadPngModal({ open, data }: any) {
                 </TableHead>
                 <TableBody>
                   <TableRow>
-                    <TableCell align="center" sx={{border: 'none', padding: '5px'}} component="th" scope="row">
+                    <TableCell
+                      align="center"
+                      sx={{ border: "none", padding: "5px" }}
+                      component="th"
+                      scope="row"
+                    >
                       <Typography sx={{ fontStyle }}>
                         {open?.DateAndTime}
                       </Typography>
                     </TableCell>
-                    <TableCell align="center" sx={{border: 'none', padding: '5px'}}>
+                    <TableCell
+                      align="center"
+                      sx={{ border: "none", padding: "5px" }}
+                    >
                       <Typography sx={{ fontStyle }}>
                         {data?.data.data.formData.asset_name}-{" "}
                         {data?.data.data.formData.equipment_name}
                       </Typography>
                     </TableCell>
-                    <TableCell align="center" sx={{border: 'none', padding: '5px'}}>
+                    <TableCell
+                      align="center"
+                      sx={{ border: "none", padding: "5px" }}
+                    >
                       <Typography sx={{ fontStyle }}>
                         {data?.data.data.formData.rated_rpm}
                       </Typography>
                     </TableCell>
-                    <TableCell align="center" sx={{border: 'none', padding: '5px'}}>
+                    <TableCell
+                      align="center"
+                      sx={{ border: "none", padding: "5px" }}
+                    >
                       <Typography sx={{ fontStyle }}>
                         {data?.data.data.otherData.sw_version}
                       </Typography>
                     </TableCell>
 
                     {data?.data.data.otherData.module_type === "Engine" && (
-                      <TableCell align="center" sx={{border: 'none', padding: '5px'}}>
-                        <Typography sx={{ fontStyle }}>
-                          {status}
-                        </Typography>
+                      <TableCell
+                        align="center"
+                        sx={{ border: "none", padding: "5px" }}
+                      >
+                        <Typography sx={{ fontStyle }}>{status}</Typography>
                       </TableCell>
                     )}
                   </TableRow>
@@ -270,11 +304,12 @@ export default function DownloadPngModal({ open, data }: any) {
                     </TableCell>
                     <TableCell sx={{ fontStyle, color: "blue" }} align="center">
                       {data?.data.data.otherData.module_type === "Engine"
-                        ? data?.data.data.formData.fuel + "-" +
-                          data?.data.data.formData.no_of_strokes
+                        ? data?.data.data.formData.no_of_strokes +
+                          " " +
+                          data?.data.data.formData.fuel
                         : ""}
                       {data?.data.data.otherData.module_type === "Turbine"
-                        ? data?.data.data.formData.type + "Turbine"
+                        ? data?.data.data.formData.type + " Turbine"
                         : ""}
                       {data?.data.data.otherData.module_type === "Motor"
                         ? "Alternator / Motor"
