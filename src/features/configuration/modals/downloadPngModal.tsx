@@ -140,7 +140,77 @@ export default function DownloadPngModal({ open, data }: any) {
               // ml: 5,
             }}
           >
-            <Box component={"span"}>
+            <TableContainer>
+              <Table
+                sx={{
+                  borderCollapse: "collapse",
+                }}
+              >
+                <TableHead>
+                  <TableRow
+                    sx={{
+                      "&:last-child td, &:last-child th": {},
+                    }}
+                  >
+                    <TableCell align="center">
+                      <Typography sx={{ fontStyle }}>
+                        Timestamp (UTC)
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography sx={{ fontStyle }}>
+                        Asset- Equipment
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography sx={{ fontStyle }}>Speed (RPM)</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography sx={{ fontStyle }}>SW Version</Typography>
+                    </TableCell>
+                    {data?.data.data.otherData.module_type === "Engine" && (
+                      <TableCell align="center">
+                        <Typography sx={{ fontStyle }}>Status</Typography>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell align="center" component="th" scope="row">
+                      <Typography sx={{ fontStyle }}>
+                        {open?.DateAndTime}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography sx={{ fontStyle }}>
+                        {data?.data.data.formData.asset_name}-{" "}
+                        {data?.data.data.formData.equipment_name}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography sx={{ fontStyle }}>
+                        {data?.data.data.formData.rated_rpm}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography sx={{ fontStyle }}>
+                        {data?.data.data.otherData.sw_version}
+                      </Typography>
+                    </TableCell>
+
+                    {data?.data.data.otherData.module_type === "Engine" && (
+                      <TableCell align="center">
+                        <Typography sx={{ ...fontStyle, fontSize: "16px" }}>
+                          {status}
+                        </Typography>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {/* <Box component={"span"}>
               <Typography sx={{ fontStyle }}>Timestamp (UTC)</Typography>
               <Typography sx={{ fontStyle }}>{open?.DateAndTime}</Typography>
             </Box>
@@ -162,7 +232,8 @@ export default function DownloadPngModal({ open, data }: any) {
               <Typography sx={{ fontStyle }}>
                 {data?.data.data.otherData.sw_version}
               </Typography>
-            </Box>
+            </Box> */}
+            {/* 
             {data?.data.data.otherData.module_type === "Engine" && (
               <Box component={"span"}>
                 <Typography sx={{ fontStyle }}>Status</Typography>
@@ -170,7 +241,8 @@ export default function DownloadPngModal({ open, data }: any) {
                   {status}
                 </Typography>
               </Box>
-            )}
+            )} 
+            */}
           </Box>
           {/* specific components */}
           <Box sx={{ mt: 2 }}>{component}</Box>
