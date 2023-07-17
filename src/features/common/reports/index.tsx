@@ -17,14 +17,15 @@ import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { convertUTCDateToLocalTime } from "src/app/utils/helper";
 import api from "../../../app/api";
-import { toPng } from "html-to-image";
-import DownloadPngModal from "src/features/configuration/modals/downloadPngModal";
+import { enqueueSnackbar } from "notistack";
 
 export interface IReportsCardProps {
   liveStatus: any;
   processName: any;
   formData: any;
   moduleId: any;
+  setData: any;
+  setDocuments:any;
 }
 
 export interface IReportsRowProps {
@@ -36,6 +37,8 @@ export interface IReportsRowProps {
   processName: any;
   formData: any;
   moduleId: any;
+  setData?: any;
+  setDocuments?: any;
 }
 
 const ReportsRow = ({
@@ -45,10 +48,31 @@ const ReportsRow = ({
   reportName,
   processName,
   formData,
+  setData,
+  setDocuments
 }: IReportsRowProps) => {
   const [responseData, setResponseData] = useState([]);
   const ref = useRef<HTMLDivElement>(null);
   const parsedFormData = JSON.parse(formData);
+
+  const getPngData = (data: any) => {
+
+    const array: any[] = [];
+    let i = 0;
+    for (let item of data?.data.data.historicalData) {
+      array.push(item);
+    }
+
+    if (array.length > 10) {
+      enqueueSnackbar({
+        message: "Export Limit Exceed, Please Select Maximum 10",
+        variant: "error",
+      });
+      return;
+    }
+    setDocuments(array);
+  };
+
   const handleDownload = (reportName: any) => {
     const fileName = `${parsedFormData?.asset_name} - ${
       parsedFormData?.equipment_name
@@ -71,23 +95,9 @@ const ReportsRow = ({
         }
       )
       .then((res) => {
-        console.log("res in graphicalReport", res);
-
         if (type === "graphical") {
-          link.setAttribute("download", `${fileName}.png`);
-          if (ref.current === null) {
-            return;
-          }
-          toPng(ref.current, { quality: 0.5 })
-            .then((dataUrl: string) => {
-              link.href = dataUrl;
-
-              document.body.appendChild(link);
-              link.click();
-            })
-            .catch((err: any) => {
-              console.error(err);
-            });
+          setData(res);
+          getPngData(res);
         } else {
           const url = window.URL.createObjectURL(res.data);
           const link = document.createElement("a");
@@ -147,13 +157,6 @@ const ReportsRow = ({
           </Box>
         </Grid>
       </Grid>
-      <div style={{ opacity: 0, height: 0, overflow: "hidden" }}>
-        <div ref={ref}>
-          <div style={{ minWidth: "1200px" }}>
-            {/* <DownloadPngModal open={offer} data={data} /> */}
-          </div>
-        </div>
-      </div>
     </Box>
   );
 };
@@ -163,6 +166,8 @@ const ReportsCardContent = ({
   processName,
   formData,
   moduleId,
+  setData,
+  setDocuments
 }: IReportsCardProps) => {
   return (
     <Box>
@@ -177,6 +182,8 @@ const ReportsCardContent = ({
             processName={processName}
             formData={formData}
             moduleId={moduleId}
+            setData={setData}
+            setDocuments={setDocuments}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -238,6 +245,8 @@ const ReportsCard = ({
   processName,
   formData,
   moduleId,
+  setData,
+  setDocuments
 }: IReportsCardProps) => {
   return (
     <Box>
@@ -246,6 +255,8 @@ const ReportsCard = ({
         processName={processName}
         formData={formData}
         moduleId={moduleId}
+        setData={setData}
+        setDocuments={setDocuments}
       />
     </Box>
   );
