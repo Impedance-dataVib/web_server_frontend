@@ -13,10 +13,12 @@ import {
   Link as Matlink,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import { convertUTCDateToLocalTime } from "src/app/utils/helper";
 import api from "../../../app/api";
+import { toPng } from "html-to-image";
+import DownloadPngModal from "src/features/configuration/modals/downloadPngModal";
 
 export interface IReportsCardProps {
   liveStatus: any;
@@ -44,6 +46,7 @@ const ReportsRow = ({
   processName,
   formData,
 }: IReportsRowProps) => {
+  const ref = useRef<HTMLDivElement>(null);
   const parsedFormData = JSON.parse(formData);
   const handleDownload = (reportName: any) => {
     const fileName = `${parsedFormData?.asset_name} - ${
@@ -67,20 +70,38 @@ const ReportsRow = ({
         }
       )
       .then((res) => {
+        console.log("res in graphicalReport", res);
         const url = window.URL.createObjectURL(res.data);
         const link = document.createElement("a");
         link.href = url;
         if (type === "json") {
           link.setAttribute("download", `${fileName}.json`);
+          document.body.appendChild(link);
+          link.click();
         } else if (type === "raw") {
           link.setAttribute("download", `${fileName}.wav`);
+          document.body.appendChild(link);
+          link.click();
         } else if (type === "spredsheet") {
           link.setAttribute("download", `${fileName}.csv`);
+          document.body.appendChild(link);
+          link.click();
         } else if (type === "graphical") {
           link.setAttribute("download", `${fileName}.png`);
+          if (ref.current === null) {
+            return;
+          }
+          toPng(ref.current, { quality: 0.5 })
+            .then((dataUrl: string) => {
+              link.href = dataUrl;
+
+              document.body.appendChild(link);
+              link.click();
+            })
+            .catch((err: any) => {
+              console.error(err);
+            });
         }
-        document.body.appendChild(link);
-        link.click();
       })
       .catch((err) => console.error(err));
   };
@@ -120,6 +141,13 @@ const ReportsRow = ({
           </Box>
         </Grid>
       </Grid>
+      <div style={{ opacity: 0, height: 0, overflow: "hidden" }}>
+        <div ref={ref}>
+          <div style={{ minWidth: "1200px" }}>
+            {/* <DownloadPngModal open={offer} data={data} /> */}
+          </div>
+        </div>
+      </div>
     </Box>
   );
 };
