@@ -223,6 +223,7 @@ const DownloadPage = () => {
       report_type: reportType,
     })
       .then((val) => {
+        setSelectedItem(new Set());
         if (reportType === "graphical") {
           setShowPngGraphical(true);
           setData(val);
