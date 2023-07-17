@@ -82,7 +82,7 @@ const DownloadPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<any>([]);
   const [open, setOpen] = React.useState<any>(null);
-  const [selectedItem, setSelectedItem] = useState<any>([]);
+  const [selectedItem, setSelectedItem] = useState<any>(new Set());
   const [selectedIds, setSelectedIds] = useState([]);
 
   const datePickerText = useMemo(() => {
@@ -360,6 +360,7 @@ const DownloadPage = () => {
       }
     }
     if (array.length > 10) {
+      setIsLoading(false);
       enqueueSnackbar({
         message: "Export Limit Exceed, Please Select Maximum 10",
         variant: "error",
@@ -682,6 +683,7 @@ const DownloadPage = () => {
                     sx={{ my: "10px" }}
                     onClick={() => exportToZip(data)}
                     variant="contained"
+                    disabled={selectedItem.size === 0}
                   >
                     Export zip
                     <FileDownloadIcon sx={{ pl: 1 }} />
