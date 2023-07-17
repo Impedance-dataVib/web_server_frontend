@@ -145,11 +145,7 @@ export default function DownloadPngModal({ open, data }: any) {
                 }}
               >
                 <TableHead>
-                  <TableRow
-                    sx={{
-                      "&:last-child td, &:last-child th": {},
-                    }}
-                  >
+                  <TableRow>
                     <TableCell align="center" sx={{border: 'none', padding: '5px', paddingBottom: 0}}>
                       <Typography sx={{ fontStyle }}>
                         Timestamp (UTC)
