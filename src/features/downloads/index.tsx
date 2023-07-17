@@ -366,9 +366,9 @@ const DownloadPage = () => {
 
     if (array.length > 0) {
       setDocuments(array);
-      setIsLoading(true);
+      setIsLoading(false);
       setTimeout(function () {
-        downloadPngReport(array, dataVal);
+     //   downloadPngReport(array, dataVal);
       }, 4000);
     } else {
       setIsLoading(false);
@@ -845,7 +845,9 @@ const DownloadPage = () => {
           </AccordionDetails>
         </Accordion>
       </Box>
-      <div style={{ opacity: 0, height: 0, overflow: "hidden" }}>
+      <div
+         /*style={{ opacity: 0, height: 0, overflow: "hidden" }}*/
+      >
         {documents.map((offer: any, i: number) => (
           <div
             key={`div${i}`}
@@ -853,7 +855,7 @@ const DownloadPage = () => {
               elementRef.current[i] = ref;
             }}
           >
-            <div id={"png" + i}>
+            <div id={"png" + i} style={{minWidth: '1200px'}}>
               <DownloadPngModal open={offer} setOpen={setOpen} data={data} />
             </div>
           </div>
