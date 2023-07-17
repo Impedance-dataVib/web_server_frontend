@@ -50,8 +50,8 @@ const Bearing = ({ indicatorData }: any) => {
                 item
                 sx={{ display: "flex", flexDirection: "column" }}
                 lg={6}
-                md={12}
-                sm={12}
+                md={6}
+                sm={6}
               >
                 <Typography
                   variant="body1"

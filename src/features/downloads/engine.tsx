@@ -1,15 +1,4 @@
-import {
-  Box,
-  Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
 import SpeedoMeter from "../common/graph/speedo-meter";
@@ -54,14 +43,19 @@ const Engine = ({ indicatorData }: any) => {
                 item
                 sx={{ display: "flex", flexDirection: "column" }}
                 lg={4}
-                md={12}
-                sm={12}
+                md={4}
+                sm={4}
               >
                 <Typography
                   variant="body1"
                   component={"span"}
                   textAlign={"center"}
-                  sx={{ mb: 1, fontWeight: "400", cursor: "pointer", fontSize: "20px" }}
+                  sx={{
+                    mb: 1,
+                    fontWeight: "400",
+                    cursor: "pointer",
+                    fontSize: "20px",
+                  }}
                   title={val?.tooltip}
                 >
                   {val?.indicatorName}
@@ -120,8 +114,8 @@ const Engine = ({ indicatorData }: any) => {
                 item
                 sx={{ display: "flex", flexDirection: "column" }}
                 lg={6}
-                md={12}
-                sm={12}
+                md={6}
+                sm={6}
               >
                 <SunburstChart
                   data={val}

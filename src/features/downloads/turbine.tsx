@@ -29,7 +29,7 @@ const Turbine = ({ indicatorData }: any) => {
     <Box>
       <Grid item xs={12} my={"20px"}>
         <Grid
-          sx={{padding: "0 100px"}}
+          sx={{ padding: "0 100px" }}
           container
           alignItems={"center"}
           justifyContent="center"
@@ -43,14 +43,19 @@ const Turbine = ({ indicatorData }: any) => {
                 item
                 sx={{ display: "flex", flexDirection: "column" }}
                 lg={6}
-                md={12}
-                sm={12}
+                md={6}
+                sm={6}
               >
                 <Typography
                   variant="body1"
                   component={"span"}
                   textAlign={"center"}
-                  sx={{ mb: 1, fontWeight: "400", cursor: "pointer", fontSize: "25px" }}
+                  sx={{
+                    mb: 1,
+                    fontWeight: "400",
+                    cursor: "pointer",
+                    fontSize: "25px",
+                  }}
                   title={val?.tooltip}
                 >
                   {val?.indicatorName}
