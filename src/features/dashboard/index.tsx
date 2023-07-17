@@ -205,7 +205,9 @@ const DashboardPage = () => {
           setIsWebSocketFailed(false);
         }
       } else {
-        setIsDataAvailable('Process file not found on server. Please check the configurations.');
+        setIsDataAvailable(
+          "Process file not found on server. Please check the configurations."
+        );
         setIsWebSocketFailed(false);
         setWebSocketsData({});
       }
@@ -319,16 +321,18 @@ const DashboardPage = () => {
               setIsWebSocketFailed(false);
             }}
           >
-           <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex" }}>
               <AlertTitle>{isDataAvailable}</AlertTitle>
-            {isWebSocketFailed && <Button
-                size="small"
-                sx={{ ml: "30px" }}
-                variant="outlined"
-                onClick={handleClick}
-              >
-                Restart WebSocket
-              </Button>}
+              {isWebSocketFailed && (
+                <Button
+                  size="small"
+                  sx={{ ml: "30px" }}
+                  variant="outlined"
+                  onClick={handleClick}
+                >
+                  Restart WebSocket
+                </Button>
+              )}
             </Box>
           </Alert>
         </Box>
@@ -351,7 +355,7 @@ const DashboardPage = () => {
               ? t("dashboard.loading.module.text", { ns: "dashboard" })
               : t("dashboard.module.text", { ns: "dashboard" })}
           </Typography>
-          <Box sx={{ ml: 1 }}>
+          <Box sx={{ minWidth: "50vw", maxWidth: "50vw" }}>
             <Tabs
               value={activeModule}
               onChange={onActiveModuleChange}
