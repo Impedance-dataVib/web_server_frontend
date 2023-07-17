@@ -310,7 +310,7 @@ export function buildData(response) {
   }
   // process engine data
   if (response["type"] === "Engine") {
-    data = JSON.parse(historical_data.at(-1)?.jsondata);
+    data = JSON.parse(historical_data.at(0)?.jsondata);
     const moduleData = data["Engine"];
     const firingOrder = moduleData["FiringOrder"];
     const firingOrderSplit = firingOrder.length / 2;
