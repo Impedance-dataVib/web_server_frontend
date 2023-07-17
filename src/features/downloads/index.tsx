@@ -856,7 +856,7 @@ const DownloadPage = () => {
                         }}
                     >
                         <div id={"png" + i} style={{minWidth: '1200px'}}>
-                            <DownloadPngModal open={offer} setOpen={setOpen} data={data}/>
+                            <DownloadPngModal open={offer} data={data}/>
                         </div>
                     </div>
                 ))}
