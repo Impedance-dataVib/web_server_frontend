@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Grid, Tab, Tabs } from "@mui/material";
+import { Grid, LinearProgress, Tab, Tabs } from "@mui/material";
 import AlertsAndInstructions from "src/features/common/alertsAndInstructions";
 import CardWidget from "src/app/components/card";
 import {
@@ -43,6 +43,7 @@ const ModuleMonitoringPage = ({
   const [documents, setDocuments] = useState<any>([]);
   const elementRef = useRef<(HTMLDivElement | null)[]>([]);
   const [data, setData] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onActiveModuleChange = (event: any, params: any) => {
     setActiveModule(params);
@@ -101,7 +102,7 @@ const ModuleMonitoringPage = ({
   }, [trendsData]);
 
   useEffect(() => {
-    if(documents.length > 0) {
+    if (documents.length > 0) {
       setTimeout(function () {
         elementRef.current.map((val: any) => {
           if (val) {
@@ -110,17 +111,19 @@ const ModuleMonitoringPage = ({
                 const link = document.createElement("a");
                 link.download = "my-image-name.png";
                 link.href = dataUrl;
+                setIsLoading(false);
                 link.click();
                 setDocuments([]);
               })
               .catch((err) => {
+                setIsLoading(false);
                 setDocuments([]);
               });
-          } 
+          }
         });
       }, 1000);
     }
-  }, [documents])
+  }, [documents]);
 
   return (
     <Grid container spacing={1}>
@@ -312,6 +315,8 @@ const ModuleMonitoringPage = ({
               moduleId={moduleId}
               setData={setData}
               setDocuments={setDocuments}
+              setIsLoading={setIsLoading}
+              isLoading={isLoading}
             />
           }
           initiallyCollapsed={true}
@@ -323,13 +328,13 @@ const ModuleMonitoringPage = ({
               moduleId={moduleId}
               setData={setData}
               setDocuments={setDocuments}
+              setIsLoading={setIsLoading}
+              isLoading={isLoading}
             />
           }
         />
       </Grid>
-      <div 
-        style={{ opacity: 0, height: 0, overflow: "hidden" }}
-      >
+      <div style={{ opacity: 0, height: 0, overflow: "hidden" }}>
         {documents.map((offer: any, i: number) => (
           <div
             key={`div${i}`}

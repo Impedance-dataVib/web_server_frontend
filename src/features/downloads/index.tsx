@@ -30,6 +30,7 @@ import {
   AccordionDetails,
   CircularProgress,
   Modal,
+  LinearProgress,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FolderIcon from "@mui/icons-material/Folder";
@@ -59,6 +60,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import JSZip from "jszip";
 import cx from "classnames";
 import { Folder, FolderOpen } from "@mui/icons-material";
+import FullScreenLoader from "src/app/components/fullscreen-loader";
 
 const DownloadPage = () => {
   const initial = "";
@@ -644,10 +646,9 @@ const DownloadPage = () => {
         </Box>
       </form>
       <Box>
-        {isLoading && (
+        {/* {isLoading && (
           <Box
             sx={{
-              // mx: "20px",
               position: "absolute",
               top: 0,
               right: 0,
@@ -658,14 +659,52 @@ const DownloadPage = () => {
               alignItems: "center",
               justifyContent: "center",
               zIndex: 2,
-              opacity: 0.4,
-              height: "100%",
+              opacity: 0.7,
+              height: "100vh",
             }}
           >
-            <CircularProgress />
-            Loading....
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress sx={{ color: "white" }} />
+              <Typography color={"white"} px={2}>
+                Loading....
+              </Typography>
+            </Box>
           </Box>
-        )}
+        )} */}
+        {/* {isLoading && (
+          <Box sx={{ my: 1, width: "100%" }}>
+            <LinearProgress />
+          </Box>
+        )} */}
+        {/* {isLoading && (
+          <Box
+            sx={{
+              height: "100vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#D3D3D3",
+            }}
+          >
+            <Box
+              sx={{
+                height: "20px",
+                color: (theme) => theme.palette.color3.main,
+                textAlign: "center",
+              }}
+            >
+              <CircularProgress
+                sx={{ color: (theme) => theme.palette.color3.main }}
+              />
+              <Typography>Loading</Typography>
+            </Box>
+          </Box>
+        )} */}
         {showPngGraphical &&
           reportType === "graphical" &&
           (data?.data.data.historicalData.length > 0 ? (
@@ -880,6 +919,36 @@ const DownloadPage = () => {
           </div>
         ))}
       </div>
+      {isLoading && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0,
+            bgcolor: "#D3D3D3",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 2,
+            opacity: 0.7,
+            height: "100%",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress sx={{ color: "white" }} />
+            <Typography color={"white"} px={2}>
+              Loading....
+            </Typography>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 };

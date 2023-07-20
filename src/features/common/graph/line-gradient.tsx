@@ -70,7 +70,7 @@ export default function LineGradient({
         tension: 0,
         pointBackgroundColor: "#2D4356",
         yAxisID: "y1",
-        pointRadius:0,
+        pointRadius: 0,
         hidden: false,
         borderWidth: 2,
       },
@@ -81,7 +81,7 @@ export default function LineGradient({
         backgroundColor: "#576CBC",
         pointBackgroundColor: "#576CBC",
         yAxisID: "y",
-        pointRadius:0,
+        pointRadius: 0,
         tension: 0,
         borderWidth: 2,
       },
@@ -95,7 +95,7 @@ export default function LineGradient({
       backgroundColor: "#957777",
       pointBackgroundColor: "#957777",
       yAxisID: "y",
-      pointRadius:0,
+      pointRadius: 0,
       tension: 0,
       borderWidth: 2,
     });
@@ -207,7 +207,7 @@ export default function LineGradient({
           font: {
             size: 14,
             family: 'Poppins,Helvetica,"sans-serif',
-            weight: "bold",
+            // weight: "bold",
           },
         },
       },
@@ -232,7 +232,7 @@ export default function LineGradient({
           font: {
             size: 14,
             family: 'Poppins,Helvetica,"sans-serif',
-            weight: "bold",
+            // weight: "bold",
           },
         },
         grid: {

@@ -7,9 +7,11 @@ import {
 } from "@mui/icons-material";
 import {
   Box,
+  CircularProgress,
   Divider,
   Grid,
   IconButton,
+  LinearProgress,
   Link as Matlink,
   Typography,
 } from "@mui/material";
@@ -25,7 +27,9 @@ export interface IReportsCardProps {
   formData: any;
   moduleId: any;
   setData: any;
-  setDocuments:any;
+  setDocuments: any;
+  setIsLoading: any;
+  isLoading: any;
 }
 
 export interface IReportsRowProps {
@@ -39,6 +43,7 @@ export interface IReportsRowProps {
   moduleId: any;
   setData?: any;
   setDocuments?: any;
+  setIsLoading: any;
 }
 
 const ReportsRow = ({
@@ -49,14 +54,13 @@ const ReportsRow = ({
   processName,
   formData,
   setData,
-  setDocuments
+  setDocuments,
+  setIsLoading,
 }: IReportsRowProps) => {
-  const [responseData, setResponseData] = useState([]);
   const ref = useRef<HTMLDivElement>(null);
   const parsedFormData = JSON.parse(formData);
 
   const getPngData = (data: any) => {
-
     const array: any[] = [];
     let i = 0;
     for (let item of data?.data.data.historicalData) {
@@ -74,6 +78,7 @@ const ReportsRow = ({
   };
 
   const handleDownload = (reportName: any) => {
+    setIsLoading(true);
     const fileName = `${parsedFormData?.asset_name} - ${
       parsedFormData?.equipment_name
     } -${convertUTCDateToLocalTime(new Date())}`;
@@ -105,21 +110,27 @@ const ReportsRow = ({
           if (type === "json") {
             link.setAttribute("download", `${fileName}.json`);
             document.body.appendChild(link);
+            setIsLoading(false);
             link.click();
           }
           if (type === "raw") {
             link.setAttribute("download", `${fileName}.wav`);
             document.body.appendChild(link);
+            setIsLoading(false);
             link.click();
           }
           if (type === "spredsheet") {
             link.setAttribute("download", `${fileName}.csv`);
             document.body.appendChild(link);
+            setIsLoading(false);
             link.click();
           }
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -167,7 +178,9 @@ const ReportsCardContent = ({
   formData,
   moduleId,
   setData,
-  setDocuments
+  setDocuments,
+  setIsLoading,
+  isLoading,
 }: IReportsCardProps) => {
   return (
     <Box>
@@ -184,6 +197,7 @@ const ReportsCardContent = ({
             moduleId={moduleId}
             setData={setData}
             setDocuments={setDocuments}
+            setIsLoading={setIsLoading}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -197,6 +211,7 @@ const ReportsCardContent = ({
             processName={processName}
             formData={formData}
             moduleId={moduleId}
+            setIsLoading={setIsLoading}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -210,6 +225,7 @@ const ReportsCardContent = ({
             processName={processName}
             formData={formData}
             moduleId={moduleId}
+            setIsLoading={setIsLoading}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -223,6 +239,7 @@ const ReportsCardContent = ({
             processName={processName}
             formData={formData}
             moduleId={moduleId}
+            setIsLoading={setIsLoading}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -246,10 +263,17 @@ const ReportsCard = ({
   formData,
   moduleId,
   setData,
-  setDocuments
+  setDocuments,
+  setIsLoading,
+  isLoading,
 }: IReportsCardProps) => {
   return (
     <Box>
+      {isLoading && (
+        <Grid sx={{ mb: 1, width: "100%" }}>
+          <LinearProgress />
+        </Grid>
+      )}
       <ReportsCardContent
         liveStatus={liveStatus}
         processName={processName}
@@ -257,6 +281,8 @@ const ReportsCard = ({
         moduleId={moduleId}
         setData={setData}
         setDocuments={setDocuments}
+        setIsLoading={setIsLoading}
+        isLoading={isLoading}
       />
     </Box>
   );

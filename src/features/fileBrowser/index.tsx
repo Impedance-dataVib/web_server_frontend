@@ -8,6 +8,8 @@ import {
   Tabs,
   Tab,
   Tooltip,
+  Alert,
+  AlertTitle,
 } from "@mui/material";
 
 import Auxiliarydata_speedometer from "./Auxiliarydata_speedometer";
@@ -162,7 +164,10 @@ const FileBrowserPage = () => {
               {moduleTabs?.map((tabElement: any, index: number) => {
                 if (tabElement.module_type.includes("Engine")) {
                   return (
-                    <Tooltip title={tabElement.name} key={`tabElement${tabElement?.id}`}>
+                    <Tooltip
+                      title={tabElement.name}
+                      key={`tabElement${tabElement?.id}`}
+                    >
                       <Tab
                         label={`${
                           JSON.parse(tabElement.from_data).asset_name
@@ -184,9 +189,35 @@ const FileBrowserPage = () => {
       <Box sx={{ bgcolor: "white", mt: "15px" }}>
         <Divider sx={{ mb: "10px" }} />
         <Grid container spacing={3}>
-          {globalIndicator.map((val: any) => (
-            <Auxiliarydata_speedometer val={val} key={`aux${val?.id}`}/>
-          ))}
+          {globalIndicator && globalIndicator.length > 0 ? (
+            globalIndicator.map((val: any) => (
+              <Auxiliarydata_speedometer val={val} key={`aux${val?.id}`} />
+            ))
+          ) : (
+            <Box>
+              <Alert
+                sx={{ display: "flex" }}
+                severity="error"
+                // onClose={() => {
+                //   setIsError(false);
+                // }}
+              >
+                <AlertTitle>
+                  Additional data such as (Load Percent, Fuel Level, Engine Oil
+                  Temperature,Engine Oil Pressure(kPa),Engine Coolant
+                  Temperature(C),Engine RPM,Fuel Pressure(kPa),Crankcase
+                  Pressure(kPa),Boost Pressure(kPa) etc ) are not integrated
+                  with the Vibox
+                </AlertTitle>
+              </Alert>
+              {/* <Typography
+                fontSize={"16px"}
+                fontWeight={500}
+                p={1}
+                pl={4}
+              ></Typography> */}
+            </Box>
+          )}
         </Grid>
       </Box>
     </Box>

@@ -111,10 +111,22 @@ const SettingsPage = () => {
       });
   };
   const handleClick = () => {
-    const date = new Date().toLocaleDateString();
-    console.log("date", date);
+    const date = new Date();
+    const toSendDate =
+      date.getUTCFullYear() +
+      "-" +
+      (date.getUTCMonth() + 1).toString().padStart(2, "0") +
+      "-" +
+      date.getUTCDate().toString().padStart(2, "0") +
+      " " +
+      date.getUTCHours().toString().padStart(2, "0") +
+      ":" +
+      date.getUTCMinutes().toString().padStart(2, "0") +
+      ":" +
+      date.getUTCSeconds().toString().padStart(2, "0");
+    console.log("date", toSendDate);
     api
-      .get(`/vbox/synk_time.php`)
+      .get(`/vbox/synk_time.php?synk_time=${toSendDate}`)
       .then((res) => {
         enqueueSnackbar({
           message: res?.data?.Message,
