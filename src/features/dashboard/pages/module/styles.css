@@ -1,0 +1,7 @@
+.sunburst-viz .text-contour {
+    stroke: none !important;
+}
+
+.sunburst-viz text {
+    fill: white !important;
+}
