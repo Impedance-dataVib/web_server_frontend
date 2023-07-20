@@ -2347,8 +2347,8 @@ export function buildAuxData(data) {
                 if (val && val?.Value && val?.Value !== "NA") {
                     returnData.push({
                         id: id++,
-                        indicatorMax: val?.Max,
-                        indicatorMin: val?.Min,
+                        indicatorMax: val?.Max ? val?.Max : 0,
+                        indicatorMin: val?.Min ? val?.Min : 0,
                         indicatorName: val?.Desc + "(" + val?.Unit + ")",
                         indicatorValue: Math.round(val?.Value),
                         isGradientColor: false,
