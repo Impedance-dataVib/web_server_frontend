@@ -83,12 +83,12 @@ const CardWidget = ({
 
   useEffect(() => {
     if (setIsLatestReportOpen) {
-      setIsLatestReportOpen(!collapsed);
+      setIsLatestReportOpen(!collapsed || openModal);
     }
     if (setIsLiveStatusOpen) {
-      setIsLiveStatusOpen(!collapsed);
+      setIsLiveStatusOpen(!collapsed || openModal);
     }
-  }, [collapsed]);
+  }, [collapsed, openModal]);
 
   const getSectionSx = useMemo(() => {
     const topSection =
