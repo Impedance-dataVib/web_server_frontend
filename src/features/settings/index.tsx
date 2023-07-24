@@ -533,7 +533,7 @@ const SettingsPage = () => {
               >
                 SAVE
               </Button>
-              <Button
+              {/* <Button
                 size="small"
                 variant="contained"
                 color="inherit"
@@ -546,7 +546,7 @@ const SettingsPage = () => {
                 onClick={getSettingsInfo}
               >
                 Cancel
-              </Button>
+              </Button> */}
             </Box>
           </Box>
         </Box>

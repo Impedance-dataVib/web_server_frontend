@@ -231,6 +231,7 @@ const DownloadPage = () => {
           setData(val);
           setIsLoading(false);
           setSelectedIds([]);
+          selectedItem.clear();
         } else {
           setIsLoading(false);
           setShowPngGraphical(false);
@@ -251,6 +252,10 @@ const DownloadPage = () => {
         });
       });
   };
+  useEffect(() => {
+    console.log("selectedIds", selectedIds);
+    console.log("selectedItem", selectedItem);
+  }, [selectedIds, selectedItem]);
   //get all the data of table
   const show = () => {
     api
@@ -319,37 +324,6 @@ const DownloadPage = () => {
     return flattenTree(folder);
   };
 
-  const FolderIcon = ({ isOpen }: any) =>
-    isOpen ? (
-      <FaRegFolderOpen color="e8a87c" className="icon" />
-    ) : (
-      <FaRegFolder color="e8a87c" className="icon" />
-    );
-  const handleOpenModal = (val: any) => {
-    setIsLoading(true);
-    setDocuments([val.metadata]);
-    setTimeout(function () {
-      elementRef.current.map((val: any) => {
-        if (val) {
-          toPng(val, { quality: 0.5 })
-            .then((dataUrl: string) => {
-              const link = document.createElement("a");
-              link.download = "my-image-name.png";
-              link.href = dataUrl;
-              setIsLoading(false);
-              link.click();
-              setDocuments([]);
-            })
-            .catch((err) => {
-              setDocuments([]);
-            });
-        } else {
-          setIsLoading(false);
-        }
-      });
-    }, 1000);
-  };
-
   const exportToZip = (dataVal: any) => {
     setIsLoading(true);
 
@@ -380,16 +354,6 @@ const DownloadPage = () => {
       setIsLoading(false);
     }
   };
-  const ArrowIcon = ({ isOpen, className }: any) => {
-    const baseClass = "arrow";
-    const classes = cx(
-      baseClass,
-      { [`${baseClass}--closed`]: !isOpen },
-      { [`${baseClass}--open`]: isOpen },
-      className
-    );
-    return <FaCaretRight className={classes} />;
-  };
 
   const CheckBoxIcon = ({ variant, ...rest }: any) => {
     switch (variant) {
@@ -401,11 +365,6 @@ const DownloadPage = () => {
         return <FaMinusSquare {...rest} />;
       default:
         return null;
-    }
-  };
-  const onKeyDown = (e: any) => {
-    if (e.key === "Enter") {
-      getAndSetIds();
     }
   };
 

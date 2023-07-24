@@ -194,14 +194,8 @@ const FileBrowserPage = () => {
               <Auxiliarydata_speedometer val={val} key={`aux${val?.id}`} />
             ))
           ) : (
-            <Box>
-              <Alert
-                sx={{ display: "flex" }}
-                severity="error"
-                // onClose={() => {
-                //   setIsError(false);
-                // }}
-              >
+            <Box sx={{ width: "100%" }}>
+              <Alert sx={{ display: "flex", width: "100%" }} severity="error">
                 <AlertTitle>
                   Additional data such as (Load Percent, Fuel Level, Engine Oil
                   Temperature,Engine Oil Pressure(kPa),Engine Coolant
@@ -210,12 +204,6 @@ const FileBrowserPage = () => {
                   with the Vibox
                 </AlertTitle>
               </Alert>
-              {/* <Typography
-                fontSize={"16px"}
-                fontWeight={500}
-                p={1}
-                pl={4}
-              ></Typography> */}
             </Box>
           )}
         </Grid>
