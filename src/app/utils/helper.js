@@ -1968,14 +1968,18 @@ function buildLineChart(
 }
 
 function calculateTorqueValue(value, key) {
-    if (key === "StaticTorque") {
-        return parseFloat((value || 0) * 0.001).toFixed(2);
-    }
+    if (value) {
+        if (key === "StaticTorque") {
+            return parseFloat((value || 0) * 0.001).toFixed(2);
+        }
 
-    if (key === "StaticPower") {
-        return parseFloat((value || 0) * 1.0e-6).toFixed(2);
+        if (key === "StaticPower") {
+            return parseFloat((value || 0) * 1.0e-6).toFixed(2);
+        }
+        return parseFloat(value).toFixed(2);
+    } else {
+        return 0;
     }
-    return parseFloat(value).toFixed(2);
 }
 
 export function buildTrendData(historical_data, type, from_data) {
