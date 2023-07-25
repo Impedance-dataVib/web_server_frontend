@@ -2136,11 +2136,11 @@ function buildDataSet(title, color, dataPoints, axisId) {
         yAxisID: axisId ?? "y",
         hidden: false,
         minVal: isAverage
-            ? Math.round(Math.min(...dataPoints))
-            : Math.min(...dataPoints),
+            ?  parseFloat(Math.min(...dataPoints)).toFixed(2)
+            : Math.round(Math.min(...dataPoints)),
         maxValue: isAverage
-            ? Math.round(Math.max(...dataPoints))
-            : Math.max(...dataPoints),
+            ? parseFloat(Math.max(...dataPoints)).toFixed(2)
+            : Math.round(Math.max(...dataPoints)),
         avgValue: isAverage
             ? average(dataPoints)
             : roundToNearest10(average(dataPoints)),
