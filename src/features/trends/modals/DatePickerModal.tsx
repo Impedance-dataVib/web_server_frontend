@@ -35,11 +35,11 @@ const DateRangePickerModal = memo(
       key: "selection",
     });
 
-    const minDate = new Date(
-      new Date().getFullYear(),
-      new Date().getMonth() - 3,
-      new Date().getDate()
-    );
+    // const minDate = new Date(
+    //   new Date().getFullYear(),
+    //   new Date().getMonth() - 3,
+    //   new Date().getDate()
+    // );
     return (
       <>
         <Dialog open={open} onClose={onClose}>
@@ -49,7 +49,6 @@ const DateRangePickerModal = memo(
               <DateRange
                 ranges={[dateValuesLocal]}
                 maxDate={new Date()}
-                minDate={minDate}
                 onChange={(e: any) => {
                   setDateValuesLocal(e.selection);
                 }}
