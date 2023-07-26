@@ -300,6 +300,7 @@ function buildPeekPressureChart(data, firingOrder, maxPressure) {
 export function buildData(response) {
     const from_data = response["from_data"];
     const maxPower = from_data?.power;
+    const alertData=response["alertData"];
     const historical_data = response["historical_data"];
     let data = {};
 
@@ -412,7 +413,7 @@ export function buildData(response) {
         return {
             cylinder_specific_indicators: cylinder_specific_indicators,
             trends: trends,
-            alert: buildEngineAlertData(historical_data),
+            alert: buildEngineAlertData(alertData),
             alertUpdatedOn: new Date(),
         };
     }
@@ -442,7 +443,7 @@ export function buildData(response) {
         return {
             cylinder_specific_indicators: [],
             trends,
-            alert: buildTorqueAlertData(historical_data),
+            alert: buildTorqueAlertData(alertData),
             alertUpdatedOn: new Date(),
         };
     }
@@ -495,7 +496,7 @@ export function buildData(response) {
             return {
                 cylinder_specific_indicators: [],
                 trends: trends,
-                alert: buildTurbineAlertData(historical_data),
+                alert: buildTurbineAlertData(alertData),
                 alertUpdatedOn: new Date(),
             };
         }
@@ -524,7 +525,7 @@ export function buildData(response) {
         return {
             cylinder_specific_indicators: [],
             trends: trends,
-            alert: buildMotorAlertData(historical_data),
+            alert: buildMotorAlertData(alertData),
             alertUpdatedOn: new Date(),
         };
     }
@@ -551,7 +552,7 @@ export function buildData(response) {
         return {
             cylinder_specific_indicators: [],
             trends: trends,
-            alert: buildBearingAlertData(historical_data),
+            alert: buildBearingAlertData(alertData),
             alertUpdatedOn: new Date(),
         };
     }
@@ -2006,10 +2007,7 @@ export function buildTrendData(historical_data, type, from_data) {
                 if (keysToIgnore[type].includes(key)) {
                     const objData = item[key];
 
-                    if (
-                        objData.hasOwnProperty("cylinderHealth") &&
-                        objData?.cylinderHealth
-                    ) {
+                    if (objData.hasOwnProperty("cylinderHealth") && objData?.cylinderHealth) {
                         const cylArray = objData?.cylinderHealth;
                         let i = 0;
                         for (let order of firingOrder) {
@@ -2018,11 +2016,11 @@ export function buildTrendData(historical_data, type, from_data) {
                                     (x) => x.key === key + "Cyl " + firingOrderLabel[i]
                                 );
                                 if (foundIndex !== -1) {
-                                    resultSet[foundIndex].data.push(cylArray[i]);
+                                    resultSet[foundIndex].data.push(cylArray[i] ? cylArray[i] : 0);
                                 } else {
                                     resultSet.push({
                                         key: key + "Cyl " + firingOrderLabel[i],
-                                        data: [cylArray[i]],
+                                        data: [cylArray[i] ? cylArray[i] : 0],
                                     });
                                 }
                             }
@@ -2033,20 +2031,19 @@ export function buildTrendData(historical_data, type, from_data) {
                     const foundIndex = resultSet.findIndex((x) => x.key === key);
                     if (foundIndex !== -1) {
                         if (key === "PowerLoss") {
-                            resultSet[foundIndex].data.push(
-                                parseFloat(objData?.value).toFixed(2)
+                            resultSet[foundIndex].data.push(objData?.value ? parseFloat(objData?.value).toFixed(2) : 0
                             );
                         } else {
-                            resultSet[foundIndex].data.push(objData?.valueInHealth);
+                            resultSet[foundIndex].data.push(objData?.valueInHealth ? objData?.valueInHealth : 0);
                         }
                     } else {
                         if (key === "PowerLoss") {
                             resultSet.push({
                                 key,
-                                data: [parseFloat(objData?.value).toFixed(2)],
+                                data: [objData?.value ? parseFloat(objData?.value).toFixed(2) : 0],
                             });
                         } else {
-                            resultSet.push({key, data: [objData?.valueInHealth]});
+                            resultSet.push({key, data: [objData?.valueInHealth ? objData?.valueInHealth : 0]});
                         }
                     }
                     toPush = true;
@@ -2076,9 +2073,9 @@ export function buildTrendData(historical_data, type, from_data) {
                     const objData = item[key];
                     const foundIndex = resultSet.findIndex((x) => x.key === key);
                     if (foundIndex !== -1) {
-                        resultSet[foundIndex].data.push(objData?.valueInHealth);
+                        resultSet[foundIndex].data.push(objData?.valueInHealth ? objData?.valueInHealth : 0);
                     } else {
-                        resultSet.push({key, data: [objData?.valueInHealth]});
+                        resultSet.push({key, data: [objData?.valueInHealth ? objData?.valueInHealth : 0]});
                     }
                     toPush = true;
                 }
@@ -2135,15 +2132,15 @@ function buildDataSet(title, color, dataPoints, axisId) {
         fill: false,
         yAxisID: axisId ?? "y",
         hidden: false,
-        minVal: isAverage
-            ?  parseFloat(Math.min(...dataPoints)).toFixed(2)
-            : Math.round(Math.min(...dataPoints)),
-        maxValue: isAverage
+        minVal: (isAverage
+            ? parseFloat(Math.min(...dataPoints)).toFixed(2)
+            : Math.round(Math.min(...dataPoints))) || 0,
+        maxValue: (isAverage
             ? parseFloat(Math.max(...dataPoints)).toFixed(2)
-            : Math.round(Math.max(...dataPoints)),
-        avgValue: isAverage
+            : Math.round(Math.max(...dataPoints))) || 0,
+        avgValue: (isAverage
             ? average(dataPoints)
-            : roundToNearest10(average(dataPoints)),
+            : roundToNearest10(average(dataPoints))) || 0,
     };
 }
 
