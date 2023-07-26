@@ -196,9 +196,7 @@ export default function LineGradient({
             size: 12,
             weight: "bold",
           },
-          callback: (value: any) => {
-            return parseInt(value);
-          },
+
         },
         title: {
           padding: 7,
