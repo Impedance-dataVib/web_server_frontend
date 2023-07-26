@@ -300,7 +300,7 @@ function buildPeekPressureChart(data, firingOrder, maxPressure) {
 export function buildData(response) {
     const from_data = response["from_data"];
     const maxPower = from_data?.power;
-    const alertData=response["alertData"];
+    const alertData = response["alertData"];
     const historical_data = response["historical_data"];
     let data = {};
 
@@ -1907,14 +1907,7 @@ function buildEngineAlertData(historical_data) {
     return returnArray;
 }
 
-function buildLineChart(
-    data,
-    key,
-    title,
-    isGradientOpposite,
-    hideBackground,
-    maxPower
-) {
+function buildLineChart(data, key, title, isGradientOpposite, hideBackground, maxPower) {
     let yMaxValue = maxPower || 6;
     let labels = [];
     let datapoints = [];
@@ -1932,13 +1925,13 @@ function buildLineChart(
             zAxisDataPoints.push(parseInt(moduleData?.ChannelSpeed || 0));
             try {
                 const valueObject = moduleData[key];
-                if (isGradientOpposite && valueObject) {
-                    datapoints.push(round(valueObject?.valueInHealth || 0));
+                if (key === 'StaticPower') {
+                    datapoints.push(round((valueObject?.value || 0) * 1.0e-6));
                 } else {
-                    datapoints.push(round(valueObject?.value || 0));
+                    datapoints.push(round((valueObject?.value || 0) * 0.001));
                 }
             } catch (e) {
-                console.error("ignorableIerror", e);
+                console.error("ignorablel error", e);
             }
             count++;
         }
