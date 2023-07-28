@@ -443,7 +443,7 @@ export function buildData(response) {
         return {
             cylinder_specific_indicators: [],
             trends,
-            alert: buildTorqueAlertData(alertData),
+            alert: buildTorqueAlertData(historical_data),
             alertUpdatedOn: new Date(),
         };
     }
