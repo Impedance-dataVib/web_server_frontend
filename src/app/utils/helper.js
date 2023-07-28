@@ -317,8 +317,8 @@ export function buildData(response) {
         const firingOrder = moduleData["FiringOrder"];
         const firingOrderSplit = firingOrder.length / 2;
         const first = firingOrder.slice(0, firingOrderSplit);
-
         const second = firingOrder.slice(first.length);
+
         let cylinder_specific_indicators = [];
         const firingOrderLabel = from_data?.firing_order.trim().split(",");
         if (data?.Compression) {
@@ -885,6 +885,7 @@ function checkForAlert(dataPoints, min, max) {
     let isCompleteRed = false;
     let isCompletelyOrange = false;
     let isCompletelyGreen = false;
+
     for (let i of dataPoints) {
         if (i <= min) {
             isCompleteRed = true;
@@ -1633,22 +1634,21 @@ function buildEngineAlertData(historical_data) {
 
     const InjectionCondition = data["InjectionCondition"]; //Performance of Vibration Damper
 
+    const min = 30;
+    const max = 70;
+
     if (InjectionCondition) {
-        let waring = false;
-        let is_all_waring = true;
-        let is_all_error = true;
-        for (const cylinder of InjectionCondition?.cylinderValues) {
-            if (cylinder <= 30) {
-                is_all_waring = false;
-            } else if (cylinder > 30 && cylinder <= 70) {
-                waring = true;
-                is_all_error = false;
-            } else {
-                is_all_waring = false;
-                is_all_error = false;
+        let isCompleteRed = false;
+        let isCompletelyOrange = false;
+
+        for (const i of InjectionCondition?.cylinderValues) {
+            if (i <= min) {
+                isCompleteRed = true;
+            } else if (i > min && i <= max) {
+                isCompletelyOrange = true;
             }
         }
-        if (is_all_error) {
+        if (isCompleteRed && !isCompletelyOrange) {
             returnArray.push({
                 instructionName: "Fuel Injection Performance",
                 instructionType: "error",
@@ -1662,21 +1662,20 @@ function buildEngineAlertData(historical_data) {
                     "Check fuel linkage in affected cylinders",
                 ],
             });
-        } else {
-            if (is_all_waring) {
-                returnArray.push({
-                    instructionName: "Fuel Injection Performance",
-                    instructionType: "warning",
-                    instructions: [
-                        "If fuel system has just been overhauled, check for faulty assembly",
-                        "Check running hours if injector/pump is due for overhaul",
-                        "Check Fuel oil filter/filter pressure. Check for fuel quality",
-                        "Check for injector timing.",
-                        "Pressure test injector/Dismantle fuel pump/injector. Overhaul if neccessary. ",
-                        "Check fuel linkage in affected cylinders",
-                    ],
-                });
-            } else if (waring) {
+        } else if (isCompletelyOrange || isCompleteRed) {
+            returnArray.push({
+                instructionName: "Fuel Injection Performance",
+                instructionType: "warning",
+                instructions: [
+                    "If fuel system has just been overhauled, check for faulty assembly",
+                    "Check running hours if injector/pump is due for overhaul",
+                    "Check Fuel oil filter/filter pressure. Check for fuel quality",
+                    "Check for injector timing.",
+                    "Pressure test injector/Dismantle fuel pump/injector. Overhaul if neccessary. ",
+                    "Check fuel linkage in affected cylinders",
+                ],
+            });
+            /*} else if (waring) {
                 returnArray.push({
                     instructionName: "Fuel Injection Performance",
                     instructionType: "warning",
@@ -1688,26 +1687,21 @@ function buildEngineAlertData(historical_data) {
                         "Check fuel linkage in affected cylinders",
                     ],
                 });
-            }
+            }*/
         }
     }
     if (compression) {
-        let waring = false;
-        let is_all_waring = true;
-        let is_all_error = true;
+        let isCompleteRed = false;
+        let isCompletelyOrange = false;
 
-        for (const cylinder of compression?.cylinderValues) {
-            if (cylinder <= 30) {
-                is_all_waring = false;
-            } else if (cylinder > 30 && cylinder <= 70) {
-                waring = true;
-                is_all_error = false;
-            } else {
-                is_all_waring = false;
-                is_all_error = false;
+        for (const i of compression?.cylinderValues) {
+            if (i <= min) {
+                isCompleteRed = true;
+            } else if (i > min && i <= max) {
+                isCompletelyOrange = true;
             }
         }
-        if (is_all_error) {
+        if (isCompleteRed && !isCompletelyOrange) {
             returnArray.push({
                 instructionName: "Compression in Cylinders",
                 instructionType: "error",
@@ -1722,57 +1716,53 @@ function buildEngineAlertData(historical_data) {
                     "Check for blue exhaust smoke indicating broken piston ring and excessive lube being burnt",
                 ],
             });
-        } else {
-            if (is_all_waring) {
-                returnArray.push({
-                    instructionName: "Compression in Cylinders",
-                    instructionType: "warning",
-                    instructions: [
-                        "If top overhaul has just been performed, check for faulty assembly",
-                        "Check Tappet Settings",
-                        "Check Crankcase pressure which may indicate liner/piston issues.",
-                        "Check Compression Pressure of specific cylinder",
-                        "Check Exhaust Temperatures specific cylinder which may indicate valve tighntess issues",
-                        "Use Borescope for further identification",
-                        "Check for deterioration in the Condition of Cyl Moving Parts",
-                        "Check for blue exhaust smoke indicating broken piston ring and excessive lube being burnt",
-                    ],
-                });
-            } else if (waring) {
-                returnArray.push({
-                    instructionName: "Compression in Cylinders",
-                    instructionType: "warning",
-                    instructions: [
-                        "If top overhaul has just been performed, check for faulty assembly",
-                        "Check Tappet Settings",
-                        "Check Crankcase pressure which may indicate liner/piston issues.",
-                        "Check Compression Pressure of specific cylinder",
-                        "Check Exhaust Temperatures specific cylinder which may indicate valve tighntess issues",
-                        "Use Borescope for further identification",
-                        "Check for deterioration in the Condition of Cyl Moving Parts",
-                        "Check for engine running hours if due for overhaul",
-                        "Check for blue exhaust smoke indicating broken piston ring and excessive lube being burnt",
-                    ],
-                });
-            }
+        } else if (isCompletelyOrange || isCompleteRed) {
+            returnArray.push({
+                instructionName: "Compression in Cylinders",
+                instructionType: "warning",
+                instructions: [
+                    "If top overhaul has just been performed, check for faulty assembly",
+                    "Check Tappet Settings",
+                    "Check Crankcase pressure which may indicate liner/piston issues.",
+                    "Check Compression Pressure of specific cylinder",
+                    "Check Exhaust Temperatures specific cylinder which may indicate valve tighntess issues",
+                    "Use Borescope for further identification",
+                    "Check for deterioration in the Condition of Cyl Moving Parts",
+                    "Check for blue exhaust smoke indicating broken piston ring and excessive lube being burnt",
+                ],
+            });
+            /*  } else if (waring) {
+                  returnArray.push({
+                      instructionName: "Compression in Cylinders",
+                      instructionType: "warning",
+                      instructions: [
+                          "If top overhaul has just been performed, check for faulty assembly",
+                          "Check Tappet Settings",
+                          "Check Crankcase pressure which may indicate liner/piston issues.",
+                          "Check Compression Pressure of specific cylinder",
+                          "Check Exhaust Temperatures specific cylinder which may indicate valve tighntess issues",
+                          "Use Borescope for further identification",
+                          "Check for deterioration in the Condition of Cyl Moving Parts",
+                          "Check for engine running hours if due for overhaul",
+                          "Check for blue exhaust smoke indicating broken piston ring and excessive lube being burnt",
+                      ],
+                  });
+              }*/
         }
     }
     if (bearing) {
-        let waring = false;
-        let is_all_waring = true;
-        let is_all_error = true;
-        for (const cylinder of bearing?.cylinderValues) {
-            if (cylinder <= 30) {
-                is_all_waring = false;
-            } else if (cylinder > 30 && cylinder <= 70) {
-                waring = true;
-                is_all_error = false;
-            } else {
-                is_all_waring = false;
-                is_all_error = false;
+
+        let isCompleteRed = false;
+        let isCompletelyOrange = false;
+
+        for (const i of bearing?.cylinderValues) {
+            if (i <= min) {
+                isCompleteRed = true;
+            } else if (i > min && i <= max) {
+                isCompletelyOrange = true;
             }
         }
-        if (is_all_error) {
+        if (isCompleteRed && !isCompletelyOrange) {
             returnArray.push({
                 instructionName: "Bearing Condition",
                 instructionType: "error",
@@ -1790,58 +1780,53 @@ function buildEngineAlertData(historical_data) {
                     "Check tightness of bearing bolts",
                 ],
             });
-        } else {
-            if (is_all_waring) {
-                returnArray.push({
-                    instructionName: "Bearing Condition",
-                    instructionType: "warning",
-                    instructions: [
-                        "If engine has just been overhauled, check for faulty assembly",
-                        "Check if the bearings are due for overhaul",
-                        "Check external influence on crankshaft from the driven load",
-                        "Check bearing clearances/Damages",
-                        "Check Damper indicator to detect malfunction",
-                        "Check Lube Oil Pressure.",
-                        "Check oil contamination for water/fuel",
-                        "Check Lube oil filter for wear debris",
-                        "Check crankshaft Misalignment",
-                    ],
-                });
-            } else if (waring) {
-                returnArray.push({
-                    instructionName: "Bearing Condition",
-                    instructionType: "warning",
-                    instructions: [
-                        "If engine has just been overhauled, check for faulty assembly",
-                        "Identify defect in the Main or Bottom end bearing",
-                        "Check bearing clearances",
-                        "In case of bottom end bearing, check free movement of rod.",
-                        "Check if bearing shelves have moved from their original position",
-                        "In case of excessive clearances of bearings, check for bearing damage.",
-                        "Check for Peak Pressure of specific cylinders",
-                        "Check for Clogged Oil Passage of Individual Bearing",
-                        "Check tightness of bearing bolts",
-                    ],
-                });
-            }
-        }
+        } else if (isCompletelyOrange || isCompleteRed) {
+            returnArray.push({
+                instructionName: "Bearing Condition",
+                instructionType: "warning",
+                instructions: [
+                    "If engine has just been overhauled, check for faulty assembly",
+                    "Check if the bearings are due for overhaul",
+                    "Check external influence on crankshaft from the driven load",
+                    "Check bearing clearances/Damages",
+                    "Check Damper indicator to detect malfunction",
+                    "Check Lube Oil Pressure.",
+                    "Check oil contamination for water/fuel",
+                    "Check Lube oil filter for wear debris",
+                    "Check crankshaft Misalignment",
+                ],
+            });
+        }/* else if (waring) {
+            returnArray.push({
+                instructionName: "Bearing Condition",
+                instructionType: "warning",
+                instructions: [
+                    "If engine has just been overhauled, check for faulty assembly",
+                    "Identify defect in the Main or Bottom end bearing",
+                    "Check bearing clearances",
+                    "In case of bottom end bearing, check free movement of rod.",
+                    "Check if bearing shelves have moved from their original position",
+                    "In case of excessive clearances of bearings, check for bearing damage.",
+                    "Check for Peak Pressure of specific cylinders",
+                    "Check for Clogged Oil Passage of Individual Bearing",
+                    "Check tightness of bearing bolts",
+                ],
+            });
+        }*/
+
     }
     if (bearingBis) {
-        let waring = false;
-        let is_all_waring = true;
-        let is_all_error = true;
-        for (const cylinder of bearingBis?.cylinderValues) {
-            if (cylinder <= 30) {
-                is_all_waring = false;
-            } else if (cylinder > 30 && cylinder <= 70) {
-                waring = true;
-                is_all_error = false;
-            } else {
-                is_all_waring = false;
-                is_all_error = false;
+        let isCompleteRed = false;
+        let isCompletelyOrange = false;
+
+        for (const i of bearingBis?.cylinderValues) {
+            if (i <= min) {
+                isCompleteRed = true;
+            } else if (i > min && i <= max) {
+                isCompletelyOrange = true;
             }
         }
-        if (is_all_error) {
+        if (isCompleteRed && !isCompletelyOrange) {
             returnArray.push({
                 instructionName: "Condition of Cyl Moving Parts",
                 instructionType: "error",
@@ -1857,23 +1842,22 @@ function buildEngineAlertData(historical_data) {
                     "Open crankcase, check liner surface of affected cylinders through borescope inspection if possible",
                 ],
             });
-        } else {
-            if (is_all_waring) {
-                returnArray.push({
-                    instructionName: "Condition of Cyl Moving Parts",
-                    instructionType: "warning",
-                    instructions: [
-                        "If engine has just been overhauled, check for faulty assembly",
-                        "Check engine running hours to identify if the engine is due for overhaul.",
-                        "Carry out borescope inspection through cylinder head of piston top for carbon deposits. Eliminate bad fuel injector",
-                        "Check quality of fuel oil to eliminate possibility of scuffing of cylinder liners",
-                        "Check Jacket cooling water temperature",
-                        "Check Lube oil filter for debris",
-                        "Check for colour of exhaust(blue smoke/black smoke)",
-                        "Open crankcase, check liner surface of affected cylinders through borescope inspection if possible",
-                    ],
-                });
-            } else if (waring) {
+        } else if (isCompletelyOrange || isCompleteRed) {
+            returnArray.push({
+                instructionName: "Condition of Cyl Moving Parts",
+                instructionType: "warning",
+                instructions: [
+                    "If engine has just been overhauled, check for faulty assembly",
+                    "Check engine running hours to identify if the engine is due for overhaul.",
+                    "Carry out borescope inspection through cylinder head of piston top for carbon deposits. Eliminate bad fuel injector",
+                    "Check quality of fuel oil to eliminate possibility of scuffing of cylinder liners",
+                    "Check Jacket cooling water temperature",
+                    "Check Lube oil filter for debris",
+                    "Check for colour of exhaust(blue smoke/black smoke)",
+                    "Open crankcase, check liner surface of affected cylinders through borescope inspection if possible",
+                ],
+            });
+            /*} else if (waring) {
                 returnArray.push({
                     instructionName: "Condition of Cyl Moving Parts",
                     instructionType: "warning",
@@ -1887,20 +1871,20 @@ function buildEngineAlertData(historical_data) {
                         "Check liner surface of affected cylinders from crankcase through borescope inspection if possible",
                     ],
                 });
-            }
+            }*/
         }
     }
     if (misfiring) {
-        let is_all_error = true;
+        let isCompleteRed = true;
 
-        for (const cylinder of misfiring?.cylinderValues) {
-            if (cylinder > 30) {
-                is_all_error = false;
+        for (const i of misfiring?.cylinderValues) {
+            if (i > min) {
+                isCompleteRed = true;
                 break;
             }
         }
 
-        if (is_all_error) {
+        if (!isCompleteRed) {
             returnArray.push({
                 instructionName: "Misfiring",
                 instructionType: "error",
@@ -2545,7 +2529,6 @@ export function buildPngReportData(data, modelType, formData) {
     const maxPower = parseInt(formData.power);
     let globalIndicator = [];
     let cylinder_specific_indicators = [];
-    console.log(data, modelType);
     if (modelType === "Engine") {
         if (data?.MechanicalHealth && data?.MechanicalHealth.valueInHealth) {
             globalIndicator.push(
