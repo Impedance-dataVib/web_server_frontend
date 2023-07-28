@@ -880,21 +880,34 @@ export function round(num) {
     return Math.round(num * 100) / 100;
 }
 
-function checkForAlert(datapoints, min, max) {
-    if (!datapoints) return 0; //return success
-    let sum = 0;
-    for (let i of datapoints) {
-        sum += i;
+function checkForAlert(dataPoints, min, max) {
+    if (!dataPoints) return 0; //return no alert
+    let isCompleteRed = false;
+    let isCompletelyOrange = false;
+    let isCompletelyGreen = false;
+    for (let i of dataPoints) {
+        if (i <= min) {
+            isCompleteRed = true;
+        } else if (i > min && i <= max) {
+            isCompletelyOrange = true;
+        } else if (i > max) {
+            isCompletelyGreen = true;
+        }
     }
 
-    const avg = sum / datapoints.length;
-    if (avg <= min) {
-        return 1; // return error
+    if (isCompletelyGreen) {
+        return 0; //return no alert
     }
-    if (avg > min && avg <= max) {
-        return 2; //return warning
+
+    if (isCompleteRed && !isCompletelyOrange) {
+        return 1; //return error alert
     }
-    return 0; //return success
+
+    if (isCompletelyOrange || isCompleteRed) {
+        return 2;  //return warning alert
+    }
+
+    return 0; //return no alert
 }
 
 function buildTorqueAlertData(data) {
