@@ -312,7 +312,7 @@ export function buildData(response) {
     }
     // process engine data
     if (response["type"] === "Engine") {
-        data = JSON.parse(historical_data.at(0)?.jsondata);
+        data = JSON.parse(historical_data.at(-1)?.jsondata);
         const moduleData = data["Engine"];
         const firingOrder = moduleData["FiringOrder"];
         const firingOrderSplit = firingOrder.length / 2;
@@ -789,14 +789,17 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
         for (let item of data) {
             const moduleData = JSON.parse(item["jsondata"]);
 
-            labels.push(getdate(moduleData?.DateAndTime));
-
-            zAxisDataPoints.push("" + parseInt(moduleData?.ChannelSpeed || 0));
             const valueObject = moduleData[key];
-            if (isGradientOpposite && valueObject) {
-                datapoints.push(round(valueObject?.valueInHealth || 0));
-            } else {
-                datapoints.push(round(valueObject?.value || 0));
+            if (valueObject) {
+
+                zAxisDataPoints.push("" + parseInt(moduleData?.ChannelSpeed || 0));
+                labels.push(getdate(moduleData?.DateAndTime));
+
+                if (isGradientOpposite && valueObject) {
+                    datapoints.push(round(valueObject?.valueInHealth || 0));
+                } else {
+                    datapoints.push(round(valueObject?.value || 0));
+                }
             }
             count++;
         }
@@ -2466,8 +2469,8 @@ const trendTitle = {
     },
     Torque: {
         StaticTorsion: "Torsion",
-        StaticTorque: "Torque",
-        StaticPower: "Power",
+        StaticTorque: "Torque(KNm)",
+        StaticPower: "Power(MW)",
     },
 };
 const trendTooltip = {
