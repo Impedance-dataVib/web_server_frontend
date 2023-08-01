@@ -176,12 +176,12 @@ const SystemConfiguration = () => {
                     <Link
                       variant="body1"
                       color="#002BBC"
-                      href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+                      href="/hardware_manual.pdf"
                       sx={{ mx: 1 }}
                       download
                       target="_blank"
                     >
-                      Download Hardware User Manual
+                      Download Hardware User Manual.pdf
                     </Link>
                   </Box>
                 </Box>
@@ -242,12 +242,12 @@ const SystemConfiguration = () => {
                     <Link
                       variant="body1"
                       color="#002BBC"
-                      href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+                      href="/software_manual.pdf"
                       sx={{ mx: 1 }}
                       download
                       target="_blank"
                     >
-                      Download Software User Manual
+                      Download Software User Manual.pdf
                     </Link>
                   </Box>
                 </Box>
