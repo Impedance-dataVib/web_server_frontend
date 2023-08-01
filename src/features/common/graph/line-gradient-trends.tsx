@@ -132,7 +132,7 @@ export default function LineGradientTrends({
         type: "linear" as const,
         display: true,
         position: "left" as const,
-        max: 110,
+        // max: 110,
         font: {
           family: 'Poppins,Helvetica,"sans-serif',
           size: 12,
@@ -143,9 +143,9 @@ export default function LineGradientTrends({
             size: 14,
             whiteSpace: "normal",
           },
-          callback: (value: any) => {
-            return parseInt(value);
-          },
+          // callback: (value: any) => {
+          //   return parseInt(value);
+          // },
         },
         title: {
           text: yLabel,
