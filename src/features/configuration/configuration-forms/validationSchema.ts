@@ -979,14 +979,7 @@ export const engineValidationSchema = yup.object({
       }
     ),
   phase_shift_mode: yup.string().required("This is a required field"),
-  shift_angle: yup
-    .number()
-    .required("This is a required field")
-    .test(
-      "Is positive?",
-      "ERROR: The number must be greater than 0!",
-      (value) => value > 0
-    ),
+  shift_angle: yup.number(),
   power: yup
     .number()
     .required("This is a required field")
