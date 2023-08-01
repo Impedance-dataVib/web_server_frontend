@@ -1196,13 +1196,10 @@ function buildMotorAlertData(data) {
                 instructionType: "error",
 
                 instructions: [
-                    "=- Check for Air Gap in the B5 of an electric motor",
-
+                    "Check for Air Gap in the B5 of an electric motor",
                     "Check for tilting in the case of vertical axis installations",
-
                     "Check for the degradation of bearings",
-
-                    "D4",
+                    "Check support structure (assembly at the level of the supports)",
                 ],
             });
         }
@@ -1215,12 +1212,9 @@ function buildMotorAlertData(data) {
 
                 instructions: [
                     "Check for Air Gap in the case of an electric motor",
-
                     "Check for tilting in the case of vertical axis installations",
-
                     "Check for the degradation of bearings",
-
-                    "D7",
+                    "Check support structure (assembly at the level of the supports)",
                 ],
             });
         }
@@ -1834,12 +1828,12 @@ function buildEngineAlertData(historical_data) {
                 instructionName: "Condition of Cyl Moving Parts",
                 instructionType: "error",
                 instructions: [
-                    "Take immediate corrective action on Bearings",
+                    "Take Immediate corrective action to improve Condition of CYl moving parts",
                     "If engine has just been overhauled, check for faulty assembly",
                     "Check engine running hours to identify if the engine is due for overhaul.",
                     "Carry out borescope inspection through cylinder head of piston top for carbon deposits. Eliminate bad fuel injector",
                     "Check quality of fuel oil to eliminate possibility of scuffing of cylinder liners",
-                    " Check Jacket cooling water temperature",
+                    "Check Jacket cooling water temperature",
                     "Check Lube oil filter for debris",
                     "Check for colour of exhaust(blue smoke/black smoke)",
                     "Open crankcase, check liner surface of affected cylinders through borescope inspection if possible",
