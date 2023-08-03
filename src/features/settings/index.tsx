@@ -17,6 +17,7 @@ import { radioData } from "./schema";
 import AccordionBase from "../../app/components/accordion-base";
 import SettingsApi from "./api";
 import { enqueueSnackbar } from "notistack";
+import { USER_NAME_ROLE } from "src/app/auth";
 
 const defaultApiData = {
   display_date_utc: false,
@@ -132,6 +133,7 @@ const SettingsPage = () => {
           message: res?.data?.Message,
           variant: "success",
         });
+        window.location.reload();
       })
       .catch((e) => {
         enqueueSnackbar({
@@ -144,6 +146,7 @@ const SettingsPage = () => {
   useEffect(() => {
     getSettingsInfo();
   }, []);
+  const userNameRole = sessionStorage.getItem(USER_NAME_ROLE);
 
   return (
     <Box>
@@ -161,14 +164,18 @@ const SettingsPage = () => {
         )}
 
         <Typography variant="h5">Settings</Typography>
-        <Button
-          size="small"
-          sx={{ mr: "18px" }}
-          variant="outlined"
-          onClick={handleClick}
-        >
-          Synchronise Time Difference
-        </Button>
+        {userNameRole === "admin" ? (
+          <Button
+            size="small"
+            sx={{ mr: "18px" }}
+            variant="outlined"
+            onClick={handleClick}
+          >
+            Synchronise Time Difference
+          </Button>
+        ) : (
+          ""
+        )}
       </Box>
       <form>
         <Box
