@@ -20,7 +20,10 @@ import Signal from "./signal";
 import Trends from "./trends";
 import CylinderIndicator from "./cylinder-indicator";
 import { SIGNAL_STATUS_QUALITY } from "../../schema";
-import { buildLiveStatusData } from "src/app/utils/helper";
+import {
+  buildLiveStatusData,
+  convertUTCDateToLocalTime,
+} from "src/app/utils/helper";
 import DownloadPngModal from "src/features/configuration/modals/downloadPngModal";
 import { toPng } from "html-to-image";
 const ModuleMonitoringPage = ({
@@ -100,8 +103,12 @@ const ModuleMonitoringPage = ({
     }
     setTrendsCylinder(trendsCylinderArr);
   }, [trendsData]);
+  const parsedFormData = JSON.parse(formData);
 
   useEffect(() => {
+    const fileName = `${parsedFormData?.asset_name} - ${
+      parsedFormData?.equipment_name
+    } - ${convertUTCDateToLocalTime(new Date())}`;
     if (documents.length > 0) {
       setTimeout(function () {
         elementRef.current.map((val: any) => {
@@ -109,7 +116,7 @@ const ModuleMonitoringPage = ({
             toPng(val, { quality: 0.5 })
               .then((dataUrl: string) => {
                 const link = document.createElement("a");
-                link.download = "my-image-name.png";
+                link.download = `${fileName}.png`;
                 link.href = dataUrl;
                 setIsLoading(false);
                 link.click();
