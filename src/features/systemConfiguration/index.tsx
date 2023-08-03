@@ -35,6 +35,7 @@ const SystemConfiguration = () => {
   const [poppup, setPoppup] = useState(false);
   const [isShown, setIsShown] = useState(false);
   const [apiData, setApiData] = useState<any>();
+  console.log(apiData);
   const getSystemInfo = async () => {
     if (apiData) {
       return;
