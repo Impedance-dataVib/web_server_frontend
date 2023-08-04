@@ -3,7 +3,7 @@ import Sunburst from "sunburst-chart";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 
-export default function SunburstChart({ elementId, data, fullScreen }) {
+export default function SunburstChart({ elementId, data, fullScreen, borderFlag= false }) {
   const getColor = (type) => {
     switch (type) {
       case "success":
@@ -17,6 +17,10 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
     }
   };
 
+  const style = {
+    mb: 1,
+    fontSize: borderFlag ? '20px': '14px',
+  }
   useEffect(() => {
     if (data?.graphData) {
       document.getElementById(
@@ -40,6 +44,7 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
         .radiusScaleExponent(1)
         .labelOrientation("angular")
         .onClick(() => {})
+        .transitionDuration(0)
         .color((d) => {
           return getColor(d.fill);
         })
@@ -51,9 +56,10 @@ export default function SunburstChart({ elementId, data, fullScreen }) {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
-      <Typography variant="body1" component={"span"} sx={{ mb: 1 }}>
+      <Typography variant="body1" component={"span"} sx={{ ...style }}>
         {data?.graphLabel}
       </Typography>
+
       <div id={`${elementId}${fullScreen ? "full" : ""}`}></div>
     </Box>
   );

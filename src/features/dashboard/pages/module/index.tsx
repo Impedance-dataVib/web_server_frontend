@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Grid, Tab, Tabs } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { Grid, LinearProgress, Tab, Tabs } from "@mui/material";
 import AlertsAndInstructions from "src/features/common/alertsAndInstructions";
 import CardWidget from "src/app/components/card";
 import {
@@ -20,7 +20,12 @@ import Signal from "./signal";
 import Trends from "./trends";
 import CylinderIndicator from "./cylinder-indicator";
 import { SIGNAL_STATUS_QUALITY } from "../../schema";
-import { buildLiveStatusData } from "src/app/utils/helper";
+import {
+  buildLiveStatusData,
+  convertUTCDateToLocalTime,
+} from "src/app/utils/helper";
+import DownloadPngModal from "src/features/configuration/modals/downloadPngModal";
+import { toPng } from "html-to-image";
 const ModuleMonitoringPage = ({
   moduleId,
   moduleData,
@@ -38,6 +43,11 @@ const ModuleMonitoringPage = ({
   const [trendsCylinder, setTrendsCylinder] = useState<string[]>([]);
   const [liveStatus, setLiveStatus] = useState<any>({});
   const [currentMode, setCurrentMode] = useState<any>("");
+  const [documents, setDocuments] = useState<any>([]);
+  const elementRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [data, setData] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const onActiveModuleChange = (event: any, params: any) => {
     setActiveModule(params);
   };
@@ -93,6 +103,35 @@ const ModuleMonitoringPage = ({
     }
     setTrendsCylinder(trendsCylinderArr);
   }, [trendsData]);
+  const parsedFormData = JSON.parse(formData);
+
+  useEffect(() => {
+    const fileName = `${parsedFormData?.asset_name} - ${
+      parsedFormData?.equipment_name
+    } - ${convertUTCDateToLocalTime(new Date())}`;
+    if (documents.length > 0) {
+      setTimeout(function () {
+        elementRef.current.map((val: any) => {
+          if (val) {
+            toPng(val, { quality: 0.5 })
+              .then((dataUrl: string) => {
+                const link = document.createElement("a");
+                link.download = `${fileName}.png`;
+                link.href = dataUrl;
+                setIsLoading(false);
+                link.click();
+                setDocuments([]);
+              })
+              .catch((err) => {
+                setIsLoading(false);
+                setDocuments([]);
+              });
+          }
+        });
+      }, 1000);
+    }
+  }, [documents]);
+
   return (
     <Grid container spacing={1}>
       <Grid item xl={5} lg={3} md={12} sm={12}>
@@ -281,6 +320,10 @@ const ModuleMonitoringPage = ({
               processName={processName}
               formData={formData}
               moduleId={moduleId}
+              setData={setData}
+              setDocuments={setDocuments}
+              setIsLoading={setIsLoading}
+              isLoading={isLoading}
             />
           }
           initiallyCollapsed={true}
@@ -290,10 +333,28 @@ const ModuleMonitoringPage = ({
               processName={processName}
               formData={formData}
               moduleId={moduleId}
+              setData={setData}
+              setDocuments={setDocuments}
+              setIsLoading={setIsLoading}
+              isLoading={isLoading}
             />
           }
         />
       </Grid>
+      <div style={{ opacity: 0, height: 0, overflow: "hidden" }}>
+        {documents.map((offer: any, i: number) => (
+          <div
+            key={`div${i}`}
+            ref={(ref) => {
+              elementRef.current[i] = ref;
+            }}
+          >
+            <div id={"png" + i} style={{ minWidth: "1200px" }}>
+              <DownloadPngModal open={offer} data={data} />
+            </div>
+          </div>
+        ))}
+      </div>
     </Grid>
   );
 };

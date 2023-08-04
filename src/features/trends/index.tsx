@@ -215,9 +215,6 @@ const TrendsPage = () => {
             }}
           >
             <AlertTitle>{errorMessage}</AlertTitle>
-            <Typography variant="caption" component={"span"}>
-              {errorMessage}
-            </Typography>
           </Alert>
         </Box>
       )}

@@ -7,6 +7,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Modal,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SystemInfoTable from "./systemInfoTable";
@@ -16,10 +17,25 @@ import { useEffect, useState } from "react";
 import SystemInfoApi from "./api";
 import InfoIcon from "@mui/icons-material/Info";
 import api from "../../app/api";
+import { enqueueSnackbar } from "notistack";
+import { USER_NAME_ROLE } from "src/app/auth";
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 const SystemConfiguration = () => {
+  const [poppup, setPoppup] = useState(false);
   const [isShown, setIsShown] = useState(false);
   const [apiData, setApiData] = useState<any>();
+  console.log(apiData);
   const getSystemInfo = async () => {
     if (apiData) {
       return;
@@ -52,6 +68,29 @@ const SystemConfiguration = () => {
     window.location.reload();
   };
 
+  const revokeLicense = () => {
+    api
+      .get("/license/delete_license.php")
+      .then((res) => {
+        setPoppup(false);
+        enqueueSnackbar({
+          message: "You have Succesfully removed the license",
+          variant: "success",
+        });
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+        enqueueSnackbar({
+          message: "Error While Revoking the License",
+          variant: "error",
+        });
+        setPoppup(false);
+      });
+  };
+
+  const userNameRole = sessionStorage.getItem(USER_NAME_ROLE);
+
   return (
     <Box>
       <Box
@@ -62,15 +101,50 @@ const SystemConfiguration = () => {
         }}
       >
         <Typography variant="h5">System Configuration</Typography>
-        <Button
-          size="small"
-          sx={{ mr: "18px" }}
-          variant="outlined"
-          onClick={handleClick}
-        >
-          Restart WebSocket
-        </Button>
+        <Box>
+          <Button
+            size="small"
+            sx={{ mr: "18px" }}
+            variant="outlined"
+            onClick={handleClick}
+          >
+            Restart WebSocket
+          </Button>
+          {userNameRole === "admin" ? (
+            <Button
+              size="small"
+              sx={{ mr: "18px", color: "red" }}
+              variant="outlined"
+              onClick={() => setPoppup(true)}
+            >
+              Revoke license
+            </Button>
+          ) : (
+            ""
+          )}
+        </Box>
       </Box>
+      <Modal
+        open={poppup}
+        onClose={() => setPoppup(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Are you really want to revoke current license. it will cause data
+            loss.
+          </Typography>
+          <Box sx={{ mt: 2 }}>
+            <Button sx={{ mr: 1 }} variant="contained" onClick={revokeLicense}>
+              yes
+            </Button>
+            <Button variant="contained" onClick={() => setPoppup(false)}>
+              No
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
       <Box
         sx={{
           m: 2,
@@ -176,12 +250,12 @@ const SystemConfiguration = () => {
                     <Link
                       variant="body1"
                       color="#002BBC"
-                      href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+                      href="/hardware_manual.pdf"
                       sx={{ mx: 1 }}
                       download
                       target="_blank"
                     >
-                      Download Hardware User Manual
+                      Download Hardware User Manual.pdf
                     </Link>
                   </Box>
                 </Box>
@@ -242,12 +316,12 @@ const SystemConfiguration = () => {
                     <Link
                       variant="body1"
                       color="#002BBC"
-                      href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+                      href="/software_manual.pdf"
                       sx={{ mx: 1 }}
                       download
                       target="_blank"
                     >
-                      Download Software User Manual
+                      Download Software User Manual.pdf
                     </Link>
                   </Box>
                 </Box>

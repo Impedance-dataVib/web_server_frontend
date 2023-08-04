@@ -7,22 +7,29 @@ import {
 } from "@mui/icons-material";
 import {
   Box,
+  CircularProgress,
   Divider,
   Grid,
   IconButton,
+  LinearProgress,
   Link as Matlink,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { convertUTCDateToLocalTime } from "src/app/utils/helper";
 import api from "../../../app/api";
+import { enqueueSnackbar } from "notistack";
 
 export interface IReportsCardProps {
   liveStatus: any;
   processName: any;
   formData: any;
   moduleId: any;
+  setData: any;
+  setDocuments: any;
+  setIsLoading: any;
+  isLoading: any;
 }
 
 export interface IReportsRowProps {
@@ -34,6 +41,9 @@ export interface IReportsRowProps {
   processName: any;
   formData: any;
   moduleId: any;
+  setData?: any;
+  setDocuments?: any;
+  setIsLoading: any;
 }
 
 const ReportsRow = ({
@@ -43,9 +53,32 @@ const ReportsRow = ({
   reportName,
   processName,
   formData,
+  setData,
+  setDocuments,
+  setIsLoading,
 }: IReportsRowProps) => {
+  const ref = useRef<HTMLDivElement>(null);
   const parsedFormData = JSON.parse(formData);
+
+  const getPngData = (data: any) => {
+    const array: any[] = [];
+    let i = 0;
+    for (let item of data?.data.data.historicalData) {
+      array.push(item);
+    }
+
+    if (array.length > 10) {
+      enqueueSnackbar({
+        message: "Export Limit Exceed, Please Select Maximum 10",
+        variant: "error",
+      });
+      return;
+    }
+    setDocuments(array);
+  };
+
   const handleDownload = (reportName: any) => {
+    setIsLoading(true);
     const fileName = `${parsedFormData?.asset_name} - ${
       parsedFormData?.equipment_name
     } -${convertUTCDateToLocalTime(new Date())}`;
@@ -63,26 +96,41 @@ const ReportsRow = ({
       .get(
         `/download/current_download.php?process_name=${processName}&type=${type}&module_id=${moduleId}`,
         {
-          responseType: "blob",
+          responseType: type === "graphical" ? "json" : "blob",
         }
       )
       .then((res) => {
-        const url = window.URL.createObjectURL(res.data);
-        const link = document.createElement("a");
-        link.href = url;
-        if (type === "json") {
-          link.setAttribute("download", `${fileName}.json`);
-        } else if (type === "raw") {
-          link.setAttribute("download", `${fileName}.wav`);
-        } else if (type === "spredsheet") {
-          link.setAttribute("download", `${fileName}.csv`);
-        } else if (type === "graphical") {
-          link.setAttribute("download", `${fileName}.png`);
+        if (type === "graphical") {
+          setData(res);
+          getPngData(res);
+        } else {
+          const url = window.URL.createObjectURL(res.data);
+          const link = document.createElement("a");
+          link.href = url;
+          if (type === "json") {
+            link.setAttribute("download", `${fileName}.json`);
+            document.body.appendChild(link);
+            setIsLoading(false);
+            link.click();
+          }
+          if (type === "raw") {
+            link.setAttribute("download", `${fileName}.wav`);
+            document.body.appendChild(link);
+            setIsLoading(false);
+            link.click();
+          }
+          if (type === "spredsheet") {
+            link.setAttribute("download", `${fileName}.csv`);
+            document.body.appendChild(link);
+            setIsLoading(false);
+            link.click();
+          }
         }
-        document.body.appendChild(link);
-        link.click();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -129,6 +177,10 @@ const ReportsCardContent = ({
   processName,
   formData,
   moduleId,
+  setData,
+  setDocuments,
+  setIsLoading,
+  isLoading,
 }: IReportsCardProps) => {
   return (
     <Box>
@@ -143,6 +195,9 @@ const ReportsCardContent = ({
             processName={processName}
             formData={formData}
             moduleId={moduleId}
+            setData={setData}
+            setDocuments={setDocuments}
+            setIsLoading={setIsLoading}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -156,6 +211,7 @@ const ReportsCardContent = ({
             processName={processName}
             formData={formData}
             moduleId={moduleId}
+            setIsLoading={setIsLoading}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -169,6 +225,7 @@ const ReportsCardContent = ({
             processName={processName}
             formData={formData}
             moduleId={moduleId}
+            setIsLoading={setIsLoading}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -182,6 +239,7 @@ const ReportsCardContent = ({
             processName={processName}
             formData={formData}
             moduleId={moduleId}
+            setIsLoading={setIsLoading}
           />
           <Divider sx={{ mx: 0 }} />
         </Grid>
@@ -204,14 +262,27 @@ const ReportsCard = ({
   processName,
   formData,
   moduleId,
+  setData,
+  setDocuments,
+  setIsLoading,
+  isLoading,
 }: IReportsCardProps) => {
   return (
     <Box>
+      {isLoading && (
+        <Grid sx={{ mb: 1, width: "100%" }}>
+          <LinearProgress />
+        </Grid>
+      )}
       <ReportsCardContent
         liveStatus={liveStatus}
         processName={processName}
         formData={formData}
         moduleId={moduleId}
+        setData={setData}
+        setDocuments={setDocuments}
+        setIsLoading={setIsLoading}
+        isLoading={isLoading}
       />
     </Box>
   );

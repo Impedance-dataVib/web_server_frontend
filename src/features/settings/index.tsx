@@ -17,6 +17,7 @@ import { radioData } from "./schema";
 import AccordionBase from "../../app/components/accordion-base";
 import SettingsApi from "./api";
 import { enqueueSnackbar } from "notistack";
+import { USER_NAME_ROLE } from "src/app/auth";
 
 const defaultApiData = {
   display_date_utc: false,
@@ -111,25 +112,41 @@ const SettingsPage = () => {
       });
   };
   const handleClick = () => {
-    api.get(
-      `/vbox/synk_time.php`
-    ).then((res) => {
-      enqueueSnackbar({
-        message: res?.data?.Message,
-        variant: "success",
+    const date = new Date();
+    const toSendDate =
+      date.getUTCFullYear() +
+      "-" +
+      (date.getUTCMonth() + 1).toString().padStart(2, "0") +
+      "-" +
+      date.getUTCDate().toString().padStart(2, "0") +
+      " " +
+      date.getUTCHours().toString().padStart(2, "0") +
+      ":" +
+      date.getUTCMinutes().toString().padStart(2, "0") +
+      ":" +
+      date.getUTCSeconds().toString().padStart(2, "0");
+    console.log("date", toSendDate);
+    api
+      .get(`/vbox/synk_time.php?synk_time=${toSendDate}`)
+      .then((res) => {
+        enqueueSnackbar({
+          message: res?.data?.Message,
+          variant: "success",
+        });
+        window.location.reload();
+      })
+      .catch((e) => {
+        enqueueSnackbar({
+          message: e?.response?.data?.Message || "",
+          variant: "error",
+        });
       });
-     }
-    ).catch((e) => {
-      enqueueSnackbar({
-        message: e?.response?.data?.Message || '',
-        variant: "error",
-      });
-    });
   };
 
   useEffect(() => {
     getSettingsInfo();
   }, []);
+  const userNameRole = sessionStorage.getItem(USER_NAME_ROLE);
 
   return (
     <Box>
@@ -147,14 +164,18 @@ const SettingsPage = () => {
         )}
 
         <Typography variant="h5">Settings</Typography>
-        <Button
-          size="small"
-          sx={{ mr: "18px" }}
-          variant="outlined"
-          onClick={handleClick}
-        >
-          Synchronise Time Difference
-        </Button>
+        {userNameRole === "admin" ? (
+          <Button
+            size="small"
+            sx={{ mr: "18px" }}
+            variant="outlined"
+            onClick={handleClick}
+          >
+            Synchronise Time Difference
+          </Button>
+        ) : (
+          ""
+        )}
       </Box>
       <form>
         <Box
@@ -519,7 +540,7 @@ const SettingsPage = () => {
               >
                 SAVE
               </Button>
-              <Button
+              {/* <Button
                 size="small"
                 variant="contained"
                 color="inherit"
@@ -532,7 +553,7 @@ const SettingsPage = () => {
                 onClick={getSettingsInfo}
               >
                 Cancel
-              </Button>
+              </Button> */}
             </Box>
           </Box>
         </Box>

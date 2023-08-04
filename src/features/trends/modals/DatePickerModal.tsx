@@ -34,6 +34,12 @@ const DateRangePickerModal = memo(
       endDate: dateRangeValues.endDate,
       key: "selection",
     });
+
+    // const minDate = new Date(
+    //   new Date().getFullYear(),
+    //   new Date().getMonth() - 3,
+    //   new Date().getDate()
+    // );
     return (
       <>
         <Dialog open={open} onClose={onClose}>
