@@ -165,7 +165,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                                 value={item.overwrite}
                               >
                                 <MenuItem value={""}>None</MenuItem>
-                                {OVER_WRITE_INDICATORS["Bearing"].map(
+                                {OVER_WRITE_INDICATORS["Motor"].map(
                                   (option: string) => (
                                     <MenuItem key={option} value={option}>
                                       {option}
@@ -448,13 +448,13 @@ export const MotorChannelInformationForm = ({
     ChannelType: ["Speed", "Transducer"],
     WheelType: [
       "Standard",
-      "1 Missing Tooth",
-      "1 Missing + 1 Junction",
-      "1 Missing + 2 Junction",
-      "1 Missing + 3 Junctions",
-      "1 Junction",
-      "2 Junctions",
-      "3 Junctions",
+      "MissingTooth",
+      "Missing+1Junction",
+      "Missing+2Junction",
+      "Missing+3Junctions",
+      "Junction",
+      "Junctions",
+      "Junctions",
       "Noisy",
       "Optical",
       "Odd",

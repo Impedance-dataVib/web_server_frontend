@@ -54,6 +54,10 @@ export function buildSoketData(response, modelType, formData) {
                 "valueInHealth"
             )
         );
+       /* The above code is adding an indicator to a global indicator array. The indicator represents
+       an increase in fuel consumption and includes data for power loss. The indicator is built
+       using the buildIndicatorData function, which takes in the indicator name, the power loss
+       data, the value type, and a boolean indicating if the indicator is active. */
         globalIndicator.push(
             buildIndicatorData(
                 "Increase in Fuel Consumption",
@@ -112,20 +116,24 @@ export function buildSoketData(response, modelType, formData) {
         if (data?.BearingStatusGas && data?.BearingStatusGas.valueInHealth) {
             globalIndicator.push(
                 buildIndicatorData(
-                    "Bearing Status ",
+                    "Bearing Status",
                     data?.BearingStatusGas,
                     "valueInHealth"
                 )
             );
         }
         globalIndicator.push(
-            buildIndicatorData("Shaft Health", data?.BladeStatus, "valueInHealth")
+            buildIndicatorData("Shaft/Blade Health", data?.BladeStatus, "valueInHealth")
         );
         if (JSON.parse(formData).type === "Steam") {
             globalIndicator.push(
                 buildIndicatorData("Coupling", data?.TurbineCoupling, "valueInHealth")
             );
-        } else {
+            
+        } else { //For Gas Turbine, the indicator list is updated in v1.1.11
+            globalIndicator.push(
+                buildIndicatorData("Coupling", data?.TurbineCoupling, "valueInHealth")
+            );
             globalIndicator.push(
                 buildIndicatorData(
                     "Combustion Kit",
@@ -241,7 +249,7 @@ function buildIndicatorData(indicator_title, data, key, isGradientOpposite) {
     return {
         indicatorName: indicator_title,
         indicatorMin: 0,
-        indicatorMax: isGradientOpposite ? 6 : 100,
+        indicatorMax: isGradientOpposite ? 10 : 100, //Increase in fuel consumption max scale to 10
         indicatorValue: isOffline
             ? "Offline"
             : getConditionalIndicatorValue(isGradientOpposite, value),
@@ -342,7 +350,13 @@ export function buildData(response) {
                 firingOrderLabel
             );
             if (injection_Condition) {
-                cylinder_specific_indicators.push(injection_Condition);
+                // Create an object to add the tooltip
+                const injectionConditionWithTooltip = { ...injection_Condition };
+        
+                // Add the tooltip for "Injection Condition"
+                injectionConditionWithTooltip.tooltip = trendTooltip["Injection Condition"]; // Add your tooltip text here
+        
+                cylinder_specific_indicators.push(injectionConditionWithTooltip);
             }
         }
         if (data?.Bearing) {
@@ -385,6 +399,18 @@ export function buildData(response) {
                 cylinder_specific_indicators.push(miss_firing);
             }
         }
+        /*{
+            const pressure = buildCompressionData(
+                first,
+                second,
+                data["Pressure"],
+                "Pressure",
+                firingOrderLabel
+            );
+            if (pressure) {
+                cylinder_specific_indicators.push(pressure);
+            }
+        }*/
         let trends = [];
         const increase_fuel_consumption = buildLineGradientChart(
             historical_data,
@@ -426,7 +452,7 @@ export function buildData(response) {
             "Torque with RPM",
             false,
             true,
-            100
+            1000
         );
         trends.push(torsionWithRpm);
 
@@ -455,7 +481,7 @@ export function buildData(response) {
                 historical_data,
                 "RegularityDeviation",
                 "BladeStatus",
-                "Regularity Deviation, Shaft Health",
+                "Regularity Deviation, Shaft/Blade Health",
                 true
             );
             trends.push(steamTurbineChart1);
@@ -480,15 +506,16 @@ export function buildData(response) {
                 historical_data,
                 "RegularityDeviation",
                 "BladeStatus",
-                "Regularity Deviation, Shaft Health",
+                "Regularity Deviation, Shaft/Blade Health",
                 true
             );
             trends.push(gasTurbineChart1);
 
             const gasTurbineChart2 = buildTurbineChart(
                 historical_data,
-                "BearingStatus",
+                "BearingStatusGas",
                 "CombustionKit",
+                 //TurbineCoupling added & removed in Dashboard trends page
                 "Bearing status, Combustion Kit Status",
                 true
             );
@@ -816,7 +843,7 @@ function buildLineGradientChart(data, key, title, isGradientOpposite) {
         speedName: "Speed",
         min: round(Math.min(...datapoints)),
         max: round(Math.max(...datapoints)),
-        yMax: title === "Engine Health" ? 110 : 6,
+        yMax: title === "Engine Health" ? 110 : 10, //increaseinFuelConsump trend scale to 10
         avg: round(avg),
         datapoints: datapoints,
         dataPointsY1: zAxisDataPoints,
@@ -1285,30 +1312,30 @@ function buildTurbineAlertData(data) {
             const RegularityDeviation = moduleData["RegularityDeviation"];
 
             if (RegularityDeviation) {
-                regularityDeviation.push(RegularityDeviation["valueInPercent"]);
+                regularityDeviation.push(RegularityDeviation["valueInHealth"]);
             }
 
             const BearingStatus = moduleData["BearingStatus"];
 
             if (BearingStatus) {
-                bearingStatus.push(BearingStatus["valueInPercent"]);
+                bearingStatus.push(BearingStatus["valueInHealth"]);
             }
 
             const combustion = moduleData["CombustionKit"];
 
             if (combustion) {
-                combustionCondition.push(combustion["valueInPercent"]);
+                combustionCondition.push(combustion["valueInHealth"]);
             }
 
             const BladeStatus = moduleData["BladeStatus"];
 
             if (BladeStatus) {
-                bladeStatus.push(BladeStatus["valueInPercent"]);
+                bladeStatus.push(BladeStatus["valueInHealth"]);
             }
 
             const TurbineCoupling = moduleData["TurbineCoupling"];
             if (TurbineCoupling) {
-                turbineCoupling.push(TurbineCoupling["valueInPercent"]);
+                turbineCoupling.push(TurbineCoupling["valueInHealth"]);
             }
         }
     }
@@ -1638,7 +1665,7 @@ function buildEngineAlertData(historical_data) {
         let isCompleteRed = false;
         let isCompletelyOrange = false;
 
-        for (const i of InjectionCondition?.cylinderValues) {
+        for (const i of InjectionCondition?.cylinderHealth) {
             if (i <= min) {
                 isCompleteRed = true;
             } else if (i > min && i <= max) {
@@ -1691,7 +1718,7 @@ function buildEngineAlertData(historical_data) {
         let isCompleteRed = false;
         let isCompletelyOrange = false;
 
-        for (const i of compression?.cylinderValues) {
+        for (const i of compression?.cylinderHealth) {
             if (i <= min) {
                 isCompleteRed = true;
             } else if (i > min && i <= max) {
@@ -1752,7 +1779,7 @@ function buildEngineAlertData(historical_data) {
         let isCompleteRed = false;
         let isCompletelyOrange = false;
 
-        for (const i of bearing?.cylinderValues) {
+        for (const i of bearing?.cylinderHealth) {
             if (i <= min) {
                 isCompleteRed = true;
             } else if (i > min && i <= max) {
@@ -1816,7 +1843,7 @@ function buildEngineAlertData(historical_data) {
         let isCompleteRed = false;
         let isCompletelyOrange = false;
 
-        for (const i of bearingBis?.cylinderValues) {
+        for (const i of bearingBis?.cylinderHealth) {
             if (i <= min) {
                 isCompleteRed = true;
             } else if (i > min && i <= max) {
@@ -1873,9 +1900,10 @@ function buildEngineAlertData(historical_data) {
     }
     if (misfiring) {
         let isCompleteRed = true;
+        let isCompletelyOrange
 
-        for (const i of misfiring?.cylinderValues) {
-            if (i > min) {
+        for (const i of misfiring?.cylinderHealth) {
+            if (i >0 && i < min) {
                 isCompleteRed = true;
                 break;
             }
@@ -1886,7 +1914,7 @@ function buildEngineAlertData(historical_data) {
                 instructionName: "Misfiring",
                 instructionType: "error",
                 instructions: [
-                    "CAUTION - specific cylinder Misfired",
+                    "CAUTION - Cylinder Misfired. Please check Cylinder Specific Indicators below",
                     "Check if knocking sensors are activated/Malfunctioning",
                     "Check Gas quality if multiple units are knocking. Reduce engine load.",
                     "Check Spark Plug condition/Malfunctioning",
@@ -1970,6 +1998,17 @@ function calculateTorqueValue(value, key) {
     }
 }
 
+/**
+ * The `buildTrendData` function takes in historical data, a type, and additional data, and builds a
+ * trend data set based on the input.
+ * @param historical_data - The `historical_data` parameter is an array of objects that contains
+ * historical data. Each object in the array represents a data entry and has a property called
+ * "jsondata" which contains the data in JSON format.
+ * @param type - The `type` parameter is a string that specifies the type of trend data to build. It
+ * could be "Engine" or any other value depending on the specific requirements of your application.
+ * @param from_data - The `from_data` parameter is a JSON string that contains additional data needed
+ * for building the trend data. It is parsed into an object using `JSON.parse()` in the code.
+ */
 export function buildTrendData(historical_data, type, from_data) {
     let labels = [];
     const rpmData = [];
@@ -1987,26 +2026,63 @@ export function buildTrendData(historical_data, type, from_data) {
         }
 
         let toPush = false;
+        /* The above code is checking if the value of the variable "type" is equal to "Engine". If it
+        is, it retrieves the firing order from the "item" object. */
         if (type === "Engine") {
             const firingOrder = item?.Engine.FiringOrder;
 
             for (const key in item) {
                 if (keysToIgnore[type].includes(key)) {
                     const objData = item[key];
-
-                    if (objData.hasOwnProperty("cylinderHealth") && objData?.cylinderHealth) {
+                    if (key === "Pressure") {
+                        // Handle "Pressure" parameter separately within the "Engine" data
+                        if (objData && objData.hasOwnProperty("cylinderValues")) {
+                            const pressureValues = objData.cylinderValues;
+                            for (let i = 0; i < pressureValues.length; i++) {
+                                const label = `Pressure Cyl ${firingOrderLabel[i]}`;
+                                const pressureValue = pressureValues[i];
+                                
+                                const foundIndex = resultSet.findIndex((x) => x.key === label);
+                                if (foundIndex !== -1) {
+                                    resultSet[foundIndex].data.push(pressureValue);
+                                } else {
+                                    resultSet.push({
+                                        key: label,
+                                        data: [pressureValue],
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    else if (objData.hasOwnProperty("cylinderHealth") && objData?.cylinderHealth) {
                         const cylArray = objData?.cylinderHealth;
                         let i = 0;
                         for (let order of firingOrder) {
                             if (firingOrderLabel[i]) {
+                                let label;
+
+                                 // Customize the label based on the key
+                                if (key === "Compression") {
+                                label = `Compression Condition Cyl ${firingOrderLabel[i]}`;
+                                } else if (key === "Bearing") {
+                                label = `Bearing Condition Cyl ${firingOrderLabel[i]}`;
+                                } else if (key === "BearingBis") {
+                                label = `Condition of Cyl Moving Parts Cyl ${firingOrderLabel[i]}`;
+                                } else if (key === "InjectionCondition") {
+                                label = `Injection Condition ${firingOrderLabel[i]}`;
+                                }  
+                                else {
+                                // Use a default label format if none of the above
+                                label = `${key} Cyl ${firingOrderLabel[i]}`;
+                                }
                                 const foundIndex = resultSet.findIndex(
-                                    (x) => x.key === key + "Cyl " + firingOrderLabel[i]
+                                    (x) => x.key === label
                                 );
                                 if (foundIndex !== -1) {
                                     resultSet[foundIndex].data.push(cylArray[i] ? cylArray[i] : 0);
                                 } else {
                                     resultSet.push({
-                                        key: key + "Cyl " + firingOrderLabel[i],
+                                        key: label,
                                         data: [cylArray[i] ? cylArray[i] : 0],
                                     });
                                 }
@@ -2100,7 +2176,10 @@ export function buildTrendData(historical_data, type, from_data) {
     return {dataSet, labels, maxRpm};
 }
 
-function buildDataSet(title, color, dataPoints, axisId) {
+/* The above code is defining a JavaScript function called `buildDataSet`. This function takes four
+parameters: `title`, `color`, `dataPoints`, and `axisId`. */
+function buildDataSet(title, color, datapoints, axisId) {
+    /* The above code is defining a function that returns an object with various properties. */
     const isAverage = [
         "Increase in Fuel Consumption",
         "Torque",
@@ -2108,7 +2187,7 @@ function buildDataSet(title, color, dataPoints, axisId) {
     ].includes(title);
     return {
         title: title,
-        data: dataPoints,
+        data: datapoints,
         label: title,
         borderWidth: 1.5,
         pointRadius: 0,
@@ -2120,14 +2199,14 @@ function buildDataSet(title, color, dataPoints, axisId) {
         yAxisID: axisId ?? "y",
         hidden: false,
         minVal: (isAverage
-            ? parseFloat(Math.min(...dataPoints)).toFixed(2)
-            : Math.round(Math.min(...dataPoints))) || 0,
+            ? parseFloat(Math.min(...datapoints)).toFixed(2)
+            : Math.round(Math.min(...datapoints))) || 0,
         maxValue: (isAverage
-            ? parseFloat(Math.max(...dataPoints)).toFixed(2)
-            : Math.round(Math.max(...dataPoints))) || 0,
+            ? parseFloat(Math.max(...datapoints)).toFixed(2)
+            : Math.round(Math.max(...datapoints))) || 0,
         avgValue: (isAverage
-            ? average(dataPoints)
-            : roundToNearest10(average(dataPoints))) || 0,
+            ? average(datapoints)
+            : roundToNearest10(average(datapoints))) || 0,
     };
 }
 
@@ -2397,17 +2476,18 @@ const keysToIgnore = {
         "Damper",
         "MechanicalHealth",
         "Compression",
-        "Injection",
         "Bearing",
         "BearingBis",
         "InjectionCondition",
+        "Misfiring",
+        "Pressure"
     ],
     Turbine: [
         "RegularityDeviation",
-        "MBearing",
+        "BearingStatus",
         "BladeStatus",
         "combustionCondition",
-        "BladeStatusGas",
+        "BearingStatusGas",
         "CombustionKit",
         "TurbineCoupling",
     ],
@@ -2437,6 +2517,8 @@ const trendTitle = {
         Bearing: "Bearing Condition",
         BearingBis: "Condition of cyl moving parts",
         InjectionCondition: "Fuel Injection Performance",
+        Misfirng: "Misfiring",
+        Pressure: "Pressure"
     },
     Turbine: {
         RegularityDeviation: "Regularity/Deviation",
@@ -2480,7 +2562,12 @@ const trendTooltip = {
         "Damper indicator provides information about the effectiveness of rotational vibration absorption by Damper. When Damper health is low, the vibrations from the engine are transferred onto the gearboxes/propellers or associated driven systems. ",
     "Increase in Fuel Consumption":
         "Overall indication of engine imbalance, expressed as a percentagem, due to non-optimal thermal health(refer to indicators) and the inertia resistance of the rotating and moving parts.",
-    //motor
+    "Compression Condition":"Indicates deviations in compression due to leakage and/or bad timing of the valves. Compression problems due to: incorrect valve timing, leakage due to a damaged valve or valve seat or major damage in liner or piston ring",
+    "Injection Condition":"Indicates deviations of fuel injection due to a defective fuel pump. Imbalance in peak firing pressure. Worn liners or timing in the compression stroke of one or more cylinders or Fuel is injected asynchronously.",
+    "Bearing Condition":"The dynamic behavior of the bearings and all moving parts( crankshaft, conrods, Tierods, pistons, connecting rods, writs pins, bearings). Measures per cylinder over multiple revolutions.",
+    "Condition of cyl moving parts":"The dynamic behavior of the bearings and all moving parts( crankshaft, conrods, Tierods, pistons, connecting rods, writs pins, bearings). Measures per cylinder over multiple revolutions.",
+    "Misfiring":"Indicates Misfiring at the Cylinders during Gas Engine Operation",
+        //motor
     Stability:
         "This indicator tracks the degradation of components of electromagnetic circuits during operation",
     Bearing:
