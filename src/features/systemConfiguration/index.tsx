@@ -106,7 +106,7 @@ const SystemConfiguration = () => {
             size="small"
             sx={{ mr: "18px" }}
             variant="outlined"
-            onClick={handleClick}
+          // onClick={handleClick}
           >
             Restart WebSocket
           </Button>
@@ -115,7 +115,7 @@ const SystemConfiguration = () => {
               size="small"
               sx={{ mr: "18px", color: "red" }}
               variant="outlined"
-              onClick={() => setPoppup(true)}
+            // onClick={() => setPoppup(true)}
             >
               Revoke license
             </Button>

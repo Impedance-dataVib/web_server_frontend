@@ -169,7 +169,7 @@ const SettingsPage = () => {
             size="small"
             sx={{ mr: "18px" }}
             variant="outlined"
-            onClick={handleClick}
+          // onClick={handleClick}
           >
             Synchronise Time Difference
           </Button>
@@ -533,10 +533,10 @@ const SettingsPage = () => {
                 size="small"
                 sx={{ backgroundColor: "#1D4580", m: 1, my: 3 }}
                 type="submit"
-                onClick={(e) => {
-                  e.preventDefault();
-                  saveSettings(apiData);
-                }}
+              // onClick={(e) => {
+              //   e.preventDefault();
+              //   saveSettings(apiData);
+              // }}
               >
                 SAVE
               </Button>

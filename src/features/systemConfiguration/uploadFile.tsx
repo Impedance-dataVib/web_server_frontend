@@ -331,7 +331,7 @@ export default function UploadFile({ setApiData }: any) {
           <Button
             color="primary"
             variant="contained"
-            onClick={handleFileUpload}
+            // onClick={handleFileUpload}
           >
             Confirm & Upload
           </Button>

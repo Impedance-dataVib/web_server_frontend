@@ -33,7 +33,9 @@ const ConfirmDeleteConfigurationModal = ({
         </Typography>
       </DialogContent>
       <DialogActions>
-        <Button color="secondary" variant="contained" onClick={onConfirm}>
+        <Button color="secondary" variant="contained"
+        // onClick={onConfirm}
+        >
           Yes
         </Button>
         <Button color="primary" variant="contained" onClick={onClose}>

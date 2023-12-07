@@ -12,7 +12,7 @@ export default function fileUpload({
   onChangeHandler,
   file,
   inputRef,
-  isLoader=false,
+  isLoader = false,
 }: FileUploadObject) {
   return (
     <Box
@@ -25,7 +25,7 @@ export default function fileUpload({
       }}
     >
       <Backdrop
-        sx={{ color: '#fff', position: 'absolute' ,zIndex: (theme: any) => theme.zIndex.drawer + 1 }}
+        sx={{ color: '#fff', position: 'absolute', zIndex: (theme: any) => theme.zIndex.drawer + 1 }}
         open={isLoader}
       >
         <CircularProgress color="inherit" />
@@ -34,6 +34,7 @@ export default function fileUpload({
         <Typography variant="body1">Drag and Drop your file here</Typography>
       </div>
       <input
+        disabled={true}
         accept={file}
         type="file"
         style={{ opacity: 0, width: "100%", height: "100%" }}

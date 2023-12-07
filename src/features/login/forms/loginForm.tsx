@@ -109,7 +109,7 @@ const LoginForm = () => {
       username === undefined ||
       (username !== undefined && String(username)?.trim().length === 0)
     ) {
-      setUsernameError("username is required");
+      setUsernameError("Username is Admin");
       allGood = false;
     } else {
       setUsernameError("");
@@ -118,7 +118,7 @@ const LoginForm = () => {
       password === undefined ||
       (password !== undefined && String(password)?.trim().length === 0)
     ) {
-      setPasswordError("password is required");
+      setPasswordError("Password is demo");
       allGood = false;
     } else {
       setPasswordError("");

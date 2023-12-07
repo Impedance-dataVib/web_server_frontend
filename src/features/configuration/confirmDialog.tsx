@@ -9,7 +9,7 @@ export default function ConfirmDialogueBox({open, handleCancel, handleOk}: any) 
     >
       <DialogContent>
         <Typography variant="subtitle1" >
-            Do you want dischard the changes?
+            Do you want discard the changes?
         </Typography>
       </DialogContent>
       <DialogActions>

@@ -34,6 +34,7 @@ import {
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FolderIcon from "@mui/icons-material/Folder";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import { selectOption, selectReportType } from "./schema";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
@@ -746,8 +747,8 @@ const DownloadPage = () => {
                             isHalfSelected
                               ? "some"
                               : isSelected
-                              ? "all"
-                              : "none"
+                                ? "all"
+                                : "none"
                           }
                         />
                       )}
@@ -767,7 +768,7 @@ const DownloadPage = () => {
 
         <Accordion sx={{ bgcolor: "#EAEAEA" }}>
           <AccordionSummary
-            // expandIcon={<ExpandMoreIcon />}
+            expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
@@ -801,29 +802,29 @@ const DownloadPage = () => {
                       <TableCell align="center">
                         {row.request_time
                           ? convertUTCDateToLocalTime(
-                              new Date(row.request_time)
-                            )
+                            new Date(row.request_time)
+                          )
                           : ""}
                       </TableCell>
                       <TableCell align="center">
                         {row.process_complete_time
                           ? convertUTCDateToLocalTime(
-                              new Date(row.process_complete_time)
-                            )
+                            new Date(row.process_complete_time)
+                          )
                           : ""}
                       </TableCell>
                       <TableCell align="center">
                         {row.filter_data.startDate
                           ? convertUTCDateToLocalTime(
-                              new Date(row.filter_data.startDate)
-                            )
+                            new Date(row.filter_data.startDate)
+                          )
                           : ""}
                       </TableCell>
                       <TableCell align="center">
                         {row.filter_data.endDate
                           ? convertUTCDateToLocalTime(
-                              new Date(row.filter_data.endDate)
-                            )
+                            new Date(row.filter_data.endDate)
+                          )
                           : ""}
                       </TableCell>
                       <TableCell align="center">

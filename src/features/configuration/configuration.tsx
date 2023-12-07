@@ -103,7 +103,7 @@ const ConfigurationPageContent = () => {
         ))}
       {showErrorAlert && (
         <Box sx={{ my: 1 }}>
-          <Alert severity="warning" onClose={() => {}}>
+          <Alert severity="warning" onClose={() => { }}>
             <AlertTitle>Active Configuration Not Found !</AlertTitle>
             <Typography variant="caption">
               No Modules found with active configuartion! Please add a new
@@ -135,6 +135,7 @@ const ConfigurationPageContent = () => {
                 >
                   Import
                   <input
+                    disabled={true}
                     accept=".csv"
                     type="file"
                     hidden

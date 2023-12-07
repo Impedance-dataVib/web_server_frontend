@@ -179,6 +179,7 @@ const ConfigurationTable = ({
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   <IconButton
+                    disabled={true}
                     onClick={() => onExportConfiguartion(row.id)}
                     aria-label="Export"
                     color="primary"

@@ -87,7 +87,7 @@ const AddModuleModal = ({ open, onClose, onSubmit }: IAddModuleModalProps) => {
         <Button
           color="primary"
           disabled={moduleType === "None" ? true : false}
-          onClick={onSubmitInternal}
+          // onClick={onSubmitInternal}
           variant="contained"
         >
           Add

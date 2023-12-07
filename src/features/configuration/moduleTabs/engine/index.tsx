@@ -155,42 +155,42 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
 
   const handleAccordionChange =
     (stepIndex: number) =>
-    (value: string) =>
-    async (event: React.SyntheticEvent, newExpanded: boolean) => {
-      try {
-        const formValidation = await moduleFormContext.validateForm();
-        const getStepsInOrder = extractSteps(formSchema, module);
+      (value: string) =>
+        async (event: React.SyntheticEvent, newExpanded: boolean) => {
+          try {
+            const formValidation = await moduleFormContext.validateForm();
+            const getStepsInOrder = extractSteps(formSchema, module);
 
-        if (stepIndex === 0) {
-          setExpanded(newExpanded ? value : false);
-        } else if (stepIndex > 0) {
-          const validationFields =
-            engineStepperValidationSchemaGroups[getStepsInOrder[stepIndex - 1]];
-          const stepValidation = Object.keys(formValidation).some((item) =>
-            validationFields.includes(item)
-          );
-          //Checking the validation errors of the previous step, if present true else false
+            if (stepIndex === 0) {
+              setExpanded(newExpanded ? value : false);
+            } else if (stepIndex > 0) {
+              const validationFields =
+                engineStepperValidationSchemaGroups[getStepsInOrder[stepIndex - 1]];
+              const stepValidation = Object.keys(formValidation).some((item) =>
+                validationFields.includes(item)
+              );
+              //Checking the validation errors of the previous step, if present true else false
 
-          if (!stepValidation) {
-            if (getStepsInOrder.length - 1 === stepIndex && !newExpanded) {
-              setActiveStep(stepIndex + 1);
-            } else {
-              setActiveStep(stepIndex);
+              if (!stepValidation) {
+                if (getStepsInOrder.length - 1 === stepIndex && !newExpanded) {
+                  setActiveStep(stepIndex + 1);
+                } else {
+                  setActiveStep(stepIndex);
+                }
+                setExpanded(newExpanded ? value : false);
+              } else {
+                throw new Error(
+                  `${getStepsInOrder[stepIndex - 1]} step has validation errors!`
+                );
+              }
             }
-            setExpanded(newExpanded ? value : false);
-          } else {
-            throw new Error(
-              `${getStepsInOrder[stepIndex - 1]} step has validation errors!`
-            );
+          } catch (error: any) {
+            enqueueSnackbar({
+              message: error?.message,
+              variant: "error",
+            });
           }
-        }
-      } catch (error: any) {
-        enqueueSnackbar({
-          message: error?.message,
-          variant: "error",
-        });
-      }
-    };
+        };
   const getInitialFormData = () => {
     if (data?.from_data && customerName) {
       const { configuration_id, ...rest } = data?.from_data;
@@ -274,7 +274,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
   const moduleFormContext = useFormik({
     initialValues: getInitialFormData(),
     enableReinitialize: true,
-    onSubmit: (values) => {},
+    onSubmit: (values) => { },
     validationSchema: engineValidationSchema,
   });
 
@@ -288,7 +288,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
         <>
           <LinearProgress />
           <Box sx={{ my: 1 }}>
-            <Alert severity="info" onClose={() => {}}>
+            <Alert severity="info" onClose={() => { }}>
               <AlertTitle>
                 Please wait! Data is taking some time to load.
               </AlertTitle>
@@ -298,7 +298,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
       )}
       {isError && (
         <Box sx={{ my: 1 }}>
-          <Alert severity="error" onClose={() => {}}>
+          <Alert severity="error" onClose={() => { }}>
             <AlertTitle>Something went wrong !</AlertTitle>
             <Typography variant="caption">
               Please refresh the page! If this behaviour remains the same
@@ -334,7 +334,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
                 >
                   <StepToComponentEngineModule
                     step={item}
-                    handleFormData={(e: any) => {}}
+                    handleFormData={(e: any) => { }}
                     formContext={moduleFormContext}
                   ></StepToComponentEngineModule>
                 </AccordionBase>
@@ -347,7 +347,9 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
               direction="row"
               sx={{ display: "flex", justifyContent: "flex-end" }}
             >
-              <Button variant="contained" onClick={handleSubmit}>
+              <Button variant="contained"
+              // onClick={handleSubmit}
+              >
                 Save
               </Button>
               <Button
@@ -360,7 +362,7 @@ const EngineTabContent = ({ module, moduleId, setIsUnsaved }: any) => {
                 startIcon={<Delete />}
                 color="primary"
                 variant="contained"
-                onClick={handleDeleteModule}
+              // onClick={handleDeleteModule}
               >
                 Delete Module
               </Button>

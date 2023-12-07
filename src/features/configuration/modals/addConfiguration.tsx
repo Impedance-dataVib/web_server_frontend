@@ -112,7 +112,7 @@ const AddConfigurationModal = ({
         <Button
           color="primary"
           variant="contained"
-          onClick={onSubmitInternal}
+          // onClick={onSubmitInternal}
           disabled={
             configName &&
             configName?.name?.length > 0 &&
