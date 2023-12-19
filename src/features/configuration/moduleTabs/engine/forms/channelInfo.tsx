@@ -28,13 +28,13 @@ const SENSORx = [
 const ChannelType = ["Speed"];
 const WheelType = [
   "Standard",
-  "1 Missing Tooth",
-  "1 Missing + 1 Junction",
-  "1 Missing + 2 Junction",
-  "1 Missing + 3 Junctions",
-  "1 Junction",
-  "2 Junctions",
-  "3 Junctions",
+  "MissingTooth",
+  "Missing+1Junction",
+  "Missing+2Junction",
+  "Missing+3Junctions",
+  "1Junction",
+  "2Junctions",
+  "3Junctions",
   "Noisy",
   "Optical",
   "Odd",
@@ -873,7 +873,7 @@ const ChannelInformationForm = ({ handleFormData, formContext }: any) => {
               <Grid item>
                 <TextField
                   name={"peak_pressure_transducer_sensitivity"}
-                  label="Transducer Sensitivity"
+                  label="Transducer Sensitivity(V)"
                   variant="outlined"
                   sx={{
                     fontSize: "16px",

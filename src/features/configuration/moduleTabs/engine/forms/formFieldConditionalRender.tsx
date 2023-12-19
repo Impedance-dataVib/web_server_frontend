@@ -260,7 +260,7 @@ const FormFieldConditionalRender = ({ type, fieldProps, formContext }: any) => {
                                 value={item.overwrite}
                               >
                                 <MenuItem value={""}>None</MenuItem>
-                                {OVER_WRITE_INDICATORS["Bearing"].map(
+                                {OVER_WRITE_INDICATORS["Engine"].map(
                                   (option: string) => (
                                     <MenuItem key={option} value={option}>
                                       {option}

@@ -79,6 +79,7 @@ const DownloadPage = () => {
     endDate: null,
     key: "selection",
   });
+  console.log(dateRangeValues);
   const [showData, setShowData] = useState([]);
   const [showPngGraphical, setShowPngGraphical] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
