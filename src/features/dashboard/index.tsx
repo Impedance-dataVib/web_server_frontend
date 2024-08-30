@@ -123,20 +123,68 @@ const DashboardPage = () => {
   const intervalHandle = useRef();
   const { sendMessage, lastMessage } = useWebSocket(
     process.env.REACT_APP_WEBSOCKET_URL ||
-      `ws:${window.location.hostname}:8081`,
+    `ws:${window.location.hostname}:8081`,
     {
-      onMessage: () => {
+      onMessage: (e) => {
+        console.log('message', e)
         if (sendMessage) sendMessage(moduleTabs[activeModule].process_name);
+        setIsWebSocketFailed(false);
       },
       onError: (e) => {
+        console.log('error', e);
+
+        let websocketUrl = process.env.REACT_APP_API_URL ?? window.location.origin;
+        websocketUrl = websocketUrl.replace('public/', '');
+
+        let abortController = new AbortController()
+        const timeout = setTimeout(() => {
+          abortController.abort()
+          console.log("Request aborted")
+        }, 3000)
+
+        Promise.all([
+          api.get(
+            `${websocketUrl}app/start_dashboard_socket.php`,
+            { signal: abortController.signal }
+          ),
+          api.get(
+            `${websocketUrl}app/start_signal_socket.php`,
+            { signal: abortController.signal }
+          ),
+          api.get(
+            `${websocketUrl}app/start_status_socket.php`,
+            { signal: abortController.signal }
+          )
+        ]).then(() => {
+          clearTimeout(timeout)
+          window.location.reload();
+        }).catch((e) => {
+          if (e.message === 'canceled') {
+            window.location.reload();
+          }
+          else {
+            console.error('Failed to start websockets, maybe they are already running?')
+          }
+        })
+
+        // setIsDataAvailable(
+        //   "Failed to connect web socket server. Please try to start websocket by clicking this button."
+        // );
+        // setIsWebSocketFailed(true);
+        // setIsLoading(false);
+      },
+      shouldReconnect: (closeEvent) => true,
+      retryOnError: true,
+      reconnectAttempts: 10,
+      reconnectInterval: 5000,
+      onReconnectStop: (e) => {
+        console.log('reconnect stopped', e)
         setIsDataAvailable(
           "Failed to connect web socket server. Please try to start websocket by clicking this button."
         );
         setIsWebSocketFailed(true);
-
         setIsLoading(false);
-      },
-      shouldReconnect: (closeEvent) => true,
+      }
     },
     isWebsocketConnect
   );
